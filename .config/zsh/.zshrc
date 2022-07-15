@@ -1,25 +1,3 @@
-## ShellCheck Setup{{{
-## Disable warnings of adding shebang or a 'shell' directive.
-# shellcheck disable=2148
-## Allow [ ! -z foo ] instead of suggesting -n
-# shellcheck disable=SC2236
-## Turn on warnings for unquoted variables with safe values
-# shellcheck enable=quote-safe-variables
-## Turn on warnings for unassigned uppercase variables
-# shellcheck enable=check-unassigned-uppercase
-## Suggest ${VAR} in place of $VAR
-# shellcheck enable=require-variable-braces
-## Look for 'source'd files relative to the checked script and also look for absolute path
-# shellcheck source-path=SCRIPTDIR
-# shellcheck source-path=/etc/zsh/zshenv 
-# shellcheck source-path=/etc/zsh/zprofile 
-# shellcheck source-path=./.zshenv
-# shellcheck source-path=./.zprofile
-# shellcheck source-path=./.zlogin
-# shellcheck source=./.zshenv
-# shellcheck source=./.zprofile
-# shellcheck source=./.zlogin
-##}}}
 #  ─────────────────────────────────────
 #     ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀  
 #      █▀   ███▄██    ▀█ ██      ██     
@@ -187,4 +165,25 @@ _zshloadendclear
 
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-
+## ShellCheck Setup{{{
+## Disable warnings of adding shebang or a 'shell' directive.
+# shellcheck disable=2148
+## Allow [ ! -z foo ] instead of suggesting -n
+# shellcheck disable=SC2236
+## Turn on warnings for unquoted variables with safe values
+# shellcheck enable=quote-safe-variables
+## Turn on warnings for unassigned uppercase variables
+# shellcheck enable=check-unassigned-uppercase
+## Suggest ${VAR} in place of $VAR
+# shellcheck enable=require-variable-braces
+## Look for 'source'd files relative to the checked script and also look for absolute path
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source-path=/etc/zsh/zshenv 
+# shellcheck source-path=/etc/zsh/zprofile 
+# shellcheck source-path=./.zshenv
+# shellcheck source-path=./.zprofile
+# shellcheck source-path=./.zlogin
+# shellcheck source=./.zshenv
+# shellcheck source=./.zprofile
+# shellcheck source=./.zlogin
+##}}}
