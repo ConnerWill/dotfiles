@@ -1,4 +1,0 @@
-autoload ztrace-usetty-wrapper ztrace
-
-ztrace-usetty-wrapper ztrace "$@"
-

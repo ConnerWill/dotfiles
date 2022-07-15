@@ -1,1 +1,0 @@
-../functions-available/list-colors.zsh

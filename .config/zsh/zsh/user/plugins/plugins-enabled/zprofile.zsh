@@ -1,1 +1,0 @@
-../plugins-available/zprofile/zprofile.zsh

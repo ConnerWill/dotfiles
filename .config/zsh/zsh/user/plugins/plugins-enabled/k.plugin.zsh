@@ -1,1 +1,0 @@
-../plugins-available/k/k.sh
