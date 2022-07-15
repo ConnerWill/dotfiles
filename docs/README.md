@@ -11,26 +11,34 @@
 
 
 <div align="center">
+
 # **dotfiles**
+
 </div>
 
 <div align="center">
+
 ```ocaml
 ZSH / NVIM / TMUX / AWESOMEWM
 ```
+
 </div>
 
 <div align="center">
+
 > *[*My Personal 'dotfiles'*](https://connerwill.com)*
+
 </div>
 
 <div align="center">
+
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
 [![GitLab](https://img.shields.io/static/v1?label=gitlab&logo=gitlab&color=E24329&message=mirrored)](https://gitlab.com/ConnerWill/dotfiles)
 ![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)
+
 </div>
 
 ---
