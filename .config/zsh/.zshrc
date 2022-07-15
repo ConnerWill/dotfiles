@@ -50,7 +50,6 @@ export                \
 ### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ### {{{
 ########################
 #┌─ Config options ####
-#│ 
 #├─┐ For boolean options:
 #│ ├─── To enable options, set the value to anything (e.g. TRUE).
 #│ └─── To disable options, comment out the option or leave it unset.
@@ -121,7 +120,6 @@ function _zshloadverbose(){
 }
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
 
-
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
 ### Clear Screen
 function _zshloadstartclear(){
@@ -132,12 +130,10 @@ function _zshloadendclear(){
 }
 ### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ### }}}
 
-
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
 _zshloadstartclear
 #: Clear Screen Before Loading
 ### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ### }}}
-
 
 ### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
@@ -157,14 +153,12 @@ else
 fi
 ### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ### }}}
 
-
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
 
 _zshloadendclear
 #: Clear Screen After Loading
 
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
-
 ## ShellCheck Setup{{{
 ## Disable warnings of adding shebang or a 'shell' directive.
 # shellcheck disable=2148
