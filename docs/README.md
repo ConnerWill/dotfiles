@@ -2,31 +2,35 @@
 <div align="center">
 
 
-</div>
-
 <!---<img width="480" height="320" src="assets/dotfiles-banner.png">--->
  <!-- <img width="480" height="320" src="assets/banner.png"> -->
   <img width="720" height="480" src="https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png">
 
----
+</div>
 
+
+
+<div align="center">
 # **dotfiles**
+</div>
 
+<div align="center">
 ```ocaml
 ZSH / NVIM / TMUX / AWESOMEWM
 ```
- 
-> *[*My Personal 'dotfiles'*](https://connerwill.com)*
-  
+</div>
 
-  
+<div align="center">
+> *[*My Personal 'dotfiles'*](https://connerwill.com)*
+</div>
+
+<div align="center">
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
 [![GitLab](https://img.shields.io/static/v1?label=gitlab&logo=gitlab&color=E24329&message=mirrored)](https://gitlab.com/ConnerWill/dotfiles)
 ![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)
-
 </div>
 
 ---
