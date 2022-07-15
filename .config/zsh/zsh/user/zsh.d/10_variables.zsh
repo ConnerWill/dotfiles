@@ -20,7 +20,7 @@ export GENCOMPL_PY="python"
 ###}}}
 
 
-
+export ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache"
 
 #
 #
