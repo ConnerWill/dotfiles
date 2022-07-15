@@ -1,0 +1,80 @@
+2022-02-14-062630
+[48;5;9m[38;5;15m[1mDO OT MODIFY THIS FILE![0m
+
+[48;5;9m[38;5;15m[1mIT IS NOT THE FILE WHICH CONFIGURES KITTY[0m
+[48;5;20m[38;5;11m[1mINSTEAD, MODIFY:[0m	[38;5;11m$KITTY_CONFIG[0m
+#[38;5;21m------------------------------------------------------[0m
+#    Configured Settings In [38;5;11mkitty.conf [0m [0m
+#[38;5;21m------------------------------------------------------[0m
+#[38;5;21m-[38;5;105m[Config][38;5;21m----------------------------------------------[0m
+#[38;5;21m---[38;5;127m[Settings][38;5;21m-----------------------------------------[0m
+
+font_family      Hack Regular Nerd Font Complete
+bold_font        Hack Bold Nerd Font Complete
+bold_italic_font Hack Bold Italic Nerd Font Complete
+cursor #E428E6
+cursor_text_color #0FFFFC
+cursor_stop_blinking_after 10.0
+scrollback_lines 5000
+scrollback_pager_history_size 100
+scrollback_fill_enlarged_window yes
+url_color #FF00FF
+url_style curly
+url_prefixes http https file ftp gemini irc gopher mailto news
+strip_trailing_spaces smart
+sync_to_monitor yes
+enable_audio_bell no
+bell_on_tab yes
+remember_window_size  yes
+bell_border_color #00FF00
+confirm_os_window_close 2
+background_opacity 0.8
+selection_foreground #000000
+selection_background #00FFFF
+update_check_interval 0
+wayland_titlebar_color system
+ map kitty_mod+p>l kitten hints --type line --program -
+ map kitty_mod+p>w kitten hints --type word --program -
+ map kitty_mod+p>h kitten hints --type hash --program -
+ map kitty_mod+p>y kitten hints --type hyperlink
+
+#[38;5;21m-[38;5;105m[Key Bindings][38;5;21m---------------------------------------[0m
+#[38;5;21m---[38;5;127m[Modifier][38;5;21m-------------------------------------------[0m
+
+ctrl+shift
+
+#[38;5;21m---[38;5;127m[Bindings][38;5;21m-------------------------------------------[0m
+
+map kitty_mod+c copy_to_clipboard
+map kitty_mod+up        scroll_line_up
+map kitty_mod+down      scroll_line_down
+map kitty_mod+page_up   scroll_page_up
+map kitty_mod+page_down scroll_page_down
+map kitty_mod+home      scroll_home
+map kitty_mod+end       scroll_end
+map kitty_mod+h         show_scrollback
+map kitty_mod+enter    launch --cwd=current
+map kitty_mod+alt+enter new_os_window
+map kitty_mod+n new_os_window
+map kitty_mod+b      launch lynx
+map kitty_mod+right next_window
+map kitty_mod+left previous_window
+map kitty_mod+k next_window
+map kitty_mod+j previous_window
+map kitty_mod+alt+right next_tab
+map kitty_mod+alt+left previous_tab
+map kitty_mod+alt+k next_tab
+map kitty_mod+alt+j previous_tab
+map kitty_mod+t new_tab_with_cwd
+map ctrl+alt+t new_tab
+map kitty_mod+e kitten hints
+ map kitty_mod+p>l kitten hints --type line --program -
+ map kitty_mod+p>w kitten hints --type word --program -
+ map kitty_mod+p>h kitten hints --type hash --program -
+map kitty_mod+p>n kitten hints --type linenum
+ map kitty_mod+p>y kitten hints --type hyperlink
+map kitty_mod+f1     edit_config_file
+map kitty_mod+escape kitty_shell window
+map kitty_mod+f5 load_config_file
+
+#[38;5;21m-----------------------------------------------------[0m

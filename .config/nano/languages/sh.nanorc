@@ -1,0 +1,74 @@
+## Here is an example for Bourne shell scripts.
+##
+syntax "SH" "\.sh$" "\.ash" "\.bashrc" "bashrc" "\.bash_aliases" "bash_aliases" "\.bash_functions" "bash_functions" "\.bash_login" "\.bash_logout" "\.bash_profile" "bash_profile" "\.profile" "revise\..+$"
+header "^#!.*/(env +)?(ba|da|a)?sh( |$)"
+magic "(POSIX|Bourne-Again) shell script.*text"
+comment "#"
+
+linter shellcheck -n
+
+## numbers:
+color brightyellow "[0-9]"
+
+## keywords:
+color green "\<(case|do|done|elif|else|esac|fi|for|function|if|in|select|then|time|until|while)\>"
+color brightgreen "(\{|\}|\(|\)|\;|\]|\[|`|\\|\$|<|>|!|=|&|\|)"
+color green "-[Ldefgruwx]\>"
+color green "-[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1]\>"
+color green "--[A-Za-z\-](.[^\s].*\s)"
+
+#.*}\>"
+color green "-(eq|ne|gt|lt|ge|le|s|n|z)\>"
+
+## builtins:
+color brightcyan "\<(alias|bg|bind|break|builtin|caller|cd|command|compgen|complete|compopt|continue|declare|dirs|disown|echo|enable|eval|exec|exit|export|false|fc|fg|getopts|hash|help|history|jobs|kill|let|local|logout|mapfile|popd|printf|pushd|pwd|read|readarray|readonly|return|set|shift|shopt|source|suspend|test|times|trap|true|type|typeset|ulimit|umask|unalias|unset|wait)\>"
+
+## not buitins:
+color cyan "(cat|chmod|chown|cp|env|grep|install|ln|make|mkdir|mv|rm|sed|tar|touch)"
+
+icolor brightgreen "^\s+[0-9A-Z_]+\s+\(\)"
+color ,green "[[:space:]]+$"
+icolor brightred "\$\{?[0-9A-Z_!@#$*?-]+\}?"
+
+## quotes:
+color brightyellow ""(\\.|[^"])*"" "'(\\.|[^'])*'"
+color yellow "'(\\.|[^'])*'"
+
+## comments:
+color blue "(^|[[:space:]])#{1,3}.*$"
+color brightblue "(^|[[:space:]])#{3,6}.*$"
+color cyan "(^|[[:space:]])#{6,20}.*$"
+color brightcyan "(^|[[:space:]])#{20,}.*$"
+
+
+
+#color brightblue "(^|[[:space:]])(#{3,10}([^{].*)?|;.*)$"
+#color blue "(^|[[:space:]])(#{1,3}([^{].*)?|;.*)$"
+#color brightblue "(^|[[:space:]])(#{3,10}([^{].*)?|;.*)$"
+#color cyan "(^|[[:space:]])(#{10,}([^{].*)?|;.*)$"
+
+
+
+
+#  GNU nano 6.0                                                         ini.nanorc
+#
+#syntax "INI" "\.(ini|desktop|lfl|override|cfg)$" "(mimeapps\.list|pinforc|setup\.cfg)$" "weechat/.+\.conf$"
+#header "^\[[A-Za-z]+\]$"
+#
+#color cyan "^[[:space:]]*[^=]*="
+#color brightmagenta "^[[:space:]]*\[.*[^.]\]$"
+#color green "(true|True|TRUE|on|On|ON|yes|Yes|YES)"
+##color brightcyan "[[:space:]]*"(true|True|TRUE|on|On|ON)"*[[:space:]]"
+#color red "(false|False|FALSE|off|Off|no|No|NO)"
+#color red "[=;]"
+#color brightyellow ""(\\.|[^"])*"|'(\\.|[^'])*'"
+#color blue "(^|[[:space:]])(#{1,3}([^{].*)?|;.*)$"
+#color brightblue "(^|[[:space:]])(#{3,10}([^{].*)?|;.*)$"
+#color cyan "(^|[[:space:]])(#{10,}([^{].*)?|;.*)$"
+#color ,green "[[:space:]]+$"
+#color ,red "    + +| +  +"
+#
+#
+#
+#
+#

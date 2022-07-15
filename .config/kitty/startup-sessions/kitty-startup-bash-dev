@@ -1,0 +1,42 @@
+#	Startup Sessions�
+
+#		You can control the tabs, kitty window layout, working directory, startup programs, etc. by creating a "session" file and
+#		using the kitty --session command line flag or the startup_session option in kitty.conf. For example:
+
+########################
+#       BASH HELP
+########################
+
+
+
+########################
+#   BASH IDE/GITHUB
+########################
+
+# Set the title for the new window
+new_tab GITHUB
+launch --title "GITHUB" zsh
+cd ~/scripts/MYPROJECTS
+
+new_tab LYNX
+launch --title "LYNX" lynx
+
+layout tall
+
+new_tab SNIPPETS
+launch --title "BASH SNIPPETS" zsh
+cd ~/scripts/bash/development/snippets
+
+# Set the title for the new window
+new_tab BASH DEV
+launch --title "BASH DEV" zsh
+# Set the working directory for windows in the current tab
+cd ~/scripts/bash
+
+# Set the layout for the current tab
+layout stack
+
+focus
+
+
+
