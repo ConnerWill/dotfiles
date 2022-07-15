@@ -32,34 +32,33 @@
 
 ## Overview
 
-
-# How to use this template
-
-1. Source `scripts/replace-placeholders.sh`
-```shell
-source "./scripts/replace-placeholders.sh"
-```
-
-2. Run command with a search string *'`dotfiles`'* and a replace string *eg.* *'`NEW_REPO_NAME`'*
-```shell
-replace-placeholders "dotfiles" "NEW_REPO_NAME"
-```
-
 > *See [Demo](#demo) section*
 
 ---
 
 # Table of Contents
+
+<!--
 <details>
-  <summary>Expand Table of Contents</summary>
+ <summary>Expand Table of Contents</summary>
+-->
 
   ---
-  
+ 
 * [dotfiles](#dotfiles)
 * [Table of Contents](#table-of-contents)
 * [Overview](#overview)
   * [Description](##description)
+  * [ScreenShots](##screenshots)
   * [Demo](##demo)
+  * [ZSH](##zsh)
+  * [NVim](##nvim)
+  * [Tmux](##tmux)
+  * [Awesome](##awesome)
+  * [Lynx](##lynx)
+  * [Xresources](##xresources)
+  * [Kitty](##kitty)
+  * [PowerShell](##powershell)
 * [Installation](#installation)
   * [Dependencies](##dependencies)
     * [Dependency-1-Installation](###dependency-1-installation)
@@ -72,27 +71,54 @@ replace-placeholders "dotfiles" "NEW_REPO_NAME"
 * [Other](#other)
 
   ---
-  
+<!--
 <p align="right">(<a href="#top">back to top</a>)</p>
 </details>  
+-->
+
 
 # Overview
 
 ## Description
 
 
+## ScreenShots
+
 
 ## Demo
 
-<div align="center">
-  <img width="1190" height="780" src="assets/replace-placeholders-demo.gif">
-</div>
+<div align="center"><img width="1190" height="780" src="assets/replace-placeholders-demo.gif"></div>
+
+
+## ZSH
+
+
+## NVim
+
+
+## Tmux
+
+
+## Awesome
+
+
+## Lynx
+
+
+## Xresources
+
+
+## Kitty
+
+
+## PowerShell
+
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
 # Installation
-
-
 
 ## Dependencies
 
@@ -123,6 +149,8 @@ git clone https://github.com/ConnerWill/dotfiles.git
 
 ### Hotkeys
 
+
+<!--
 <kbd>CTRL</kbd>
 <kbd>ALT</kbd>
 <kbd>SHIFT</kbd>
@@ -148,7 +176,9 @@ git clone https://github.com/ConnerWill/dotfiles.git
 <kbd>`→`</kbd>
 <kbd>`↑`</kbd>
 *<kbd>`</kbd>*
+-->
 
+<!--
 ## Environment Variables
 
 > *(https://example.com)*
@@ -170,10 +200,10 @@ git clone https://github.com/ConnerWill/dotfiles.git
 : environment variable description.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
+-->
 
 # Tables
-
+<!--
 ### Large
 
 ```shell
@@ -190,7 +220,8 @@ LOWERMIDDLE_CONTENT="test"
 LOWERRIGHT_TITLE="TEST"
 LOWERRIGHT_CONTENT="test"
 ```
-
+-->
+<!--
 <div align="center">
   <table border="0" width="100%">
     <col style="width:33%">
@@ -211,8 +242,8 @@ LOWERRIGHT_CONTENT="test"
   </table>
   <p align="right">(<a href="#top">back to top</a>)</p>
 </div>
-
-
+-->
+<!--
 ### Small
 
 <summary>Expand Small Table</summary>
@@ -230,17 +261,16 @@ LOWERRIGHT_CONTENT="test"
 
   <p align="right">(<a href="#top">back to top</a>)</p>
 </div>
+-->
 
 # Other
-
-
 
 <div align="center">
   <details>
     <summary>Click to expand contributing section</summary>
-    
+ 
 ## Contributing
-    
+
 ---
 
 Any contributions you make are **greatly appreciated**.
@@ -259,26 +289,29 @@ If you have a suggestion that would make this better, please fork the repo and c
 ---
 
 <footer>
-  <nav data-content="bottom">
-    <div align="center">
-      <div id="foot">
-        <span id="bottom">
-          <p><strong>
-            dotfiles
-          </p></strong>
-        </span>
-      </div>
-      <div id="foot2">
-        <span id="bottom2">
-          <p><strong>
-            dotfiles
-          </p></strong>
-        </span>
-      </div>
-    </div>
-  </nav>
+ <nav data-content="bottom">
+  <div align="center">
+   <div id="foot">
+    <span id="bottom">
+     <p>
+     <strong>
+dotfiles
+     </strong>
+     </p>
+    </span>
+   </div>
+   <div id="foot2">
+    <span id="bottom2">
+     <p>
+     <strong>
+dotfiles
+     </strong>
+     </p>
+    </span>
+   </div>
+  </div>
+ </nav>
 </footer>
-  
+ 
 > *Bottom Text*
-> 
-> </div>
+</div>
