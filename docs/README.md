@@ -10,6 +10,13 @@
 
 
 
+
+
+
+
+
+
+
 <div align="center">
 
 # **dotfiles**
@@ -50,6 +57,12 @@ ZSH / NVIM / TMUX / AWESOMEWM
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 
 
+<p align="right">
+  [<a href="https://gitlab.com/ConnerWill/dotfiles">GitLab Mirror</a>]
+</p>
+## :fallen_leaf: ‎ <samp>TEST</samp>
+
+
 ## Overview
 
 > *See [Demo](#demo) section*
@@ -58,10 +71,17 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 # Table of Contents
 
-<!--
+<br>
+<div align="center">
+
+```ocaml
+CLICK OR TAP ❲☰❳ TO SHOW TABLE-OF-CONTENTS
+```
+
+</div>
+
 <details>
- <summary>Expand Table of Contents</summary>
--->
+ <summary><b>Table of Contents</b></summary>
 
   ---
  
@@ -91,9 +111,11 @@ ZSH / NVIM / TMUX / AWESOMEWM
 * [Other](#other)
 
   ---
+
+</details>  
+
 <!--
 <p align="right">(<a href="#top">back to top</a>)</p>
-</details>  
 -->
 
 
