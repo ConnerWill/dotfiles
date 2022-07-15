@@ -1,28 +1,22 @@
-
-
+<!-- README.md -->
 <div align="center">
 
-
-```diff
-- SEE THE 'How to use this template' SECTION 
-```
-
-<!---<img width="480" height="320" src="assets/{{repo_name}}-banner.png">--->
+<!---<img width="480" height="320" src="assets/dotfiles-banner.png">--->
   
   <img width="480" height="320" src="assets/banner.png">
 
-# **{{repo_name}}**
+# **dotfiles**
   
-> *[*{{repo_name}}*](https://example.com)*
+> *[*dotfiles*](https://example.com)*
   
 
   
-![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/{{repo_name}})
-![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/{{repo_name}})
-![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/{{repo_name}})
-[![GitLab](https://img.shields.io/static/v1?label=gitlab&logo=gitlab&color=E24329&message=mirrored)](https://gitlab.com/ConnerWill/{{repo_name}})
-![GitHub](https://img.shields.io/github/license/ConnerWill/{{repo_name}})
-![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/{{repo_name}}?style=social)
+![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
+![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
+![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
+[![GitLab](https://img.shields.io/static/v1?label=gitlab&logo=gitlab&color=E24329&message=mirrored)](https://gitlab.com/ConnerWill/dotfiles)
+![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)
+![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)
 
 ---
 </div>
@@ -46,9 +40,9 @@
 source "./scripts/replace-placeholders.sh"
 ```
 
-2. Run command with a search string *'`{{repo_name}}`'* and a replace string *eg.* *'`NEW_REPO_NAME`'*
+2. Run command with a search string *'`dotfiles`'* and a replace string *eg.* *'`NEW_REPO_NAME`'*
 ```shell
-replace-placeholders "{{repo_name}}" "NEW_REPO_NAME"
+replace-placeholders "dotfiles" "NEW_REPO_NAME"
 ```
 
 > *See [Demo](#demo) section*
@@ -61,7 +55,7 @@ replace-placeholders "{{repo_name}}" "NEW_REPO_NAME"
 
   ---
   
-* [{{repo_name}}](#{{repo_name}})
+* [dotfiles](#dotfiles)
 * [Table of Contents](#table-of-contents)
 * [Overview](#overview)
   * [Description](##description)
@@ -114,7 +108,7 @@ replace-placeholders "{{repo_name}}" "NEW_REPO_NAME"
 1. Clone this repository
 
 ```console
-git clone https://github.com/ConnerWill/{{repo_name}}.git
+git clone https://github.com/ConnerWill/dotfiles.git
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -270,14 +264,14 @@ If you have a suggestion that would make this better, please fork the repo and c
       <div id="foot">
         <span id="bottom">
           <p><strong>
-            {{repo_name}}
+            dotfiles
           </p></strong>
         </span>
       </div>
       <div id="foot2">
         <span id="bottom2">
           <p><strong>
-            {{repo_name}}
+            dotfiles
           </p></strong>
         </span>
       </div>
