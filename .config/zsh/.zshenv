@@ -9,7 +9,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 ### ZSH
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-# export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSHRC="$ZDOTDIR/.zshrc"
 
 ### LOCALE

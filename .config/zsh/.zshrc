@@ -1,44 +1,25 @@
 ## ShellCheck Setup{{{
-
-# Disable warnings of adding shebang or a 'shell' directive.
+## Disable warnings of adding shebang or a 'shell' directive.
 # shellcheck disable=2148
-# Allow [ ! -z foo ] instead of suggesting -n
+## Allow [ ! -z foo ] instead of suggesting -n
 # shellcheck disable=SC2236
-
-# Turn on warnings for unquoted variables with safe values
+## Turn on warnings for unquoted variables with safe values
 # shellcheck enable=quote-safe-variables
-
-# Turn on warnings for unassigned uppercase variables
+## Turn on warnings for unassigned uppercase variables
 # shellcheck enable=check-unassigned-uppercase
-
-# Suggest ${VAR} in place of $VAR
+## Suggest ${VAR} in place of $VAR
 # shellcheck enable=require-variable-braces
-
-# Look for 'source'd files relative to the checked script,
-# and also look for absolute path
+## Look for 'source'd files relative to the checked script and also look for absolute path
 # shellcheck source-path=SCRIPTDIR
-
 # shellcheck source-path=/etc/zsh/zshenv 
 # shellcheck source-path=/etc/zsh/zprofile 
-
+# shellcheck source-path=./.zshenv
+# shellcheck source-path=./.zprofile
+# shellcheck source-path=./.zlogin
 # shellcheck source=./.zshenv
 # shellcheck source=./.zprofile
 # shellcheck source=./.zlogin
-
-# shellcheck source=./banner/zshbanner.zsh
-# shellcheck source=./variables/zshvariables.zsh
-# shellcheck source=./options/zshoptions.zsh
-# shellcheck source=./aliases/zshalias.zsh
-# shellcheck source=./history/zshhistory.zsh
-# shellcheck source=./keybindings/zshkeybindings.zsh
-# shellcheck source=./functions/zshfunctions.zsh
-# shellcheck source=./themes-prompts/zshpromptsthemes.zsh
-# shellcheck source=./modules/zshmodules.zsh
-# shellcheck source=./plugins/zshplugins.zsh
-# shellcheck source=./completions/zshcompletions.zsh
-
 ##}}}
-
 #                                              
 #             ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀  
 #             █▀   ███▄██    ▀█ ██      ██     
@@ -57,51 +38,59 @@
 #############################################################
 ##;:::::::::::::::::::;---ZSHRC---;:::::::::::::::::::::::;##
 ##,_______________________________________________________,##
-##|ENVIRONMENT VARIABLES|                                  ##
-##'====================='           _______________________##
-##---${DOTBARE_DIR}:............... location of the bare repo
-##:::${DOTBARE_TREE}:-------------- which folder is the bare repo tracking
-##---${DOTBARE_BACKUP}:............ backup directory for all tracked files
-##:::${DOTBARE_KEY}:---------------  default key bindings
-##---${FZF_DEFAULT_OPTS}:.......... update FZF_DEFAULT_OPTS to reflect dotbare changes
-##:::${DOTBARE_FZF_DEFAULT_OPTS}:-- user custom setting for dotbare
-##---${EDITOR}:.................... default editor to use
-##___________________________________________________________
-export _ZSH_LOAD_VERBOSE _ZSH_SHOW_ERRORS ZSH_USER_DIR_NAME ZSH_USER_DIR ZSH_USER_LOAD_DIR _ZSH_BANNER_SHOW _ZSH_BANNER_START
-
-#    _____________________________________________________________________________
-#   [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-#   |||                                                                         |||
-#   |||;:.............................. CONFIG ...............................:;|||
-#   |||_________________________________________________________________________|||
-#   [~]============>-----------._______________________.-----------<============[~]
-
-########################
-#### Config options ####
-########################
-###   For boolean options:
-##      To enable options, set the value to anything (e.g. TRUE).
-##      To disable options, comment out the option or leave it unset.
-###   For string options:
-##      See the description next to the value to find what values cam be used,
-##      To disable options, comment out the option or leave it unset.
-
+##|ENVIRONMENT VARIABLES|. . . . . Description . . . . . . ##
+##'====================='----------------------------------##
+##  ${ZDOTDIR}::::::::::: Directory containing user's zsh files ( ~/.config/zsh ) 
+##  ${ZSHRC}::::::::::::: Path to the '.zshrc' file ( ${$ZDOTDIR:-$HOME}/.zshrc )
+##  ${ZSH_USER_DIR_NAME}: Name of zsh config profile to use ( user )
+##  ${ZSH_USER_DIR}:::::: Path to current config profile ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user )
+##  ${ZSHDDIR}::::::::::: Directory containing configs that will be sourced in numeric order ( $ZSH_USER_DIR/zsh.d )
+##_________________________________________________________##
+export LC_ALL="en_US.UTF-8"
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
+#: VERY Verbose loading zshrc
 if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
-#: VERY Verbose loading zshrc
 
-unset _ZSH_LOAD_VERBOSE
-unset _ZSH_SHOW_ERRORS
-unset _ZSH_BANNER_SHOW
-unset _ZSH_BANNER_START
+### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ### {{{
+
+unset                 \
+  _ZSH_LOAD_VERBOSE   \
+  _ZSH_SHOW_ERRORS    \
+  _ZSH_BANNER_SHOW    \
+  _ZSH_BANNER_START
+
+export                \
+  _ZSH_LOAD_VERBOSE   \
+  _ZSH_SHOW_ERRORS    \
+  _ZSH_BANNER_SHOW    \
+  _ZSH_BANNER_START
+  ZSH_USER_DIR_NAME   \
+  ZSH_USER_DIR        \
+  ZSH_USER_LOAD_DIR   \
+
+### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ### }}}
 
 
+### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ### {{{
+
+########################
+#### Config options ####
+###########################################################################
+### For boolean options:
+##    To enable options, set the value to anything (e.g. TRUE).
+##    To disable options, comment out the option or leave it unset.
+### For string options:
+##    See the description next to the value to find what values cam be used,
+##    To disable options, comment out the option or leave it unset.
+##########################################################################
+
+### :::::::::::::: BEGIN ZSHRC USER CONFIG :::::::::::::::: ###
 
 [[ -z "${ZSH_USER_DIR_NAME}" ]] \
-  && ZSH_USER_DIR_NAME="user"  # "bare"
+  && ZSH_USER_DIR_NAME="user"
 #: Name of the User-Folder for the 'profile' to use. This makes it easy to work on multiple zsh configs on the same machine/user
 
 ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"
@@ -149,7 +138,6 @@ _ZSH_DEBUGGING_ENABLED="TRUE"
 #:
 #:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
 #:
-#:
 
 _ZSH_BANNER_SHOW="TRUE"
 #: Show banner art
@@ -160,54 +148,13 @@ _ZSH_BANNER_START="TRUE"
 #: If this option is disabled, banner art will be shown after all files are loaded.
 #: NOTE: Banner art will only be shown if also '_ZSH_BANNER_SHOW' is enabled.
 
-export LC_ALL="en_US.UTF-8"
-### []==========================[]
-### []      ZSHRC Settings
-### []==========================[]
-  # [] HELP:
-  # []   Set ZSHRC Settings variable
-  # []   to any value to set as true.
-  # []   Set as no value to set as false.
 
-### Banner Settings
-#zsh_startup_banner_show="True"              # Source .zshrc after editing
-#zsh_startup_banner_clear_before="True"      # Clear Screen before displaying banner (Requires 'zsh_startup_banner_show' enabled)
 
-### Edit ZSH Configs Settings
+### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ### }}}
 
-zsh_source_after_edit="True"
-#: Source .zshrc after editing
 
-#zsh_edit_zshrc="ezsh"
-#: Edit zshrc command (Requires 'zsh_source_after_edit' enabled)
+### :::::::::::::: ZSHRC VERBOSE MESSEGES ::::::::::::::::: ### {{{
 
-### Source ZSH Configs
-zsh_source_zshrc="rzsh"                     # Source zshrc command
-
-### Verbose Loading ZSH Settings
-
-zsh_load_verbose="True"
-#: Verbose loading zshrc
-
-#zsh_load_verbose_color="True"
-#: Verbose loading zshrc in color (Requires 'zsh_load_verbose' enabled)
-
-### Clear Screen Settings
-
-#zsh_load_verbose_clear="True"
-#: Clear Screen between loading sections (Requires 'zsh_load_verbose' enabled)
-
-#zsh_load_start_clear="True"
-#: Clear screen before loading zshrc
-
-#zsh_load_end_clear="True"
-#: Clear screen after loading zshrc
-
-### Timing Settings
-
-# zsh_load_sleep="0.01"
-zsh_load_sleep="0"
-# Time to sleep between loading sections (default: 0.02s)
 ### VERBOSE / ERROR Displaying
 function _zshrc_VERBOSE_MESSEGE(){
   if [[ -n "${_ZSH_LOAD_VERBOSE}" ]]; then
@@ -224,7 +171,6 @@ function _zshrc_VERBOSE_MESSEGE(){
     return 0
   fi
 }
-    # printf "\e[0;1;38;5;190;48;5;21m VERBOSE \e[0m \e[0;38;5;190m%s \e[0;38;5;%sm%s\e[0m\n" "$zsh_verbose_messege_verb" "$zsh_verbose_messege"
 
 function _zshrc_VERBOSE_ERROR(){
   if [[ -n "${_ZSH_SHOW_ERRORS}" ]]; then
@@ -242,15 +188,6 @@ function _zshrc_VERBOSE_ERROR(){
   fi
 }
 
-### []==========================[]
-### []      Clear Screen
-### []==========================[]
-function _zshloadstartclear(){
-    [[ -z "$zsh_load_start_clear" ]] || clear
-}
-function _zshloadendclear(){
-    [[ -z "$zsh_load_end_clear" ]] || clear
-}
 function _zshloadverbose(){
     [[ -z "$zsh_load_verbose_clear" ]] || clear
     [[ -z "$zsh_load_section" ]] || printf "Loading %s ..." "$zsh_load_section"
@@ -258,10 +195,39 @@ function _zshloadverbose(){
     unset zsh_load_section
     unset zsh_load_section_error
 }
-### ::::::::::::::::::::::::::::::
-### ::::::::::::::::::::::::::::::
-# Clear Screen Before Loading
+
+
+
+### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
+
+
+### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
+
+
+### Clear Screen
+function _zshloadstartclear(){
+    [[ -z "$zsh_load_start_clear" ]] || clear
+}
+function _zshloadendclear(){
+    [[ -z "$zsh_load_end_clear" ]] || clear
+}
+
+
+### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ### }}}
+
+
+### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
+
+
 _zshloadstartclear
+#: Clear Screen Before Loading
+
+
+### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ### }}}
+
+
+### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
+
 
 
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
@@ -281,92 +247,19 @@ else
 fi
 
 
-################################################################
-### Potential loop to loop over dirs and source then at startup.
-################################################################
-#      for ((i=1; i <= $#fpath; ++i)); do
-#        dir=$fpath[i]
-#        zwc=${dir:t}.zwc
-#        if [[ $dir == (.|..) || $dir == (.|..)/* ]]; then
-#          continue
-#        fi
-#        files=($dir/*(N-.))
-#        if [[ -w $dir:h && -n $files ]]; then
-#          files=(${${(M)files%/*/*}#/})
-#          if ( cd $dir:h &&
-#               zrecompile -p -U -z $zwc $files ); then
-#            fpath[i]=$fpath[i].zwc
-#          fi
-#        fi
-#      done
-################################################################
 
-### []==========================[]
-### []      ZSHRC Helpers
-### []==========================[]
-# Clear Screen After Loading
+### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ### }}}
+
+
+### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
+
+
+
 _zshloadendclear
-# _zsh_startup_banner
-
-### ::::::::::::::::::::::::::::::
-### :::       END FUNCTION
-### ::::::::::::::::::::::::::::::
+#: Clear Screen After Loading
 
 
-# ### [~]#======================
-#         ----------------------
-#         ______________________
-#         ......................
-#         ^^^^^^^^^^^^^^^^^^^^^^
-#         ,,,,,,,,,,,,,,,,,,,,,,
-#         ``````````````````````
-#         **********************
-#         @@@@@@@@@@@@@@@@@@@@@@
 
-#        [~]============>-----------._______________________.-----------<============[~]                      ---------------------- ======================#[~]
-#        |||                        `^`^`^`^`^`^`^`^`^`^`^`^`                        |||
-#        |||                                                                         |||
-#        |||                                                                         |||
-#        [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-#
-#        [~]============>-----------._______________________.-----------<============[~]                      ---------------------- ======================#[~]
-#        |||                        `^`^`^`^`^`^`^`^`^`^`^`^`                        |||
-#        |||                                                                         |||
-#        [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-
-#    _____________________________________________________________________________
-#   [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||_________________________________________________________________________|||
-#   [~]============>-----------._______________________.-----------<============[~]                      ---------------------- ======================#[~]
-
-#    _____________________________________________________________________________
-#   [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-#   |||                                                                         |||
-#   |||                                                                         |||
-#   |||_________________________________________________________________________|||
-#   [~]============>-----------._______________________.-----------<============[~]
-
-
-#    _____________________________________________________________________________
-#   [~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-#   |||                                                                         |||
-#   |||_________________________________________________________________________|||
-#   [~]============>-----------._______________________.-----------<============[~]                      ---------------------- ======================#[~]
-
-
-#[~]============>-----------._______________________.-----------<============[~]                      ---------------------- ======================#[~]
-#|||                        `^`^`^`^`^`^`^`^`^`^`^`^`                        |||
-#|||                                                                         |||
-#|||                                                                         |||
-#|||                                                                         |||
-#|||                                                                         |||
-#[~]============>-----------'~.~.~.~.~.~.~.~.~.~.~.~'-----------<============[~]
-
+### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
 
