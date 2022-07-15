@@ -1,9 +1,6 @@
 <div align="justify">
 <div align="center">
 
-```ocaml
-ZSH / NVIM / TMUX / AWESOMEWM
-```
 
 </div>
 
@@ -14,7 +11,11 @@ ZSH / NVIM / TMUX / AWESOMEWM
 ---
 
 # **dotfiles**
-  
+
+```ocaml
+ZSH / NVIM / TMUX / AWESOMEWM
+```
+ 
 > *[*My Personal 'dotfiles'*](https://connerwill.com)*
   
 
