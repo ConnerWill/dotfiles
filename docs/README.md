@@ -1,3 +1,6 @@
+
+---
+
 <!-- README.md -->
 <div align="center">
 
@@ -18,7 +21,6 @@
 ![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)
 
----
 </div>
 
 ---
