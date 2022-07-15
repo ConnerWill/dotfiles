@@ -13,9 +13,8 @@
 
 
 
-### :sunflower: ‎ <samp>SYNC FOR UPDATES</samp>
+### ‎ <samp>SYNC FOR UPDATES</samp>
 
-<details>
 <summary><b>Click or tap to extend</b></summary>
 
 
