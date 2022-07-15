@@ -46,22 +46,18 @@
 ##  ${ZSH_USER_DIR}:::::: Path to current config profile ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user )
 ##  ${ZSHDDIR}::::::::::: Directory containing configs that will be sourced in numeric order ( $ZSH_USER_DIR/zsh.d )
 ##_________________________________________________________##
-export LC_ALL="en_US.UTF-8"
-
+LC_ALL="en_US.UTF-8"
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
 #: VERY Verbose loading zshrc
 if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
-
 ### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ### {{{
-
 unset                 \
   _ZSH_LOAD_VERBOSE   \
   _ZSH_SHOW_ERRORS    \
   _ZSH_BANNER_SHOW    \
   _ZSH_BANNER_START
-
 export                \
   _ZSH_LOAD_VERBOSE   \
   _ZSH_SHOW_ERRORS    \
@@ -70,12 +66,10 @@ export                \
   ZSH_USER_DIR_NAME   \
   ZSH_USER_DIR        \
   ZSH_USER_LOAD_DIR   \
-
+  LC_ALL  
 ### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ### }}}
 
-
 ### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ### {{{
-
 ########################
 #### Config options ####
 ###########################################################################
@@ -86,29 +80,20 @@ export                \
 ##    See the description next to the value to find what values cam be used,
 ##    To disable options, comment out the option or leave it unset.
 ##########################################################################
-
 ### :::::::::::::: BEGIN ZSHRC USER CONFIG :::::::::::::::: ###
 
 [[ -z "${ZSH_USER_DIR_NAME}" ]] \
-  && ZSH_USER_DIR_NAME="user"
-#: Name of the User-Folder for the 'profile' to use. This makes it easy to work on multiple zsh configs on the same machine/user
-
-ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"
-#: Define the path of sub-profiles
-
-ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d"
-#: Define the name of the folder which will be looped through looking for files with and extension of '.zsh'.
-#: All files with an extension of '.zsh' will be sourced durring startup.
-
-_ZSH_LOAD_VERBOSE="TRUE"
-#: Show what is being loaded verbosely
-
-_ZSH_SHOW_ERRORS="TRUE"
-#: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
-
-ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"
-#: Directory that ZSH logs will be written to.
-
+  && ZSH_USER_DIR_NAME="user"   #: Name of the User-Folder for the 'profile' to use.
+                                #: This makes it easy to work on multiple zsh configs
+                                #: on the same machine/user
+ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"   #: Define the path of sub-profiles
+ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d"   #: Define the name of the folder that will be looped
+                                            #: through looking for file with and extension of '.zsh'.
+                                            #: All files with an extension of '.zsh' will
+                                            #: be sourced durring startup.
+_ZSH_LOAD_VERBOSE="TRUE"              #: Show what is being loaded verbosely
+_ZSH_SHOW_ERRORS="TRUE"               #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
+ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"   #: Directory that ZSH logs will be written to.
 _ZSH_DEBUGGING_ENABLED="TRUE"
 #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
 #:
@@ -147,14 +132,10 @@ _ZSH_BANNER_START="TRUE"
 #: If this option is enabled (default), banner art will be shown before other files are loaded.
 #: If this option is disabled, banner art will be shown after all files are loaded.
 #: NOTE: Banner art will only be shown if also '_ZSH_BANNER_SHOW' is enabled.
-
-
-
 ### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC VERBOSE MESSEGES ::::::::::::::::: ### {{{
-
 ### VERBOSE / ERROR Displaying
 function _zshrc_VERBOSE_MESSEGE(){
   if [[ -n "${_ZSH_LOAD_VERBOSE}" ]]; then
@@ -171,7 +152,6 @@ function _zshrc_VERBOSE_MESSEGE(){
     return 0
   fi
 }
-
 function _zshrc_VERBOSE_ERROR(){
   if [[ -n "${_ZSH_SHOW_ERRORS}" ]]; then
     local zsh_verbose_error_verb zsh_verbose_error
@@ -187,7 +167,6 @@ function _zshrc_VERBOSE_ERROR(){
     return 1
   fi
 }
-
 function _zshloadverbose(){
     [[ -z "$zsh_load_verbose_clear" ]] || clear
     [[ -z "$zsh_load_section" ]] || printf "Loading %s ..." "$zsh_load_section"
@@ -195,15 +174,10 @@ function _zshloadverbose(){
     unset zsh_load_section
     unset zsh_load_section_error
 }
-
-
-
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
-
-
 ### Clear Screen
 function _zshloadstartclear(){
     [[ -z "$zsh_load_start_clear" ]] || clear
@@ -211,25 +185,16 @@ function _zshloadstartclear(){
 function _zshloadendclear(){
     [[ -z "$zsh_load_end_clear" ]] || clear
 }
-
-
 ### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
-
-
 _zshloadstartclear
 #: Clear Screen Before Loading
-
-
 ### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
-
-
-
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
@@ -245,20 +210,13 @@ if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
 else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "${ZSH_USER_LOAD_DIR}" "196" "124"
 fi
-
-
-
 ### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
 
-
-
 _zshloadendclear
 #: Clear Screen After Loading
-
-
 
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
