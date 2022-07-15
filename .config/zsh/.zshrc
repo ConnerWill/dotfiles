@@ -83,49 +83,18 @@ export                \
 ### :::::::::::::: BEGIN ZSHRC USER CONFIG :::::::::::::::: ###
 
 [[ -z "${ZSH_USER_DIR_NAME}" ]] \
-  && ZSH_USER_DIR_NAME="user"   #: Name of the User-Folder for the 'profile' to use.
-                                #: This makes it easy to work on multiple zsh configs
-                                #: on the same machine/user
-ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"   #: Define the path of sub-profiles
-ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d"   #: Define the name of the folder that will be looped
-                                            #: through looking for file with and extension of '.zsh'.
-                                            #: All files with an extension of '.zsh' will
-                                            #: be sourced durring startup.
-_ZSH_LOAD_VERBOSE="TRUE"              #: Show what is being loaded verbosely
-_ZSH_SHOW_ERRORS="TRUE"               #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
-ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"   #: Directory that ZSH logs will be written to.
-_ZSH_DEBUGGING_ENABLED="TRUE"
-#: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
-#:
-#: To run a diagnostics dump, run command:
-#:  
-#:      zsh_diagnostic_dump
-#:
-#:  If you're getting weird behavior and can't find the culprit,
-#:  run the following command to enable debug mode:
-#:
-#:      zsh -xv 2> >(tee ~/omz-debug.log &>/dev/null)
-#:
-#:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
-#:  and when you're done, run exit to stop the debugging session.
-#:  This will create a omz-debug.log file on your home directory,
-#:  with a trace of every command executed and its output.
-#:  You can then upload this file when creating an issue.
-#:
-#:  If you only need to debug the session initialization, you can do so with the command:
-#:
-#:      zsh -xvic exit &> ~/omz-debug.log
-#:
-#:  To list all keybindings, run this command
-#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
-#:
-#:  Or:
-#:
-#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
-#:
-
-_ZSH_BANNER_SHOW="TRUE"
-#: Show banner art
+  && ZSH_USER_DIR_NAME="user"        #: Name of the User-Folder for the 'profile' to use.
+                                     #: This makes it easy to work on multiple zsh configs on the same machine/user
+ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}" #: Define the path of sub-profiles
+ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d" #: Define the name of the folder that will be looped
+                                          #: through looking for file with and extension of '.zsh'.
+                                          #: All files with an extension of '.zsh' will
+                                          #: be sourced durring startup.
+_ZSH_LOAD_VERBOSE="TRUE"             #: Show what is being loaded verbosely
+_ZSH_SHOW_ERRORS="TRUE"              #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
+ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"  #: Directory that ZSH logs will be written to.
+_ZSH_DEBUGGING_ENABLED="TRUE"        #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
+_ZSH_BANNER_SHOW="TRUE"              #: Show banner art
 
 _ZSH_BANNER_START="TRUE"
 #: Show banner art before loading other files.
