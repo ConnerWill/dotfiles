@@ -23,7 +23,11 @@ configs.setup {
     "gowork",
     "hjson",
     "html",
+<<<<<<< HEAD
+    "http",
+=======
     -- "http",
+>>>>>>> main
     -- "java",
     "javascript",
     -- "jsdoc",
@@ -37,7 +41,11 @@ configs.setup {
     "python",
     "regex",
     -- "scss",
+<<<<<<< HEAD
+    -- "slint",
+=======
     "slint",
+>>>>>>> main
     -- "todotxt",
     "toml",
     "vim",

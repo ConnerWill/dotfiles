@@ -1,0 +1,6 @@
+[submodule "/home/dampsock/.config/zsh/zsh/user/functions/functions-available/yayfzf"]
+	path = /home/dampsock/.config/zsh/zsh/user/functions/functions-available/yayfzf
+	url = https://github.com/ConnerWill/yayfzf
+[submodule "/home/dampsock/.config/zsh/zsh/user/functions/functions-available/cheat-fzf"]
+	path = /home/dampsock/.config/zsh/zsh/user/functions/functions-available/cheat-fzf
+	url = https://github.com/ConnerWill/cheat-fzf

@@ -9,7 +9,7 @@
 local options = {
 	backup = false, -- backup file?
 	clipboard = "unnamedplus", -- allows neovim to access the system clipboard
-	-- verbose=1,
+	-- verbose=13,
 	-- verbosefile = "2022-nvim.log",
 	cmdheight = 1, -- command line height for displaying messages
 	completeopt = { "menu", "menuone", "preview", "noselect" }, -- mostly just for cmp

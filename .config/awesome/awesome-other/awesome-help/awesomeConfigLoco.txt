@@ -1,0 +1,8 @@
+# Awesome Window Manager Config File Location 
+
+/etc/xdg/awesome/rc.lua
+
+
+
+
+

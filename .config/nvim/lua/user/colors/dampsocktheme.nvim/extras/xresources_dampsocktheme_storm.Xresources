@@ -1,0 +1,23 @@
+! DampSockTheme colors for Xresources
+
+*background: #13172a
+*foreground: #c0caf5
+
+*color0: #0F1222
+*color1: #ff7690
+*color2: #4edf6a
+*color3: #c9cb20
+*color4: #75a2f7
+*color5: #da50f0
+*color6: #7dffff
+*color7: #98a0c5
+
+*color8: #202646
+*color9: #ff7690
+*color10: #4edf6a
+*color11: #c9cb20
+*color12: #75a2f7
+*color13: #da50f0
+*color14: #7dffff
+*color15: #c0caf5
+ 
