@@ -1,12 +1,12 @@
 
----
-
 <!-- README.md -->
 <div align="center">
 
 <!---<img width="480" height="320" src="assets/dotfiles-banner.png">--->
  <!-- <img width="480" height="320" src="assets/banner.png"> -->
   <img width="720" height="480" src="https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png">
+
+---
 
 # **dotfiles**
   
