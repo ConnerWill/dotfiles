@@ -13,8 +13,10 @@
 
 
 
+### :sunflower: ‎ <samp>SYNC FOR UPDATES</samp>
 
-
+<details>
+<summary><b>Click or tap to extend</b></summary>
 
 
 <div align="center">
