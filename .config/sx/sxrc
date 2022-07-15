@@ -1,0 +1,50 @@
+# Make sure this is before the 'exec' command or it won't be sourced.
+[ -f /etc/xprofile ] && . /etc/xprofile
+[ -f ~/.xprofile ] && . ~/.xprofile
+
+
+
+### [~]==================[~]
+### [~]    AwesomeWM
+### [~]==================[~]
+
+WM_PATH="/usr/bin/awesome"
+WM_LOGGING_DIR="$HOME/.local/var/log/awesomewm"
+
+## Confirm Logging dir exists
+function WMloggingDirExists(){
+
+  [[ -f "$WM_PATH" ]] \
+    || return "WM '$WM_PATH' Not Found"
+
+  [[ -d "$WM_LOGGING_DIR" ]] \
+    || mkdir -v -p "$WM_LOGGING_DIR"
+
+  [[ -d "$WM_LOGGING_DIR" ]] \
+    && start_WM_w_log \
+      && return 0
+
+  [[ -d "$WM_LOGGING_DIR" ]] \
+    || start_WM_no_log \
+      || return 1
+
+}
+
+## Start WM with logging 
+function start_WM_w_log(){
+
+  exec \
+    "$WM_PATH" \
+      >> "$WM_LOGGING_DIR/stdout" \
+      2>> "$WM_LOGGING_DIR/stderr"
+}
+
+## Start WM without logging 
+function start_WM_no_log(){
+  
+  exec \
+    "$WM_PATH"    
+}
+
+WMloggingDirExists
+
