@@ -71,36 +71,34 @@ export                \
 
 ### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ### {{{
 ########################
-#### Config options ####
-###########################################################################
-### For boolean options:
-##    To enable options, set the value to anything (e.g. TRUE).
-##    To disable options, comment out the option or leave it unset.
-### For string options:
-##    See the description next to the value to find what values cam be used,
-##    To disable options, comment out the option or leave it unset.
+#┌─ Config options ####
+#│ 
+#├─┐ For boolean options:
+#│ ├─── To enable options, set the value to anything (e.g. TRUE).
+#│ └─── To disable options, comment out the option or leave it unset.
+#└─┐ For string options:
+#  ├──── See the description next to the value to find what values cam be used,
+#  └──── To disable options, comment out the option or leave it unset.
 ##########################################################################
 ### :::::::::::::: BEGIN ZSHRC USER CONFIG :::::::::::::::: ###
 
 [[ -z "${ZSH_USER_DIR_NAME}" ]] \
-  && ZSH_USER_DIR_NAME="user"        #: Name of the User-Folder for the 'profile' to use.
-                                     #: This makes it easy to work on multiple zsh configs on the same machine/user
+  && ZSH_USER_DIR_NAME="user"        #┌ Name of the User-Folder for the 'profile' to use.
+                                     #└─ This makes it easy to work on multiple zsh configs on the same machine/user
 ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}" #: Define the path of sub-profiles
-ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d" #: Define the name of the folder that will be looped
-                                          #: through looking for file with and extension of '.zsh'.
-                                          #: All files with an extension of '.zsh' will
-                                          #: be sourced durring startup.
+ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d" #┌ Define the name of the folder that will be looped
+                                          #├─ through looking for file with and extension of '.zsh'.
+                                          #├─ All files with an extension of '.zsh' will
+                                          #└─ be sourced durring startup.
 _ZSH_LOAD_VERBOSE="TRUE"             #: Show what is being loaded verbosely
 _ZSH_SHOW_ERRORS="TRUE"              #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
 ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"  #: Directory that ZSH logs will be written to.
 _ZSH_DEBUGGING_ENABLED="TRUE"        #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
 _ZSH_BANNER_SHOW="TRUE"              #: Show banner art
-
-_ZSH_BANNER_START="TRUE"
-#: Show banner art before loading other files.
-#: If this option is enabled (default), banner art will be shown before other files are loaded.
-#: If this option is disabled, banner art will be shown after all files are loaded.
-#: NOTE: Banner art will only be shown if also '_ZSH_BANNER_SHOW' is enabled.
+_ZSH_BANNER_START="TRUE"             #┌ Show banner art before loading other files.
+                                     #├─ If this option is enabled (default), banner art will be shown before other files are loaded.
+                                     #├─ If this option is disabled, banner art will be shown after all files are loaded.
+                                     #└──NOTE: Banner art will only be shown if also '_ZSH_BANNER_SHOW' is enabled.
 ### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ### }}}
 
 
