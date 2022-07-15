@@ -1,6 +1,11 @@
-
-<!-- README.md -->
+<div align="justify">
 <div align="center">
+
+```ocaml
+ZSH / NVIM / TMUX / AWESOMEWM
+```
+
+</div>
 
 <!---<img width="480" height="320" src="assets/dotfiles-banner.png">--->
  <!-- <img width="480" height="320" src="assets/banner.png"> -->
@@ -270,7 +275,7 @@ LOWERRIGHT_CONTENT="test"
 <div align="center">
   <details>
     <summary>Click to expand contributing section</summary>
- 
+
 ## Contributing
 
 ---
@@ -287,6 +292,8 @@ If you have a suggestion that would make this better, please fork the repo and c
 
   <p align="right">(<a href="#top">back to top</a>)</p>
 </details>  
+
+</div>
 
 ---
 
