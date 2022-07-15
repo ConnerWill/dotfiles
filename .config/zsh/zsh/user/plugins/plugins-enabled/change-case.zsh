@@ -1,0 +1,1 @@
+../plugins-available/zsh-change-case/change-case.zsh

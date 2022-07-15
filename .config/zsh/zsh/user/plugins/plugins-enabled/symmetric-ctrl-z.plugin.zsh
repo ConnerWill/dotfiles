@@ -1,0 +1,1 @@
+../plugins-available/symmetric-ctrl-z/symmetric-ctrl-z.plugin.zsh

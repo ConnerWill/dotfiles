@@ -1,0 +1,1 @@
+/home/dampsock/scripts/MYPROJECTS/ConnerWill/gists/kitty-conf-configured-settings/kitty-conf-configured-settings.sh
