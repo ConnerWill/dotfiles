@@ -1,0 +1,1 @@
+../plugins-available/z.lua/z.lua.plugin.zsh
