@@ -579,4 +579,9 @@ export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 ###}}}
 
 export DOTFILES="${HOME}/.dotfiles"
-[[ -n "${DOTFILES}" ]] && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
+export DOTBARE_DIR="${DOTFILES}"
+export DOTBARE_TREE="${HOME}"
+[[ -n "${DOTFILES}" ]] \
+  && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}" \
+  && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
+
