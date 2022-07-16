@@ -66,7 +66,7 @@ export                \
   _ZSH_LOAD_VERBOSE   \
   _ZSH_SHOW_ERRORS    \
   _ZSH_BANNER_SHOW    \
-  _ZSH_BANNER_START
+  _ZSH_BANNER_START   \
   ZSH_USER_DIR_NAME   \
   ZSH_USER_DIR        \
   ZSH_USER_LOAD_DIR   \
@@ -106,8 +106,6 @@ _ZSH_LOAD_VERBOSE="TRUE"
 _ZSH_SHOW_ERRORS="TRUE"
 #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
 
-ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"
-#: Directory that ZSH logs will be written to.
 
 _ZSH_DEBUGGING_ENABLED="TRUE"
 #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
@@ -119,7 +117,7 @@ _ZSH_DEBUGGING_ENABLED="TRUE"
 #:  If you're getting weird behavior and can't find the culprit,
 #:  run the following command to enable debug mode:
 #:
-#:      zsh -xv 2> >(tee ~/omz-debug.log &>/dev/null)
+#:      zsh -xv 2> >(tee ${ZSH_DEBUG_LOG_DIR}/$(date +'%Y%m%d-%H%M%S')_zsh-debug.log &>/dev/null)
 #:
 #:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
 #:  and when you're done, run exit to stop the debugging session.
@@ -129,7 +127,7 @@ _ZSH_DEBUGGING_ENABLED="TRUE"
 #:
 #:  If you only need to debug the session initialization, you can do so with the command:
 #:
-#:      zsh -xvic exit &> ~/omz-debug.log
+#:      zsh -xvic exit &> ${ZSH_DEBUG_LOG_DIR}/$(date +'%Y%m%d-%H%M%S')_zsh-debug.log
 #:
 #:  To list all keybindings, run this command
 #:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
@@ -199,6 +197,50 @@ function _zshloadverbose(){
 
 
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
+
+
+### :::::::::::::: ZSHRC LOGGING DIR :::::::::::::::::::::: ### {{{
+
+
+# ZSH_DEBUG_LOG_DIR="${XDG_CACHE_HOME}/zsh/zsh-logs"
+#: Directory that ZSH logs will be written to.
+
+[[ -z "${ZSH_DEBUG_LOG_DIR}" ]] \
+  && ZSH_DEBUG_LOG_DIR="${XDG_CACHE_HOME}/zsh/zsh-logs"
+[[ ! -d "${ZSH_DEBUG_LOG_DIR}" ]] \
+  && _zshrc_VERBOSE_MESSEGE "Creating Directory: " "${ZSH_DEBUG_LOG_DIR}" "22" "208" \
+  && mkdir -p "${ZSH_DEBUG_LOG_DIR}" >/dev/null 2>&1
+    # || _zshrc_VERBOSE_ERROR "Unable to create logging directory" "${ZSH_DEBUG_LOG_DIR}" "196" "190"
+
+#: To run a diagnostics dump, run command:
+#:  
+#:      zsh_diagnostic_dump
+#:
+#:  If you're getting weird behavior and can't find the culprit,
+#:  run the following command to enable debug mode:
+#:
+#:      zsh -xv 2> >(tee ${ZSH_DEBUG_LOG_DIR}/$(date +'%Y%m%d-%H%M%S')_zsh-debug.log &>/dev/null)
+#:
+#:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
+#:  and when you're done, run exit to stop the debugging session.
+#:  This will create a omz-debug.log file on your home directory,
+#:  with a trace of every command executed and its output.
+#:  You can then upload this file when creating an issue.
+#:
+#:  If you only need to debug the session initialization, you can do so with the command:
+#:
+#:      zsh -xvic exit &> ${ZSH_DEBUG_LOG_DIR}/$(date +'%Y%m%d-%H%M%S')_zsh-debug.log
+#:
+#:  To list all keybindings, run this command
+#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
+#:
+#:  Or:
+#:
+#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
+#:
+
+
+### :::::::::::::: END ZSHRC LOGGING DIR :::::::::::::::::: ### }}}
 
 
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
