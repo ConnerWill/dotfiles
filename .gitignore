@@ -39,4 +39,9 @@ sessions
 .dotfiles*
 .dotfiles
 .git
-
+.chpwd-recent-dirs
+*.chpwd-recent-dirs*
+*chpwd*
+*recent-dirs*
+.zcompdump
+*.zcompdump*
