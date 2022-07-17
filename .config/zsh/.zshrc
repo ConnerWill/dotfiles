@@ -66,7 +66,7 @@ export                \
   _ZSH_LOAD_VERBOSE   \
   _ZSH_SHOW_ERRORS    \
   _ZSH_BANNER_SHOW    \
-  _ZSH_BANNER_START   \
+  _ZSH_BANNER_START
   ZSH_USER_DIR_NAME   \
   ZSH_USER_DIR        \
   ZSH_USER_LOAD_DIR   \
@@ -106,6 +106,8 @@ _ZSH_LOAD_VERBOSE="TRUE"
 _ZSH_SHOW_ERRORS="TRUE"
 #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
 
+ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"
+#: Directory that ZSH logs will be written to.
 
 _ZSH_DEBUGGING_ENABLED="TRUE"
 #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
@@ -116,7 +118,6 @@ _ZSH_DEBUGGING_ENABLED="TRUE"
 #:
 #:  If you're getting weird behavior and can't find the culprit,
 #:  run the following command to enable debug mode:
-#:
 #:      zsh -xv 2> >(tee ${ZSH_DEBUG_LOG_DIR}/$(date +'%Y%m%d-%H%M%S')_zsh-debug.log &>/dev/null)
 #:
 #:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
