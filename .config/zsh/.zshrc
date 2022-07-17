@@ -274,33 +274,6 @@ ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"
 _ZSH_DEBUGGING_ENABLED="TRUE"
 #: If this option is set, your ZSH shell will write a debug log to $ZSH_DEBUG_LOG_DIR 
 #:
-#: To run a diagnostics dump, run command:
-#:  
-#:      zsh_diagnostic_dump
-#:
-#:  If you're getting weird behavior and can't find the culprit,
-#:  run the following command to enable debug mode:
-#:
-#:      zsh -xv 2> >(tee ~/omz-debug.log &>/dev/null)
-#:
-#:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
-#:  and when you're done, run exit to stop the debugging session.
-#:  This will create a omz-debug.log file on your home directory,
-#:  with a trace of every command executed and its output.
-#:  You can then upload this file when creating an issue.
-#:
-#:  If you only need to debug the session initialization, you can do so with the command:
-#:
-#:      zsh -xvic exit &> ~/omz-debug.log
-#:
-#:  To list all keybindings, run this command
-#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
-#:
-#:  Or:
-#:
-#:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
-#:
-
 _ZSH_BANNER_SHOW="TRUE"
 #: Show banner art
 
