@@ -18,10 +18,15 @@ zsh -xv 2> >(tee "${_zsh_debug_log_dir}/$(date +'%Y%m%d%H%M%S')_zsh_debug.log" &
 ```
 
 *Afterwards, reproduce the behavior (i.e. if it's a particular command, run it), and*
+
 *when you're done, run exit to stop the debugging session.*
+
 *This will create a log file*
-  **`${XDG_CACHE_HOME}/zsh/debug-logs/$(date +'%Y%m%d%H%M%S')_zsh_debug.log`**
+
+**`${XDG_CACHE_HOME}/zsh/debug-logs/$(date +'%Y%m%d%H%M%S')_zsh_debug.log`**
+
 *with a trace of every command executed and its output.*
+
 *You can then upload this file and create an issue or debug it yourself* **:)**
 
 > *If you only need to debug the session initialization, you can do so with the command:*
