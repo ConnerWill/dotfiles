@@ -136,4 +136,7 @@ compinit
 # #         exec zsh
 # # https://thevaluable.dev/zsh-completion-guide-examples/
 # # https://raw.githubusercontent.com/Phantas0s/.dotfiles/master/zsh/completion.zsh
+<<<<<<< HEAD
 
+=======
+>>>>>>> temp
