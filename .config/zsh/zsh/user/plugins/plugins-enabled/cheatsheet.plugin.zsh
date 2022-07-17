@@ -1,1 +1,0 @@
-../plugins-available/cheatsheet/cheatsheet.plugin.zsh
