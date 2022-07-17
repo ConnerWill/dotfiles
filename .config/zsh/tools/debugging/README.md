@@ -1,6 +1,6 @@
 # **DEBUGGING**
 > 
-> To run a diagnostics dump, run command:
+> **To run a diagnostics dump, run command:**
 > 
 ```shell
 zsh_diagnostic_dump
