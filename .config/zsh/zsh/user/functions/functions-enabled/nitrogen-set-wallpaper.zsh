@@ -1,0 +1,1 @@
+../functions-available/nitrogen-set-wallpaper.zsh

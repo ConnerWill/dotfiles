@@ -1,0 +1,601 @@
+# Uses h2-list
+
+emulate -LR zsh
+
+setopt extendedglob typesetsilent
+
+_ztrace_has_terminfo=0
+
+zmodload zsh/curses
+zmodload zsh/parameter
+zmodload zsh/datetime
+zmodload zsh/terminfo 2>/dev/null && _ztrace_has_terminfo=1
+
+trap "_ztrace_exit" EXIT
+
+local IFS="
+"
+
+# Ztrace selection list
+local one_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local one_HLIST_CURRENT_IDX
+local one_HLIST_IS_SEARCH_MODE
+local one_HLIST_SEARCH_BUFFER
+local one_HLIST_TEXT_OFFSET
+local one_HLIST_IS_UNIQ_MODE
+local one_HLIST_CURRENT_SEGMENT
+local -a one_HLIST_ENABLED_EVENTS
+local -A one_HLIST_ACTIVE_SEGMENTS
+local one_HLIST_TRACK_SEGMENTS
+local -a one_HLIST_NONSELECTABLE_ELEMENTS
+
+# Command list
+local two_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local two_HLIST_CURRENT_IDX
+local two_HLIST_IS_SEARCH_MODE
+local two_HLIST_SEARCH_BUFFER
+local two_HLIST_TEXT_OFFSET
+local two_HLIST_IS_UNIQ_MODE
+local two_HLIST_CURRENT_SEGMENT
+local -a two_HLIST_ENABLED_EVENTS
+local -A two_HLIST_ACTIVE_SEGMENTS
+local two_HLIST_TRACK_SEGMENTS
+local -a two_HLIST_NONSELECTABLE_ELEMENTS
+
+# Catched output list
+local three_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local three_HLIST_CURRENT_IDX
+local three_HLIST_IS_SEARCH_MODE
+local three_HLIST_SEARCH_BUFFER
+local three_HLIST_TEXT_OFFSET
+local three_HLIST_IS_UNIQ_MODE
+local three_HLIST_CURRENT_SEGMENT
+local -a three_HLIST_ENABLED_EVENTS
+local -A three_HLIST_ACTIVE_SEGMENTS
+local three_HLIST_TRACK_SEGMENTS
+
+# History list
+local four_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+local four_HLIST_CURRENT_IDX
+local four_HLIST_IS_SEARCH_MODE
+local four_HLIST_SEARCH_BUFFER
+local four_HLIST_TEXT_OFFSET
+local four_HLIST_IS_UNIQ_MODE
+local four_HLIST_CURRENT_SEGMENT
+local -a four_HLIST_ENABLED_EVENTS
+local -A four_HLIST_ACTIVE_SEGMENTS
+local four_HLIST_TRACK_SEGMENTS
+
+# Cleanup before any exit
+_ztrace_exit() {
+    setopt localoptions
+    setopt extendedglob
+
+    zcurses 2>/dev/null delwin main
+    zcurses 2>/dev/null delwin status
+    zcurses 2>/dev/null refresh
+
+    zcurses end
+    _ztrace_alternate_screen 0
+    unset _ztrace_has_terminfo
+
+    _hlist_cursor_visibility "plain" 1
+    unset _hlist_has_terminfo
+}
+
+_ztrace_init_windows() {
+    _ztrace_alternate_screen 1
+
+    zcurses init
+    zcurses delwin cmd 2>/dev/null
+    zcurses delwin main 2>/dev/null
+    zcurses delwin status 2>/dev/null
+    zcurses addwin cmd 4 "$term_width" 0 0
+    zcurses addwin main $(( term_height - 7 )) "$term_width" 4 0
+    zcurses addwin status "3" "$term_width" $(( term_height - 3 )) 0
+}
+
+# Reason for this function is that on some systems
+# smcup and rmcup are not knowing why left empty
+_ztrace_alternate_screen() {
+    [ "$_ztrace_has_terminfo" -ne "1" ] && return
+    [[ "$1" = "1" && -n "$terminfo[smcup]" ]] && return
+    [[ "$1" = "0" && -n "$terminfo[rmcup]" ]] && return
+
+    case "$TERM" in
+        *rxvt*)
+            [ "$1" = "1" ] && echo -n $'\x1b7\x1b[?47h'
+            [ "$1" = "0" ] && echo -n $'\x1b[2J\x1b[?47l\x1b8'
+            ;;
+        *)
+            [ "$1" = "1" ] && echo -n $'\x1b[?1049h'
+            [ "$1" = "0" ] && echo -n $'\x1b[?1049l'
+            # just to remember two other that work: $'\x1b7\x1b[r\x1b[?47h', $'\x1b[?47l\x1b8'
+            ;;
+    esac
+}
+
+_ztrace_save_list_state() {
+    if [ "$1" = "1" ]; then
+        # Switching from first list, save its state
+        one_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        one_HLIST_CURRENT_IDX=$HLIST_CURRENT_IDX
+        one_HLIST_IS_SEARCH_MODE=$HLIST_IS_SEARCH_MODE
+        one_HLIST_SEARCH_BUFFER=$HLIST_SEARCH_BUFFER
+        one_HLIST_TEXT_OFFSET=$HLIST_TEXT_OFFSET
+        one_HLIST_IS_UNIQ_MODE=$HLIST_IS_UNIQ_MODE
+        one_HLIST_CURRENT_SEGMENT=$HLIST_CURRENT_SEGMENT
+        one_HLIST_ENABLED_EVENTS=( ${HLIST_ENABLED_EVENTS[@]} )
+        one_HLIST_ACTIVE_SEGMENTS=( ${(kv)HLIST_ACTIVE_SEGMENTS[@]} )
+        one_HLIST_TRACK_SEGMENTS=$HLIST_TRACK_SEGMENTS
+        one_HLIST_NONSELECTABLE_ELEMENTS=( ${HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "2" ]; then
+        # Switching from second list, save its state
+        two_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        two_HLIST_CURRENT_IDX=$HLIST_CURRENT_IDX
+        two_HLIST_IS_SEARCH_MODE=$HLIST_IS_SEARCH_MODE
+        two_HLIST_SEARCH_BUFFER=$HLIST_SEARCH_BUFFER
+        two_HLIST_TEXT_OFFSET=$HLIST_TEXT_OFFSET
+        two_HLIST_IS_UNIQ_MODE=$HLIST_IS_UNIQ_MODE
+        two_HLIST_CURRENT_SEGMENT=$HLIST_CURRENT_SEGMENT
+        two_HLIST_ENABLED_EVENTS=( ${HLIST_ENABLED_EVENTS[@]} )
+        two_HLIST_ACTIVE_SEGMENTS=( ${(kv)HLIST_ACTIVE_SEGMENTS[@]} )
+        two_HLIST_TRACK_SEGMENTS=$HLIST_TRACK_SEGMENTS
+        two_HLIST_NONSELECTABLE_ELEMENTS=( ${HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "3" ]; then
+        # Switching from third list, save its state
+        three_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        three_HLIST_CURRENT_IDX=$HLIST_CURRENT_IDX
+        three_HLIST_IS_SEARCH_MODE=$HLIST_IS_SEARCH_MODE
+        three_HLIST_SEARCH_BUFFER=$HLIST_SEARCH_BUFFER
+        three_HLIST_TEXT_OFFSET=$HLIST_TEXT_OFFSET
+        three_HLIST_IS_UNIQ_MODE=$HLIST_IS_UNIQ_MODE
+        three_HLIST_CURRENT_SEGMENT=$HLIST_CURRENT_SEGMENT
+        three_HLIST_ENABLED_EVENTS=( ${HLIST_ENABLED_EVENTS[@]} )
+        three_HLIST_ACTIVE_SEGMENTS=( ${(kv)HLIST_ACTIVE_SEGMENTS[@]} )
+        three_HLIST_TRACK_SEGMENTS=$HLIST_TRACK_SEGMENTS
+        three_HLIST_NONSELECTABLE_ELEMENTS=( ${HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "4" ]; then
+        # Switching from third list, save its state
+        four_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        four_HLIST_CURRENT_IDX=$HLIST_CURRENT_IDX
+        four_HLIST_IS_SEARCH_MODE=$HLIST_IS_SEARCH_MODE
+        four_HLIST_SEARCH_BUFFER=$HLIST_SEARCH_BUFFER
+        four_HLIST_TEXT_OFFSET=$HLIST_TEXT_OFFSET
+        four_HLIST_IS_UNIQ_MODE=$HLIST_IS_UNIQ_MODE
+        four_HLIST_CURRENT_SEGMENT=$HLIST_CURRENT_SEGMENT
+        four_HLIST_ENABLED_EVENTS=( ${HLIST_ENABLED_EVENTS[@]} )
+        four_HLIST_ACTIVE_SEGMENTS=( ${(kv)HLIST_ACTIVE_SEGMENTS[@]} )
+        four_HLIST_TRACK_SEGMENTS=$HLIST_TRACK_SEGMENTS
+        four_HLIST_NONSELECTABLE_ELEMENTS=( ${HLIST_NONSELECTABLE_ELEMENTS[@]} )
+    fi
+}
+
+_ztrace_retrieve_list_state() {
+    if [ "$1" = "1" ]; then
+        # Switching to first list, restore its state
+        HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$one_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        HLIST_CURRENT_IDX=$one_HLIST_CURRENT_IDX
+        HLIST_IS_SEARCH_MODE=$one_HLIST_IS_SEARCH_MODE
+        HLIST_SEARCH_BUFFER=$one_HLIST_SEARCH_BUFFER
+        HLIST_TEXT_OFFSET=$one_HLIST_TEXT_OFFSET
+        HLIST_IS_UNIQ_MODE=$one_HLIST_IS_UNIQ_MODE
+        HLIST_CURRENT_SEGMENT=$one_HLIST_CURRENT_SEGMENT
+        HLIST_ENABLED_EVENTS=( ${one_HLIST_ENABLED_EVENTS[@]} )
+        HLIST_ACTIVE_SEGMENTS=( ${(kv)one_HLIST_ACTIVE_SEGMENTS[@]} )
+        HLIST_TRACK_SEGMENTS=$one_HLIST_TRACK_SEGMENTS
+        HLIST_NONSELECTABLE_ELEMENTS=( ${one_HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "2" ]; then
+        # Switching to second list, restore its state
+        HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$two_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        HLIST_CURRENT_IDX=$two_HLIST_CURRENT_IDX
+        HLIST_IS_SEARCH_MODE=$two_HLIST_IS_SEARCH_MODE
+        HLIST_SEARCH_BUFFER=$two_HLIST_SEARCH_BUFFER
+        HLIST_TEXT_OFFSET=$two_HLIST_TEXT_OFFSET
+        HLIST_IS_UNIQ_MODE=$two_HLIST_IS_UNIQ_MODE
+        HLIST_CURRENT_SEGMENT=$two_HLIST_CURRENT_SEGMENT
+        HLIST_ENABLED_EVENTS=( ${two_HLIST_ENABLED_EVENTS[@]} )
+        HLIST_ACTIVE_SEGMENTS=( ${(kv)two_HLIST_ACTIVE_SEGMENTS[@]} )
+        HLIST_TRACK_SEGMENTS=$two_HLIST_TRACK_SEGMENTS
+        HLIST_NONSELECTABLE_ELEMENTS=( ${two_HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "3" ]; then
+        # Switching to third list, restore its state
+        HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$three_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        HLIST_CURRENT_IDX=$three_HLIST_CURRENT_IDX
+        HLIST_IS_SEARCH_MODE=$three_HLIST_IS_SEARCH_MODE
+        HLIST_SEARCH_BUFFER=$three_HLIST_SEARCH_BUFFER
+        HLIST_TEXT_OFFSET=$three_HLIST_TEXT_OFFSET
+        HLIST_IS_UNIQ_MODE=$three_HLIST_IS_UNIQ_MODE
+        HLIST_CURRENT_SEGMENT=$three_HLIST_CURRENT_SEGMENT
+        HLIST_ENABLED_EVENTS=( ${three_HLIST_ENABLED_EVENTS[@]} )
+        HLIST_ACTIVE_SEGMENTS=( ${(kv)three_HLIST_ACTIVE_SEGMENTS[@]} )
+        HLIST_TRACK_SEGMENTS=$three_HLIST_TRACK_SEGMENTS
+        HLIST_NONSELECTABLE_ELEMENTS=( ${three_HLIST_NONSELECTABLE_ELEMENTS[@]} )
+
+    elif [ "$1" = "4" ]; then
+        # Switching to third list, restore its state
+        HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN=$four_HLIST_FROM_WHAT_IDX_LIST_IS_SHOWN
+        HLIST_CURRENT_IDX=$four_HLIST_CURRENT_IDX
+        HLIST_IS_SEARCH_MODE=$four_HLIST_IS_SEARCH_MODE
+        HLIST_SEARCH_BUFFER=$four_HLIST_SEARCH_BUFFER
+        HLIST_TEXT_OFFSET=$four_HLIST_TEXT_OFFSET
+        HLIST_IS_UNIQ_MODE=$four_HLIST_IS_UNIQ_MODE
+        HLIST_CURRENT_SEGMENT=$four_HLIST_CURRENT_SEGMENT
+        HLIST_ENABLED_EVENTS=( ${four_HLIST_ENABLED_EVENTS[@]} )
+        HLIST_ACTIVE_SEGMENTS=( ${(kv)four_HLIST_ACTIVE_SEGMENTS[@]} )
+        HLIST_TRACK_SEGMENTS=$four_HLIST_TRACK_SEGMENTS
+        HLIST_NONSELECTABLE_ELEMENTS=( ${four_HLIST_NONSELECTABLE_ELEMENTS[@]} )
+    fi
+}
+
+unset HLIST_COLORING_PATTERN
+
+[ -f ~/.config/ztrace/h2-list.conf ] && builtin source ~/.config/ztrace/h2-list.conf
+[ -f ~/.config/ztrace/ztrace.conf ] && builtin source ~/.config/ztrace/ztrace.conf
+
+typeset -a prelist list1 list2 undolist
+local answer active_window=1 active_subwindow=1
+local boldattr
+integer cur_bkp
+
+[ "$bold" = "0" ] && boldattr="" || boldattr="+bold"
+
+prelist=( )
+# $buf can be empty if not run from Zle
+local buf="${BUFFER%% #}"
+buf="${buf## #}"
+list1=( "$buf" "[F1-Accept] [F2-Reject] [F3-Undo] [F4-Semicolon]" )
+list2=( )
+undolist=( "${list1[1]}" )
+
+integer term_height="$LINES"
+integer term_width="$COLUMNS"
+if [[ "$term_height" -lt 1 || "$term_width" -lt 1 ]]; then
+    local stty_out=$( stty size )
+    term_height="${stty_out% *}"
+    term_width="${stty_out#* }"
+fi
+
+_ztrace_init_windows
+
+zcurses bg "cmd" "$boldattr" white/black
+zcurses bg "main" "$boldattr" white/black
+zcurses bg "status" "$boldattr" white/black
+
+# First draw three vanilla (no remembering of state) h2-lists, saving their default state
+HLIST_DRAW_ONLY=1
+HLIST_REMEMBER_STATE=0
+
+# Window (1): ztrace selection
+# Window (2): command editing
+# Window (3): content (catched output)
+
+typeset -a HLIST_ENABLED_EVENTS
+local HLIST_TRACK_SEGMENTS
+
+#
+# Catched output (3)
+#
+_ztrace_retrieve_list_state 3
+HLIST_START_IN_UNIQ_MODE=0
+HLIST_TRACK_SEGMENTS=0
+h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  Catched output:  " "0" "${list2[@]}"
+# Save default state of list (3)
+_ztrace_save_list_state 3
+unset HLIST_START_IN_UNIQ_MODE
+
+#
+# History (4)
+#
+_ztrace_retrieve_list_state 4
+HLIST_START_IN_UNIQ_MODE=1
+HLIST_TRACK_SEGMENTS=0
+h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  History:  " "0"
+# Save default state of list (4)
+_ztrace_save_list_state 4
+unset HLIST_START_IN_UNIQ_MODE
+
+#
+# Ztraces (1)
+#
+_ztrace_retrieve_list_state 1
+HLIST_START_IN_UNIQ_MODE=0
+HLIST_TRACK_SEGMENTS=0
+h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  Ztraces:  " "0" "${prelist[@]}"
+# Save default state of list (1)
+_ztrace_save_list_state 1
+unset HLIST_START_IN_UNIQ_MODE
+
+#
+# Command (2)
+#
+_ztrace_retrieve_list_state 2
+HLIST_ENABLED_EVENTS=( "BR_MOVE_LEFT" "BR_MOVE_RIGHT" )
+HLIST_TRACK_SEGMENTS=1
+h2-list "cmd" "4" $term_width "" "0" "0" "  Command:  " "1" "${list1[@]}"
+_ztrace_save_list_state 2
+unset HLIST_ENABLED_EVENTS
+
+HLIST_DRAW_ONLY=0
+HLIST_REMEMBER_STATE=1 # From now on lists remember their state
+
+# Main loop that allows to go back to selection
+while (( 1 )); do
+
+# The while loop here isn't actually needed
+# but this way the code is open for extensions
+while (( 1 )); do
+    _ztrace_retrieve_list_state 2
+    HLIST_DRAW_ONLY=1
+    h2-list "cmd" "4" $term_width "" "0" "0" "  Command:  " "0" "${list1[@]}"
+    HLIST_DRAW_ONLY=0
+    _ztrace_save_list_state 2
+
+    # Gather the traces to process and display them
+    local -a traces
+    traces=( /tmp/ztrace-*/*(omN) )
+    prelist=()
+
+    local trace session dtime ts
+    integer cur_ts=EPOCHSECONDS ts_diff last_heading=0
+    local -a headings headings_times
+    local col=$'\x1b[00;32m' rst=$'\x1b[00;00m'
+    headings=(       "" "$col== 5 minutes ==$rst" "$col== 30 minutes ==$rst" "$col== 1 hour ==$rst" "$col== 3 hours ==$rst"
+                        "$col== 6 hours ==$rst"   "$col== 1 day ==$rst"      "$col== 7 days ==$rst" "$col== 30 days ==$rst"
+                        "" )
+    headings_times=( 0  $((5*60))                 $((30*60))                 $((60*60))             $((3*3600))
+                        $((6*3600))               $((24*3600))               $((7*24*3600))         $((30*24*3600))
+                        $cur_ts  )
+
+    integer idx=0
+
+    one_HLIST_NONSELECTABLE_ELEMENTS=()
+
+    # Iterate to find first heading that's greater
+    # meaning we have to assign previous header
+    for trace in "${traces[@]}"; do
+        trace="${trace#/tmp/ztrace-}"
+        session="${trace%%/*}"
+        dtime="${trace##*/}"
+        dtime="${dtime%.ztrace}"
+        dtime="${dtime/_/ }"
+
+        strftime -r -s "ts" '%Y.%m.%d %H:%M:%S' "$dtime"
+
+        ts_diff=$(( cur_ts-ts ))
+        integer i
+        for (( i=1; i<=10; i++ )); do
+            if [[ "${headings_times[$i]}" -gt "$ts_diff" ]]; then
+                # Selected header
+                integer selh=i-1
+                if [ "$last_heading" -ne "$selh" ]; then
+                    last_heading=selh
+
+                    # Add the heading if it's not empty
+                    if [ -n "$headings[$selh]" ]; then
+                        idx+=1
+                        prelist+=( "$headings[selh]" )
+                        one_HLIST_NONSELECTABLE_ELEMENTS+=( "$idx" )
+                    fi
+                fi
+                break
+            fi
+        done
+
+        # Find to which heading this entry belongs
+        idx+=1
+        prelist+=( "[SESSION $session] $dtime" )
+    done
+
+    _ztrace_retrieve_list_state 1
+    HLIST_DISABLE_SEARCH=0
+    h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  Ztraces:  " "1" "${prelist[@]}"
+    _ztrace_save_list_state 1
+
+    # Ignore few events
+    [[ "$REPLY" = -(#c0,1)[0-9]## ]] && break
+done
+
+
+if [[ "$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -lt 0 ]]; then
+    [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+    break
+elif [[ "$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -gt 0 ]]; then
+    local selection="${reply[REPLY]}"
+    local session="${selection#* }"
+    session="${session%%\]*}"
+    local dtime="${selection##*\] }"
+    dtime="${dtime/ /_}"
+
+    local filename="/tmp/ztrace-${session}/${dtime}.ztrace"
+    list2=( "${(@f)"$(<$filename)"}" )
+fi
+
+active_window=3
+
+while (( 1 )); do
+
+    # Command window (2)
+    if [ "$active_window" = "2" ]; then
+        if [ "$active_subwindow" = 1 ]; then
+            _ztrace_retrieve_list_state 3
+            HLIST_DRAW_ONLY=1
+            h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  Catched output:  " "0" "${list2[@]}"
+            HLIST_DRAW_ONLY=0
+            _ztrace_save_list_state 3
+        elif [ "$active_subwindow" = "2" ]; then
+            _ztrace_retrieve_list_state 4
+            HLIST_DRAW_ONLY=1
+            h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  History:  " "0" "${history[@]}"
+            HLIST_DRAW_ONLY=0
+            _ztrace_save_list_state 4
+        fi
+
+        _ztrace_retrieve_list_state 2
+        HLIST_DISABLE_SEARCH=1
+        h2-list "cmd" "4" $term_width "" "0" "0" "  Command:  " "1" "${list1[@]}"
+        _ztrace_save_list_state 2
+    # Main window (3)
+    elif [ "$active_window" = "3" ]; then
+        _ztrace_retrieve_list_state 2
+        HLIST_DRAW_ONLY=1
+        h2-list "cmd" "4" $term_width "" "0" "0" "  Command:  " "0" "${list1[@]}"
+        HLIST_DRAW_ONLY=0
+        _ztrace_save_list_state 2
+
+        if [ "$active_subwindow" = 1 ]; then
+            _ztrace_retrieve_list_state 3
+            HLIST_DISABLE_SEARCH=0
+            h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  Catched output:  " "1" "${list2[@]}"
+            _ztrace_save_list_state 3
+        elif [ "$active_subwindow" = "2" ]; then
+            _ztrace_retrieve_list_state 4
+            HLIST_DISABLE_SEARCH=0
+            h2-list "main" $(( term_height-7 )) $term_width "status" "3" "$term_width" "  History:  " "1" "${history[@]}"
+            _ztrace_save_list_state 4
+        fi
+    fi
+
+    # Init before possible simulation
+    cur_bkp=-1
+
+    if [ "$REPLY" = "LEAVE" ]; then
+        (( active_window = 2 + ((active_window-2 +1) % 2) ))
+    elif [ "$REPLY" = "SUBWIN" ]; then
+        (( active_subwindow = 1 + (active_subwindow % 2) ))
+    elif [[ ("$REPLY" = "MOVE_LEFT" || $REPLY = "MOVE_RIGHT" ||
+             "$REPLY" = "BR_MOVE_LEFT" || $REPLY = "BR_MOVE_RIGHT") && "$active_window" = 2 ]]; then
+        #
+        # Shift + cursor key - move existing element
+        #
+        local cmd="$reply[1]"
+        typeset -a tmp
+        tmp=( "${(z)cmd}" )
+        integer nseg="$#tmp"
+        [[ "$HLIST_CURRENT_SEGMENT" -gt "$nseg" ]] && HLIST_CURRENT_SEGMENT="$nseg"
+
+        if [[ "$REPLY" = "MOVE_LEFT" || "$REPLY" = "BR_MOVE_LEFT" ]]; then
+            if [ "$HLIST_CURRENT_SEGMENT" -gt "1" ]; then
+                _ztrace_retrieve_list_state 2
+                local dest="$tmp[HLIST_CURRENT_SEGMENT-1]"
+                tmp[HLIST_CURRENT_SEGMENT-1]="$tmp[HLIST_CURRENT_SEGMENT]";
+                tmp[HLIST_CURRENT_SEGMENT]="$dest"
+                list1[1]="${(j: :)tmp}"
+                (( HLIST_CURRENT_SEGMENT -- ))
+                _ztrace_save_list_state 2
+
+                # Remember for undo
+                undolist=( "$list1[1]" "$undolist[@]" )
+            fi
+        elif [[ "$REPLY" = "MOVE_RIGHT" || "$REPLY" = "BR_MOVE_RIGHT" ]]; then
+            if [ "$HLIST_CURRENT_SEGMENT" -lt "$nseg" ]; then
+                _ztrace_retrieve_list_state 2
+                local dest="$tmp[HLIST_CURRENT_SEGMENT+1]"
+                tmp[HLIST_CURRENT_SEGMENT+1]="$tmp[HLIST_CURRENT_SEGMENT]";
+                tmp[HLIST_CURRENT_SEGMENT]="$dest"
+                list1[1]="${(j: :)tmp}"
+                (( HLIST_CURRENT_SEGMENT ++ ))
+                _ztrace_save_list_state 2
+
+                # Remember for undo
+                undolist=( "$list1[1]" "$undolist[@]" )
+            fi
+        fi
+    elif [[ ("$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -gt 0) || "$REPLY" = F[1-4] ]]; then
+        if [[ "$REPLY" = F[1-4] ]]; then
+            # Simulate
+            reply=( "" "[F1-Accept] [F2-Reject] [F3-Undo] [F4-Semicolon]" )
+            local key="$REPLY"
+            REPLY="2"
+            cur_bkp="$HLIST_CURRENT_SEGMENT"
+
+            # Simulate F1-Accept selection
+            [ "$key" = "F1" ] && HLIST_CURRENT_SEGMENT="1"
+            # Simulate F2-Reject selection
+            [ "$key" = "F2" ] && HLIST_CURRENT_SEGMENT="2"
+            # Simulate F3-Reject selection
+            [ "$key" = "F3" ] && HLIST_CURRENT_SEGMENT="3"
+            # Simulate F4-Semicolon selection
+            [ "$key" = "F4" ] && HLIST_CURRENT_SEGMENT="4"
+        fi
+
+        #
+        # Selection - add or remove element (or Accept, Reject, Undo, Semicolon)
+        #
+
+        answer="$reply[REPLY]"
+        typeset -a tmp
+        tmp=( "${(z)answer}" )
+        integer nseg="$#tmp"
+        integer cur_seg="$HLIST_CURRENT_SEGMENT"
+        [[ "$cur_seg" -gt "$nseg" ]] && cur_seg="$nseg"
+
+        # Get the interesting part - the selected segment
+        answer="$tmp[$cur_seg]"
+
+        if [ "$answer" = "[F1-Accept]" ]; then
+            # ZLE?
+            if [ "${(t)CURSOR}" = "integer-local-special" ]; then
+                zle redisplay
+                zle kill-buffer
+                zle -U "$list1[1]"
+                break 2
+            else
+                print -zr "$list1[1]"
+                break 2
+            fi
+        elif [ "$answer" = "[F2-Reject]" ]; then
+            # QUIT (1/2)
+            [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+            break
+        elif [ "$answer" = "[F3-Undo]" ]; then
+            if [ "$#undolist" -gt 1 ]; then
+                # Move previous to position of the current, deleting current
+                list1[1]="$undolist[2]"
+                shift undolist
+            fi
+        elif [ "$answer" = "[F4-Semicolon]" ]; then
+            # Addition of semicolon
+            [ -z "$list1[1]" ] && list1[1]=";" || list1[1]="$list1[1] ;"
+
+            # Remember for undo
+            undolist=( "$list1[1]" "$undolist[@]" )
+        else
+            #
+            # Here is where add or remove logic operates
+            #
+
+            if [ "$active_window" = "2" ]; then
+                # Delete of segment
+                tmp[cur_seg]=()
+                list1[1]="${(j: :)tmp}"
+
+                # Remember for undo
+                undolist=( "$list1[1]" "$undolist[@]" )
+            elif [ "$active_window" = "3" ]; then
+                # Addition of segment
+                [ -z "$list1[1]" ] && list1[1]="$answer" || list1[1]="$list1[1] $answer"
+
+                # Remember for undo
+                undolist=( "$list1[1]" "$undolist[@]" )
+            fi
+        fi
+    elif [[ "$REPLY" = -(#c0,1)[0-9]## && "$REPLY" -lt 0 ]]; then
+        # QUIT (2/2)
+        [ "${(t)CURSOR}" = "integer-local-special" ] && zle redisplay
+        break
+    fi
+
+    # After simulating, restore current segment
+    [ "$cur_bkp" -ne "-1" ] && HLIST_CURRENT_SEGMENT="$cur_bkp"
+
+done
+
+# Main loop
+done
+# vim: set filetype=zsh:

@@ -1,0 +1,8 @@
++/etc/zsh/zshenv:2> export ZDOTDIR=/home/dampsock/.config/zsh
++/home/dampsock/.config/zsh/.zshenv:6> export XDG_CONFIG_HOME=/home/dampsock/.config
++/home/dampsock/.config/zsh/.zshenv:7> export XDG_DATA_HOME=/home/dampsock/.local/share
++/home/dampsock/.config/zsh/.zshenv:8> export XDG_CACHE_HOME=/home/dampsock/.cache
++/home/dampsock/.config/zsh/.zshenv:11> export ZDOTDIR=/home/dampsock/.config/zsh
++/home/dampsock/.config/zsh/.zshenv:12> export ZSHRC=/home/dampsock/.config/zsh/.zshrc
++/home/dampsock/.config/zsh/.zshenv:15> export LC_ALL=en_US.UTF-8
+zsh: can't open input file: 2
