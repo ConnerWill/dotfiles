@@ -36,8 +36,7 @@ _zsh_debug_log_dir="${XDG_CACHE_HOME}/zsh/debug-logs"
 _zsh_debug_log_path="${_zsh_debug_log_dir}/$(date +'%Y%m%d%H%M%S')_zsh_debug.log"
 zsh -xvic exit &> "${_zsh_debug_log_path}"
 [[ -z "${PAGER}" ]] && export PAGER="less --RAW-CONTROL-CHARS"
-"${PAGER}" "${_zsh_debug_log_path}"
-
+$(realpath ${PAGER}) "${_zsh_debug_log_path}"
 ```
 
 > *To list all keybindings, run this command:*
