@@ -10,12 +10,10 @@ zsh_diagnostic_dump
 > run the following command to enable debug mode:
 
 ```shell
-
 _zsh_debug_log_dir="${XDG_CACHE_HOME}/zsh/debug-logs"
 [[ ! -d "${_zsh_debug_log_dir}" ]] && mkdir -pv "${_zsh_debug_log_dir}"
 _zsh_debug_log_path="${_zsh_debug_log_dir}/$(date +'%Y%m%d%H%M%S')_zsh_debug.log"
-zsh -xv 2> >(tee "${_zsh_debug_log_path" &>/dev/null)
-
+zsh -xv 2> >(tee "${_zsh_debug_log_path}" &>/dev/null)
 ```
 
 > *Afterwards, reproduce the behavior (i.e. if it's a particular command, run it), and*
@@ -33,7 +31,10 @@ zsh -xv 2> >(tee "${_zsh_debug_log_path" &>/dev/null)
 > *If you only need to debug the session initialization, you can do so with the command:*
 
 ```shell
-zsh -xvic exit &> ~/omz-debug.log
+_zsh_debug_log_dir="${XDG_CACHE_HOME}/zsh/debug-logs"
+[[ ! -d "${_zsh_debug_log_dir}" ]] && mkdir -pv "${_zsh_debug_log_dir}"
+_zsh_debug_log_path="${_zsh_debug_log_dir}/$(date +'%Y%m%d%H%M%S')_zsh_debug.log"
+zsh -xvic exit &> "${_zsh_debug_log_path}"
 ```
 
 > *To list all keybindings, run this command:*
