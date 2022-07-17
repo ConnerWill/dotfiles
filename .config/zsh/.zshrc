@@ -182,7 +182,6 @@ _zshloadendclear
 # shellcheck source=./.zprofile
 # shellcheck source=./.zlogin
 ##}}}
-<<<<<<< HEAD
 #                                              
 #             ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀  
 #             █▀   ███▄██    ▀█ ██      ██     
@@ -425,6 +424,3 @@ _zshloadendclear
 
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-
-=======
->>>>>>> main

@@ -2,10 +2,8 @@ local status_ok, configs = pcall(require, "nvim-treesitter.configs")
 if not status_ok then
   return
 end
-
 -- https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
 -- bash c comment commonlisp cpp css dockerfile devicetree embedded_template fish go  gomod gowork hjson  html  http  java javascript  jsdoc json  json5 lua make markdown  markdown_inline  perl  python  "Tree-sitter query language" regex scss slint todotxt toml vim yaml
-
 configs.setup {
   ensure_installed = {
     "bash",
@@ -23,11 +21,8 @@ configs.setup {
     "gowork",
     "hjson",
     "html",
-<<<<<<< HEAD
     "http",
-=======
     -- "http",
->>>>>>> main
     -- "java",
     "javascript",
     -- "jsdoc",
@@ -41,11 +36,8 @@ configs.setup {
     "python",
     "regex",
     -- "scss",
-<<<<<<< HEAD
     -- "slint",
-=======
     "slint",
->>>>>>> main
     -- "todotxt",
     "toml",
     "vim",

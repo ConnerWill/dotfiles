@@ -1,0 +1,746 @@
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `code_action`
+- Command: `eslint`
+- Args: `{ "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `code_action`
+- Command: `eslint_d`
+- Args: `{ "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Once spawned, the server will continue to run in the background. This is normal and not related to null-ls. You can stop it by running `eslint_d stop` from the command line.
+- Filetypes: `{ "gitrebase" }`
+- Method: `code_action`
+- Filetypes: `{}`
+- Method: `code_action`
+- Filetypes: `{ "markdown", "tex" }`
+- Method: `code_action`
+- Command: `proselint`
+- Args: `{ "--json" }`
+- Filetypes: `{ "go", "javascript", "lua", "python", "typescript" }`
+- Method: `code_action`
+- Requires visually selecting the code you want to refactor and calling `:'<,'>lua vim.lsp.buf.range_code_action()` (for the default handler) or `:'<,'>Telescope lsp_range_code_actions` (for Telescope).
+- Filetypes: `{ "sh" }`
+- Method: `code_action`
+- Command: `shellcheck`
+- Args: `{ "--format", "json1", "--source-path=$DIRNAME", "--external-sources", "-" }`
+- Running the action to disable a rule for the current line adds a disable directive above the line or appends the rule to an existing disable directive for that line.
+- Running the action to disable a rule for the current file adds a disable directive at the top of the file or appends the rule to an existing file disable directive.
+- The first non-comment line in a script is not eligible for a line-level disable directive. See [shellcheck#1877](https://github.com/koalaman/shellcheck/issues/1877).
+- Filetypes: `{ "nix" }`
+- Method: `code_action`
+- Command: `statix`
+- Args: `{ "check", "--stdin", "--format=json" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact" }`
+- Method: `code_action`
+- Command: `xo`
+- Args: `{ "--reporter", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{}`
+- Method: `completion`
+- Registering this source will show available snippets in the completion list, but luasnip is in charge of expanding them. Consult [luasnip's documentation](https://github.com/L3MON4D3/LuaSnip#keymaps) to set up keymaps for expansion and jumping.
+- Filetypes: `{}`
+- Method: `completion`
+- Filetypes: `{}`
+- Method: `completion`
+- Filetypes: `{}`
+- Method: `completion`
+- Registering this source will show available snippets in the completion list, but vim-vsnip is in charge of expanding them. See [vim-vsnip's documentation](https://github.com/hrsh7th/vim-vsnip#2-setting) for setup instructions.
+- Filetypes: `{ "yaml" }`
+- Method: `diagnostics`
+- Command: `actionlint`
+- Args: `{ "-no-color", "-format", "{{json .}}", "-" }`
+- Filetypes: `{ "markdown" }`
+- Method: `diagnostics`
+- Command: `alex`
+- Args: `{ "--stdin", "--quiet" }`
+- Filetypes: `{ "yaml.ansible" }`
+- Method: `diagnostics`
+- Command: `ansible-lint`
+- Args: `{ "-f", "codeclimate", "-q", "--nocolor", "$FILENAME" }`
+- Filetypes: `{ "proto" }`
+- Method: `diagnostics`
+- Command: `buf`
+- Args: `{ "lint", "$FILENAME#include_package_files=true" }`
+- Filetypes: `{ "bzl" }`
+- Method: `diagnostics`
+- Command: `buildifier`
+- Args: `{ "-mode=check", "-lint=warn", "-format=json", "-path=$FILENAME" }`
+- Filetypes: `{ "make" }`
+- Method: `diagnostics`
+- Command: `checkmake`
+- Args: `{ "--format='{{.LineNumber}}:{{.Rule}}:{{.Violation}}'", "$FILENAME" }`
+- Filetypes: `{ "tex" }`
+- Method: `diagnostics`
+- Command: `chktex`
+- Args: `{ "-q", "-f%l:%c:%d:%k:%n:%m\n" }`
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Command: `codespell`
+- Args: `{ "-" }`
+- Filetypes: `{ "cpp", "c" }`
+- Method: `diagnostics`
+- Command: `cppcheck`
+- Args: `{ "--enable=warning,style,performance,portability", "--template=gcc", "$FILENAME" }`
+- Filetypes: `{ "elixir" }`
+- Method: `diagnostics`
+- Command: `mix`
+- Args: `{ "credo", "suggest", "--format", "json", "--read-from-stdin", "$FILENAME" }`
+- Searches upwards from the buffer to the project root and tries to find the first `.credo.exs` file in case the project has nested `credo` configs.
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Command: `cspell`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/diagnostics/cspell.lua))
+- Filetypes: `{ "cue" }`
+- Method: `diagnostics`
+- Command: `cue`
+- Args: `{ "fmt", "$FILENAME" }`
+- Filetypes: `{ "jinja.html", "htmldjango" }`
+- Method: `diagnostics`
+- Command: `curlylint`
+- Args: `{ "--quiet", "-", "--format", "json", "--stdin-filepath", "$FILENAME" }`
+- Filetypes: `{ "nix" }`
+- Method: `diagnostics`
+- Command: `deadnix`
+- Args: `{ "--output-format=json", "$FILENAME" }`
+- Filetypes: `{ "django", "jinja.html", "htmldjango" }`
+- Method: `diagnostics`
+- Command: `djlint`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Command: `ec`
+- Args: `{ "-no-color", "$FILENAME" }`
+- Filetypes: `{ "eruby" }`
+- Method: `diagnostics`
+- Command: `erblint`
+- Args: `{ "--format", "json", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `diagnostics`
+- Command: `eslint`
+- Args: `{ "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `diagnostics`
+- Command: `eslint_d`
+- Args: `{ "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Once spawned, the server will continue to run in the background. This is normal and not related to null-ls. You can stop it by running `eslint_d stop` from the command line.
+- Filetypes: `{ "fish" }`
+- Method: `diagnostics`
+- Command: `fish`
+- Args: `{ "--no-execute", "$FILENAME" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `flake8`
+- Args: `{ "--format", "default", "--stdin-display-name", "$FILENAME", "-" }`
+- Filetypes: `{ "c", "cpp" }`
+- Method: `diagnostics_on_save`
+- Command: `gccdiag`
+- Args: `{ "--default-args", "-S -x $FILEEXT", "-i", "-fdiagnostics-color", "--", "$FILENAME" }`
+- Filetypes: `{ "gitcommit" }`
+- Method: `diagnostics`
+- Command: `gitlint`
+- Args: `{ "--msg-filename", "$FILENAME" }`
+- Filetypes: `{ "go" }`
+- Method: `diagnostics_on_save`
+- Command: `golangci-lint`
+- Args: `{ "run", "--fix=false", "--fast", "--out-format=json", "$DIRNAME", "--path-prefix", "$ROOT" }`
+- Filetypes: `{ "dockerfile" }`
+- Method: `diagnostics`
+- Command: `hadolint`
+- Args: `{ "--no-fail", "--format=json", "-" }`
+- Filetypes: `{ "haml" }`
+- Method: `diagnostics`
+- Command: `haml-lint`
+- Args: `{ "--reporter", "json", "$FILENAME" }`
+- Filetypes: `{ "json" }`
+- Method: `diagnostics`
+- Command: `jsonlint`
+- Args: `{ "--compact" }`
+- Filetypes: `{ "kotlin" }`
+- Method: `diagnostics_on_save`
+- Command: `ktlint`
+- Args: `{ "--relative", "--reporter=json" }`
+- Filetypes: `{ "lua" }`
+- Method: `diagnostics`
+- Command: `luacheck`
+- Args: `{ "--formatter", "plain", "--codes", "--ranges", "--filename", "$FILENAME", "-" }`
+- Filetypes: `{ "markdown" }`
+- Method: `diagnostics`
+- Command: `markdownlint`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "markdown" }`
+- Method: `diagnostics`
+- Command: `mdl`
+- Args: `{ "--json" }`
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Command: `misspell`
+- Filetypes: `{ "matlab" }`
+- Method: `diagnostics_on_save`
+- Command: `mlint`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `mypy`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/diagnostics/mypy.lua))
+- Filetypes: `{ "php" }`
+- Method: `diagnostics`
+- Command: `php`
+- Args: `{ "-l", "-d", "display_errors=STDERR", "-d", " log_errors=Off" }`
+- Filetypes: `{ "php" }`
+- Method: `diagnostics`
+- Command: `phpcs`
+- Args: `{ "--report=json", "-q", "-s", "--runtime-set", "ignore_warnings_on_exit", "1", "--runtime-set", "ignore_errors_on_exit", "1", "--stdin-path=$FILENAME", "-" }`
+- Filetypes: `{ "php" }`
+- Method: `diagnostics`
+- Command: `phpmd`
+- Args: `{ "$FILENAME", "json" }`
+- Filetypes: `{ "php" }`
+- Method: `diagnostics`
+- Command: `phpstan`
+- Args: `{ "analyze", "--error-format", "json", "--no-progress", "$FILENAME" }`
+- Requires a valid `phpstan.neon` at root.
+- If in place validation is required set `method` to `diagnostics_on_save`  and `to_temp_file` to `false`
+- Filetypes: `{ "markdown", "tex" }`
+- Method: `diagnostics`
+- Command: `proselint`
+- Args: `{ "--json" }`
+- Filetypes: `{ "proto" }`
+- Method: `diagnostics`
+- Command: `protoc`
+- Args: `{ "--lint_out", "$FILENAME", "-I", "/tmp", "$FILENAME" }`
+- Filetypes: `{ "proto" }`
+- Method: `diagnostics`
+- Command: `protolint`
+- Args: `{ "--reporter", "json", "$FILENAME" }`
+- Filetypes: `{ "php" }`
+- Method: `diagnostics`
+- Command: `psalm`
+- Args: `{ "--output-format=json", "--no-progress", "$FILENAME" }`
+- Filetypes: `{ "pug" }`
+- Method: `diagnostics`
+- Command: `pug-lint`
+- Args: `{ "--reporter=inline", "$FILENAME" }`
+- Filetypes: `{ "puppet", "epuppet" }`
+- Method: `diagnostics`
+- Command: `puppet-lint`
+- Args: `{ "--json", "$FILENAME" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `pydocstyle`
+- Args: `{ "$FILENAME" }`
+- May fail to resolve config files. See [the wiki](https://github.com/jose-elias-alvarez/null-ls.nvim/wiki/Source-specific-Configuration#pydocstyle) for workarounds.
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `pylama`
+- Args: `{ "--from-stdin", "$FILENAME", "-f", "json" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `pylint`
+- Args: `{ "--from-stdin", "$FILENAME", "-f", "json" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `pflake8`
+- Args: `{ "--format", "default", "--stdin-display-name", "$FILENAME", "-" }`
+- Filetypes: `{ "qml" }`
+- Method: `diagnostics`
+- Command: `qmllint`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "go" }`
+- Method: `diagnostics_on_save`
+- Command: `revive`
+- Args: `{ "-formatter", "json", "./..." }`
+- Filetypes: `{ "spec" }`
+- Method: `diagnostics`
+- Command: `rpmspec`
+- Args: `{ "-P", "$FILENAME" }`
+- Filetypes: `{ "rst" }`
+- Method: `diagnostics_on_save`
+- Command: `rstcheck`
+- Args: `{ "-r", "$DIRNAME" }`
+- Filetypes: `{ "ruby" }`
+- Method: `diagnostics`
+- Command: `rubocop`
+- Args: `{ "-f", "json", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "lua" }`
+- Method: `diagnostics`
+- Command: `selene`
+- Args: `{ "--display-style", "quiet", "-" }`
+- Filetypes: `{ "typescript", "typescriptreact", "ruby", "python", "java", "go" }`
+- Method: `diagnostics`
+- Command: `semgrep`
+- Args: `{ "-q", "--json", "$FILENAME" }`
+- Filetypes: `{ "sh" }`
+- Method: `diagnostics`
+- Command: `shellcheck`
+- Args: `{ "--format", "json1", "--source-path=$DIRNAME", "--external-sources", "-" }`
+- Filetypes: `{ "solidity" }`
+- Method: `diagnostics`
+- Command: `solhint`
+- Args: `{ "$FILENAME", "--formatter", "unix" }`
+- Filetypes: `{ "sql" }`
+- Method: `diagnostics`
+- Command: `sqlfluff`
+- Args: `{ "lint", "-f", "github-annotation", "-n", "--disable_progress_bar", "-" }`
+- SQLFluff needs a mandatory `--dialect` argument. Use `extra_args` to add yours. `extra_args` can also be a function to build more sophisticated logic.
+- Filetypes: `{ "javascript", "javascriptreact" }`
+- Method: `diagnostics`
+- Command: `standard`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "ruby" }`
+- Method: `diagnostics`
+- Command: `standardrb`
+- Args: `{ "--no-fix", "-f", "json", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "go" }`
+- Method: `diagnostics_on_save`
+- Command: `staticcheck`
+- Args: `{ "-f", "json", "./..." }`
+- Filetypes: `{ "nix" }`
+- Method: `diagnostics`
+- Command: `statix`
+- Args: `{ "check", "--stdin", "--format=errfmt" }`
+- Filetypes: `{ "scss", "less", "css", "sass" }`
+- Method: `diagnostics`
+- Command: `stylelint`
+- Args: `{ "--formatter", "json", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "stylus" }`
+- Method: `diagnostics`
+- Command: `stylint`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "teal" }`
+- Method: `diagnostics`
+- Command: `tl`
+- Args: `{ "check", "$FILENAME" }`
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Command: `textlint`
+- Args: `{ "-f", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "html", "xml" }`
+- Method: `diagnostics`
+- Command: `tidy`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/diagnostics/tidy.lua))
+- Filetypes: `{}`
+- Method: `diagnostics`
+- Filetypes: `{ "typescript", "typescriptreact" }`
+- Method: `diagnostics_on_save`
+- Command: `tsc`
+- Args: `{ "--pretty", "false", "--noEmit" }`
+- Filetypes: `{ "twig" }`
+- Method: `diagnostics`
+- Command: `twigcs`
+- Args: `{ "--reporter", "json", "$FILENAME" }`
+- Filetypes: `{ "markdown", "tex", "asciidoc" }`
+- Method: `diagnostics`
+- Command: `vale`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/diagnostics/vale.lua))
+- vale does not include a syntax by itself, so you probably need to grab a `vale.ini` (at `~/.vale.ini`) and a StylesPath (somewhere, pointed from `vale.ini`) from [the list of configurations](https://docs.errata.ai/vale/about#open-source-configurations).
+- Filetypes: `{ "vim" }`
+- Method: `diagnostics`
+- Command: `vint`
+- Args: `{ "--style-problem", "--json", "$FILENAME" }`
+- Filetypes: `{ "python" }`
+- Method: `diagnostics`
+- Command: `vulture`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "markdown" }`
+- Method: `diagnostics`
+- Command: `write-good`
+- Args: `{ "--text=$TEXT", "--parse" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact" }`
+- Method: `diagnostics`
+- Command: `xo`
+- Args: `{ "--reporter", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "yaml" }`
+- Method: `diagnostics`
+- Command: `yamllint`
+- Args: `{ "--format", "parsable", "-" }`
+- Filetypes: `{ "zsh" }`
+- Method: `diagnostics`
+- Command: `zsh`
+- Args: `{ "-n", "$FILENAME" }`
+- Filetypes: `{ "nix" }`
+- Method: `formatting`
+- Command: `alejandra`
+- Args: `{ "--quiet" }`
+- Filetypes: `{ "asm" }`
+- Method: `formatting`
+- Command: `asmfmt`
+- Filetypes: `{ "arduino", "c", "cpp", "cs", "java" }`
+- Method: `formatting`
+- Command: `astyle`
+- Args: `{ "--quiet" }`
+- Filetypes: `{ "python" }`
+- Methods: `formatting, range_formatting`
+- Command: `autopep8`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/autopep8.lua))
+- Filetypes: `{ "beancount" }`
+- Method: `formatting`
+- Command: `bean-format`
+- It left-aligns all the currencies.
+- It only modifies whitespace.
+- Filetypes: `{ "bib" }`
+- Method: `formatting`
+- Command: `bibclean`
+- Args: `{ "-align-equals", "-delete-empty-values" }`
+- See [bibclean: prettyprint and syntax check BibTeX and Scribe bibliography data base files](https://ftp.math.utah.edu/pub/bibclean/) for latest version.
+- Filetypes: `{ "python" }`
+- Method: `formatting`
+- Command: `black`
+- Args: `{ "--stdin-filename", "$FILENAME", "--quiet", "-" }`
+- Filetypes: `{ "haskell" }`
+- Method: `formatting`
+- Command: `brittany`
+- Filetypes: `{ "proto" }`
+- Method: `formatting`
+- Command: `buf`
+- Args: `{ "format", "$FILENAME" }`
+- Filetypes: `{ "bzl" }`
+- Method: `formatting`
+- Command: `buildifier`
+- Args: `{ "-path=$FILENAME" }`
+- Filetypes: `{ "cabal" }`
+- Method: `formatting`
+- Command: `cabal-fmt`
+- Filetypes: `{ "c", "cpp", "cs", "java" }`
+- Method: `formatting`
+- Command: `clang-format`
+- Args: `{ "-assume-filename", "$FILENAME" }`
+- Filetypes: `{ "clojure" }`
+- Method: `formatting`
+- Command: `cljstyle`
+- Args: `{ "pipe" }`
+- Filetypes: `{ "cmake" }`
+- Method: `formatting`
+- Command: `cmake-format`
+- Args: `{ "-" }`
+- Filetypes: `{}`
+- Method: `formatting`
+- Command: `codespell`
+- Args: `{ "--write-changes", "$FILENAME" }`
+- Filetypes: `{ "crystal" }`
+- Method: `formatting`
+- Command: `crystal`
+- Args: `{ "tool", "format" }`
+- Filetypes: `{ "cue" }`
+- Method: `formatting`
+- Command: `cue`
+- Args: `{ "fmt", "$FILENAME" }`
+- Filetypes: `{ "dart" }`
+- Method: `formatting`
+- Command: `dart`
+- Args: `{ "format" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact" }`
+- Method: `formatting`
+- Command: `deno`
+- Args: `{ "fmt", "-" }`
+- Filetypes: `{ "d" }`
+- Method: `formatting`
+- Command: `dfmt`
+- Filetypes: `{ "django", "jinja.html", "htmldjango" }`
+- Method: `formatting`
+- Command: `djhtml`
+- Filetypes: `{ "django", "jinja.html", "htmldjango" }`
+- Method: `formatting`
+- Command: `djlint`
+- Args: `{ "--reformat", "-" }`
+- Filetypes: `{ "elm" }`
+- Method: `formatting`
+- Command: `elm-format`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "eruby" }`
+- Method: `formatting`
+- Command: `erblint`
+- Args: `{ "--autocorrect", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "erlang" }`
+- Method: `formatting`
+- Command: `erlfmt`
+- Args: `{ "-" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `formatting`
+- Command: `eslint`
+- Args: `{ "--fix-dry-run", "--format", "json", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Slow and not suitable for formatting on save. If at all possible, use [eslint_d](https://github.com/mantoni/eslint_d.js/).
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }`
+- Method: `formatting`
+- Command: `eslint_d`
+- Args: `{ "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Once spawned, the server will continue to run in the background. This is normal and not related to null-ls. You can stop it by running `eslint_d stop` from the command line.
+- Filetypes: `{ "fish" }`
+- Method: `formatting`
+- Command: `fish_indent`
+- Filetypes: `{ "json" }`
+- Method: `formatting`
+- Command: `fixjson`
+- Filetypes: `{ "fennel", "fnl" }`
+- Method: `formatting`
+- Command: `fnlfmt`
+- Args: `{ "-" }`
+- Filetypes: `{ "r", "rmd" }`
+- Method: `formatting`
+- Command: `R`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/format_r.lua))
+- Filetypes: `{ "haskell" }`
+- Method: `formatting`
+- Command: `fourmolu`
+- Filetypes: `{ "fortran" }`
+- Method: `formatting`
+- Command: `fprettify`
+- Args: `{ "--silent" }`
+- Filetypes: `{ "go" }`
+- Method: `formatting`
+- Command: `gofmt`
+- It uses tabs for indentation and blanks for alignment.
+- Aligntment assumes that the editor is using a fixed-width font.
+- Filetypes: `{ "go" }`
+- Method: `formatting`
+- Command: `gofumpt`
+- Filetypes: `{ "go" }`
+- Method: `formatting`
+- Command: `goimports`
+- Args: `{ "-srcdir", "$DIRNAME" }`
+- Filetypes: `{ "go" }`
+- Method: `formatting`
+- Command: `golines`
+- Filetypes: `{ "java" }`
+- Method: `formatting`
+- Command: `google-java-format`
+- Args: `{ "-" }`
+- Filetypes: `{ "python" }`
+- Method: `formatting`
+- Command: `isort`
+- Args: `{ "--stdout", "--filename", "$FILENAME", "-" }`
+- Filetypes: `{ "clj" }`
+- Method: `formatting`
+- Command: `joker`
+- Args: `{ "--format", "-" }`
+- Filetypes: `{ "json" }`
+- Method: `formatting`
+- Command: `jq`
+- Filetypes: `{ "json" }`
+- Method: `formatting`
+- Command: `python`
+- Args: `{ "-m", "json.tool" }`
+- Filetypes: `{ "kotlin" }`
+- Method: `formatting`
+- Command: `ktlint`
+- Args: `{ "--format", "--stdin" }`
+- Filetypes: `{ "tex" }`
+- Method: `formatting`
+- Command: `latexindent`
+- Args: `{ "-" }`
+- Filetypes: `{ "lua" }`
+- Method: `formatting`
+- Command: `lua-format`
+- Args: `{ "-i" }`
+- Filetypes: `{ "markdown" }`
+- Method: `formatting`
+- Command: `markdownlint`
+- Args: `{ "--fix", "$FILENAME" }`
+- Can fix some (but not all!) markdownlint issues. If possible, use [Prettier](https://github.com/prettier/prettier), which can also fix Markdown files.
+- Filetypes: `{ "elixir" }`
+- Method: `formatting`
+- Command: `mix`
+- Args: `{ "format", "-" }`
+- Filetypes: `{ "nginx" }`
+- Method: `formatting`
+- Command: `nginxbeautifier`
+- Args: `{ "-i", "-o", "$FILENAME" }`
+- Filetypes: `{ "nim" }`
+- Method: `formatting`
+- Command: `nimpretty`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "nix" }`
+- Method: `formatting`
+- Command: `nixfmt`
+- Filetypes: `{ "nix" }`
+- Method: `formatting`
+- Command: `nixpkgs-fmt`
+- Filetypes: `{ "perl" }`
+- Method: `formatting`
+- Command: `perltidy`
+- Args: `{ "-q" }`
+- Filetypes: `{ "sql", "pgsql" }`
+- Method: `formatting`
+- Command: `pg_format`
+- Filetypes: `{ "php" }`
+- Method: `formatting`
+- Command: `phpcbf`
+- Args: `{ "-q", "--stdin-path=$FILENAME", "-" }`
+- Filetypes: `{ "php" }`
+- Method: `formatting`
+- Command: `php-cs-fixer`
+- Args: `{ "--no-interaction", "--quiet", "fix", "$FILENAME" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }`
+- Methods: `formatting, range_formatting`
+- Command: `prettier`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/prettier.lua))
+- Supports more filetypes such as [Svelte](https://github.com/sveltejs/prettier-plugin-svelte) and [TOML](https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml) via plugins. These filetypes are not enabled by default, but you can follow the instructions [here](#filetypes) to define your own list of filetypes.
+- To increase speed, you may want to try [prettierd](https://github.com/fsouza/prettierd). You can also set up [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) and format via [eslint_d](https://github.com/mantoni/eslint_d.js/).
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }`
+- Method: `formatting`
+- Command: `prettierd`
+- Args: `{ "$FILENAME" }`
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }`
+- Methods: `formatting, range_formatting`
+- Command: `prettier_d_slim`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/prettier_d_slim.lua))
+- May not work on some filetypes.
+- `prettierd` is more stable and recommended.
+- Filetypes: `{ "javascript", "javascriptreact" }`
+- Method: `formatting`
+- Command: `prettier-standard`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "prisma" }`
+- Method: `formatting`
+- Command: `prisma-fmt`
+- Args: `{ "format", "-i", "$FILENAME" }`
+- Filetypes: `{ "proto" }`
+- Method: `formatting`
+- Command: `protolint`
+- Args: `{ "--fix", "$FILENAME" }`
+- Filetypes: `{ "pascal", "delphi" }`
+- Method: `formatting`
+- Command: `ptop`
+- Args: `{ "$FILENAME", "$FILENAME" }`
+- Filetypes: `{ "puppet", "epuppet" }`
+- Method: `formatting`
+- Command: `puppet-lint`
+- Args: `{ "--fix", "$FILENAME" }`
+- Filetypes: `{ "qml" }`
+- Method: `formatting`
+- Command: `qmlformat`
+- Args: `{ "-i", "$FILENAME" }`
+- Filetypes: `{ "racket" }`
+- Method: `formatting`
+- Command: `raco`
+- Args: `{ "fmt" }`
+- Requires Racket 8.0 or later
+- Install with `raco pkg install fmt`
+- Filetypes: `{ "markdown" }`
+- Method: `formatting`
+- Command: `remark`
+- Args: `{ "--no-color", "--silent" }`
+- Depends on [remark-cli](https://github.com/remarkjs/remark/tree/main/packages/remark-cli).
+- Filetypes: `{ "python" }`
+- Method: `formatting`
+- Command: `reorder-python-imports`
+- Args: `{ "-", "--exit-zero-even-if-changed" }`
+- Filetypes: `{ "rescript" }`
+- Method: `formatting`
+- Command: `rescript`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/rescript.lua))
+- Filetypes: `{ "javascript", "typescript" }`
+- Method: `formatting`
+- Command: `rome`
+- Args: `{ "format", "--write", "$FILENAME" }`
+- Currently support only JavaScript and TypeScript. See status [here](https://rome.tools/#language-support)
+- Filetypes: `{ "ruby" }`
+- Method: `formatting`
+- Command: `rubocop`
+- Args: `{ "--auto-correct", "-f", "quiet", "--stderr", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "ruby" }`
+- Method: `formatting`
+- Command: `rufo`
+- Args: `{ "-x" }`
+- Filetypes: `{ "rust" }`
+- Method: `formatting`
+- Command: `rustfmt`
+- Args: `{ "--emit=stdout" }`
+- `--edition` defaults to `2015`. To set a different edition, use `extra_args`.
+- See [the wiki](https://github.com/jose-elias-alvarez/null-ls.nvim/wiki/Source-specific-Configuration#rustfmt) for other workarounds.
+- Filetypes: `{ "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte", "html" }`
+- Method: `formatting`
+- Command: `rustywind`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "scala" }`
+- Method: `formatting`
+- Command: `scalafmt`
+- Args: `{ "--stdin" }`
+- Filetypes: `{ "sh" }`
+- Method: `formatting`
+- Command: `shellharden`
+- Args: `{ "--transform", "" }`
+- Filetypes: `{ "sh" }`
+- Method: `formatting`
+- Command: `shfmt`
+- Args: `{ "-filename", "$FILENAME" }`
+- Filetypes: `{ "sql" }`
+- Method: `formatting`
+- Command: `sqlfluff`
+- Args: `{ "fix", "--disable_progress_bar", "-f", "-n", "-" }`
+- SQLFluff needs a mandatory `--dialect` argument. Use `extra_args` to add yours. `extra_args` can also be a function to build more sophisticated logic.
+- Filetypes: `{ "sql" }`
+- Method: `formatting`
+- Command: `sqlformat`
+- Args: `{ "-" }`
+- Filetypes: `{ "javascript", "javascriptreact" }`
+- Method: `formatting`
+- Command: `standard`
+- Args: `{ "--stdin", "--fix" }`
+- Filetypes: `{ "ruby" }`
+- Method: `formatting`
+- Command: `standardrb`
+- Args: `{ "--fix", "--format", "quiet", "--stderr", "--stdin", "$FILENAME" }`
+- Filetypes: `{ "scss", "less", "css", "sass" }`
+- Method: `formatting`
+- Command: `stylelint`
+- Args: `{ "--fix", "--stdin", "--stdin-filename", "$FILENAME" }`
+- Filetypes: `{ "r", "rmd" }`
+- Method: `formatting`
+- Command: `R`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/styler.lua))
+- Filetypes: `{ "lua" }`
+- Methods: `formatting, range_formatting`
+- Command: `stylua`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/stylua.lua))
+- Filetypes: `{ "elixir", "surface" }`
+- Method: `formatting`
+- Command: `mix`
+- Args: `{ "surface.format", "-" }`
+- Filetypes: `{ "swift" }`
+- Method: `formatting`
+- Command: `swiftformat`
+- Filetypes: `{ "toml" }`
+- Method: `formatting`
+- Command: `taplo`
+- Args: `{ "format", "-" }`
+- Filetypes: `{ "markdown" }`
+- Method: `formatting`
+- Command: `terrafmt`
+- Args: `{ "fmt", "$FILENAME" }`
+- Filetypes: `{ "terraform", "tf" }`
+- Method: `formatting`
+- Command: `terraform`
+- Args: `{ "fmt", "-" }`
+- Filetypes: `{ "html", "xml" }`
+- Method: `formatting`
+- Command: `tidy`
+- Args: `{ "--tidy-mark", "no", "-quiet", "-indent", "-wrap", "-" }`
+- Filetypes: `{}`
+- Method: `formatting`
+- Command: `awk`
+- Args: `{ 'NF{print s $0; s=""; next} {s=s ORS}' }`
+- Filetypes: `{}`
+- Method: `formatting`
+- Command: `awk`
+- Args: `{ '{ sub(/[ \t]+$/, ""); print }' }`
+- Filetypes: `{ "c", "cpp", "cs", "java" }`
+- Method: `formatting`
+- Command: `uncrustify`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/uncrustify.lua))
+- Filetypes: `{ "verilog", "systemverilog" }`
+- Method: `formatting`
+- Command: `verible-verilog-format`
+- Args: `{ "--stdin_name", "$FILENAME", "-" }`
+- Filetypes: `{ "xml" }`
+- Method: `formatting`
+- Command: `xmllint`
+- Args: `{ "--format", "-" }`
+- Filetypes: `{ "python" }`
+- Methods: `formatting, range_formatting`
+- Command: `yapf`
+- Args: dynamically resolved (see [source](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/lua/null-ls/builtins/formatting/yapf.lua))
+- Filetypes: `{ "zig" }`
+- Method: `formatting`
+- Command: `zig`
+- Args: `{ "fmt", "--stdin" }`
+- Filetypes: `{ "text", "markdown" }`
+- Method: `hover`
+- Depends on Plenary's `curl` module, which itself depends on having `curl` installed and available on your `$PATH`.
