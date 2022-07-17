@@ -1,8 +1,0 @@
-# bat-modules example file.
-# See https://github.com/eth-p/bat-extras for documentation and help.
-
-# syntax example/syntax
-
-# theme https://github.com/example/theme.git
-#     checkout abcdef1
-
