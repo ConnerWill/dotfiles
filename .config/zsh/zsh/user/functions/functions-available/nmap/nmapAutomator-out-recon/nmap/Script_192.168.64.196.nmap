@@ -1,0 +1,12 @@
+# Nmap 7.92 scan initiated Sat Jul 16 13:16:20 2022 as: /usr/bin/nmap -sCV -p8009 --open -oN nmap/Script_192.168.64.196.nmap --system-dns --stats-every 2s 192.168.64.196
+Nmap scan report for amazon-c4e294e2f.hsd1.mn.comcast.net (192.168.64.196)
+Host is up (0.0088s latency).
+
+PORT     STATE SERVICE VERSION
+8009/tcp open  http    Amazon Whisperplay DIAL REST service
+|_http-title: Site doesn't have a title (text/plain).
+|_ajp-methods: Failed to get a valid response for the OPTION request
+Service Info: Device: media device
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Jul 16 13:16:32 2022 -- 1 IP address (1 host up) scanned in 11.39 seconds

@@ -51,6 +51,44 @@ ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
 ZSH_PLUGINS_AVAILABLE="${ZSH_PLUGINS_DIR}/plugins-available"
 ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
 
+function _zsh_plugins_clone_personal_plugins(){
+  declare -a my_repo_list 
+  local ZSH_PLUGINS_AVAILABLE \
+        ZSH_PLUGINS_ENABLED   \
+        repo_full_url         \
+        repo_host_url         \
+        repo_host_username    \
+        repo_host_user_url  
+
+  ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
+  ZSH_PLUGINS_AVAILABLE="${ZSH_PLUGINS_DIR}/plugins-available"
+  ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
+  repo_host_url="https://github.com"
+  repo_host_username="ConnerWill"
+  repo_host_user_url="${repo_host_url}/${repo_host_username}"
+  my_repo_list=(
+                "cheat-fzf"
+                "yayfzf"
+               ) 
+  declare -r my_repo_list
+  for repo_to_clone in $my_repo_list
+  do
+    repo_full_url="${repo_host_user_url}/${repo_to_clone}"
+    repo_full_dl_path="${ZSH_PLUGINS_AVAILABLE}/${repo_to_clone}"
+    git clone                     \
+      --verbose                   \
+      "${repo_full_url}"          \
+      "${repo_full_dl_path}"
+  done
+  ln -sr "${ZSH_PLUGINS_AVAILABLE}/yayfzf/bin/yayfzf" "${ZSH_PLUGINS_ENABLED}/yayfzf.zsh"
+  ln -sr "${ZSH_PLUGINS_AVAILABLE}/cheat-fzf/src/cht-fzf.sh" "${ZSH_PLUGINS_ENABLED}/chtfzf.zsh"
+}
+if [[ -d "${ZSH_PLUGINS_AVAILABLE}/cheat-fzf" ]] && [[ -d "${ZSH_PLUGINS_AVAILABLE}/yayfzf" ]]; then
+  echo -n ""
+else
+  _zsh_plugins_clone_personal_plugins
+fi
+
 ## Load plugins
 # shellcheck disable=SC1009
 if [[ -d "${ZSH_PLUGINS_ENABLED}" ]]; then

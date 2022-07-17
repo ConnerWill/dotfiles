@@ -1,0 +1,22 @@
+
+[0;33mRunning a Recon scan on [0m192.168.64.196
+[0m
+[0;32mHost is likely running Linux
+
+
+[0;32m---------------------Recon Recommendations---------------------
+[0m
+[0m
+[0;33mWeb Servers Recon:
+[0m
+nikto -host "http://192.168.64.196:8009" | tee "recon/nikto_192.168.64.196_8009.txt"
+gobuster dir -w /usr/share/wordlists/dirb/common.txt -t 30 -ekx '' -u "http://192.168.64.196:8009" -o "recon/gobuster_192.168.64.196_8009.txt"
+
+
+
+
+[0;33m
+Which commands would you like to run?[0m
+All (Default), gobuster, nikto, Skip <!>
+
+[2KRunning Default in (30)s: 

@@ -1,0 +1,1 @@
+../plugins-available/yayfzf/bin/yayfzf
