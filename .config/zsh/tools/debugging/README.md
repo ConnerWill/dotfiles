@@ -35,7 +35,8 @@ _zsh_debug_log_dir="${XDG_CACHE_HOME}/zsh/debug-logs"
 [[ ! -d "${_zsh_debug_log_dir}" ]] && mkdir -pv "${_zsh_debug_log_dir}"
 _zsh_debug_log_path="${_zsh_debug_log_dir}/$(date +'%Y%m%d%H%M%S')_zsh_debug.log"
 zsh -xvic exit &> "${_zsh_debug_log_path}"
-"${PAGER:-less --RAW-CONTROL-CHARS}" "${_zsh_debug_log_path}"
+[[ -z "${PAGER}" ]] && export PAGER="less --RAW-CONTROL-CHARS"
+"${PAGER}" "${_zsh_debug_log_path}"
 
 ```
 
