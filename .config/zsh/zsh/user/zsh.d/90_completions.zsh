@@ -1,3 +1,5 @@
+#!/shellcheck/disable=1
+
 # The following lines were added by compinstall
 zstyle ':completion:*' completer _complete _ignored
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:]}={[:upper:]}'
@@ -136,7 +138,3 @@ compinit
 # #         exec zsh
 # # https://thevaluable.dev/zsh-completion-guide-examples/
 # # https://raw.githubusercontent.com/Phantas0s/.dotfiles/master/zsh/completion.zsh
-<<<<<<< HEAD
-
-=======
->>>>>>> temp

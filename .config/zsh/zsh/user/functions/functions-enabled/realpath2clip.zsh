@@ -1,0 +1,1 @@
+../functions-available/realpath2clip.zsh
