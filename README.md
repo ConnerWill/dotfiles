@@ -1,3 +1,1 @@
-# dotfiles
-
-My dotfiles
+.dotfiles/docs/README.md
