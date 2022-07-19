@@ -1,1 +1,0 @@
-../functions-available/terminal-record-script.zsh

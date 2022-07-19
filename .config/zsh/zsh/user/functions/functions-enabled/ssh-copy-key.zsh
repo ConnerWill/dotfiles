@@ -1,1 +1,0 @@
-../functions-available/ssh-copy-key.zsh

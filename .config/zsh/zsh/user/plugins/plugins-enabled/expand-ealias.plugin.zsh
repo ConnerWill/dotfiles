@@ -1,1 +1,0 @@
-../plugins-available/expand-ealias.plugin.zsh/expand-ealias.plugin.zsh

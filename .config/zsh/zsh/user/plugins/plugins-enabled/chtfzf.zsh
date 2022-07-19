@@ -1,1 +1,0 @@
-../plugins-available/cheat-fzf/src/cht-fzf.sh

@@ -1,8 +1,0 @@
-# Nmap 7.92 scan initiated Sat Jul 16 13:16:19 2022 as: /usr/bin/nmap -T4 --max-retries 1 --max-scan-delay 20 --open -oN nmap/Port_192.168.64.196.nmap --system-dns --stats-every 1s 192.168.64.196
-Nmap scan report for amazon-c4e294e2f.hsd1.mn.comcast.net (192.168.64.196)
-Host is up (0.011s latency).
-Not shown: 999 closed tcp ports (conn-refused)
-PORT     STATE SERVICE
-8009/tcp open  ajp13
-
-# Nmap done at Sat Jul 16 13:16:19 2022 -- 1 IP address (1 host up) scanned in 0.21 seconds

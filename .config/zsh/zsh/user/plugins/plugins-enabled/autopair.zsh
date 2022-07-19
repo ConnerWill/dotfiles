@@ -1,1 +1,0 @@
-../plugins-available/zsh-autopair/autopair.zsh

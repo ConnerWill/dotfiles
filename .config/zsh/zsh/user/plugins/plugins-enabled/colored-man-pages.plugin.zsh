@@ -1,1 +1,0 @@
-../plugins-available/zsh-colored-man-pages/colored-man-pages.plugin.zsh
