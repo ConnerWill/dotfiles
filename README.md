@@ -1,1 +1,1 @@
-.dotfiles/docs/README.md
+dotfiles/docs/README.md
