@@ -1,0 +1,1 @@
+../functions-available/DEMOPROMPT.zsh

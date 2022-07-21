@@ -1,0 +1,73 @@
+# Images
+*.png
+*.jpg
+*.jpeg
+
+# Archives / Binaries
+*.tar
+*.tar.*
+*.gz
+*.xz
+*.tar.*
+*.jar
+*.exe
+*.msi
+*.zip
+*.tgz
+*.7z
+
+# Logs
+*.log
+*.log.*
+
+# Book build output
+_book
+
+# eBook build output
+*.epub
+*.mobi
+*.pdf
+
+# Keys
+*.pub
+*.private
+*.asc
+*.gpg
+*id_rsa*
+*id_*
+*.keys
+*.sig
+
+# Backups
+*.old
+*.bak
+*.orig
+*.new
+*.1
+*.2
+*.3
+*.4
+
+# zsh
+#zsh_*
+
+# History
+*history*
+
+# Private
+*private*
+*secret*
+
+# Password
+*password*
+*passwd*
+
+#old
+old
+
+#refrences
+refrences
+
+#asciicasts/ttyrec
+*.cast
+*.ttyrec

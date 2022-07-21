@@ -1,0 +1,106 @@
+###	User Defined Aliases	###
+
+# Because zsh is installed on my system, the custom aliases file is save at this path:
+#
+#	/home/dampsock/.oh-my-zsh/custom/custom_aliases.zsh
+#		Another Name For Path:
+#	$ZSH_CUSTOM/custom_aliases.zsh
+#
+
+alias install='sudo pacman -S'
+
+# change directory aliases
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias cd..='cd ..'
+
+# edit grub menu aliases
+alias editgrubconfig='sudo nano /etc/default/grub'
+
+# grep aliases
+alias gv='grep -v'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# list items aliases
+alias la='ls -a'
+alias ls='ls --color=auto'
+alias lsa='ls -lah'
+alias l='ls -CF'
+#alias lsd='ls -d'
+#alias lss=ls -sh
+
+# clear console aliases
+alias cls='clear'
+
+# colored GCC warnings and errors
+#export GCC_COLORS=error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
+
+# neofetch alias
+alias nf='clear && neofetch'
+
+# view display/gpu events in xorg log file 
+alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | grep -vi logitech | less'
+
+# Load zsh-5.8 
+alias zsh='zsh-5.8'
+
+# Allow mispelling of sudo "sudp"
+alias sudp='sudo'
+
+###	User Defined Aliases	###
+
+# Because zsh is installed on my system, the custom aliases file is save at this path:
+#
+#	/home/dampsock/.oh-my-zsh/custom/custom_aliases.zsh
+#		Another Name For Path:
+#	$ZSH_CUSTOM/custom_aliases.zsh
+#
+
+alias install='sudo pacman -S'
+
+# change directory aliases
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias cd..='cd ..'
+
+# edit grub menu aliases
+alias editgrubconfig='sudo nano /etc/default/grub'
+
+# grep aliases
+alias gv='grep -v'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# list items aliases
+alias la='ls -a'
+alias ls='ls --color=auto'
+alias lsa='ls -lah'
+alias l='ls -CF'
+alias lsd='ls -d'
+#alias lss=ls -sh
+
+# clear console aliases
+alias cls='clear'
+
+# colored GCC warnings and errors
+#export GCC_COLORS=error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
+
+# neofetch alias
+alias nf='clear && neofetch'
+
+# view display/gpu events in xorg log file 
+alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | grep -vi logitech | less'
+
+# Load zsh-5.8 
+alias zsh='zsh-5.8'
+
+# Allow mispelling of sudo "sudp"
+alias sudp='sudo'
+

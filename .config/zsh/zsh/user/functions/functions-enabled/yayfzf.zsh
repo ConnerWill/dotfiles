@@ -1,0 +1,1 @@
+../functions-available/yayfzf/bin/yayfzf
