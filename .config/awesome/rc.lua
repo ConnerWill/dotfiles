@@ -77,17 +77,17 @@ end
 -- =====================
 -- {{{
 
-local terminal = "kitty" -- Terminal Emulator
-local editor = os.getenv("EDITOR") or "nvim" -- Text Editor
-local editor_cmd = terminal .. " -e " .. editor
-local texteditor = "nvim" -- Text Editor
-local filebrowser = "pcmanfm" -- File Explorer
-local webbrowser = "firefox" -- WebBrowser
-local torbrowser = "torbrowser-launcher" -- TOR WebBrowser
-local cliwebbrowser = "lynx" -- cli WebBrowser
-local cliwebbrowser_cmd = terminal .. " -T lynx -e " .. cliwebbrowser
+terminal = "kitty" -- Terminal Emulator
+editor = os.getenv("EDITOR") or "nvim" -- Text Editor
+editor_cmd = terminal .. " -e " .. editor
+texteditor = "nvim" -- Text Editor
+filebrowser = "pcmanfm" -- File Explorer
+webbrowser = "firefox" -- WebBrowser
+torbrowser = "torbrowser-launcher" -- TOR WebBrowser
+cliwebbrowser = "lynx" -- cli WebBrowser
+cliwebbrowser_cmd = terminal .. " -T lynx -e " .. cliwebbrowser
 -- FreeCAD = "FreeCAD"                        -- CAD
--- SignalMessager = "signal-desktop" -- Messager
+SignalMessager = "signal-desktop" -- Messager
 
 --}}}
 
@@ -394,10 +394,10 @@ globalkeys = gears.table.join(
 	awful.key({ modkey, "Shift", "Control" }, "b", function()
 		awful.spawn(torbrowser)
 	end, { description = "launch tor browser", group = "launcher" }),
-	-- Spawn Signal Desktop
-	-- awful.key({ modkey, "Shift", "Control" }, "s", function()
-	-- 	awful.spawn(SignalMessager)
-	-- end, { description = "launch signal-desktop", group = "launcher" }),
+	-- Spawn Signal Desktop 
+	awful.key({ modkey, "Shift", "Control" }, "s", function()
+		awful.spawn(SignalMessager)
+	end, { description = "launch signal-desktop", group = "launcher" }),
 
 	-- --CAD
 	-- Spawn FreeCAD
@@ -682,18 +682,6 @@ client.connect_signal("manage", function(c)
 		awful.placement.no_offscreen(c)
 	end
 end)
-
-
--- Prevent new clients from being urgent by default
--- client.disconnect_signal("request::activate", awful.ewmh.activate)
--- function awful.ewmh.activate(c)
---     if c:isvisible() then
---         client.focus = c
---         c:raise()
---     end
--- end
--- client.connect_signal("request::activate", awful.ewmh.activate)
-
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
