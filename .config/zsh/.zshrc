@@ -256,3 +256,24 @@ _zshloadendclear
 #: Clear Screen After Loading
 
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
+
+
+
+
+
+
+### :::::::::::::: ZSHRC EXIT TRAPS ::::::::::::: ### {{{
+
+  TRAPEXIT() {
+    # commands to run here, e.g. if you 
+    # always want to run .zlogout:
+    if [[ ! -o login ]]; then
+      # don't do this in a login shell
+      # because it happens anyway
+      . ~/.zlogout
+    fi
+  }
+
+### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
+
+

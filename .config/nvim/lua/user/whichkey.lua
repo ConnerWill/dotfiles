@@ -86,6 +86,7 @@ local mappings = {
     ["r"] = { "<cmd>Telescope oldfiles<cr>",                                                                                        "Recent Files" },
     ["f"] = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",    "Find files" },
     ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>",                                                                                "Find Text" },
+    ["T"] = { "<cmd>Telescope treesitter theme=ivy<cr>",                                                                              "TreeSitter" },
     ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>",                                                       "Projects" },
     ["w"] = { "<cmd>w!<CR>",                                                                                                                "Save" },
     ["q"] = { "<cmd>q!<CR>",                                                                                                                "Quit" },

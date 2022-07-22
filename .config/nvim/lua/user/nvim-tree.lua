@@ -307,8 +307,7 @@ nvim_tree.setup {
   --     },
   --     live_filter = {
   --       prefix = "[FILTER]: ",
-  --       always_show_folders = true,
-  --     },
+  --       always_show_folders = true, },
   --     log = {
   --       enable = false,
   --       truncate = false,
