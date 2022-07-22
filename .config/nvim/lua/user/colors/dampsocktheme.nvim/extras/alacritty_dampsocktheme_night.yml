@@ -1,0 +1,34 @@
+# DampSockTheme Alacritty Colors
+colors:
+  # Default colors
+  primary:
+    background: '0x1a1b26'
+    foreground: '0xc0caf5'
+
+  # Normal colors
+  normal:
+    black:   '0x15161E'
+    red:     '0xff7690'
+    green:   '0x4edf6a'
+    yellow:  '0xc9cb20'
+    blue:    '0x75a2f7'
+    magenta: '0xda50f0'
+    cyan:    '0x7dffff'
+    white:   '0x98a0c5'
+
+  # Bright colors
+  bright:
+    black:   '0x202646'
+    red:     '0xff7690'
+    green:   '0x4edf6a'
+    yellow:  '0xc9cb20'
+    blue:    '0x75a2f7'
+    magenta: '0xda50f0'
+    cyan:    '0x7dffff'
+    white:   '0xc0caf5'
+
+  indexed_colors:
+    - { index: 16, color: '0xff9e64' }
+    - { index: 17, color: '0xfb3b4b' }
+    
+  

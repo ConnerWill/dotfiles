@@ -36,20 +36,28 @@
 # shellcheck source=./modules/zshmodules.zsh
 # shellcheck source=./plugins/zshplugins.zsh
 # shellcheck source=./completions/zshcompletions.zsh
-
 ##}}}
 ### [=============================]
 ### [-------- ZSH PLUGINS --------]
+### [=============================]
+### {{{ Help
 ### [=============================]--------------------------]
 ### [ Example:                                               ]
 ### [  $ source "$ZSH_CUSTOM_PLUGINS/path-to/zsh-plugin.zsh" ]
 ### [=============================]--------------------------]
+### }}}
+
 
 ### Define Plugin Directory
-export ZSH_PLUGINS_AVAILABLE ZSH_PLUGINS_ENABLED ZSH_PLUGINS_CONFIG_DIR
-ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
+export                    \
+  ZSH_PLUGINS_AVAILABLE   \
+  ZSH_PLUGINS_ENABLED     \
+  ZSH_PLUGINS_CONFIG_DIR
+
+[[ -z "${ZSH_USER_DIR}" ]] && export ZSH_USER_DIR="${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}"
+      ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
 ZSH_PLUGINS_AVAILABLE="${ZSH_PLUGINS_DIR}/plugins-available"
-ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
+  ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
 
 ## Load plugins
 # shellcheck disable=SC1009
@@ -64,6 +72,16 @@ else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_PLUGINS_ENABLED}]" "196" "124"
 fi
 
-source "${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+
+# zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}$ZSH_PLUGINS_AVAILABLE/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+# [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
+#   ; unset zsh_source_plugin_tmp
+
+zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}" \
+  ; unset zsh_source_plugin_tmp
+
+zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
+  ; unset zsh_source_plugin_tmp
 

@@ -1,6 +1,3 @@
-
-
-
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
 ### [=========================================]
@@ -9,7 +6,7 @@
 ## colour in the 88 or 256 colour palettes that are widely used by terminal emulators.
 autoload -U promptinit ; promptinit
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
-setopt PROMPT_SUBST                      
+setopt PROMPT_SUBST
 
 ### ZSH PROMPTS
 PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
@@ -27,9 +24,9 @@ function _rprompt_set_ssh(){
     RPROMPT_SSH_COLOR='%F{237}'
     RPROMPT_SSH_COLOR_RESET='%f'
     RPROMPT_SSH='${RPROMPT_SSH_COLOR}${SSH_CLIENT}${RPROMPT_SSH_COLOR_RESET}'
-    export RPROMPT RPS1 
     RPROMPT='${RPROMPT_SSH}'
     RPS1='${RPROMPT}'
+    export RPROMPT RPS1
   fi
 }
 _rprompt_set_ssh
@@ -37,24 +34,26 @@ _rprompt_set_ssh
 ### [===============================]
 ### [ --------- GIT PROMPT -------- ]
 ### [===============================]
-  ### USE 'vcs_info_printsys' TO LIST VCS BACKENDS
-function _prompt_set_git(){
-  setopt PROMPT_SUBST ; autoload -Uz vcs_info
-  zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
-  zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
-  zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
-  precmd () { vcs_info }
-}
-_prompt_set_git
-_VCS_INFO_PROMPT='${vcs_info_msg_0_}'
-GITPROMPT="$vcs_info_msg_0_"
+#   ### USE 'vcs_info_printsys' TO LIST VCS BACKENDS
+# function _prompt_set_git(){
+#   setopt PROMPT_SUBST ;             autoload -Uz vcs_info
+#   zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
+#   zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
+#   zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+#   zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
+#   precmd () { vcs_info }
+# }
+# _prompt_set_git
+# _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
+# GITPROMPT="$vcs_info_msg_0_"
+#
+# PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+# export PS1="$PROMPT_FULL"
+# export PROMPT="$PROMPT_FULL"
+#
 
-PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-export PS1="$PROMPT_FULL"
-export PROMPT="$PROMPT_FULL"
+### VCS PROMPT OPTIONS ### {{{
 
-### VCS PROMPT OPTIONS ###
 #       %s     The VCS in use (git, hg, svn, etc.).
 #       %b     Information about the current branch.
 #       %a     An identifier that describes the action. Only makes sense in actionformats.
@@ -102,3 +101,5 @@ export PROMPT="$PROMPT_FULL"
 #PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$PROMPTDELIMITER"
 #export PROMPT='%F{51}%B[%b%f%B%F{99}%n%f%b%F{51}%B]%b%f%F{51}%B[%b%f%F{66}%40<..<%~%<<%F{51}%B]%b%f%u${vcs_info_msg_0_}%B%F{76}:%b%f '
 #echo "🌑              🌑"
+
+### }}}

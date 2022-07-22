@@ -1,0 +1,72 @@
+_dotf () {
+	if (( CURRENT > 2 ))
+	then
+		local -a aliases
+		local -A git_aliases
+		local a k v
+		local endopt='!(-)--end-of-options' 
+		aliases=(${(0)"$(_call_program aliases git config -z --get-regexp '\^alias\\.')"}) 
+		for a in ${aliases}
+		do
+			k="${${a/$'\n'*}/alias.}" 
+			v="${a#*$'\n'}" 
+			git_aliases[$k]="$v" 
+		done
+		if (( $+git_aliases[$words[2]] && !$+commands[git-$words[2]] && !$+functions[_git-$words[2]] ))
+		then
+			local -a tmpwords expalias
+			expalias=(${(z)git_aliases[$words[2]]}) 
+			tmpwords=(${words[1]} ${expalias}) 
+			if [[ -n "${words[3,-1]}" ]]
+			then
+				tmpwords+=(${words[3,-1]}) 
+			fi
+			[[ -n ${words[$CURRENT]} ]] || tmpwords+=('') 
+			(( CURRENT += ${#expalias} - 1 ))
+			words=("${tmpwords[@]}") 
+			unset tmpwords expalias
+		fi
+		unset git_aliases aliases
+	fi
+	integer ret=1 
+	if [[ $service == git ]]
+	then
+		local curcontext=$curcontext state line 
+		declare -A opt_args
+		_arguments -C '(- :)--version[display version information]' '(- :)--help[display help message]' '-C[run as if git was started in given path]: :_directories' \*{-c,--config-env=}'[pass configuration parameter to command]: :->configuration' '--exec-path=-[path containing core git-programs]:: :_directories' '(: -)--man-path[print the manpath for the man pages for this version of Git and exit]' '(: -)--info-path[print the path where the info files are installed and exit]' '(: -)--html-path[display path to HTML documentation and exit]' '(-p --paginate -P --no-pager)'{-p,--paginate}'[pipe output into a pager]' '(-p --paginate -P --no-pager)'{-P,--no-pager}"[don't pipe git output into a pager]" '--git-dir=[path to repository]: :_directories' '--work-tree=[path to working tree]: :_directories' '--namespace=[set the Git namespace]:namespace' '--super-prefix=[set a prefix which gives a path from above a repository down to its root]:path:_directories' '--bare[use $PWD as repository]' '--no-replace-objects[do not use replacement refs to replace git objects]' '--literal-pathspecs[treat pathspecs literally, rather than as glob patterns]' '(-): :->command' '(-)*:: :->option-or-argument' && return
+		case $state in
+			(command) _git_commands && ret=0  ;;
+			(option-or-argument) curcontext=${curcontext%:*:*}:git-$words[1]: 
+				(( $+opt_args[--git-dir] )) && local -x GIT_DIR=${(Q)${~opt_args[--git-dir]}} 
+				(( $+opt_args[--work-tree] )) && local -x GIT_WORK_TREE=${(Q)${~opt_args[--work-tree]}} 
+				if ! _call_function ret _git-$words[1]
+				then
+					if [[ $words[1] = \!* ]]
+					then
+						words[1]=${words[1]##\!} 
+						_normal && ret=0 
+					elif zstyle -T :completion:$curcontext: use-fallback
+					then
+						_default && ret=0 
+					else
+						_message "unknown sub-command: $words[1]"
+					fi
+				fi ;;
+			(configuration) if compset -P 1 '*='
+				then
+					__git_config_value && ret=0 
+				else
+					if compset -S '=*'
+					then
+						__git_config_option && ret=0 
+						compstate[to_end]='' 
+					else
+						__git_config_option -S '=' && ret=0 
+					fi
+				fi ;;
+		esac
+	else
+		_call_function ret _$service
+	fi
+	return ret
+}

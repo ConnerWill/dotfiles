@@ -20,43 +20,50 @@ setopt prompt_subst
 
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
-PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f' PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
-PROMPTHOSTNAME='%F{99}%m%f'          PROMPTUSERNAME='%F{99}%n%f' 
-PROMPTPATH='%F{66}%40<..<%~%<<'
-PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
-
-function _rprompt_set_ssh(){
-  ### SET RIGHT PROMPT TO DISPLAY VALUE OF '$SSH_CLIENT' IF CONNECTED OVER SSH
-  if [[ "$SSH_CLIENT" = *.* || "$REMOTEHOST" = *.* ]]; then
-    export RPROMPT="%F{237}$SSH_CLIENT%f"
-    setopt TRANSIENT_RPROMPT
-  fi 
-}
-_rprompt_set_ssh
+  PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
+ PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
+        PROMPTUSERNAME='%F{99}%n%f'
+        PROMPTHOSTNAME='%F{99}%m%f'
+            PROMPTPATH='%F{66}%40<..<%~%<<'
+      PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
 
 ### [===============================]
 ### [ --------- GIT PROMPT -------- ]
 ### [===============================]
 function _prompt_set_git(){
-  autoload -Uz vcs_info
-  setopt PROMPT_SUBST
-  ### USE 'vcs_info_printsys' TO LIST VCS BACKENDS
-  zstyle ':vcs_info:*' disable bzr cdv darcs mtn svk tla
-  # zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
-  zstyle ':vcs_info:*' actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
-  zstyle ':vcs_info:*' formats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+  setopt PROMPT_SUBST ;             autoload -Uz vcs_info
+  zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
+  zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
+  zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
   precmd () { vcs_info }
 }
 _prompt_set_git
-_VCS_INFO_PROMPT='${vcs_info_msg_0_}'
-GITPROMPT="$vcs_info_msg_0_"
-PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-export PS1="$PROMPT_FULL"
-export PROMPT="$PROMPT_FULL"
+### {{{ Previous vcs prompt
+## function _prompt_set_git(){
+##   autoload -Uz vcs_info ; setopt PROMPT_SUBST
+##   zstyle ':vcs_info:*'             disable bzr cdv darcs mtn svk tla ### USE 'vcs_info_printsys' TO LIST VCS BACKENDS
+##   zstyle ':vcs_info:*'             actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
+##   zstyle ':vcs_info:*'                   formats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+##   zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+##   precmd () { vcs_info }
+## }
+## _prompt_set_git
+### }}}
+
+ _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
+        GITPROMPT="$vcs_info_msg_0_"
+           PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+     PS1="$PROMPT_FULL"
+  PROMPT="$PROMPT_FULL"
+
+export PS1
+export PROMPT
 
 
 
+### DISABLED VCS PROMPTS ### {{{
+# zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
 # PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$NEW_GIT_PROMPT$PROMPT_CLOSE_BRACKETS$PROMPTDELIMITER"
 # PS1="$PROMPT_FULL"
 # PROMPT="$PROMPT_FULL" # }
@@ -1124,3 +1131,10 @@ export PROMPT="$PROMPT_FULL"
 ## The current directory gets truncated from the left if the whole prompt doesn't fit on the line.
 ## PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
 ## PS1="$PROMPT_FULL" PROMPT="$PROMPT_FULL" #PROMPT='%70F%n@%m%f # PROMPT+='%39F%$((-GITSTATUS_PROMPT_LEN-1))<…<%~%<<%f'
+
+
+
+### }}}
+
+
+

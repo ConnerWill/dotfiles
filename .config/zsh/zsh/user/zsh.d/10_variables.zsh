@@ -13,8 +13,6 @@ export ZSHRC="$ZDOTDIR/.zshrc"
 export ZSHRC_USER="$ZDOTDIR/.zshrc"
 export ZSHRC_GLOBAL="/etc/zsh/zshrc"
 export ZSHDDIR="$ZDOTDIR/zsh.d"
-export ZSH_COMPLETIONS_DIR="$ZDOTDIR/completions/completions"
-export GENCOMPL_FPATH="$ZSH_COMPLETIONS_DIR"
 export GENCOMPL_PY="python"
 
 ###}}}
@@ -70,10 +68,11 @@ export PATH="${PATH}:$HOME/.bin"
 export PATH="${PATH}:$HOME/.local/bin"
 export PATH="${PATH}:$HOME/.local/lib/bat-extras/bin"
 export PATH="${PATH}:$HOME/.local/bin/Python/3.8/bin"
-export PATH="${PATH}:$HOME/.local/share/gem/ruby/3.0.0/bin"
-export PATH="${PATH}:$HOME/.local/share/OpenSCAD/libraries/NopSCADlib/scripts"
-export PATH="${PATH}:$HOME/.local/share/OpenSCAD/libraries"
-export PATH="${PATH}:/opt/nmapbar"
+
+export ZSH_COMPLETIONS_DIR="$ZSH_USER_DIR/completion"
+[[ -d "${ZSH_COMPLETIONS_DIR}" ]] \
+  && fpath+=( "${ZSH_COMPLETIONS_DIR}" ) \
+  || mkdir -vp "${ZSH_COMPLETIONS_DIR}"
 
 ##    ###=========================================###
 ##    # According to the Zsh Plugin Standard:
