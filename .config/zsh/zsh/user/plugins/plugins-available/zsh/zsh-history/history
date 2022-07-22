@@ -1,0 +1,129 @@
+: 1650991564:0;cls
+: 1650991566:0;pwd
+: 1650991583:0;which
+: 1650991594:0;echo $PROMPT
+: 1650991627:0;PROMPT='%F{51}%B[%b%f%F{99}%n%f%F{51}%B]%b%f%F{51}%B[%b%f%F{66}%40<..<%~%<<%F{51}%B]%b%f%{olor=$((30+$RANDOM % 8))))m%}:%{%}'
+: 1650991637:0;PROMPT='%F{51}%B[%b%f%F{99}%n%f%F{51}%B]%b%f%F{51}%B[%b%f%F{66}%40<..<%~%<<%F{51}%B]%b%f%{color=$((30+$RANDOM % 8))))m%}:%{%}'
+: 1650991681:0;unfunction
+: 1650992142:0;unalias bat
+: 1650992146:0;cat /root/.config/zsh/.zshrc
+: 1650992159:0;precmd
+: 1650992162:0;--help
+: 1650992277:0;unalias ls
+: 1650992279:0;unalias l
+: 1650992284:0;unalias ll
+: 1650992301:0;function vcs_info{echo -n ""}
+: 1650992313:0;function vcs_info{ echo -n " " }
+: 1650992529:0;yls
+: 1650992553:0;vcs_info(){echo "ffff"}
+: 1650992568:0;unalias
+: 1650992577:0;options
+: 1650992580:0;options[aliases]
+: 1650992592:0;zsystem
+: 1650992595:0;zsystem .zshrc
+: 1650992599:0;zsystem -h
+: 1650992630:0;zsh -x
+: 1650992649:0;exity
+: 1650992872:0;vi .zsh/zshcomp.zsh
+: 1650992900:0;vi .zsh/zshcompletions.zsh
+: 1650992937:0;cd .config
+: 1650992940:0;cd zsh
+: 1650992942:0;ls -a
+: 1650992952:0;compaudit -h
+: 1650992971:0;cd plugins
+: 1650992975:0;vi zshplugins.zsh
+: 1650993048:0;cd plugins-available
+: 1650993051:0;cd tsm
+: 1650993058:0;compaudit
+: 1650993062:0;cd dist
+: 1650993069:0;..
+: 1650993070:0;c ds
+: 1650993072:0;zsh
+: 1650993204:0;lld
+: 1650993476:0;adduser -h
+: 1650993524:0;adduser -h $HOME -u 0 -D -s zsh dampsock
+: 1650993532:0;adduser -h $HOME -u 100 -D -s zsh dampsock
+: 1650993535:0;adduser -h $HOME -u 1000 -D -s zsh dampsock
+: 1650993540:0;getent
+: 1650993581:0;usermod --append --groups=root,wheel
+: 1650993599:0;usermod --append --groups=root,wheel dampsock
+: 1650993603:0;getent group
+: 1650993627:0;whereis
+: 1650993630:0;cd /
+: 1650993633:0;cd bin
+: 1650993653:0;usermod --shell=/bin/zsh dampsock
+: 1650993658:0;su --login dampsock
+: 1650994064:0;apk
+: 1650994068:0;function vcs_info(){ echo -n " " }
+: 1650994074:0;function vcs_info(){ echo -n " "}
+: 1650994077:0;unfunction vcs_info
+: 1650994084:0;vcs_info(){echo -n ""}
+: 1650994091:0;apl
+: 1650994101:0;apk search
+: 1650994105:0;cd etc
+: 1650994108:0;cd apk
+: 1650994119:0;cat repositories
+: 1650994128:0;cat world
+: 1650994135:0;cat arch
+: 1650994138:0;cat keys
+: 1650994141:0;cd keys
+: 1650994157:0;alias l="ls -a -1"
+: 1650994162:0;alias l="ls -A"
+: 1650994166:0;alias l="ls -A -1"
+: 1650994171:0;alias ll="ls -A -l"
+: 1650994195:0;source $ZDOTDIR/plugins/plugin-store/zsnapshot/zsnapshot.plugin.zsh
+: 1650994206:0;cd
+: 1650994211:0;zsnapshot
+: 1650994216:0;cat snap-2022.04.26_17:30:11
+: 1650994252:0;which list-zsh-keybindings
+: 1650994264:0;bindkey -L | cat
+: 1650994280:0;alias list-zsh-keybindings="bindkey -L | less"
+: 1650994297:0;vi runafterinit.zsh
+: 1650994413:0;vi .zshrc
+: 1650994448:0;cat .autoenv_authorized
+: 1650994457:0;cat runafterinit.zsh
+: 1650994692:0;which ll
+: 1650994698:0;llll
+: 1650994705:0;ll
+: 1650994709:0;cd .zsh
+: 1650994711:0;cd keybindings
+: 1650994713:0;list-zsh-keybindings
+: 1650994720:0;list-zsh-keybindings > b4
+: 1650994723:0;cat b4
+: 1650994741:0;cd zsh-shift-select
+: 1650994748:0;source ./zsh-shift-select.plugin.zsh
+: 1650994755:0;cd ..
+: 1650994760:0;list-zsh-keybindings > after
+: 1650994774:0;diff --side-by-side --color=always --minimal
+: 1650994788:0;diff --side-by-side --color=always --minimal -w b4 after
+: 1650994801:0;unalias diff
+: 1650994803:0;diff --side-by-side --minimal -w b4 after
+: 1650994810:0;diff --help --minimal -w b4 after
+: 1650994882:0;la
+: 1650994884:0;diff --minimal -w b4 after
+: 1650994920:0;unalias cat
+: 1650994922:0;cat
+: 1650994964:0;test.txt < cat
+: 1650994968:0;echo test.txt < cat
+: 1650994973:0;echo < cat > test
+: 1650994981:0;echo < test > cat
+: 1650994986:0;cat test
+: 1650994996:0;cat > teeee
+: 1650995010:0;vi teeee
+: 1650995094:0;cat teeee
+: 1650995106:0;cat 2&1>teeee
+: 1650995113:0;cat 2&1> teeee2
+: 1650995129:0;unalias rm
+: 1650995146:0;clear ; cat teeee ; cat 2&1> teeee2
+: 1650995190:0;showkey
+: 1650995199:0;shift;ls
+: 1650995202:0;reset
+: 1650995202:0;sl
+: 1650995205:0;clear
+: 1650995228:0;clear ; cat teeee ; cat 2&1>teeee2
+: 1650995258:0;l
+: 1650995265:0;rm teeee2
+: 1650995268:0;clear ; cat teeee ; cat 2&>teeee2
+: 1650995290:0;cat teeee2
+: 1650995290:0;ls
+: 1650995294:0;exit
