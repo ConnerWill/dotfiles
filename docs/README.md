@@ -211,6 +211,22 @@ CLICK OR TAP ❲☰❳ TO SHOW TABLE-OF-CONTENTS
 
 # Installation
 
+
+
+```shell
+
+$ git clone https://github.com/connerwill/dotfiles \
+  && docker run                                    \
+    -v $PWD/dotfiles:/root                         \
+    -it                                            \
+    archlinux                                      \
+    sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
+
+```
+
+
+
+
 ## Dependencies
 
 : dependency-1
