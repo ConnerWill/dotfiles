@@ -1,3 +1,4 @@
+
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
 #   the `source' or `.' commands, then reference the key parameter in bindkey commands,
@@ -248,6 +249,30 @@ bindkey -M vicmd 	"gc" 	vi-pound-insert
 
 bindkey -M vicmd 	"gg" 	beginning-of-buffer
 bindkey -M vicmd 	"G"		end-of-buffer
+
+
+if autoload -Uz surround; then
+	zle -N delete-surround surround
+	zle -N add-surround surround
+	zle -N change-surround surround
+
+	bindkey -a 				"cs" change-surround
+	bindkey -a 				"ds" delete-surround
+	bindkey -a 				"ys" add-surround
+	bindkey -M visual "S" add-surround
+fi
+
+
+
+
+
+
+
+
+
+
+
+
 
 # [Alt-#] -
 bindkey "^[#" push-input

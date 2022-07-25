@@ -15,6 +15,10 @@ export ZSH_COMPLETIONS_DIR="$ZSH_USER_DIR/completion"
   && fpath+=( "${ZSH_COMPLETIONS_DIR}" ) \
   || mkdir -vp "${ZSH_COMPLETIONS_DIR}"
 
+ZSH_USER_FPATH_DIR="${ZSH_USER_DIR}/fpath"
+[[ -d "${ZSH_USER_FPATH_DIR}" ]] \
+  && fpath+=( "${ZSH_USER_FPATH_DIR}" )
+
 
 # automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
