@@ -6,9 +6,9 @@ autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 ### Completion for the argument to cdr is available if compinit
 ### has been run; menu selection is recommended, using:
-zstyle ':completion:*:*:cdr:*:*' menu selection
+# zstyle ':completion:*:*:cdr:*:*' menu selection
 #set the value of the recent-dirs-max style to 0
-zstyle ':chpwd:*' recent-dirs-max 0
+# zstyle ':chpwd:*' recent-dirs-max 0
 
 
 #       recent-dirs-file

@@ -9,12 +9,9 @@
 #        [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
 #
 #######################################################################################
-
-
 ###     [=]===========================================================[=]
-### 	[~] ------------------- ZSH KEYBINDINGS ----------------------[~]
+###    	[~] ------------------- ZSH KEYBINDINGS ----------------------[~]
 ###     [=]===========================================================[=]
-
 setopt autocd
 bindkey -e
 
@@ -22,7 +19,6 @@ bindkey -e
 alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
 # keybindings.zsh
-
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
 # https://raw.githubusercontent.com/sorin-ionescu/prezto/master/modules/editor/init.zsh
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
@@ -32,14 +28,9 @@ alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init() {
-        echoti smkx
-    }
-    function zle-line-finish() {
-        echoti rmkx
-    }
-    zle -N zle-line-init
-    zle -N zle-line-finish
+    function zle-line-init  () { echoti smkx  }
+    function zle-line-finish() { echoti rmkx  }
+    zle -N zle-line-init ; zle -N zle-line-finish
 fi
 
 
@@ -95,19 +86,14 @@ function shift-select::select-and-invoke() {
 	fi
 	zle ${WIDGET#shift-select::} -w
 }
-
 function {
 	emulate -L zsh
-
 	# Create a new keymap for the shift-selection mode.
 	bindkey -N shift-select
-
 	# Bind all possible key sequences to deselect-and-input, i.e. it will be used
 	# as a fallback for "unbound" key sequences.
 	bindkey -M shift-select -R '^@'-'^?' shift-select::deselect-and-input
-
 	local kcap seq seq_mac widget
-
 	# Bind Shift keys in the emacs and shift-select keymaps.
 	for	kcap   seq          seq_mac    widget (             # key name
 		kLFT   '^[[1;2D'    x          backward-char        # Shift + LeftArrow
@@ -116,25 +102,25 @@ function {
 		kind   '^[[1;2B'    x          down-line            # Shift + DownArrow
 		kHOM   '^[[1;2H'    x          beginning-of-line    # Shift + Home
 		kEND   '^[[1;2F'    x          end-of-line          # Shift + End
-#		x      '^[[97;6u'   x          beginning-of-line    # Shift + Alt + A
-#		x      '^[[101;6u'  x          end-of-line          # Shift + Alt + E
 		x      '^[[1;4D'    '^[[1;4D'  backward-word        # Shift + Alt + LeftArrow
 		x      '^[[1;4C'    '^[[1;4C'  forward-word         # Shift + Alt + RightArrow
 		x      '^[[1;4H'    '^[[1;4H'  beginning-of-buffer  # Shift + Alt + Home
 		x      '^[[1;4F'    '^[[1;4F'  end-of-buffer        # Shift + Alt + End
+#		x      '^[[97;6u'   x          beginning-of-line    # Shift + Alt + A
+#		x      '^[[101;6u'  x          end-of-line          # Shift + Alt + E
 	); do
 		# Use alternative sequence (Option instead of Ctrl) on macOS, if defined.
 		[[ "$OSTYPE" = darwin* && "$seq_mac" != x ]] && seq=$seq_mac
 
-		zle -N shift-select::$widget shift-select::select-and-invoke
-		bindkey -M emacs ${terminfo[$kcap]:-$seq} shift-select::$widget
+		zle 		-N shift-select::$widget shift-select::select-and-invoke
+		bindkey -M emacs 				${terminfo[$kcap]:-$seq} shift-select::$widget
 		bindkey -M shift-select ${terminfo[$kcap]:-$seq} shift-select::$widget
 	done
 
 	# Bind keys in the shift-select keymap.
 	for	kcap   seq        widget (                          # key name
-		kdch1  '^[[3~'    shift-select::kill-region         # Delete
-		bs     '^?'       shift-select::kill-region         # Backspace
+		kdch1  '^[[3~'    shift-select::kill-region           # Delete
+		bs     '^?'       shift-select::kill-region           # Backspace
 	); do
 		bindkey -M shift-select ${terminfo[$kcap]:-$seq} $widget
 	done
@@ -163,7 +149,6 @@ fi
 if [[ -n "${terminfo[kcuu1]}" ]]; then
     autoload -U up-line-or-beginning-search
     zle -N up-line-or-beginning-search
-
     bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
     bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
     bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
@@ -197,7 +182,6 @@ if [[ -n "${terminfo[kcbt]}" ]]; then
     bindkey -M viins "${terminfo[kcbt]}" reverse-menu-complete
     bindkey -M vicmd "${terminfo[kcbt]}" reverse-menu-complete
 fi
-
 # [Backspace] - delete backward
 bindkey -M emacs '^?' backward-delete-char
 bindkey -M viins '^?' backward-delete-char
@@ -258,11 +242,14 @@ bindkey "^[m" copy-prev-shell-word
 # If there is no `#` character at the beginning of the current line, add one. If
 # there is one, remove it. The `INTERACTIVE_COMMENTS` option must be set for
 # this to have any usefulness. ( See also pound-insert (unbound) (#) (unbound) )
-bindkey -M viins "^[3" vi-pound-insert
-bindkey -M emacs "^[3" vi-pound-insert
-bindkey -M vicmd "^[3" vi-pound-insert
+bindkey -M emacs 	"^[3"	vi-pound-insert
+bindkey -M viins 	"^[3"	vi-pound-insert
+bindkey -M vicmd 	"gc" 	vi-pound-insert
 
-# [Alt-#] - 
+bindkey -M vicmd 	"gg" 	beginning-of-buffer
+bindkey -M vicmd 	"G"		end-of-buffer
+
+# [Alt-#] -
 bindkey "^[#" push-input
 
 ### zsh-change-case
@@ -276,11 +263,10 @@ bindkey "^[#" push-input
 #In case of trouble, you probably need to unbind Ctrl+K</kbd>. Just add this before the bindings you will use:
 #bindkey -r '^K'
 
-
 ## This is a very simple plugin that binds Ctrl+h to navigating up a directory.
 ## It is now very easy to go up a few directories without having to type any commands.
-PROG='@a = split " "; 
-print join " ", @a[0..($#a-1)]; 
+PROG='@a = split " ";
+print join " ", @a[0..($#a-1)];
 if (rindex($a[$#a], "/") != -1) {
   if (scalar @a > 1) { print " "; }
   @b = split "/", $a[$#a];

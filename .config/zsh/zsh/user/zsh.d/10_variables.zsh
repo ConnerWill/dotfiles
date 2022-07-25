@@ -1,109 +1,61 @@
 ###     [=]===========================================================[=]
 ###	  	[~] -------------------- ZSH VARIABLES -----------------------[~]
 ###     [=]===========================================================[=]
-###{{{
-
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export ZSH_CUSTOM="$XDG_CONFIG_HOME/zsh"
-export ZDOTDIR_PLUGINS="$XDG_CONFIG_HOME/zsh/plugins"
-export ZSH_CUSTOM_PLUGINS="$ZDOTDIR/plugins"
 export ZSHRC="$ZDOTDIR/.zshrc"
-export ZSHRC_USER="$ZDOTDIR/.zshrc"
+export ZSHRC_USER="${ZSHRC}"
 export ZSHRC_GLOBAL="/etc/zsh/zshrc"
-export ZSHDDIR="$ZDOTDIR/zsh.d"
-export GENCOMPL_PY="python"
-
-###}}}
-
-
 export ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache"
+export COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME}/zsh/zcompdump}
 
-#
-#
 # export XDG_STATE_HOME="$HOME/.local/state"
 # export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
 # export PYENV_ROOT="$XDG_DATA_HOME"/pyenv
-#
-#
-#
 # export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
-#
-#
-#
-#
-#
 # export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
-#
 # export GOPATH="$XDG_DATA_HOME"/go
-#
 # $HOME/.wget-hsts
-#
 # alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
-#
-#
 # compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
-#
 # export HISTFILE="$XDG_STATE_HOME"/zsh/history
-#
-#
 # export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 # export CARGO_HOME="$XDG_DATA_HOME"/cargo
-#
 # export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
-#
 # export HISTFILE="${XDG_STATE_HOME}"/bash/history
 # export ANDROID_HOME="$XDG_DATA_HOME"/android
-#
-#
 ### uncomment lines above
-
-### [=]==================================[=]
-### [~]............ SOURCE PATH
-### [=]==================================[=]
-###{{{
-
-export PATH="${PATH}:$HOME/.bin"
-export PATH="${PATH}:$HOME/.local/bin"
-export PATH="${PATH}:$HOME/.local/lib/bat-extras/bin"
-export PATH="${PATH}:$HOME/.local/bin/Python/3.8/bin"
-
-export ZSH_COMPLETIONS_DIR="$ZSH_USER_DIR/completion"
-[[ -d "${ZSH_COMPLETIONS_DIR}" ]] \
-  && fpath+=( "${ZSH_COMPLETIONS_DIR}" ) \
-  || mkdir -vp "${ZSH_COMPLETIONS_DIR}"
-
+##
 ##    ###=========================================###
 ##    # According to the Zsh Plugin Standard:
 ##    # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
-##    
+##
 ##    0=${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}
 ##    0=${${(M)0:#/*}:-$PWD/$0}
-##    
+##
 ##    # Then ${0:h} to get plugin's directory
-##    
+##
 ##    if [[ ${zsh_loaded_plugins[-1]} != */_set_path && -z ${fpath[(r)${0:h}]} ]] {
 ##        fpath+=( "${0:h}" )
 ##    }
-##    
+##
 ##    # Standard hash for plugins, to not pollute the namespace
 ##    typeset -gA Plugins
 ##    Plugins[_SET_PATH_DIR]="${0:h}"
-##    
+##
 ##    if [[ -d "$HOME/go/bin" ]]; then
 ##        export PATH="$PATH:$HOME/go/bin"
 ##    fi
-##    
+##
 ##    if [[ -d "$HOME/edirect" ]]; then
 ##        export PATH="$PATH:$HOME/edirect"
 ##    fi
-##    
+##
 ##    # Use alternate vim marks [[[ and ]]] as the original ones can
 ##    # confuse nested substitutions, e.g.: ${${${VAR\}}  <--  }
-##    
+##
 
-###}}}
 
 ### [=]==================================[=]
 ### [~]........ TERM COLORS
@@ -125,7 +77,6 @@ esac
 ### [=]==================================[=]
 ### [~]............ BROWSER
 ### [=]==================================[=]
-
 ###{{{
 ##  If in GUI
 [[ -n "$DISPLAY" ]] &&
@@ -161,7 +112,7 @@ export MANPAGER='nvim +Man!'
 
 
 MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 4 )) ))"
-export MANWIDTH=120
+export MANWIDTH #=120
 
 
 function _set_nvim_man_pager() {
@@ -217,10 +168,11 @@ export PAGER="bat"
 export BAT_PAGER="less -RFi"
 export GH_PAGER="/usr/bin/bat"
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
-export BAT_THEME="Dracula" #"TwoDark" "Coldark-Dark"
+#export BAT_THEME="Dracula" #"TwoDark" "Coldark-Dark"
 
 
 man() {
+	export MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 1 )) ))"
     env \
         LESS_TERMCAP_mb="$(printf "\e[1;31m")" \
         LESS_TERMCAP_md="$(printf "\e[1;35m")" \
@@ -231,7 +183,8 @@ man() {
         LESS_TERMCAP_us="$(printf "\e[3;34m")" \
         PAGER="${commands[less]:-${PAGER}}" \
         PATH="${HOME}/bin:${PATH}" \
-            man "$@"
+				MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 1 )) ))" \
+    man "$@"
 }
 
 
@@ -305,7 +258,7 @@ export TEMPDIR="$HOME/temporary"
 ###}}}
 
 ### [=]==================================[=]
-### [~]........... AWESOMEWM 
+### [~]........... AWESOMEWM
 ### [=]==================================[=]
 ###{{{
 
@@ -399,6 +352,7 @@ export ZSH_ASCII_ART_DIR="$HOME/.config/zsh/art-animations"
 ### [~]............ PYTHON
 ### [=]==================================[=]
 ###{{{
+export GENCOMPL_PY="python"
 export PYTHONPATH="$HOME/.local/bin:$PATH"
 export IPYTHONDIR="$HOME/.config/ipython"
 export IPYTHON_CONFIG="$IPYTHONDIR/profile_default/ipython_config.py"
@@ -581,9 +535,9 @@ export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 ###}}}
 
 export DOTFILES="${HOME}/.dotfiles"
-if [[ -d "${DOTFILES}" ]]; then
-   [[ -n "${DOTFILES}" ]] \
-    && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}" \
-    && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
-fi
-
+# if [[ -d "${DOTFILES}" ]]; then
+#    [[ -n "${DOTFILES}" ]] \
+#     && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}" \
+#     && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
+# fi
+#

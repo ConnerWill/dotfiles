@@ -1,6 +1,6 @@
 # zsh-vi-mode.zsh -- A better and friendly vi(vim) mode for Zsh
 # https://github.com/jeffreytse/zsh-vi-mode
-# https://github.com/ConnerWill/zsh-vi-mode
+# https://github.com/jeffreytse/zsh-vi-mode
 #
 # Copyright (c) 2020 Jeffrey Tse
 #
@@ -309,8 +309,8 @@ fi
 
 : ${ZVM_VI_INSERT_MODE_LEGACY_UNDO:=false}
 : ${ZVM_VI_SURROUND_BINDKEY:=classic}
-: ${ZVM_VI_HIGHLIGHT_BACKGROUND:=#cc0000}
-: ${ZVM_VI_HIGHLIGHT_FOREGROUND:=#eeeeee}
+: ${ZVM_VI_HIGHLIGHT_BACKGROUND:=#00ffff}
+: ${ZVM_VI_HIGHLIGHT_FOREGROUND:=#bb00ff}
 : ${ZVM_VI_HIGHLIGHT_EXTRASTYLE:=default}
 : ${ZVM_VI_EDITOR:=${EDITOR:-vim}}
 : ${ZVM_TMPDIR:=${TMPDIR:-/tmp}}

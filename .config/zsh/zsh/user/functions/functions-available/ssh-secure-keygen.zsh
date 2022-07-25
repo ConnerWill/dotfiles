@@ -2,15 +2,10 @@
 ### Title:        ssh-secure-keygen.zsh
 ### Author:       https://github.com/connerwill
 ### Description:  Functions to generate secure ssh keys
-### 
-
-
-
 
 function _ssh_secure_keygen(){
-
   local cleanedKeyName keyType currentDate keyDir AuthorizedKeysPath keyPath KeyName keyPublic
-
+  tput smcup
   printf "\e[0;38;5;93mEnter Comment/KeyName \e[38;5;241m(Spaces will be replaced by underscores '_')\e[0m\n\n\t\e[38;5;201m[>\e[0m "
   read -r sshcomment
 
@@ -81,9 +76,8 @@ function _ssh_secure_keygen(){
     && currentDate="-" \
     || currentDate="${currentDate}-"
 
-  KeyName="${currentHost}${currentDate}${cleanedKeyName}-${keyType}"
+  KeyName="${cleanedKeyName}-${currentHost}${currentDate}${keyType}"
   keyPath="${keyDir}/${KeyName}"
-  
   [[ -z "${KeyName}" ]] \
     && printf "\e[0;1;38;5;196mError: Cannot Define Key Name!\e[0m\n" \
     && return 1
@@ -121,18 +115,30 @@ function _ssh_secure_keygen(){
     && printf "\e[0;2;38;5;82mDONE\e[0m\n" \
     && return 0
 
-  printf "\n\e[0;38;5;93mDo you want to add this key to \e[0;38;5;190m'Authorized_Keys'\e[0;38;5;93m?\e[0m\n" 
-  printf "\e[0;38;5;93mPress 'y' To Add The Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0;38;5;93m\e[0m: " 
-  read -s -r -t 10 -q \
-    || printf "\n\e[0;2;38;5;190mExiting ...\e[0m\n" \
-    || return 0 \
-    && printf "\n\e[0;38;5;33mAdding to Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0m\n" \
-  keyPublic="$(cat "${keyPath}".pub)"
-  echo "${keyPublic}" >> "${AuthorizedKeysPath}" \
-    && printf "\e[0;38;5;82mAdded Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0m\n" \
-    || printf "\e[0;2;38;5;196mError: Failed To Add SSH Public Key To \e[0;38;5;190m'Authorized_Keys'\e[0;1;38;5;196m!\e[0m\n" \
-    || return 1
-
+  printf "\n\e[0;38;5;93mDo you want to add this key to \e[0;38;5;190m'Authorized_Keys'\e[0;38;5;93m?\e[0m\n"
+  printf "\e[0;38;5;93mPress 'y' To Add The Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0;38;5;93m\e[0m: "
+  read -s -r -t 10 add_to_auth_keys
+  if [[ "${add_to_auth_keys}" == "y" ]]; then
+    printf "\n\e[0;38;5;33mAdding to Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0m\n"
+    keyPublic="$(cat "${keyPath}".pub)"
+    echo "${keyPublic}" >> "${AuthorizedKeysPath}" \
+      && printf "\e[0;38;5;82mAdded Generated SSH Public Key to \e[0;38;5;190m'Authorized_Keys'\e[0m\n" \
+      && return 0 \
+      || printf "\e[0;2;38;5;196mError: Failed To Add SSH Public Key To \e[0;38;5;190m'Authorized_Keys'\e[0;1;38;5;196m!\e[0m\n" \
+      || return 1
+  else
+    printf "\n\e[0;2;38;5;93mNot adding key to \e[0;38;5;190m'Authorized_Keys'\e[0;2;38;5;93m ...\e[0m\n"
+  fi
+  printf "\n\e[0;2;38;5;46mExiting ...\e[0m\n"
+  sleep 1
+  tput rmcup
+  printf "\n"
+  printf "\t\e[0;38;5;33mName   :\t\e[0;38;5;190m%s\e[0m\n" "${KeyName}"
+  printf "\t\e[0;38;5;33mPath   :\t\e[0;38;5;190m%s\e[0m\n" "${keyPath}"
+  printf "\t\e[0;38;5;33mComment:\t\e[0;38;5;190m%s\e[0m\n" "${cleanedKeyName}"
+  printf "\t\e[0;38;5;33mType   :\t\e[0;38;5;190m%s\e[0m\n" "${keyType}"
+  printf "\t\e[0;38;5;33mBits   :\t\e[0;38;5;190m%s\e[0m\n" "${keyBits}"
+  printf "\n"
 }
 alias ssh-secure-keygen="_ssh_secure_keygen"
 
