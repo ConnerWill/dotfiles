@@ -4,21 +4,15 @@
  </div>
  <div align="center">
 
-```shell
-░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀
-░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█
-░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
-```
+
 
 # **ｄｏｔｆｉｌｅｓ**
 
-<!--```ocaml
-ZSH / NVIM / TMUX / AWESOMEWM
-```-->
- 
 ```ocaml
-ＺＳＨ  ／  ＮＶＩＭ  ／  ＴＭＵＸ  ／  ＡＷＥＳＯＭＥＷＭ
+ZSH / NVIM / TMUX / AWESOMEWM
 ```
+ 
+<!--```ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ```-->
 
 > > > *[*My Personal dotfiles*](https://connerwill.com)*
 
@@ -33,6 +27,12 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 ---
 
+ ```shell
+░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀
+░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█
+░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
+```
+ 
 ![neovim screenshot](https://user-images.githubusercontent.com/10108377/140420895-a3ed425b-e19f-4970-b0b5-9d25eec3fbe7.png)
 
 | ![lf screenshot](https://user-images.githubusercontent.com/10108377/140654098-bafadfdf-76d9-43ac-87b9-e42308ea11a3.png) | ![zsh screenshot](https://user-images.githubusercontent.com/10108377/140654211-2bd25f1a-2677-4cf7-ab2e-d043e65e40e5.png) | ![fzf screenshot](https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png) |
