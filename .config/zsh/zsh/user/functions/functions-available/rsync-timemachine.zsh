@@ -12,8 +12,9 @@ rsync-timemachine(){
              rsync_path='"$(command -v sudo)" "$(command -v rsync)"'
        excludes_file="${HOME}/.rsync-tmbackup/excludes.txt"
        includes_file="${HOME}/.rsync-tmbackup/includes.txt"
-       backup_target='/home'
-  backup_destination="/backup/archdesk-backups/2022"
+
+       backup_target="${1:-/home}"
+  backup_destination="${2:-/backup/archdesk-backups/2022}"
 
   [[ -e "${excludes_file}" ]]                                 \
     || printf "Cannot find excludes file at %s" "${excludes_file}" \

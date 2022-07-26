@@ -34,6 +34,22 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-init ; zle -N zle-line-finish
 fi
 
+if [[ -n "${DISPLAY}" ]]; then
+function toggle-monitors(){
+    local monitor_status monitor_action
+    is-monitor-on(){ xset q | grep 'Monitor is' | cut -d' ' -f5 }
+    monitor_status=$(is-monitor-on) ; unfunction is-monitor-on
+    [[ "${monitor_status:l}" == "on"  ]] && monitor_action="off"
+    [[ "${monitor_status:l}" == "off" ]] && monitor_action="on"
+		xset dpms force "${monitor_action}"
+  } ; zle -N toggle-monitors \
+		&& bindkey -M vicmd "^[[24;5~" toggle-monitors
+		#&& bindkey -M vicmd "[38;2;248;248;242mu" toggle-monitors
+		#&& bindkey "^[[57362u" toggle-monitors
+
+	# ^[[57361;5u" toggle-monitors
+		##			 <Ctrl-PrintScreen>
+fi
 
 ############################
 # Emacs shift-select mode for Zsh - select text in the command line using Shift
