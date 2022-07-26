@@ -10,7 +10,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
  
 <!--```ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ```-->
 
-> > > *[*My Personal dotfiles*](https://connerwill.com)*
+> **My Personal dotfiles**
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
