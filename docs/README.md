@@ -1,94 +1,26 @@
 <div align="justify">
-<div align="center">
-
-<!---<img width="480" height="320" src="assets/dotfiles-banner.png">--->
- <!-- <img width="480" height="320" src="assets/banner.png"> -->
+ <div align="center">
   <img width="720" height="480" src="https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png">
+ </div>
+ <div align="center">
 
-</div>
-
-<!--
-```ocaml
-
-┍──────────────────────────────────────────────────┐
-
-║││             ＺＳＨ ＣＯＮＦＩＧ                  ││║
-└──────────────────────────────────────────────────┘
-```
-
-```ocaml
-┍──────────────────────────────────────────────────┐
-║││  Ｍｙ  Ｚ－Ｓｈｅｌｌ  Ｃｏｎｆｉｇｕｒａｔｉｏｎ ││║
-
-└──────────────────────────────────────────────────┘
-```
-
-
-</div>
-
-
-```
-     ░██             ░██     ████  ██  ██
-     ░██             ░██    ░██░  ░░  ░██
-     ░██   ██████  ██████ ██████ ██ ░██  █████  ░██████
-  ██████ ██░░░░██ ░░██░ ░░░██░ ░██ ░██ ██░░░██ ░██░░
- ██░░░██░██   ░██  ░██     ░██  ░██ ░██░███████░░█████
-░██  ░██░██   ░██  ░██     ░██  ░██ ░██░██░░░    ░░░░██
-░░██████░░██████  ░██     ░██  ░██ ░███░░██████ ██████
- ░░░░░░  ░░░░░░   ░░░     ░░░  ░░░ ░░░ ░░░░    ░░░░░
- 
- ░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
- ░▓ about  ▓ custom linux config files
- ░▓ author ▓ ConnerWill
- ░▓ code   ▓ http://github.com/ConnerWill/dotfiles
- ░▓        ▓
- ░▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-
-```
--->
-
-<div align="center">
-
- 
 ```shell
 ░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀
 ░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█
 ░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
 ```
 
-</div>
-
- <!--
-
-ｄｏｔｆｉｌｅｓ
-
-### ‎ <samp>DOTFILES</samp>
-
- -->
- 
- 
-<div align="center">
-
 # **ｄｏｔｆｉｌｅｓ**
 
-</div>
-
-<div align="center">
-
-```ocaml
+<!--```ocaml
 ZSH / NVIM / TMUX / AWESOMEWM
+```-->
+ 
+```ocaml
+ＺＳＨ  ／  ＮＶＩＭ  ／  ＴＭＵＸ  ／  ＡＷＥＳＯＭＥＷＭ
 ```
 
-</div>
-
-<div align="center">
-
-> *[*My Personal dotfiles*](https://connerwill.com)*
-
-</div>
-
-<div align="center">
+> > > *[*My Personal dotfiles*](https://connerwill.com)*
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
@@ -100,7 +32,6 @@ ZSH / NVIM / TMUX / AWESOMEWM
 </div>
 
 ---
-
 
 ![neovim screenshot](https://user-images.githubusercontent.com/10108377/140420895-a3ed425b-e19f-4970-b0b5-9d25eec3fbe7.png)
 
