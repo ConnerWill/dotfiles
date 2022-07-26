@@ -63,9 +63,6 @@
 
 ### ‎ <samp>DOTFILES</samp>
 
-<summary><b>Click or tap to extend</b></summary>
-
-
 <div align="center">
 
 # **ｄｏｔｆｉｌｅｓ**
@@ -82,7 +79,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 <div align="center">
 
-> *[*My Personal 'dotfiles'*](https://connerwill.com)*
+> *[*My Personal dotfiles*](https://connerwill.com)*
 
 </div>
 
