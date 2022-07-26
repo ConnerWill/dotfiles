@@ -23,7 +23,19 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 ---
 
-> *Test ZSH config in docker*
+> *Test full config in docker*
+```shell
+git clone https://github.com/connerwill/dotfiles   \
+  && docker run                                    \
+    -v $PWD/dotfiles:/root                         \
+    -it                                            \
+    archlinux                                      \
+    sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
+```
+> _____________________________________________________________________________________________________________
+
+ 
+> *Test ZSH with no extra packages*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
   && docker run                                    \
@@ -34,6 +46,7 @@ git clone https://github.com/connerwill/dotfiles   \
 ```
 > _____________________________________________________________________________________________________________
 
+ 
 <p align="right">
   [<a href="https://gitlab.com/ConnerWill/dotfiles">GitLab Mirror</a>]
 </p>
