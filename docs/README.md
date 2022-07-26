@@ -56,6 +56,8 @@
 
 </div>
 
+ｄｏｔｆｉｌｅｓ
+
 ### ‎ <samp>DOTFILES</samp>
 
 <summary><b>Click or tap to extend</b></summary>
@@ -63,7 +65,7 @@
 
 <div align="center">
 
-# **dotfiles**
+# **ｄｏｔｆｉｌｅｓ**
 
 </div>
 
