@@ -1,7 +1,8 @@
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
 ### [=========================================]
-
+### ???{{{
+# ------------------------------------------------------------------
 # # Parent dir of highlighting plugin dir
 # ZSH_HIGHLIGHTING_PLUGIN_DIR="$ZSH_CUSTOM_PROMPTS_THEMES_DIR/highlighting/highlighting-plugins"
 # # Parent dir and name of highlighting plugin
@@ -14,22 +15,76 @@
  #   palettes that are widely used by terminal emulators.
  #echo "🌑              🌑"
 # ------------------------------------------------------------------
+### }}}
+
+### [===============================]
+### [ ------- SETUP PROMPT -------- ]
+### [===============================]
+### {{{ SETUP PROMPT
+# ------------------------------------------------------------------
 autoload -U promptinit
 promptinit
 setopt prompt_subst
-
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
+# ------------------------------------------------------------------
+### SETUP PROMPT }}}
 
+### [===============================]
+### [ ---------- PROMPT ----------- ]
+### [===============================]
+### {{{ STANDARD PROMPT
+# ------------------------------------------------------------------
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
         PROMPTHOSTNAME='%F{99}%m%f'
             PROMPTPATH='%F{66}%40<..<%~%<<'
       PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
+# ------------------------------------------------------------------
+### STANDARD PROMPT }}}
+
+### [===============================]
+### [ ------ KUBECTL PROMPT ------- ]
+### [===============================]
+### {{{ KUBECTL PROMPT
+# ------------------------------------------------------------------
+      if command -v kubectl >/dev/null 2>&1; then
+  function kubectl_prompt_setup(){
+    if !  kubectl >/dev/null 2>&1; then; return 1; fi
+    if ! kube_ps1 >/dev/null 2>&1; then; return 1; fi
+  ###{{{ kubctl_ps1 Docs
+  # The default settings can be overridden in ~/.bashrc or ~/.zshrc by setting
+  # the following environment variables:
+  ###}}}
+  ###{{{ kubectl_ps1 Env Vars
+  # KUBE_PS1_BINARY 	kubectl 	Default Kubernetes binary
+  # KUBE_PS1_NS_ENABLE 	true 	Display the namespace. If set to false, this will also disable KUBE_PS1_DIVIDER
+  # KUBE_PS1_PREFIX 	( 	Prompt opening character
+  # KUBE_PS1_SYMBOL_ENABLE 	true 	Display the prompt Symbol. If set to false, this will also disable KUBE_PS1_SEPARATOR
+  # KUBE_PS1_SYMBOL_PADDING 	false 	Adds a space (padding) after the symbol to prevent clobbering prompt characters
+  # KUBE_PS1_SYMBOL_DEFAULT 	⎈ 	Default prompt symbol. Unicode \u2388
+  # KUBE_PS1_SYMBOL_USE_IMG 	false 	☸️ , Unicode \u2638 as the prompt symbol
+  # KUBE_PS1_SEPARATOR 	| 	Separator between symbol and context name
+  # KUBE_PS1_DIVIDER 	: 	Separator between context and namespace
+  # KUBE_PS1_SUFFIX 	) 	Prompt closing character
+  # KUBE_PS1_CLUSTER_FUNCTION 	No default, must be user supplied 	Function to customize how cluster is displayed
+  # KUBE_PS1_NAMESPACE_FUNCTION 	No default, must be user supplied 	Function to customize how namespace is displayed
+  # KUBE_PS1_PREFIX_COLOR 	null 	Set default color of the prompt prefix
+  # KUBE_PS1_SYMBOL_COLOR 	blue 	Set default color of the Kubernetes symbol
+  # KUBE_PS1_CTX_COLOR 	red 	Set default color of the context
+  # KUBE_PS1_SUFFIX_COLOR 	null 	Set default color of the prompt suffix
+  # KUBE_PS1_NS_COLOR 	cyan 	Set default color of the namespace
+  # KUBE_PS1_BG_COLOR 	null 	Set default color of the prompt background
+  ###}}}
+  }; command -v kubectl >/dev/null 2>&1 && kubectl_prompt_setup
+# ------------------------------------------------------------------
+### KUBECTL PROMPT }}}i
 
 ### [===============================]
 ### [ --------- GIT PROMPT -------- ]
 ### [===============================]
+### {{{ GIT PROMPT
+# ------------------------------------------------------------------
 function _prompt_set_git(){
   setopt PROMPT_SUBST ;             autoload -Uz vcs_info
   zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
@@ -39,6 +94,28 @@ function _prompt_set_git(){
   precmd () { vcs_info }
 }
 _prompt_set_git
+_VCS_INFO_PROMPT='${vcs_info_msg_0_}'
+       GITPROMPT="$vcs_info_msg_0_"
+# ------------------------------------------------------------------
+### GIT PROMPT }}}
+
+### [===============================]
+### [ ---------- PROMPT ----------- ]
+### [===============================]
+### {{{ PUT IT ALL TOGETHER
+# ------------------------------------------------------------------
+         PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+   PS1="$PROMPT_FULL"
+PROMPT="$PROMPT_FULL"
+# ------------------------------------------------------------------
+export PS1 ; export PROMPT
+# ------------------------------------------------------------------
+### PUT IT ALL TOGETHER }}}
+
+
+#######################################################
+#######################################################
+### {{{ DISABLED VCS PROMPTS
 ### {{{ Previous vcs prompt
 ## function _prompt_set_git(){
 ##   autoload -Uz vcs_info ; setopt PROMPT_SUBST
@@ -50,18 +127,6 @@ _prompt_set_git
 ## }
 ## _prompt_set_git
 ### }}}
-
- _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
-        GITPROMPT="$vcs_info_msg_0_"
-           PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-     PS1="$PROMPT_FULL"
-  PROMPT="$PROMPT_FULL"
-
-export PS1
-export PROMPT
-
-
-
 ### DISABLED VCS PROMPTS ### {{{
 # zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
 # PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$NEW_GIT_PROMPT$PROMPT_CLOSE_BRACKETS$PROMPTDELIMITER"
@@ -127,10 +192,6 @@ export PROMPT
 # _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
 # GITPROMPT="$vcs_info_msg_0_"
 #
-#
-#
-#
-#
 # PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
 # export PS1="$PROMPT_FULL" ; export PROMPT="$PROMPT_FULL"
 # VCS PROMPT OPTIONS ###
@@ -145,15 +206,12 @@ export PROMPT
 #     %S     A subdirectory within a repository. If $PWD is /foo/bar/repoXY/beer/tasty, %S is beer/tasty.
 #     %m     A "misc" replacement. It is at the discretion of the backend to decide what this replacement expands to.
 #     %Q     Quilt  series  information.  When quilt is used (either in `addon' mode or as a `standalone' backend), this expando is set to quilt series' patch-format string.  The set-patch-format hook and
-# 
 # In branchformat these replacements are done:
 #     %b     The branch name.
 #     %r     The current revision number or the hgrevformat style for hg.
-# 
 # In hgrevformat these replacements are done:
 #     %r     The current local revision number.
 #     %h     The current global revision identifier.
-# 
 # In patch-format and nopatch-format these replacements are done:
 #     %p     The name of the top-most applied patch; may be overridden by the applied-string hook.
 #     %u     The number of unapplied patches; may be overridden by the unapplied-string hook.
@@ -163,8 +221,6 @@ export PROMPT
 #     %g     The names of active mq guards (hg backend).
 ##--------------------------------------------------
 ### Shows state of the Versioning Control System (e.g. Git, Subversion, Mercurial
-
-
 
 ##--------------------------------------------------
 ## Example: Start gitstatusd, send it a request, wait for response and print it.
@@ -1135,6 +1191,4 @@ export PROMPT
 
 
 ### }}}
-
-
-
+### }}}
