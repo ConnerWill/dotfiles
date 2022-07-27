@@ -27,7 +27,7 @@ if builtin zstyle -t :autocomplete:tab: insert-unambiguous; then
     cols+='=30;103'  # black foreground, bright yellow background
     (( prv = ++nxt ))
   done
-  ZLS_COLORS="=(#bi)*$subs=$cols:$ZLS_COLORS"
+  #ZLS_COLORS="=(#bi)*$subs=$cols:$ZLS_COLORS"
   return 1
 fi
 
