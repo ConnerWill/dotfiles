@@ -211,7 +211,15 @@ $ git clone https://github.com/connerwill/dotfiles \
 ```
  
 ```console
-git clone --bare --config status.showUntrackedFiles=no --config core.excludesfile=/home/dampsock/.gitignore --recurse-submodules --progress https://github.com/ConnerWill/dotfiles.git ~/.dotfiles
+ 
+git clone                                                 \
+ --bare --recurse-submodules                              \
+ --config status.showUntrackedFiles=no                    \
+ --config core.excludesfile="${HOME}/.dotfiles/.gitignore \
+ --verbose --progress                                     \
+ https://github.com/ConnerWill/dotfiles.git               \
+ ~/.dotfiles
+
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
