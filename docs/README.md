@@ -204,10 +204,14 @@ $ git clone https://github.com/connerwill/dotfiles \
 
 ## Setup
 
-1. Clone this repository
+1. Clone this repository to your home directory 
 
+```diff
+- This will overwrite all files any existing files! Make sure to backup first!
+```
+ 
 ```console
-git clone https://github.com/ConnerWill/dotfiles.git
+git clone --bare --config status.showUntrackedFiles=no --config core.excludesfile=/home/dampsock/.gitignore --recurse-submodules --progress https://github.com/ConnerWill/dotfiles.git ~/.dotfiles
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
