@@ -206,20 +206,20 @@ $ git clone https://github.com/connerwill/dotfiles \
 
 1. Clone this repository to your home directory 
 
-```diff
-- This will overwrite all files any existing files! Make sure to backup first!
+
+ 
+```shell
+git clone \
+ --bare --recurse-submodules                               \
+ --config status.showUntrackedFiles=no                     \
+ --config core.excludesfile="${HOME}/.dotfiles/.gitignore" \
+ --verbose --progress                                      \
+ https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
+
 ```
  
-```console
- 
-git clone                                                 \
- --bare --recurse-submodules                              \
- --config status.showUntrackedFiles=no                    \
- --config core.excludesfile="${HOME}/.dotfiles/.gitignore \
- --verbose --progress                                     \
- https://github.com/ConnerWill/dotfiles.git               \
- ~/.dotfiles
-
+```diff
+- This will overwrite all files any existing files! Make sure to backup first!
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
