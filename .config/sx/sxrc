@@ -1,50 +1,103 @@
+#!/bin/env bash
+### {{{ ShellCheck
+# shellcheck source=/etc/xprofile
+# shellcheck source=~/.xprofile
+# shellcheck source=~/.config/zsh/.zprofile
+# shellcheck source=~/.config/zsh/.zshrc
+### Add 'shellcheck external-sources=true' to your shellcheckrc
+### }}}
+### [~]==================[~]
+### [~]    xprofile
+### [~]==================[~]
+###{{{ xprofile
+###-----------------------------------------------------
 # Make sure this is before the 'exec' command or it won't be sourced.
-[ -f /etc/xprofile ] && . /etc/xprofile
-[ -f ~/.xprofile ] && . ~/.xprofile
-
-
+if [[ -f /etc/xprofile ]]; then
+  . /etc/xprofile || printf "Errors running '/etc/xprofile'\n"
+else
+  printf "ERROR:%s:Cannot locate '/etc/xprofile'\n" "$0"
+fi
+if [[ -f ~/.xprofile   ]]; then
+  . ~/.xprofile   || printf "Errors running '~/.xprofile'\n"
+else
+  printf "ERROR:%s: Cannot locate '~/.xprofile'\n" "$0"
+fi
+###-----------------------------------------------------
+### }}}
 
 ### [~]==================[~]
 ### [~]    AwesomeWM
 ### [~]==================[~]
+###{{{ awesome
+###-----------------------------------------------------
+WM_PATH="$(command -v awesome)"            # /usr/bin/awesome"
+WM_LOGGING_DIR="${XDG_CACHE_HOME}/awesome" # ~/.cache/awesome
+WM_LOGGING_ENABLED=1                       # enable logging (comment out to disable logging)
 
-WM_PATH="/usr/bin/awesome"
-WM_LOGGING_DIR="$HOME/.local/var/log/awesomewm"
-
-## Confirm Logging dir exists
+## Perform checks before calling WM
+function WMExists(){
+  [[ -f "${WM_PATH}" ]] && return 0 || return 1
+} ## Confirm Logging dir exists
 function WMloggingDirExists(){
+  [[ -d "${WM_LOGGING_DIR}" ]] && return 0 || return 1
+} ## Confirm Logging dir exists
+function createWMloggingDir(){
+  mkdir -p "${WM_LOGGING_DIR}" && return 0 || return 1
+} ## Create logging dir
 
-  [[ -f "$WM_PATH" ]] \
-    || return "WM '$WM_PATH' Not Found"
-
-  [[ -d "$WM_LOGGING_DIR" ]] \
-    || mkdir -v -p "$WM_LOGGING_DIR"
-
-  [[ -d "$WM_LOGGING_DIR" ]] \
-    && start_WM_w_log \
-      && return 0
-
-  [[ -d "$WM_LOGGING_DIR" ]] \
-    || start_WM_no_log \
-      || return 1
-
-}
-
-## Start WM with logging 
+## exec WM
 function start_WM_w_log(){
-
-  exec \
-    "$WM_PATH" \
-      >> "$WM_LOGGING_DIR/stdout" \
-      2>> "$WM_LOGGING_DIR/stderr"
-}
-
-## Start WM without logging 
+  exec "$WM_PATH" >>"${WM_LOGGING_DIR}/stdout" 2>> "${WM_LOGGING_DIR}/stderr"
+} ## Start WM with logging
 function start_WM_no_log(){
-  
-  exec \
-    "$WM_PATH"    
-}
+  exec "$WM_PATH"
+} ## Start WM without logging
 
-WMloggingDirExists
+#                                 ## Check if WM defined
+if [[ -n "${WM_PATH}" ]]; then    ## Check if WM exists
+  if WMExists; then               ## Check if WM logging dir exists
+    if WMloggingDirExists; then   ## directory exists, enable logging
+      WM_logging_enabled=1
+    else                          ## Cannot find logging dir, attempt to create dir
+      printf "\e[0;1;38;5;190mCannot locate '%s' log output directory: '%s'\e[0m\n" "${WM_PATH}" "${WM_LOGGING_DIR}"
+      printf "\e[0;1;38;5;190mCreating logging directory: '%s'\e[0m\n" "${WM_LOGGING_DIR}"
+      if createWMloggingDir; then ## Created directory, enable logging
+        WM_logging_enabled=1
+      else                        ## Unable to create directory, disable logging, and continue.
+        printf "\e[0;1;38;5;196mFailed to create logging directory: '%s'\e[0m\n" "${WM_LOGGING_DIR}"
+        printf "\e[0;1;38;5;190mStarting window manager without logging ... '\e[0m\n"
+        WM_logging_enabled=""
+        unset WM_logging_enabled
+      fi
+    fi
+  else                            ## Cannot find  defined WM
+    printf "\e[0;1;38;5;196mCannot find window manager '%s' in PATH \e[0m\n" "${WM_PATH}"
+    sleep 3
+    return 1
+  fi
+else                              ## WM is not defined
+  #shellcheck disable=2182
+  printf "\n\e[0;1;38;5;196mWindow manager is not defined\n\e[0;38;5;190mdefine environment variable: \e[0;38;5;46m'WM_PATH'\e[0;38;5;190m to the full path to your window manager \e[0;38;5;201m:)\e[0m\n" "${WM_PATH}"
+  printf "\e[0;38;5;190m\n\e[0;38;5;190m\te.g.  \e[0;38;5;8m(Replace 'awesome' with your window manager.)\e[0;38;5;87m\n\n\t\texport\e[0;38;5;46m WM_PATH\e[0;38;5;255m=\"\e[0;38;5;33m\$(\e[0;38;5;87mcommand\e[0;38;5;184m -v \e[0;38;5;255mawesome\e[0;38;5;33m)\e[0;38;5;255m\"\e[0m\n\n\e[0m"
+  sleep 3
+  return 1
+fi
+###-----------------------------------------------------
+### }}}
 
+### [~]==================[~]
+### [~]    MAIN
+### [~]==================[~]
+### {{{ MAIN
+###-----------------------------------------------------
+if [[ -n ${WM_LOGGING_ENABLED} ]]; then     ## Check if logging is enabled
+  if [[ -n "${WM_logging_enabled}" ]]; then ## If logging is enabled, start WM with logging
+      start_WM_w_log && return 0 || return 1
+  fi
+else                                        ## If logging is enabled, start WM without logging
+  WM_logging_enabled=""
+  unset WM_logging_enabled
+  start_WM_no_log && return 0 || return 1
+fi
+###-----------------------------------------------------
+### }}}
