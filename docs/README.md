@@ -37,11 +37,15 @@ git clone \
 ```
  
 > Then checkout the main branch 
-
+ 
+ <div align="center">
+  
 ```diff
 - This will overwrite existing files! Make sure to backup first!
 ```
 
+  </div>
+ 
 ```shell
 git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main
 ```
