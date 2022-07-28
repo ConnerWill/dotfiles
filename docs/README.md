@@ -36,7 +36,7 @@ git clone \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
  
-> Then checkout the main branch 
+> Then checkout the main branch and exec zsh
  
  <div align="center">
   
@@ -47,7 +47,8 @@ git clone \
   </div>
  
 ```shell
-git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main
+git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main \
+ && exec zsh
 ```
  
 ---
