@@ -4,9 +4,10 @@
   && export ZCOMPCACHE_PATH
 
 ## load completions system
+
 zmodload -i zsh/complist
 autoload -Uz compinit && compinit -u
-autoload bashcompinit && bashcompinit
+autoload -Uz bashcompinit && bashcompinit
 
 ## Completion for kitty
 [[ -n "$(command -v kitty)" ]] \
@@ -207,6 +208,7 @@ function comp_setup () {
   compdef _hosts upgrade
 
 
+  dotf >/dev/null 2>&1 && compdef dotf=git
 }
 comp_setup ; unfunction comp_setup
 

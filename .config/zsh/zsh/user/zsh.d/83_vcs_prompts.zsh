@@ -37,6 +37,7 @@ setopt prompt_subst
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
+        PROMPTATSYMBOL='%F{201}@%f'
         PROMPTHOSTNAME='%F{99}%m%f'
             PROMPTPATH='%F{66}%40<..<%~%<<'
       PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
@@ -48,10 +49,11 @@ setopt prompt_subst
 ### [===============================]
 ### {{{ KUBECTL PROMPT
 # ------------------------------------------------------------------
-      if command -v kubectl >/dev/null 2>&1; then
+## Uncomment to enable kubectl prompt
+#KUBECTL_PROMPT_ENABLE=true
+if [[ -n "${KUBECTL_PROMPT_ENABLE}" ]]; then
   function kubectl_prompt_setup(){
-    if !  kubectl >/dev/null 2>&1; then; return 1; fi
-    if ! kube_ps1 >/dev/null 2>&1; then; return 1; fi
+    command -v kube_ps1 >/dev/null 2>&1 || return 1
   ###{{{ kubctl_ps1 Docs
   # The default settings can be overridden in ~/.bashrc or ~/.zshrc by setting
   # the following environment variables:
@@ -76,7 +78,9 @@ setopt prompt_subst
   # KUBE_PS1_NS_COLOR 	cyan 	Set default color of the namespace
   # KUBE_PS1_BG_COLOR 	null 	Set default color of the prompt background
   ###}}}
-  }; command -v kubectl >/dev/null 2>&1 && kubectl_prompt_setup
+  }
+  command -v kubectl >/dev/null 2>&1 && kubectl_prompt_setup
+fi
 # ------------------------------------------------------------------
 ### KUBECTL PROMPT }}}i
 
@@ -91,7 +95,9 @@ function _prompt_set_git(){
   zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
   zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
   zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
-  precmd () { vcs_info }
+  precmd () {
+    vcs_info
+  }
 }
 _prompt_set_git
 _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
@@ -104,11 +110,37 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}'
 ### [===============================]
 ### {{{ PUT IT ALL TOGETHER
 # ------------------------------------------------------------------
-         PROMPT_FULL="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-   PS1="$PROMPT_FULL"
-PROMPT="$PROMPT_FULL"
+function define_combine_prompt(){
+      PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
+           PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
+ PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
+
+           PROMPT_FULL="$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+  PROMPT="$PROMPT_FULL"
+     PS1="$PROMPT_FULL"
+    export PROMPT PS1
+}
+if define_combine_prompt; then
+  unfunction define_combine_prompt
+else
+  printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
+    if [[ autoload -Uz promptinit && promptinit ]]; then
+      if [[ autoload -Uz colors && colors ]]; then
+        prompt fire blue magenta blue black green cyan
+      else
+        prompt adam2
+      fi
+    else
+      printf "\e[0;1;38;5;196m The backup prompt failed to load ... >:(\e[0;1;38;5;201m\n\n\tWell... you are on your own now, buddy :0\n" \
+      export PROMPT='%F{196}(╯°□°）╯︵ ┻━┻%f %F{93}[>:%f ' \
+      export RPROMPT='%F{87}(⌐■_■)%f  %F{46}¯\_(ツ)_/¯%f'
+    fi
+fi
+
+
+
+
 # ------------------------------------------------------------------
-export PS1 ; export PROMPT
 # ------------------------------------------------------------------
 ### PUT IT ALL TOGETHER }}}
 
