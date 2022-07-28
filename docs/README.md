@@ -37,12 +37,13 @@ git clone \
 ```
  
 > Then checkout the main branch 
-```shell
-git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main
-```
 
 ```diff
 - This will overwrite existing files! Make sure to backup first!
+```
+
+```shell
+git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main
 ```
  
 ---
