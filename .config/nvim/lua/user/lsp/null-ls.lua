@@ -68,7 +68,7 @@ null_ls.setup({
 
 		diagnostics.trail_space,
 		diagnostics.luacheck,
-		diagnostics.stylua,
+--		diagnostics.stylua,
 		diagnostics.selene,
 		diagnostics.zsh.with({
 			filetypes = { "sh", "zsh" },
