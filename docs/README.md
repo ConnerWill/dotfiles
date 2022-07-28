@@ -26,7 +26,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
 ## Installation
 
 > ═════════════════════════════════════════════
-
+> *Clone this repository to use as your dotfiles*
 ```diff
 - This will overwrite all files any existing files! Make sure to backup first!
 ```
@@ -39,17 +39,15 @@ git clone \
  --verbose --progress                                      \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
-> Clone this repository to use as your dotfiles
-
+ 
 > ─────────────────────────────────────────────
-
+> *Clone this repository like a normal repository*
 ```console
 git clone https://github.com/ConnerWill/dotfiles.git
 ```
-> Clone this repository like a normal repository,
  
 > ═════════════════════════════════════════════
-
+> *Test full config in docker*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
   && docker run                                    \
@@ -58,10 +56,9 @@ git clone https://github.com/connerwill/dotfiles   \
     archlinux                                      \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
 ```
-> *Test full config in docker*
  
 > ─────────────────────────────────────────────
-
+> *Test ZSH with no extra packages*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
   && docker run                                    \
@@ -70,7 +67,7 @@ git clone https://github.com/connerwill/dotfiles   \
     archlinux                                      \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
-> *Test ZSH with no extra packages*
+
 > ═════════════════════════════════════════════
 
  
