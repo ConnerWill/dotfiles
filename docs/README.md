@@ -27,7 +27,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 > *Clone this repository to use as your dotfiles*
 
-```console
+```shell
 git clone \
  --bare                                                    \
  --config status.showUntrackedFiles=no                     \
@@ -36,8 +36,13 @@ git clone \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
  
+> Then checkout the main branch 
+```shell
+git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main
+```
+
 ```diff
-- This will overwrite all files any existing files! Make sure to backup first!
+- This will overwrite existing files! Make sure to backup first!
 ```
  
 ---
