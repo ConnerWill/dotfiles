@@ -87,7 +87,7 @@ git clone https://github.com/connerwill/dotfiles   \
 
  <div align="center">
  
- ```shell
+ ```ocaml
 ░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀
 ░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█
 ░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
