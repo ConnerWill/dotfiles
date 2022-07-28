@@ -25,13 +25,8 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 ## Installation
 
-> ═════════════════════════════════════════════
- 
 > *Clone this repository to use as your dotfiles*
-```diff
-- This will overwrite all files any existing files! Make sure to backup first!
-```
- 
+
 ```console
 git clone \
  --bare                                                    \
@@ -41,14 +36,18 @@ git clone \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
  
-> ─────────────────────────────────────────────
+```diff
+- This will overwrite all files any existing files! Make sure to backup first!
+```
+ 
+---
  
 > *Clone this repository like a normal repository*
 ```console
 git clone https://github.com/ConnerWill/dotfiles.git
 ```
- 
-> ═════════════════════════════════════════════
+
+***
  
 > *Test full config in docker*
 ```shell
@@ -60,7 +59,7 @@ git clone https://github.com/connerwill/dotfiles   \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
 ```
  
-> ─────────────────────────────────────────────
+---
  
 > *Test ZSH with no extra packages*
 ```shell
@@ -72,8 +71,7 @@ git clone https://github.com/connerwill/dotfiles   \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
-> ═════════════════════════════════════════════
-
+***
  
 <p align="right">
   [<a href="https://gitlab.com/ConnerWill/dotfiles">GitLab Mirror</a>]
