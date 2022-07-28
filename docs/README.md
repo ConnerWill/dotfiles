@@ -23,6 +23,32 @@ ZSH / NVIM / TMUX / AWESOMEWM
 
 ---
 
+## Installation
+
+> Clone this repository to use as your dotfiles
+```console
+git clone \
+ --bare                                                    \
+ --config status.showUntrackedFiles=no                     \
+ --config core.excludesfile="${HOME}/.dotfiles/.gitignore" \
+ --verbose --progress                                      \
+ https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
+```
+
+```diff
+- This will overwrite all files any existing files! Make sure to backup first!
+```
+
+> ─────────────────────────────────────────────────────────────────────────────────────────────
+
+> Clone this repository like a normal repository,
+```console
+git clone https://github.com/ConnerWill/dotfiles.git
+```
+
+> ═════════════════════════════════════════════════════════════════════════════════════════════
+
+
 > *Test full config in docker*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
@@ -32,9 +58,9 @@ git clone https://github.com/connerwill/dotfiles   \
     archlinux                                      \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
 ```
-> _____________________________________________________________________________________________________________
 
- 
+> ─────────────────────────────────────────────────────────────────────────────────────────────
+
 > *Test ZSH with no extra packages*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
@@ -44,7 +70,8 @@ git clone https://github.com/connerwill/dotfiles   \
     archlinux                                      \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
-> _____________________________________________________________________________________________________________
+
+> ═════════════════════════════════════════════════════════════════════════════════════════════
 
  
 <p align="right">
@@ -206,11 +233,9 @@ $ git clone https://github.com/connerwill/dotfiles \
 
 1. Clone this repository to your home directory 
 
-
- 
-```shell
+```console
 git clone \
- --bare --recurse-submodules                               \
+ --bare                                                    \
  --config status.showUntrackedFiles=no                     \
  --config core.excludesfile="${HOME}/.dotfiles/.gitignore" \
  --verbose --progress                                      \
@@ -220,6 +245,12 @@ git clone \
  
 ```diff
 - This will overwrite all files any existing files! Make sure to backup first!
+```
+
+> To clone this repository like a normal repository, run this command:
+
+```console
+git clone https://github.com/ConnerWill/dotfiles.git
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
