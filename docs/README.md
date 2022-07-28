@@ -26,6 +26,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
 ## Installation
 
 > ═════════════════════════════════════════════
+ 
 > *Clone this repository to use as your dotfiles*
 ```diff
 - This will overwrite all files any existing files! Make sure to backup first!
@@ -41,12 +42,14 @@ git clone \
 ```
  
 > ─────────────────────────────────────────────
+ 
 > *Clone this repository like a normal repository*
 ```console
 git clone https://github.com/ConnerWill/dotfiles.git
 ```
  
 > ═════════════════════════════════════════════
+ 
 > *Test full config in docker*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
@@ -58,6 +61,7 @@ git clone https://github.com/connerwill/dotfiles   \
 ```
  
 > ─────────────────────────────────────────────
+ 
 > *Test ZSH with no extra packages*
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
