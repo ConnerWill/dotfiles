@@ -47,7 +47,7 @@ git clone \
   </div>
  
 ```shell
-git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout main \
+git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force --verbose main \
  && exec zsh
 ```
  
