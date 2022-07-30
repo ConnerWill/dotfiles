@@ -39,7 +39,7 @@ git clone \
 
 > Set temporary alias *(zsh config will set up for you when loaded)*
 ```shell
-alias dotf='git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles'
+alias dotf='git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles"'
 ```
  
 > Then checkout the main branch and exec zsh
