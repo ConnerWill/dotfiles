@@ -13,4 +13,4 @@ jobs:
           submodules: recursive
 
       - name: Shellcheck .zshrc
-        run: shellcheck --color=always --exclude=1072,1073,1009 --check-sourced .config/zsh/.zshrc .config/zsh/zsh/user/zsh.d/*.zsh
+        run: shellcheck --color=always --exclude=1072,1073,1009,2148 --check-sourced .config/zsh/.zshrc .config/zsh/zsh/user/zsh.d/*.zsh
