@@ -13,4 +13,4 @@ jobs:
           submodules: recursive
 
       - name: Shellcheck .zshrc
-        run: shellcheck -s zsh -x .config/zsh/.zshrc
+        run: shellcheck -s bash -x .config/zsh/.zshrc
