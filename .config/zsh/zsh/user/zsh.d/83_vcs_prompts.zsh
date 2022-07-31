@@ -1,4 +1,4 @@
-# shellcheck disable=2148,2016
+# shellcheck disable=2148,2016,2182
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
 ### [=========================================]
@@ -57,8 +57,11 @@ function check_last_exit_code() {
   local LAST_EXIT_CODE=$?
   if [[ $LAST_EXIT_CODE -ne 0 ]]; then
     local EXIT_CODE_PROMPT=' '
+    # shellcheck disable=2148,2016,2182,1087,2154
     EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    # shellcheck disable=2148,2016,2182,1087,2154
     EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    # shellcheck disable=2148,2016,2182,1087,2154
     EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
     export EXIT_CODE_PROMPT
   else

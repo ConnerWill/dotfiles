@@ -53,6 +53,7 @@ ZSH_FUNCTIONS_ENABLED="${ZSH_FUNCTIONS_DIR}/functions-enabled"
 
 ## Load functions
 if [[ -d "${ZSH_FUNCTIONS_ENABLED}" ]]; then
+  # shellcheck disable=1072,1058,1036,1073
   for ZSH_FILE in "${ZSH_FUNCTIONS_ENABLED}"/*.zsh(N); do
       _zshrc_VERBOSE_MESSEGE "  Function" "$(basename ${ZSH_FUNCTIONS_ENABLED})/$(basename ${ZSH_FILE})" "93" "46"
       source "${ZSH_FILE}" \

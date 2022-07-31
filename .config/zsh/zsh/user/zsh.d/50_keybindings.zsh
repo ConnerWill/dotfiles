@@ -1,3 +1,4 @@
+# shellcheck disable=1072,1073,1123
 
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
@@ -28,10 +29,16 @@ alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
+# shellcheck disable=1009
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init  () { echoti smkx  }
-    function zle-line-finish() { echoti rmkx  }
+    function zle-line-init  () {
+			echoti smkx
+		}
+    function zle-line-finish() {
+			echoti rmkx
+		}
     zle -N zle-line-init ; zle -N zle-line-finish
+# shellcheck disable=1072,1123
 fi
 
 if [[ -n "${DISPLAY}" ]]; then
