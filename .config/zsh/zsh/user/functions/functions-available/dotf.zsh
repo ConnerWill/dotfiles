@@ -5,9 +5,7 @@
     export DOTFILES
     # No arguments: `git status` With arguments: acts like `git`
     dotf() {
-      if [[ ${1} == "add" ]]; then
-
-      elif [[ ${1} == "help" ]]; then
+      if [[ ${1} == "help" ]]; then
         printf "dotf help : enter help msg here\n"
       elif [[ ${1} == "add-all" ]]; then
          $(command -v git) --git-dir=$DOTFILES --work-tree=$HOME diff --name-only | xargs -I{} sh -c "$(command -v git) --git-dir=$DOTFILES --work-tree=$HOME add -v $HOME/{}"
