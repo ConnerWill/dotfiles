@@ -51,7 +51,7 @@ function fzfrg() {
 	
 #>/dev/null 2>&1
 
-	INITIAL_QUERY=""
+INITIAL_QUERY="${*}"
 	RG_PREFIX="rg --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:white' --no-line-number --no-heading --color=always --smart-case  --with-filename"
 	#RG_PREFIX="rg --column --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --line-number --no-heading --color=always --smart-case "
 	FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'"
@@ -60,6 +60,9 @@ function fzfrg() {
 	# ===============================
 		# --preview-window hidden \
 		# --preview-window='right' \
+
+  tput smcup
+  clear
 	fzf \
 		--multi \
 		--ansi \
@@ -84,7 +87,9 @@ function fzfrg() {
 		--header "${STRING_HEADER}" \
 		--pointer "${STRING_POINTER}" \
 		--query "${INITIAL_QUERY}"
-}
+
+   tput rmcup
+	}
 
 #=======================================================================================
 #

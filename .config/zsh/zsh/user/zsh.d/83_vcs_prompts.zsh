@@ -45,45 +45,34 @@ setopt prompt_subst
 # ------------------------------------------------------------------
 ### STANDARD PROMPT }}}
 
-### [===============================]
-### [ ------ KUBECTL PROMPT ------- ]
-### [===============================]
-### {{{ KUBECTL PROMPT
+
+### [=========================================]
+### [ ---------- EXIT CODE PROMPT ----------- ]
+### [=========================================]
+### {{{ EXIT CODE PROMPT
 # ------------------------------------------------------------------
-## Uncomment to enable kubectl prompt
-#KUBECTL_PROMPT_ENABLE=true
-if [[ -n "${KUBECTL_PROMPT_ENABLE}" ]]; then
-  function kubectl_prompt_setup(){
-    command -v kube_ps1 >/dev/null 2>&1 || return 1
-  ###{{{ kubctl_ps1 Docs
-  # The default settings can be overridden in ~/.bashrc or ~/.zshrc by setting
-  # the following environment variables:
-  ###}}}
-  ###{{{ kubectl_ps1 Env Vars
-  # KUBE_PS1_BINARY 	kubectl 	Default Kubernetes binary
-  # KUBE_PS1_NS_ENABLE 	true 	Display the namespace. If set to false, this will also disable KUBE_PS1_DIVIDER
-  # KUBE_PS1_PREFIX 	( 	Prompt opening character
-  # KUBE_PS1_SYMBOL_ENABLE 	true 	Display the prompt Symbol. If set to false, this will also disable KUBE_PS1_SEPARATOR
-  # KUBE_PS1_SYMBOL_PADDING 	false 	Adds a space (padding) after the symbol to prevent clobbering prompt characters
-  # KUBE_PS1_SYMBOL_DEFAULT 	⎈ 	Default prompt symbol. Unicode \u2388
-  # KUBE_PS1_SYMBOL_USE_IMG 	false 	☸️ , Unicode \u2638 as the prompt symbol
-  # KUBE_PS1_SEPARATOR 	| 	Separator between symbol and context name
-  # KUBE_PS1_DIVIDER 	: 	Separator between context and namespace
-  # KUBE_PS1_SUFFIX 	) 	Prompt closing character
-  # KUBE_PS1_CLUSTER_FUNCTION 	No default, must be user supplied 	Function to customize how cluster is displayed
-  # KUBE_PS1_NAMESPACE_FUNCTION 	No default, must be user supplied 	Function to customize how namespace is displayed
-  # KUBE_PS1_PREFIX_COLOR 	null 	Set default color of the prompt prefix
-  # KUBE_PS1_SYMBOL_COLOR 	blue 	Set default color of the Kubernetes symbol
-  # KUBE_PS1_CTX_COLOR 	red 	Set default color of the context
-  # KUBE_PS1_SUFFIX_COLOR 	null 	Set default color of the prompt suffix
-  # KUBE_PS1_NS_COLOR 	cyan 	Set default color of the namespace
-  # KUBE_PS1_BG_COLOR 	null 	Set default color of the prompt background
-  ###}}}
-  }
-  command -v kubectl >/dev/null 2>&1 && kubectl_prompt_setup
-fi
+setopt prompt_subst
+
+function check_last_exit_code() {
+  local LAST_EXIT_CODE=$?
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    local EXIT_CODE_PROMPT=' '
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    export EXIT_CODE_PROMPT
+  else
+    unset EXIT_CODE_PROMPT
+  fi
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd check_last_exit_code
 # ------------------------------------------------------------------
-### KUBECTL PROMPT }}}i
+### EXIT CODE PROMPT }}}
+
+# set RPROMT directly. Will override other functions where it gets set
+# add-zsh-hook chpwd check_last_exit_code
 
 ### [===============================]
 ### [ --------- GIT PROMPT -------- ]
@@ -122,11 +111,9 @@ fi
 ##--------------------------------------------------
 ### Shows state of the Versioning Control System (e.g. Git, Subversion, Mercurial ------------------------------------------------------------------
 
-
-
-
 function _prompt_set_git(){
-  setopt PROMPT_SUBST ;             autoload -Uz vcs_info
+  setopt PROMPT_SUBST
+  autoload -Uz vcs_info
   zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
   zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
   zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
@@ -199,7 +186,8 @@ function gitstatus(){
       output+="${staged}"
       output+="${deleted}"
       output+="${untracked}"
- true_output="$(sed 's/[ \t]*$//' <<<"${output}")" # remove trailing whitespace
+ true_output="${output//[ \t]*$/}" # remove trailing whitespace
+ # true_output="$(sed 's/[ \t]*$//' <<<"${output}")" # remove trailing whitespace
 
     if [[ "$1" == "-i" ]]; then
         true_output+=" "
@@ -340,6 +328,48 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
 # ------------------------------------------------------------------
 ### GIT PROMPT }}}
 
+
+### [===============================]
+### [ ------ KUBECTL PROMPT ------- ]
+### [===============================]
+### {{{ KUBECTL PROMPT
+# ------------------------------------------------------------------
+## Uncomment to enable kubectl prompt
+#KUBECTL_PROMPT_ENABLE=true
+if [[ -n "${KUBECTL_PROMPT_ENABLE}" ]]; then
+  function kubectl_prompt_setup(){
+    command -v kube_ps1 >/dev/null 2>&1 || return 1
+  ###{{{ kubctl_ps1 Docs
+  # The default settings can be overridden in ~/.bashrc or ~/.zshrc by setting
+  # the following environment variables:
+  ###}}}
+  ###{{{ kubectl_ps1 Env Vars
+  # KUBE_PS1_BINARY 	kubectl 	Default Kubernetes binary
+  # KUBE_PS1_NS_ENABLE 	true 	Display the namespace. If set to false, this will also disable KUBE_PS1_DIVIDER
+  # KUBE_PS1_PREFIX 	( 	Prompt opening character
+  # KUBE_PS1_SYMBOL_ENABLE 	true 	Display the prompt Symbol. If set to false, this will also disable KUBE_PS1_SEPARATOR
+  # KUBE_PS1_SYMBOL_PADDING 	false 	Adds a space (padding) after the symbol to prevent clobbering prompt characters
+  # KUBE_PS1_SYMBOL_DEFAULT 	⎈ 	Default prompt symbol. Unicode \u2388
+  # KUBE_PS1_SYMBOL_USE_IMG 	false 	☸️ , Unicode \u2638 as the prompt symbol
+  # KUBE_PS1_SEPARATOR 	| 	Separator between symbol and context name
+  # KUBE_PS1_DIVIDER 	: 	Separator between context and namespace
+  # KUBE_PS1_SUFFIX 	) 	Prompt closing character
+  # KUBE_PS1_CLUSTER_FUNCTION 	No default, must be user supplied 	Function to customize how cluster is displayed
+  # KUBE_PS1_NAMESPACE_FUNCTION 	No default, must be user supplied 	Function to customize how namespace is displayed
+  # KUBE_PS1_PREFIX_COLOR 	null 	Set default color of the prompt prefix
+  # KUBE_PS1_SYMBOL_COLOR 	blue 	Set default color of the Kubernetes symbol
+  # KUBE_PS1_CTX_COLOR 	red 	Set default color of the context
+  # KUBE_PS1_SUFFIX_COLOR 	null 	Set default color of the prompt suffix
+  # KUBE_PS1_NS_COLOR 	cyan 	Set default color of the namespace
+  # KUBE_PS1_BG_COLOR 	null 	Set default color of the prompt background
+  ###}}}
+  }
+  command -v kubectl >/dev/null 2>&1 && kubectl_prompt_setup
+fi
+# ------------------------------------------------------------------
+### KUBECTL PROMPT }}}i
+
+
 ### [===============================]
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
@@ -350,10 +380,11 @@ function define_combine_prompt(){
 
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS"
-           # PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
+           PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
  PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
+ PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
 
-           PROMPT_FULL="$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+           PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
   PROMPT="$PROMPT_FULL"
      PS1="$PROMPT_FULL"
     export PROMPT PS1
