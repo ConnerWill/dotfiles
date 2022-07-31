@@ -36,6 +36,11 @@ git clone \
  --verbose --progress                                      \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
+
+> Set temporary alias *(zsh config will set up for you when loaded)*
+```shell
+alias dotf='git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles"'
+```
  
 > Then checkout the main branch and exec zsh
  
@@ -50,6 +55,12 @@ git clone \
 ```shell
 git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
  && exec zsh
+```
+
+> If you set the alias, you can run the following instead
+
+```shell
+dotf checkout --force main && exec zsh
 ```
  
 ---
