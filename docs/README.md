@@ -12,6 +12,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
  
 <!--```ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ```-->
 
+[![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg?branch=main&event=push)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
@@ -35,6 +36,11 @@ git clone \
  --verbose --progress                                      \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
+
+> Set temporary alias *(zsh config will set up for you when loaded)*
+```shell
+alias dotf='git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles"'
+```
  
 > Then checkout the main branch and exec zsh
  
@@ -49,6 +55,12 @@ git clone \
 ```shell
 git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
  && exec zsh
+```
+
+> If you set the alias, you can run the following instead
+
+```shell
+dotf checkout --force main && exec zsh
 ```
  
 ---

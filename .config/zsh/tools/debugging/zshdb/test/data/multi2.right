@@ -1,0 +1,18 @@
+(multi.sh:5):
+x=1
++set showcommand 1
++#### Test step inside multi-statement line...
++step 
+(multi.sh:5):
+y=2
++step 
+(multi.sh:5):
+z=3
++step 2
+(multi.sh:6):
+builtin cd .
++#### Should now be inside a subshell. Test from here...
++pr $ZSH_SUBSHELL
+1
++quit 0 2
+zshdb: That's all, folks...

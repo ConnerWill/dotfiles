@@ -1,0 +1,81 @@
+(hanoi.sh:6):
+init () { if (( $tracing )) then _Dbg_set_linetrace=1 fi }
++# Test of frame commands
++# We also try all of the various where/backtrace variants
++# Do we give a valid stack listing initially?
++where 1
+->0 in file `hanoi.sh' at line 6
++# How about after a frame command?
++frame 0
+->0 in file `hanoi.sh' at line 6
+(hanoi.sh:6):
++bt 1
+->0 in file `hanoi.sh' at line 6
++where 1
+->0 in file `hanoi.sh' at line 6
++# Let's start with a couple of stack entries
++step 7
+(hanoi.sh:8):
+if (( $tracing )) then _Dbg_set_linetrace=1 fi
++where 2
+->0 in file `hanoi.sh' at line 8
+##1 init called from file `hanoi.sh' at line 41
++# How about after moving?
++up 
+->1 init called from file `hanoi.sh' at line 41
+(hanoi.sh:41):
++where 1
+##0 in file `hanoi.sh' at line 8
++# Try moving past the end
++down 2
+** Would be beyond bottom-most (most recent) entry.
++where 5-3
+##0 in file `hanoi.sh' at line 8
+->1 init called from file `hanoi.sh' at line 41
++up 3
+** Would be beyond top-most (least recent) entry.
++# Try some negative numbers
++# should be the same as up
++down -1
+->2 hanoi.sh called from file `zshdb' at line 140
+(zshdb:140):
++T 2
+##0 in file `hanoi.sh' at line 8
+##1 init called from file `hanoi.sh' at line 41
++# Should go to next-to-least-recent frame
++frame -2
+->1 init called from file `hanoi.sh' at line 41
+(hanoi.sh:41):
++where 2
+##0 in file `hanoi.sh' at line 8
+->1 init called from file `hanoi.sh' at line 41
++# Let's add another stack entry
++## continue hanoi
++step 12
+(hanoi.sh:16):
+typeset -r a=$2
++where 3
+->0 in file `hanoi.sh' at line 16
+##1 hanoi called from file `hanoi.sh' at line 21
+##2 hanoi called from file `hanoi.sh' at line 42
++# Again, next-to-least recent stack entry
++frame -2
+->2 hanoi called from file `hanoi.sh' at line 42
+(hanoi.sh:42):
++where 3
+##0 in file `hanoi.sh' at line 16
+##1 hanoi called from file `hanoi.sh' at line 21
+->2 hanoi called from file `hanoi.sh' at line 42
++# Most recent stack entry
++frame +0
+->0 in file `hanoi.sh' at line 16
+(hanoi.sh:16):
++backtrace 3
+->0 in file `hanoi.sh' at line 16
+##1 hanoi called from file `hanoi.sh' at line 21
+##2 hanoi called from file `hanoi.sh' at line 42
++up 2
+->2 hanoi called from file `hanoi.sh' at line 42
+(hanoi.sh:42):
++quit 
+zshdb: That's all, folks...
