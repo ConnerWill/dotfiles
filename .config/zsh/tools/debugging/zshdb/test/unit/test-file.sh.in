@@ -1,0 +1,87 @@
+#!@SH_PROG@
+# -*- shell-script -*-
+# Test _Dbg_tilde_expand_filename
+test_file_glob_filename()
+{
+    typeset filename
+    filename=''
+    _Dbg_tilde_expand_filename $shunit_file
+    assertEquals "Should be able to glob $shunit_file" '0' $?
+    filename=${filename##*/}
+    assertEquals 'shunit2' $filename
+
+    _Dbg_tilde_expand_filename ./${srcdir}shunit?
+    assertEquals '0' $?
+    filename=${filename##*/}
+    assertEquals 'shunit2' $filename
+
+    _Dbg_tilde_expand_filename ./${srcdir}[a-s]h*nit?
+    assertEquals '0' $?
+    filename=${filename##*/}
+    assertEquals 'shunit2' $filename
+
+    _Dbg_tilde_expand_filename ${srcdir}abcdefg
+    assertEquals '1' $?
+    filename=${filename##*/}
+    assertEquals 'abcdefg' "$filename"
+
+    if [[ -r ~ ]] ; then
+	_Dbg_tilde_expand_filename '~'
+	assertEquals '0' $?
+	assertEquals ~ "$filename"
+    fi
+
+    # FIXME
+    # _Dbg_tilde_expand_filename ${srcdir}'some embedded spaces'
+    # assertEquals '1' $?
+    # filename=${filename##*/}
+    # assertEquals 'some embedded spaces' "$filename"
+
+}
+
+# Test _Dbg_adjust_filename
+test_file_adjust_filename()
+{
+    typeset filename
+    _Dbg_set_annotate=0
+    _Dbg_set_basename=0
+    filename=$(_Dbg_adjust_filename abc)
+    assertEquals 'abc' $filename
+    filename=$(_Dbg_adjust_filename /abc)
+    assertEquals '/abc' $filename
+    _Dbg_set_basename=1
+    filename=$(_Dbg_adjust_filename /abc)
+    assertEquals 'abc' $filename
+}
+
+# Test _Dbg_tilde_expand_filename
+test_file_resolve_expand_filename()
+{
+    filename=$(_Dbg_resolve_expand_filename /)
+    assertEquals '0' $?
+    assertEquals '/' "$filename"
+    filename=$(_Dbg_resolve_expand_filename .)
+    assertEquals '0' $?
+    assertEquals '/' "${filename[0]}"
+    filename=$(_Dbg_resolve_expand_filename ./fdafdsa)
+    assertEquals '0' $?
+    assertEquals '/fdafdsa' "${filename[-8,-1]}"
+    assertNotEquals '.' "${filename[-9]}"
+}
+
+abs_top_srcdir=@abs_top_srcdir@
+# Make sure $abs_top_srcdir has a trailing slash
+abs_top_srcdir=${abs_top_srcdir%%/}/
+. ${abs_top_srcdir}test/unit/helper.sh
+
+. $abs_top_srcdir/dbg-pre.sh
+. $abs_top_srcdir/lib/filecache.sh
+. $abs_top_srcdir/lib/file.sh
+set -- # reset $# so shunit2 doesn't get confused.
+
+SHUNIT_PARENT=$0
+
+srcdir=@srcdir@
+srcdir=${srcdir%%/}/
+
+[[ @CMDLINE_INVOKED@ ]] && . ${shunit_file}
