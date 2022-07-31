@@ -213,7 +213,7 @@ export GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
 ### [=]==================================[=]
 ###{{{
 
-export EMAIL="Conner.Will@outlook.com"
+export EMAIL="Conner.Will@connerwill.com"
 ## The user's email address.
 
 #export MAIL="/var/spool"

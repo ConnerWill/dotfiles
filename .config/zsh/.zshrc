@@ -93,6 +93,10 @@
 ### }}}
 
 
+[ -n "$INHERIT_ENV" ] && return 0
+#
+
+
 ### {{{ VERBOSE LOADING
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
@@ -101,7 +105,12 @@ if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
 
-### }}}
+
+#  Profiling
+# ZSH_PROFILE_RC=1
+[[ -n "$ZSH_PROFILE_RC" ]] && which zmodload >&/dev/null && zmodload zsh/zprof
+
+# }}}
 
 
 ### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ### {{{
@@ -259,7 +268,14 @@ _zshloadendclear
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
 
+# {{{ Profile report
 
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  zprof # >! ~/zshrc.zprof
+  #exit
+fi
+
+# }}}
 
 
 

@@ -893,3 +893,4 @@ alias iptables-watch="sudo watch --differences --differences --color --interval 
 alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote '**' --close-quote '**' --reference-links --pad-tables --images-to-alt --no-wrap-links --hide-strikethrough --decode-errors=ignore"
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias zshall="man zshall"
+alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"

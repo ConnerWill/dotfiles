@@ -10,8 +10,7 @@
 	helper = cache --timeout=129000
 [credential "https://github.com"]
 	username = ConnerWill
-	helper =
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
@@ -161,3 +160,5 @@
 #	header = dim
 #	updated = yellow
 
+[alias]
+	status = sta

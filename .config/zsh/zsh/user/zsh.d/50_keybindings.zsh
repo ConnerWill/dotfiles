@@ -93,6 +93,20 @@ function shift-select::deselect-and-input() {
 }
 zle -N shift-select::deselect-and-input
 
+
+autoload -U transpose-lines
+zle -N transpose-lines
+bindkey -M vicmd gl transpose-lines
+
+autoload -U transpose-words
+zle -N transpose-words
+bindkey -M vicmd tw transpose-words
+
+autoload -U transpose-words-match
+zle -N transpose-words-match
+bindkey -M vicmd tm transpose-words-match
+
+
 # If the selection region is not active, set the mark at the cursor position,
 # switch to the shift-select keymap, and call $WIDGET without 'shift-select::'
 # prefix. This function must be used only for shift-select::<widget> widgets.
