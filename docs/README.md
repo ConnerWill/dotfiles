@@ -12,7 +12,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
  
 <!--```ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ```-->
 
-[![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg?branch=main&event=push)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
+[![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
