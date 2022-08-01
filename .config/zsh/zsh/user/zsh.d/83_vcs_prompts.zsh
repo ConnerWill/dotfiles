@@ -40,7 +40,7 @@ setopt prompt_subst
         PROMPTUSERNAME='%F{99}%n%f'
         # PROMPTATSYMBOL='%F{201}@%f'
         # PROMPTHOSTNAME='%F{99}%m%f'
-            PROMPTPATH='%F{66}%40<..<%~%<<'
+
       PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
 # ------------------------------------------------------------------
 ### STANDARD PROMPT }}}
@@ -116,11 +116,13 @@ add-zsh-hook precmd check_last_exit_code
 
 function _prompt_set_git(){
   setopt PROMPT_SUBST
+  # is_in_git_repository && PROMPTPATH='' || return 1
   autoload -Uz vcs_info
   zstyle ':vcs_info:*'              disable bzr cdv darcs mtn svk tla
-  zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r '
-  zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
+  # zstyle ':vcs_info:*'              actionformats '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f%r'
+  #zstyle ':vcs_info:*'              formats       '%F{5}(%f%r%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f'
+  zstyle ':vcs_info:*'              formats       '%f%F{190}:%f%F{5}(%f%F{15}%r%f%F{5})%f'
+ zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  '%b%F{1}:%F{3}%r'
   precmd () {
     vcs_info
   }
@@ -134,17 +136,29 @@ _prompt_set_git
 # Options:  -i  add a whitespace at the end, if the output isn't empty
 ###
 function gitstatus(){
-  is_in_git_repository && PROMPTPATH='' || return 1
-
+  if is_in_git_repository; then
+  unset PROMPT_PATH
+  unset PROMPTPATH
+  typeset -g PROMPTPATH
+  typeset -g PROMPT_PATH
+  else
+    typeset -g PROMPTPATH='%F{66}%40<..<%~%<<'
+    return 1
+  fi
+  # PROMPTPATH='%F{66}%40<..<%~%<<'
   local \
     icon_commits_behind="↓" \
      icon_commits_ahead="↓" \
-            icon_branch="" \
+            icon_branch="" \
           icon_modified="${modified}" \
             icon_staged="${staged}"   \
            icon_deleted="${deleted}"  \
          icon_untracked="﬒${untracked}"
-
+      openbracket="%f%F{5}[%f" \
+      closebracket="%f%F{5}]%f" \
+      dash="%f%F{190}-%f" \
+      color_reset="%f%b%u%k"
+            # icon_branch="" \
   local \
        commit_diffs \
         true_output \
@@ -177,23 +191,26 @@ function gitstatus(){
     git_determine_color $((modified + staged + deleted + untracked))
     color="${REPLY}"
 
-    (( modified > 0 ))  && modified="${icon_modified}${modified} "
-    (( staged > 0 ))    && staged="${icon_staged}${staged} "
-    (( deleted > 0 ))   && deleted="${icon_deleted}${deleted} "
-    (( untracked > 0 )) && untracked="${icon_untracked}${untracked} "
+    (( modified > 0 ))  && modified="${icon_modified}${modified}"
+    (( staged > 0 ))    && staged="${icon_staged}${staged}"
+    (( deleted > 0 ))   && deleted="${icon_deleted}${deleted}"
+    (( untracked > 0 )) && untracked="${icon_untracked}${untracked}"
 
-       output="${color}"
-      output+="${icon_branch} ${branch} "
+      output="${dash}"
+      output+="${openbracket}"
+       output+="${color}"
+      output+="${icon_branch}${branch}"
       output+="${commit_diffs}"
       output+="${modified}"
       output+="${staged}"
       output+="${deleted}"
       output+="${untracked}"
+      output+="${color_reset}${closebracket}"
  true_output="${output//[ \t]*$/}" # remove trailing whitespace
  # true_output="$(sed 's/[ \t]*$//' <<<"${output}")" # remove trailing whitespace
 
     if [[ "$1" == "-i" ]]; then
-        true_output+=" "
+        true_output+=""
     fi
 
     true_output+=$'%F{default}'
@@ -296,11 +313,11 @@ function git_local_remote_diffs(){
         && behind="${icon_commits_behind}${commits_behind}"
 
     if [[ -n "${ahead}" ]]; then
-        result="${ahead} "
+        result="${ahead}"
     fi
 
     if [[ -n "${behind}" ]]; then
-        result="${behind} "
+        result="${behind}"
     fi
 
     typeset -g REPLY="${result}"
@@ -313,7 +330,7 @@ function git_local_remote_diffs(){
 ###
 function git_determine_color(){
     if (( $1 > 0 )); then
-        typeset -g REPLY=$'%F{yellow}'
+        typeset -g REPLY=$'%F{2}%B'
     else
         typeset -g REPLY=$'%F{green}'
     fi
@@ -380,6 +397,14 @@ fi
 # ------------------------------------------------------------------
 function define_combine_prompt(){
   # [[ -n "${GITPROMPT}" ]] && PROMPTPATH='$(gitstatus -i)'
+  # if is_in_git_repository; then
+  # unset PROMPT_PATH
+  # unset PROMPTPATH
+  # else
+  #   PROMPTPATH='%F{66}%40<..<%~%<<'
+  # fi
+
+
 
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS"
