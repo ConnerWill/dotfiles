@@ -55,48 +55,13 @@ function M.setup(config)
             delete = "#823c41"
          },
 }
-  -- {{{ OLD (keeping is case error)
-  -- colors = {
-  --   none = "NONE",
-  --   bg_dark = "#0e1224", -- Color of side panels
-  --   bg = "#13172a", -- Main background color
-  --   bg_highlight = "#181d31",
-  --   terminal_black = "#202646",
-  --   fg = "#c0caf5", -- plain text color
-  --   fg_dark = "#98a0c5",
-  --   fg_gutter = "#2a3150",
-  --   dark3 = "#323a5c",
-  --   comment = "#454e78",
-  --   dark5 = "#404770",
-  --   blue0 = "#1a59f1",
-  --   blue = "#75a2f7",
-  --   cyan = "#7dffff",
-  --   blue1 = "#1ac3ff",
-  --   blue2 = "#5fb9e7",
-  --   blue5 = "#409aff",
-  --   blue6 = "#a4c9Fa",
-  --   blue7 = "#114bb0", -- select highlight bg color
-  --   magenta = "#cf04fa",
-  --   magenta2 = "#ed0eee",
-  --   purple = "#9923ff",
-  --   orange = "#ff9e54",
-  --   yellow = "#c9eb20",
-  --   green = "#4eff6a", -- select highlight fg color
-  --   green1 = "#73e0aa", -- Green text color #73ddaa
-  --   green2 = "#41b6a5",
-  --   teal = "#18a7b5", -- #0abc9c
-  --   red = "#ff7690",
-  --   red1 = "#fb3b4b",
-  --   git = { change = "#6183bb", add = "#449dab", delete = "#914c54", conflict = "#bb7a61" },
-  --   gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
-  -- } --}}}
   if config.style == "night" or config.style == "day" or vim.o.background == "light" then
     colors.bg = colors.bg_light
     colors.bg_dark = colors.bg_dark_light
   end
   util.bg = colors.bg
   util.day_brightness = config.dayBrightness
-
+  
   colors.diff = {
        add = util.darken(colors.green2, 0.15),
     delete = util.darken(colors.red1  , 0.15),

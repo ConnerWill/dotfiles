@@ -182,7 +182,6 @@ man() {
         LESS_TERMCAP_ue="$(printf "\e[0m")" \
         LESS_TERMCAP_us="$(printf "\e[3;34m")" \
         PAGER="${commands[less]:-${PAGER}}" \
-        PATH="${HOME}/bin:${PATH}" \
 				MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 1 )) ))" \
     man "$@"
 }
@@ -213,7 +212,7 @@ export GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
 ### [=]==================================[=]
 ###{{{
 
-export EMAIL="Conner.Will@outlook.com"
+export EMAIL="Conner.Will@connerwill.com"
 ## The user's email address.
 
 #export MAIL="/var/spool"

@@ -1,3 +1,4 @@
+#shellcheck disable=2148,2139
 ### [=]==================================[=]
 ### [~]............ cd
 ### [=]==================================[=]
@@ -49,10 +50,11 @@ alias cat='bat --style=header,grid'
 alias ca='bat --style=header,grid *'
 
 function bat_preview_languages(){
-    local viewfile="$1"
+    local batlangsdirt batlangs viewfile
+    viewfile="$1"
     [[ -z "$viewfile" ]] && local viewfile="$HOME/*"
-    local batlangsdirt=$(bat --list-languages | sort --reverse)
-    local batlangs=$(echo "$batlangsdirt" | awk -F ":" '{print $2}' | awk -F "," '{print $1}' | awk '{print $1}')
+    batlangsdirt=$(bat --list-languages | sort --reverse)
+    batlangs=$(echo "$batlangsdirt" | awk -F ":" '{print $2}' | awk -F "," '{print $1}' | awk '{print $1}')
     echo "$batlangs" | fzf --preview-window=right,80% --preview="bat --language={} --color=always $viewfile"
 }
 alias bat-preview-languages="bat_preview_languages"
@@ -310,7 +312,8 @@ alias chown-dampsock-recursive="sudo chown --verbose --preserve-root --recursive
 # chgrp
 alias chgrp='chgrp --verbose'
 alias chgrpR='chgrp --verbose --recursive'
-alias check-file-permissions="stat $@ --printf=\"\n%n\n%F\n%A\n%a\n\""
+# shellcheck disable=2139
+alias check-file-permissions="stat ${*} --printf=\"\n%n\n%F\n%A\n%a\n\""
 
 ### [=]==================================[=]
 ### [~]............ rclone
@@ -893,3 +896,4 @@ alias iptables-watch="sudo watch --differences --differences --color --interval 
 alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote '**' --close-quote '**' --reference-links --pad-tables --images-to-alt --no-wrap-links --hide-strikethrough --decode-errors=ignore"
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias zshall="man zshall"
+alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"

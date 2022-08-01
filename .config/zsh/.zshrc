@@ -93,6 +93,10 @@
 ### }}}
 
 
+[ -n "$INHERIT_ENV" ] && return 0
+#
+
+
 ### {{{ VERBOSE LOADING
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
@@ -101,7 +105,12 @@ if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
 
-### }}}
+
+#  Profiling
+# ZSH_PROFILE_RC=1
+[[ -n "$ZSH_PROFILE_RC" ]] && which zmodload >&/dev/null && zmodload zsh/zprof
+
+# }}}
 
 
 ### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ### {{{
@@ -215,6 +224,25 @@ function _zshloadverbose(){
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
 
 
+
+### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
+# shellcheck disable=2148
+function _zshinittmux(){
+  # Check if tmux is installed, return if not
+  command -v tmux >/dev/null 2>&1 || return 0
+  if [[ -z $TMUX && -n $SSH_TTY ]]; then
+    if tmux has-session >/dev/null 2>&1; then
+       exec tmux -2 attach-session
+    else
+       exec tmux -2 new-session
+    fi
+  fi
+}
+_zshinittmux
+unfunction _zshinittmux
+### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
+
+
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
 ### Clear Screen
 function _zshloadstartclear(){
@@ -259,7 +287,14 @@ _zshloadendclear
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
 
+# {{{ Profile report
 
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  zprof # >! ~/zshrc.zprof
+  #exit
+fi
+
+# }}}
 
 
 

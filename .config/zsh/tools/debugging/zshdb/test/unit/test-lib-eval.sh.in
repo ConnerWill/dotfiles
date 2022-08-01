@@ -1,0 +1,59 @@
+#!@SH_PROG@
+# -*- shell-script -*-
+setopt ksharrays bashrematch rematchpcre
+
+test_eval_subst()
+{
+    # Set up necessary vars
+    typeset extracted
+    typeset -a texts
+    texts=(
+	'if (( x == 0 )); then'
+	'if (( y == 0 )) ; then'
+	'if (( z == 1 ))'
+	'if test -z "$a" ; then'
+	'return something'
+	'elif [[ $x = test1 ]] && [ $? -eq 0 ] ; then'
+	'while [[ $x = test2 ]] && [ $? -eq 0 ] ; do'
+	'while [[ $x = test3 ]] && [ $? -eq 0 ]'
+	'x=10'
+	'array[1]=20'
+	'__fn__+=30'
+	'PROFILES="/etc/apparmor.d"'
+    )
+    
+    expected=(
+	'(( x == 0 ))'
+	'(( y == 0 )) '
+	'(( z == 1 ))'
+	'test -z "$a" '
+	'echo something'
+	'[[ $x = test1 ]] && [ $? -eq 0 ] '
+	'[[ $x = test2 ]] && [ $? -eq 0 ] '
+	'[[ $x = test3 ]] && [ $? -eq 0 ]'
+	'echo 10'
+	'echo 20'
+	'echo 30'
+	'echo "/etc/apparmor.d"'
+    )
+    typeset -i i
+    for (( i=0 ; i<${#expected[@]}; i++ )) ; do
+	_Dbg_eval_extract_condition "${texts[i]}"
+	assertEquals "${expected[i]}" "$extracted"
+    done
+}
+
+if [ '@abs_top_srcdir@' = '' ] ; then
+  echo "Something is wrong abs_top_srcdir is not set."
+ exit 1
+fi
+
+abs_top_srcdir=@abs_top_srcdir@
+# Make sure $abs_top_builddir has a trailing slash
+abs_top_srcdir=${abs_top_srcdir%%/}/
+. ${abs_top_srcdir}test/unit/helper.sh
+. $abs_top_srcdir/lib/fns.sh
+set -- # reset $# so shunit2 doesn't get confused.
+SHUNIT_PARENT=$0
+
+[[ @CMDLINE_INVOKED@ ]] && . ${shunit_file}

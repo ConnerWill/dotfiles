@@ -1,0 +1,110 @@
+#!@SH_PROG@
+# -*- shell-script -*-
+typeset -a _Dbg_frame_stack; _Dbg_frame_stack=()
+
+test_frame()
+{
+    _Dbg_frame_save_frames 0
+    ((bool=${#_Dbg_frame_stack[@]} >= 5))
+    assertEquals  "Frame size large enough" 1 $bool
+    _Dbg_set_basename=1
+    typeset _Dbg_frame_filename=''
+    _Dbg_frame_file a b c
+    assertNotEquals 0 "$?"
+    _Dbg_frame_filename=''
+    _Dbg_frame_file
+    assertEquals 0 "$?"
+    assertEquals 'test-frame.sh' "$_Dbg_frame_filename"
+}
+
+test_frame_complete() {
+    _Dbg_frame_stack=("one" "two" "three")
+    _Dbg_stack_pos=0
+    got=$(_Dbg_frame_complete 0)
+    expect='1 2 -3 -2 -1 0'
+    assertEquals 'frame complete' "$expect" "$got"
+
+    got=$(_Dbg_frame_complete 1)
+    expect='1 2 0'
+    assertEquals 'up complete' "$expect" "$got"
+
+    _Dbg_stack_pos=1
+    got=$(_Dbg_frame_complete 1)
+    expect='1 0'
+    assertEquals 'up complete' "$expect" "$got"
+
+    got=$(_Dbg_frame_complete -1)
+    expect='1 -1 0'
+    assertEquals 'down complete' "$expect" "$got"
+
+    _Dbg_stack_pos=0
+    _Dbg_frame_stack=("one")
+    got=$(_Dbg_frame_complete 0)
+    expect='-1 0'
+    assertEquals 'frame complete - 1 item' "$expect" "$got"
+
+    got=$(_Dbg_frame_complete 1)
+    expect='0'
+    assertEquals 'frame up complete - 1 item' "$expect" "$got"
+
+    got=$(_Dbg_frame_complete -1)
+    assertEquals 'frame down complete - 1 item' "$expect" "$got"
+}
+
+test_frame_adjust()
+{
+    _Dbg_errmsg() {
+	errmsg+=("$1")
+    }
+    _Dbg_msg() {
+	msg+=("$@")
+    }
+    _Dbg_running=1
+    typeset -a errmsg; errmsg=()
+    _Dbg_frame_save_frames 0
+
+    # Test frame_adjust parameter checking
+    _Dbg_frame_adjust a
+    assertNotEquals "Invalid frame_adjust 'a'" 0 "$?"
+
+    _Dbg_frame_adjust
+    assertNotEquals 'no adjust parameter' 0 "$?"
+
+    # Test absolute positioning - ok values (0..3)
+    for i in 0 1 2 3 -1 -2 -3; do
+	_Dbg_frame_adjust $i 0
+	assertEquals 0 ${#errmsg[@]}
+    done
+
+    # Test invalid values
+    for pair in '6 0' '6 -1' '5 +1' '-7 0'; do
+	unset errmsg; errmsg=()
+	unset msg; msg=()
+	local _Dbg_stack_pos=2  # Bug if typeset is used.
+	_Dbg_frame_adjust $pair
+	assertNotEquals 0 "$?"
+	assertNotEquals 0 ${#errmsg[@]}
+    done
+}
+
+if [ '@abs_top_srcdir@' = '' ] ; then
+  echo "Something is wrong: abs_top_srcdir is not set."
+ exit 1
+fi
+abs_top_srcdir=@abs_top_srcdir@
+# Make sure @abs_top_srcdir@ has a trailing slash
+abs_top_srcdir=${abs_top_srcdir%%/}/
+. ${abs_top_srcdir}test/unit/helper.sh
+. ${abs_top_srcdir}dbg-pre.sh
+. $abs_top_srcdir/lib/file.sh
+. $abs_top_srcdir/lib/filecache.sh
+. $abs_top_srcdir/lib/fns.sh
+. $abs_top_srcdir/lib/gdb.sh
+. $abs_top_srcdir/lib/msg.sh
+. $abs_top_srcdir/lib/run.sh
+. $abs_top_srcdir/lib/frame.sh
+set -- # reset $# so shunit2 doesn't get confused.
+
+SHUNIT_PARENT=$0
+
+[[ @CMDLINE_INVOKED@ ]] && . ${shunit_file}

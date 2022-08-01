@@ -1,3 +1,4 @@
+# shellcheck disable=1072,1073,1123
 
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
@@ -28,6 +29,7 @@ alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
+# shellcheck disable=1009
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     function zle-line-init  () {
 			echoti smkx
@@ -36,6 +38,7 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
 			echoti rmkx
 		}
     zle -N zle-line-init ; zle -N zle-line-finish
+# shellcheck disable=1072,1123
 fi
 
 if [[ -n "${DISPLAY}" ]]; then
@@ -90,6 +93,20 @@ function shift-select::deselect-and-input() {
 	# but now with the main keymap.
 	zle -U "$KEYS"
 }; zle -N shift-select::deselect-and-input
+
+
+autoload -U transpose-lines
+zle -N transpose-lines
+bindkey -M vicmd gl transpose-lines
+
+autoload -U transpose-words
+zle -N transpose-words
+bindkey -M vicmd tw transpose-words
+
+autoload -U transpose-words-match
+zle -N transpose-words-match
+bindkey -M vicmd tm transpose-words-match
+
 
 # If the selection region is not active, set the mark at the cursor position,
 # switch to the shift-select keymap, and call $WIDGET without 'shift-select::'
