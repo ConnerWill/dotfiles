@@ -64,27 +64,27 @@ zmodload -a  zsh/zpty    zpty
 zmodload -ap zsh/mapfile mapfile
 
 # completion system
-COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
+COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompdump}
+[[ ! -d ${COMPDUMPFILE:h} ]] && command mkdir -pv "${COMPDUMPFILE:h}"
+#TODO
 typeset -a tmp
 zstyle -a ':grml:completion:compinit' arguments tmp
-compinit -d ${COMPDUMPFILE} "${tmp[@]}"
-unset tmp
+compinit -d ${COMPDUMPFILE} "${tmp[@]}" ; unset tmp
+
 # We can use a cache in order to speed things up
-ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${$XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
-[[ ! -d ${ZCOMPCACHE_PATH:h} ]] \
-  && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
+ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
+[[ ! -d ${ZCOMPCACHE_PATH:h} ]] && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
 zstyle ':completion:*' use-cache  yes
 zstyle ':completion:*:complete:*' cache-path "${ZCOMPCACHE_PATH}"
 
-# completion system
-# note: use 'zstyle' for getting current settings
-#       press ^xh (control-x h) for getting tags in context;
-#       ^x? (control-x ?) to run complete_debug with trace output
+# note: use 'zstyle' for getting current settings press ^xh (control-x h)
+# for getting tags in context; ^x? (control-x ?) to run complete_debug with
+# trace output
+
+
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
-    [[ -z "${NOMENU}" ]]                                  \
-      && zstyle ':completion:*'            menu select=5  \
-      || setopt no_auto_menu                                                                 # if there are more than N options allow selecting from a menu
+    [[ -z "${NOMENU}" ]] && zstyle ':completion:*' menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
     zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'   # allow one error for every three characters typed in approximate completer
     zstyle ':completion:*:complete:-command-::commands' ignored-patterns '(aptitude-*|*\~)'  # don't complete backup files as executables
     zstyle ':completion:*:correct:*'       insert-unambiguous true                           # start menu completion only if it could find no unambiguous initial string
@@ -126,12 +126,10 @@ function comp_setup () {
         return 1
     }
     ## correction
-    # some people don't like the automatic correction - so run 'NOCOR=1 zsh' to deactivate it
-    if [[ "$NOCOR" -gt 0 ]] ; then
+    if [[ -n "${NOCOR}" ]]; then # set 'NOCOR=true' to deactivate it
         zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _files _ignored
         setopt nocorrect
-    else
-        # try to be smart about when to use what completer...
+    else # try to be smart about when to use what completer...
         setopt correct
         zstyle -e ':completion:*' completer '
             if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
@@ -147,16 +145,18 @@ function comp_setup () {
     fi
 
     # host completion
-    [[ -r ~/.ssh/config ]] \
+    # Defined variable 'NOETCHOSTS' to disable completing hosts from /etc/hosts
+    SSH_DIR="${SSH_DIR:-${HOME}/.ssh}"
+    [[ -r "${SSH_DIR}/config" ]]          \
       && _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*}) \
       || _ssh_config_hosts=()
 
-    [[ -r ~/.ssh/known_hosts ]] \
-      && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
+    [[ -r "${SSH_DIR}/known_hosts" ]]     \
+      && _ssh_hosts=(${${${${(f)"$(<$SSH_DIR/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
       || _ssh_hosts=()
 
-    [[ -r /etc/hosts ]] \
-      && [[ "$NOETCHOSTS" -eq 0 ]] \
+    [[ -r /etc/hosts ]]             \
+      && [[ "$NOETCHOSTS" -eq 0 ]]  \
       && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0.\0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} \
       || _etc_hosts=()
 
@@ -164,12 +164,12 @@ function comp_setup () {
     localname="$(uname -n)"
     hosts=(
         "${localname}"
-        "$_ssh_config_hosts[@]"
-        "$_ssh_hosts[@]"
-        "$_etc_hosts[@]"
+        "${_ssh_config_hosts[@]}"
+        "${_ssh_hosts[@]}"
+        "${_etc_hosts[@]}"
         localhost
     )
-    zstyle ':completion:*:hosts' hosts $hosts
+    zstyle ':completion:*:hosts' hosts "${hosts[@]}"
     # TODO: so, why is this here?
     #  zstyle '*' hosts $hosts
 
@@ -199,18 +199,17 @@ function comp_setup () {
                   stow
                   uname
   )
-  for compcom in ${compcom_list}; do
+  for compcom in "${compcom_list[@]}"; do
     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
   done
   unset compcom compcom_list
+  compdef _hosts upgrade # see upgrade function in this file
 
-  # see upgrade function in this file
-  compdef _hosts upgrade
-
-
+  # Completion for dotf command (dotfiles)
   dotf >/dev/null 2>&1 && compdef dotf=git
+  dotfiles >/dev/null 2>&1 && compdef dotf=git
 }
-comp_setup ; unfunction comp_setup
+comp_setup; unfunction comp_setup
 
 ###{{{
 ## add an autoload function path, if directory exists

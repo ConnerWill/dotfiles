@@ -125,6 +125,9 @@ return packer.startup(function(use)
 		},
 	}) })
 
+	-- zsh completions
+	use({ "Valodim/vim-zsh-completion" })
+
 	-- mkdir
 	use({ "jghauser/mkdir.nvim" })
 
