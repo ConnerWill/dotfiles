@@ -70,15 +70,12 @@ COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompdump}
 #TODO
 typeset -a tmp
 zstyle -a ':grml:completion:compinit' arguments tmp
-<<<<<<< HEAD
 compinit -d ${COMPDUMPFILE} "${tmp[@]}" ; unset tmp
 
-=======
 compinit -d ${COMPDUMPFILE} "${tmp[@]}"
 unset tmp
 
 # shellcheck disable=2298
->>>>>>> 784184bb4250657f8a3ccda0419283eb8a36ff21
 # We can use a cache in order to speed things up
 ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
 [[ ! -d ${ZCOMPCACHE_PATH:h} ]] && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
@@ -92,16 +89,10 @@ zstyle ':completion:*:complete:*' cache-path "${ZCOMPCACHE_PATH}"
 
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
-<<<<<<< HEAD
     [[ -z "${NOMENU}" ]] && zstyle ':completion:*' menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
-=======
-    [[ -z "${NOMENU}" ]]                                  \
-      && zstyle ':completion:*'            menu select=5  \
-      || setopt no_auto_menu                                                                 # if there are more than N options allow selecting from a menu
     zstyle ':completion:*'                 verbose true                                      # provide verbose completion information
     zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'                      # match uppercase from lowercase
     zstyle ':completion:*'                 group-name ''
->>>>>>> 784184bb4250657f8a3ccda0419283eb8a36ff21
     zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'   # allow one error for every three characters typed in approximate completer
     zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'                  # Ignore completion functions for commands you don't have:
     zstyle ':completion:*:options' auto-description '%d'
@@ -194,11 +185,8 @@ function comp_setup () {
         localhost
     )
     zstyle ':completion:*:hosts' hosts "${hosts[@]}"
-<<<<<<< HEAD
     # TODO: so, why is this here?
     #  zstyle '*' hosts $hosts
-=======
->>>>>>> 784184bb4250657f8a3ccda0419283eb8a36ff21
 
   # # Search path for sudo completion
     # zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
