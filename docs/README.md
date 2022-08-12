@@ -66,9 +66,15 @@ dotf checkout --force main && exec "${SHELL}"
 <details>
  <summary><b>Single Command</b></summary>
  
+ 
+ <div align="center">
+  
+ 
  ```diff
 - This will overwrite existing files! Make sure to backup first!
 ```
+  
+ </div>
  
 ```shell
  
