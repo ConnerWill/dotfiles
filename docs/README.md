@@ -60,8 +60,29 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 > If you set the alias, you can run the following instead
 
 ```shell
-dotf checkout --force main && exec zsh
+dotf checkout --force main && exec "${SHELL}"
 ```
+ 
+<details>
+ <summary><b>Single Command</b></summary>
+ 
+```shell
+ 
+ clear \
+ && export DOTFILES="${HOME}/.dotfiles" \
+ && alias dotf='git --work-tree="${HOME}" --git-dir="${DOTFILES}"' \
+ && git clone \
+    --bare                                                    \
+    --config status.showUntrackedFiles=no                     \
+    --config core.excludesfile="${DOTFILES}/.gitignore"       \
+    --verbose --progress                                      \
+    https://github.com/ConnerWill/dotfiles.git "${DOTFILES}"  \
+ && dotf checkout --force main \
+ && exec "${SHELL}"
+ 
+```
+ 
+</details>
  
 ---
  
