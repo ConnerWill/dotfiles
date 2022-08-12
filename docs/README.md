@@ -77,7 +77,7 @@ dotf checkout --force main && exec "${SHELL}"
     --config core.excludesfile="${DOTFILES}/.gitignore"       \
     --verbose --progress                                      \
     https://github.com/ConnerWill/dotfiles.git "${DOTFILES}"  \
- && dotf checkout --force main \
+ && git --work-tree="${HOME}" --git-dir="${DOTFILES}" checkout --force main \
  && exec "${SHELL}"
  
 ```
