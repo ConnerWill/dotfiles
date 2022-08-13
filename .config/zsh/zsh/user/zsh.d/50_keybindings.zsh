@@ -381,3 +381,16 @@ bindkey "^r" history-search-multi-word
   #  zle -N prepend-nvim
   ## Now assign widget to a key; in this example 'Alt+e'
   #  bindkey "^[e" prepend-vim
+function vicmdZZ() {
+		zle kill-region -w
+		zle clear-screen
+		zle reset-prompt
+}; zle -N vicmdZZ
+
+function vicmdZQ() {
+	exit
+}; zle -N vicmdZQ
+
+
+bindkey -M vicmd 	"ZZ" vicmdZZ
+bindkey -M vicmd 	"ZQ" vicmdZQ
