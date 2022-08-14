@@ -48,6 +48,10 @@ zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-vi-mode/zsh-vi-mode.plugin.z
 [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
 unset zsh_source_plugin_tmp
 
+zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/history-search-multi-word/history-search-multi-word.plugin.zsh"
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
+unset zsh_source_plugin_tmp
+
 ### ZSH Banner To Show After Loading ZSHRC
 if [[ -n "${ZSH_BANNER_SHOW}" ]]; then
   if [[ -z "${ZSH_BANNER_START}" ]]; then

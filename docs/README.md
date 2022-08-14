@@ -12,7 +12,7 @@ ZSH / NVIM / TMUX / AWESOMEWM
  
 <!--```ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ```-->
 
-[![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg?branch=main&event=push)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
+[![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
@@ -60,8 +60,39 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 > If you set the alias, you can run the following instead
 
 ```shell
-dotf checkout --force main && exec zsh
+dotf checkout --force main && exec "${SHELL}"
 ```
+ 
+<details>
+ <summary><b>Single Command</b></summary>
+ 
+ 
+ <div align="center">
+  
+ 
+ ```diff
+- This will overwrite existing files! Make sure to backup first!
+```
+  
+ </div>
+ 
+```shell
+ 
+ clear \
+ && export DOTFILES="${HOME}/.dotfiles" \
+ && alias dotf='git --work-tree="${HOME}" --git-dir="${DOTFILES}"' \
+ && git clone \
+    --bare                                                    \
+    --config status.showUntrackedFiles=no                     \
+    --config core.excludesfile="${DOTFILES}/.gitignore"       \
+    --verbose --progress                                      \
+    https://github.com/ConnerWill/dotfiles.git "${DOTFILES}"  \
+ && git --work-tree="${HOME}" --git-dir="${DOTFILES}" checkout --force main \
+ && exec "${SHELL}"
+ 
+```
+ 
+</details>
  
 ---
  

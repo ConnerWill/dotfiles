@@ -48,51 +48,62 @@ zstyle    ':completion:*'               list-colors ${(s.:.)LS_COLORS}
 # zstyle :compinstall filename "$ZSHRC"
 # zstyle ':completion:*' menu select
 # setopt completealiases
+
+# shellcheck disable=2034
 # automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
 
 # Load a few modules
-# is4 && \
-# for mod in parameter complist deltochar mathfunc ; do
+# is4 && for mod in parameter complist deltochar mathfunc ; do
 #     zmodload -i zsh/${mod} 2>/dev/null
 #     grml_status_feature mod:$mod $?
 # done && builtin unset -v mod
-#
+
 # autoload zsh modules when they are referenced
 zmodload -a  zsh/stat    zstat
 zmodload -a  zsh/zpty    zpty
 zmodload -ap zsh/mapfile mapfile
 
 # completion system
-COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
+COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompdump}
+[[ ! -d ${COMPDUMPFILE:h} ]] && command mkdir -pv "${COMPDUMPFILE:h}"
+#TODO
 typeset -a tmp
 zstyle -a ':grml:completion:compinit' arguments tmp
+compinit -d ${COMPDUMPFILE} "${tmp[@]}" ; unset tmp
+
 compinit -d ${COMPDUMPFILE} "${tmp[@]}"
 unset tmp
+
+# shellcheck disable=2298
 # We can use a cache in order to speed things up
-ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${$XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
-[[ ! -d ${ZCOMPCACHE_PATH:h} ]] \
-  && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
+ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
+[[ ! -d ${ZCOMPCACHE_PATH:h} ]] && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
 zstyle ':completion:*' use-cache  yes
 zstyle ':completion:*:complete:*' cache-path "${ZCOMPCACHE_PATH}"
 
-# completion system
-# note: use 'zstyle' for getting current settings
-#       press ^xh (control-x h) for getting tags in context;
-#       ^x? (control-x ?) to run complete_debug with trace output
+# note: use 'zstyle' for getting current settings press ^xh (control-x h)
+# for getting tags in context; ^x? (control-x ?) to run complete_debug with
+# trace output
+
+
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
-    [[ -z "${NOMENU}" ]]                                  \
-      && zstyle ':completion:*'            menu select=5  \
-      || setopt no_auto_menu                                                                 # if there are more than N options allow selecting from a menu
+    [[ -z "${NOMENU}" ]] && zstyle ':completion:*' menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
+    zstyle ':completion:*'                 verbose true                                      # provide verbose completion information
+    zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'                      # match uppercase from lowercase
+    zstyle ':completion:*'                 group-name ''
     zstyle ':completion:*:approximate:'    max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'   # allow one error for every three characters typed in approximate completer
+    zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'                  # Ignore completion functions for commands you don't have:
+    zstyle ':completion:*:options' auto-description '%d'
+    zstyle ':completion:*:*:cd:*:directory-stack' menu yes select                            # automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
     zstyle ':completion:*:complete:-command-::commands' ignored-patterns '(aptitude-*|*\~)'  # don't complete backup files as executables
     zstyle ':completion:*:correct:*'       insert-unambiguous true                           # start menu completion only if it could find no unambiguous initial string
-    zstyle ':completion:*:corrections'     format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
     zstyle ':completion:*:correct:*'       original true
+    zstyle ':completion:correct:'          prompt '🖳 correct to: %e'
+    zstyle ':completion:*:corrections'     format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
     zstyle ':completion:*:default'         list-colors ${(s.:.)LS_COLORS}                    # activate color-completion
     zstyle ':completion:*:descriptions'    format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'  # format on completion
-    zstyle ':completion:*:*:cd:*:directory-stack' menu yes select                            # automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
     zstyle ':completion:*:expand:*'        tag-order all-expansions                          # insert all expansions for expand completer
     zstyle ':completion:*:history-words'   list false
     zstyle ':completion:*:history-words'   menu yes                                          # activate menu
@@ -100,38 +111,40 @@ function comp_setup () {
     zstyle ':completion:*:history-words'   stop yes
     zstyle ':completion:*:messages'        format '%d'
     zstyle ':completion:*:matches'         group 'yes'                                       # separate matches into groups
-    zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'                      # match uppercase from lowercase
-    zstyle ':completion:*'                 group-name ''
-    zstyle ':completion:*:options'         auto-description '%d'
-    zstyle ':completion:*:options'         description 'yes'                                 # describe options in full
-    zstyle ':completion:*:processes'       command 'ps -au$USER'                             # on processes completion complete all user processes
-    zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters                      # offer indexes before parameters in subscripts
-    zstyle ':completion:*'                 verbose true                                      # provide verbose completion information
-    zstyle ':completion:*:warnings'        format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d' # set format for warnings
-    zstyle ':completion:*:*:zcompile:*'    ignored-patterns '(*~|*.zwc)'                     # define files to ignore for zcompile
-    zstyle ':completion:correct:'          prompt 'correct to: %e'
-    zstyle ':completion::(^approximate*):*:functions' ignored-patterns '_*'                  # Ignore completion functions for commands you don't have:
-    zstyle ':completion:*:processes-names' command 'ps c -u ${USER} -o command | uniq'       # Provide more processes in completion of programs like killall:
     zstyle ':completion:*:manuals'         separate-sections true                            # complete manual by their section
     zstyle ':completion:*:manuals.*'       insert-sections   true
     zstyle ':completion:*:man:*'           menu yes select
-    # zstyle ':completion:*'                 special-dirs ..                                   # provide '../' as a completion
+    zstyle ':completion:*:options'         auto-description '%d'
+    zstyle ':completion:*:options'         description 'yes'                                 # describe options in full
+    zstyle ':completion:*:processes'       command 'ps -au$USER'                             # on processes completion complete all user processes
+    zstyle ':completion:*:processes-names' command 'ps c -u ${USER} -o command | uniq'       # Provide more processes in completion of programs like killall:
+    zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters                      # offer indexes before parameters in subscripts
     zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'                        # command for process lists, the local web server details and host completion
+    zstyle ':completion:*:*:*:users' ignored-patterns \
+        adm amanda apache avahi beaglidx bin cacti canna clamav daemon \
+        dbus distcache dovecot fax ftp games gdm gkrellmd gopher \
+        hacluster haldaemon halt hsqldb ident junkbust ldap lp mail \
+        mailman mailnull mldonkey mysql nagios \
+        named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
+        operator pcap postfix postgres privoxy pulse pvm quagga radvd \
+        rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs                               # Don't complete uninteresting users
+    zstyle ':completion:*:warnings'        format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d' # set format for warnings
+    zstyle ':completion:*:*:zcompile:*'    ignored-patterns '(*~|*.zwc)'                     # define files to ignore for zcompile
+    # zstyle ':completion:*'                 special-dirs ..                                   # provide '../' as a completion
     # recent (as of Dec 2007) zsh versions are able to provide descriptions
     # for commands (read: 1st word in the line) that it will list for the user
     # to choose from. The following disables that, because it's not exactly fast.
     #zstyle ':completion:*:-command-:*:'    verbose false
-    function _force_rehash () {                                                   # run rehash on completion so new installed program are found automatically:
+
+    function _force_rehash () { # run rehash on completion so new installed program are found automatically:
         (( CURRENT == 1 )) && rehash
         return 1
     }
     ## correction
-    # some people don't like the automatic correction - so run 'NOCOR=1 zsh' to deactivate it
-    if [[ "$NOCOR" -gt 0 ]] ; then
+    if [[ -n "${NOCOR}" ]]; then # set 'NOCOR=true' to deactivate it
         zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _files _ignored
         setopt nocorrect
-    else
-        # try to be smart about when to use what completer...
+    else # try to be smart about when to use what completer...
         setopt correct
         zstyle -e ':completion:*' completer '
             if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
@@ -147,16 +160,18 @@ function comp_setup () {
     fi
 
     # host completion
-    [[ -r ~/.ssh/config ]] \
+    # Defined variable 'NOETCHOSTS' to disable completing hosts from /etc/hosts
+    SSH_DIR="${SSH_DIR:-${HOME}/.ssh}"
+    [[ -r "${SSH_DIR}/config" ]]          \
       && _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*}) \
       || _ssh_config_hosts=()
 
-    [[ -r ~/.ssh/known_hosts ]] \
-      && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
+    [[ -r "${SSH_DIR}/known_hosts" ]]     \
+      && _ssh_hosts=(${${${${(f)"$(<$SSH_DIR/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
       || _ssh_hosts=()
 
-    [[ -r /etc/hosts ]] \
-      && [[ "$NOETCHOSTS" -eq 0 ]] \
+    [[ -r /etc/hosts ]]             \
+      && [[ "$NOETCHOSTS" -eq 0 ]]  \
       && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0.\0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} \
       || _etc_hosts=()
 
@@ -164,12 +179,12 @@ function comp_setup () {
     localname="$(uname -n)"
     hosts=(
         "${localname}"
-        "$_ssh_config_hosts[@]"
-        "$_ssh_hosts[@]"
-        "$_etc_hosts[@]"
+        "${_ssh_config_hosts[@]}"
+        "${_ssh_hosts[@]}"
+        "${_etc_hosts[@]}"
         localhost
     )
-    zstyle ':completion:*:hosts' hosts $hosts
+    zstyle ':completion:*:hosts' hosts "${hosts[@]}"
     # TODO: so, why is this here?
     #  zstyle '*' hosts $hosts
 
@@ -199,18 +214,17 @@ function comp_setup () {
                   stow
                   uname
   )
-  for compcom in ${compcom_list}; do
+  for compcom in "${compcom_list[@]}"; do
     [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic ${compcom}
   done
   unset compcom compcom_list
+  compdef _hosts upgrade # see upgrade function in this file
 
-  # see upgrade function in this file
-  compdef _hosts upgrade
-
-
+  # Completion for dotf command (dotfiles)
   dotf >/dev/null 2>&1 && compdef dotf=git
+  dotfiles >/dev/null 2>&1 && compdef dotf=git
 }
-comp_setup ; unfunction comp_setup
+comp_setup; unfunction comp_setup
 
 ###{{{
 ## add an autoload function path, if directory exists

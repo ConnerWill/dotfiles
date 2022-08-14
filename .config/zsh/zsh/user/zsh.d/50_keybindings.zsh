@@ -1,3 +1,4 @@
+# shellcheck disable=1072,1073,1123
 
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
@@ -28,25 +29,31 @@ alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
+# shellcheck disable=1009
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init  () { echoti smkx  }
-    function zle-line-finish() { echoti rmkx  }
+    function zle-line-init  () {
+			echoti smkx
+		}
+    function zle-line-finish() {
+			echoti rmkx
+		}
     zle -N zle-line-init ; zle -N zle-line-finish
+# shellcheck disable=1072,1123
 fi
 
 if [[ -n "${DISPLAY}" ]]; then
 function toggle-monitors(){
     local monitor_status monitor_action
-    is-monitor-on(){ xset q | grep 'Monitor is' | cut -d' ' -f5 }
+    is-monitor-on(){
+			xset q | grep 'Monitor is' | cut -d' ' -f5
+		}
     monitor_status=$(is-monitor-on) ; unfunction is-monitor-on
     [[ "${monitor_status:l}" == "on"  ]] && monitor_action="off"
     [[ "${monitor_status:l}" == "off" ]] && monitor_action="on"
 		xset dpms force "${monitor_action}"
-  } ; zle -N toggle-monitors \
-		&& bindkey -M vicmd "^[[24;5~" toggle-monitors
+  } ; zle -N toggle-monitors && bindkey -M vicmd "^[[24;5~" toggle-monitors
 		#&& bindkey -M vicmd "[38;2;248;248;242mu" toggle-monitors
 		#&& bindkey "^[[57362u" toggle-monitors
-
 	# ^[[57361;5u" toggle-monitors
 		##			 <Ctrl-PrintScreen>
 fi
@@ -57,41 +64,49 @@ fi
 #
 # Version: 0.1.1
 # Homepage: <https://github.com/jirutka/zsh-shift-select>
-
 # Move cursor to the end of the buffer.
 # This is an alternative to builtin end-of-buffer-or-history.
 function end-of-buffer() {
 	CURSOR=${#BUFFER}
 	zle end-of-line -w  # trigger syntax highlighting redraw
-}
-zle -N end-of-buffer
+}; zle -N end-of-buffer
 
 # Move cursor to the beginning of the buffer.
 # This is an alternative to builtin beginning-of-buffer-or-history.
 function beginning-of-buffer() {
 	CURSOR=0
 	zle beginning-of-line -w  # trigger syntax highlighting redraw
-}
-zle -N beginning-of-buffer
+}; zle -N beginning-of-buffer
 
 # Kill the selected region and switch back to the main keymap.
 function shift-select::kill-region() {
 	zle kill-region -w
 	zle -K main
-}
-zle -N shift-select::kill-region
+}; zle -N shift-select::kill-region
 
 # Deactivate the selection region, switch back to the main keymap and process
 # the typed keys again.
 function shift-select::deselect-and-input() {
 	zle deactivate-region -w
-	# Switch back to the main keymap (emacs).
-	zle -K main
+	zle -K main # Switch back to the main keymap (emacs).
 	# Push the typed keys back to the input stack, i.e. process them again,
 	# but now with the main keymap.
 	zle -U "$KEYS"
-}
-zle -N shift-select::deselect-and-input
+}; zle -N shift-select::deselect-and-input
+
+
+autoload -U transpose-lines
+zle -N transpose-lines
+bindkey -M vicmd gl transpose-lines
+
+autoload -U transpose-words
+zle -N transpose-words
+bindkey -M vicmd tw transpose-words
+
+autoload -U transpose-words-match
+zle -N transpose-words-match
+bindkey -M vicmd tm transpose-words-match
+
 
 # If the selection region is not active, set the mark at the cursor position,
 # switch to the shift-select keymap, and call $WIDGET without 'shift-select::'
@@ -266,7 +281,6 @@ bindkey -M vicmd 	"gc" 	vi-pound-insert
 bindkey -M vicmd 	"gg" 	beginning-of-buffer
 bindkey -M vicmd 	"G"		end-of-buffer
 
-
 if autoload -Uz surround; then
 	zle -N delete-surround surround
 	zle -N add-surround surround
@@ -278,18 +292,6 @@ if autoload -Uz surround; then
 	bindkey -M visual "S" add-surround
 fi
 
-
-
-
-
-
-
-
-
-
-
-
-
 # [Alt-#] -
 bindkey "^[#" push-input
 
@@ -297,7 +299,6 @@ bindkey "^[#" push-input
 # I recomend you to use the following bindkeys
 #* Ctrl+K + Ctrl+U to uppercase
 #* Ctrl+K + Ctrl+L to lowercase
-
 # bindkey '^K^U' _mtxr-to-upper # Ctrl+K + Ctrl+U
 # bindkey '^K^L' _mtxr-to-lower # Ctrl+K + Ctrl+L
 
@@ -327,6 +328,33 @@ function _up-dir {
 zle -N _up-dir
 bindkey "^h" _up-dir
 
+
+
+
+
+
+ # autoload history-search-multi-word
+zle -N history-search-multi-word
+zle -N history-search-multi-word-backwards history-search-multi-word
+zle -N history-search-multi-word-pbackwards history-search-multi-word
+zle -N history-search-multi-word-pforwards history-search-multi-word
+bindkey "^R" history-search-multi-word
+bindkey "^h" history-search-multi-word
+bindkey "^H" history-search-multi-word
+bindkey "^r" history-search-multi-word
+# This will bind to Ctrl-R
+#
+# Zstyles:
+# zstyle ":history-search-multi-word" page-size "8"
+# zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"
+# zstyle ":plugin:history-search-multi-word" synhl "yes"
+# zstyle ":plugin:history-search-multi-word" clear-on-cancel "no
+
+
+
+
+# zle -l 
+
 # Keyboard shortcut problems
 # Example:
 # bindkey '^L' clear-screen
@@ -353,3 +381,16 @@ bindkey "^h" _up-dir
   #  zle -N prepend-nvim
   ## Now assign widget to a key; in this example 'Alt+e'
   #  bindkey "^[e" prepend-vim
+function vicmdZZ() {
+		zle kill-region -w
+		zle clear-screen
+		zle reset-prompt
+}; zle -N vicmdZZ
+
+function vicmdZQ() {
+	exit
+}; zle -N vicmdZQ
+
+
+bindkey -M vicmd 	"ZZ" vicmdZZ
+bindkey -M vicmd 	"ZQ" vicmdZQ

@@ -15,7 +15,6 @@ ${0}() {
   local -P keymap_menuselect="$( builtin bindkey -M menuselect -L )"
   {
     builtin bindkey -M menuselect -s \
-        '^R' '^_^_^R' \
         '^S' '^_^_^S'
     builtin bindkey -M menuselect \
         '\e[D' .backward-char \
