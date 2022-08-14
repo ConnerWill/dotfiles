@@ -10,6 +10,13 @@ export ZSHRC_GLOBAL="/etc/zsh/zshrc"
 export ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache"
 export COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME}/zsh/zcompdump}
 
+export DOTFILES="${HOME}/.dotfiles"
+# if [[ -d "${DOTFILES}" ]]; then
+#    [[ -n "${DOTFILES}" ]] \
+#     && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}" \
+#     && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
+# fi
+#
 # export XDG_STATE_HOME="$HOME/.local/state"
 # export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
 # export PYENV_ROOT="$XDG_DATA_HOME"/pyenv
@@ -55,13 +62,11 @@ export COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME}/zsh/zcompdump}
 ##    # Use alternate vim marks [[[ and ]]] as the original ones can
 ##    # confuse nested substitutions, e.g.: ${${${VAR\}}  <--  }
 ##
-
-
 ### [=]==================================[=]
 ### [~]........ TERM COLORS
 ### [=]==================================[=]
 ###{{{
-
+export CLICOLOR=1
 export TERM=xterm-256color
 #case $TERM in
 case ${TERM} in
@@ -90,12 +95,10 @@ esac
 ### [=]==================================[=]
 ### [~]............ EDITOR
 ### [=]==================================[=]
-
 ###{{{
-export EDITOR="nvim"
+export EDITOR="nvim" # "nano" # "vim"
 export FCEDIT="$EDITOR"
-#export EDITOR="nano"
-#export EDITOR="vim"
+export NVIMDIR="$XDG_CONFIG_HOME/nvim"
 
 ###}}}
 ### [=]==================================[=]
@@ -160,16 +163,11 @@ _set_nvim_man_pager
 ## [~]............ PAGER
 ## [=]==================================[=]
 ###{{{
-#    -F --quit-if-one-screen    exit if entire file fits on first screen
-#    -R --RAW-CONTROL-CHARS     display control chars; keep track of screen effects
-#    -i --ignore-case           ignore case in searches that lack uppercase
 export PAGER="less"
 export PAGER="bat"
 export BAT_PAGER="less -RFi"
 export GH_PAGER="/usr/bin/bat"
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
-#export BAT_THEME="Dracula" #"TwoDark" "Coldark-Dark"
-
 
 man() {
 	export MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 1 )) ))"
@@ -192,10 +190,11 @@ man() {
 ### [~]........... GPG / SSH
 ### [=]==================================[=]
 ###{{{
-export GNUPGHOME="$XDG_CONFIG_HOME/.gnupg"
-export GPG_TTY=$(tty)
-export GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
-
+GNUPGHOME="$XDG_CONFIG_HOME/.gnupg"
+GPG_TTY=$(tty)
+GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
+export GNUPGHOME GPG_TTY
+export GPG_TUI_CONFIG
 #unset SSH_AGENT_PID
 #SSH_AGENT_PID=""
 #SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
@@ -204,9 +203,7 @@ export GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
 #export XMODIFIERS
 #export XDG_SESSION_TYPE
 #export DBUS_SESSION_BUS_ADDRESS
-
 ###}}}
-
 ### [=]==================================[=]
 ### [~]........... MAIL
 ### [=]==================================[=]
@@ -246,7 +243,6 @@ export EMAIL="Conner.Will@connerwill.com"
 ## For OpenSSL since version 0.9.5, files, mentioned at RANDFILE below, can be Entropy Gathering Daemon (EGD) sockets. Also, and if exists, ~/.entropy and /tmp/entropy will be used to initialize SSL library functions. Specified sockets must be owned by the user and have permission of 600 (octal number representing).
 
 ###}}}
-
 ### [=]==================================[=]
 ### [~]........... TEMP
 ### [=]==================================[=]
@@ -255,7 +251,6 @@ export EMAIL="Conner.Will@connerwill.com"
 export TEMPDIR="$HOME/temporary"
 
 ###}}}
-
 ### [=]==================================[=]
 ### [~]........... AWESOMEWM
 ### [=]==================================[=]
@@ -268,7 +263,6 @@ AWESOMEWM_CONFIG_DIR="$XDG_CONFIG_HOME/awesome"
 
 
 ###}}}
-
 ### [=]==================================[=]
 ### [~]............ Lynx
 ### [=]==================================[=]
@@ -300,6 +294,22 @@ export MYPROJECTS="$HOME/scripts/MYPROJECTS"
 
 ###}}}
 ### [=]==================================[=]
+### [~]............ SCRIPTS
+### [=]==================================[=]
+###{{{
+### Bash Scripts
+export SCRIPTS="$HOME/scripts"
+export BASHSCRIPTSDIR="${SCRIPTS}/bash"
+export BASHSNIPPETSDIR="${SCRIPTS}/bash/development/snippets"
+export BASHTEMPLATEDIR_BEST="${SCRIPTS}/bash/development/snippets/templates-bash/best-script-templates/extended-cd"
+export BASHTEMPLATESDIR="${SCRIPTS}/bash/development/snippets/templates-bash"
+export CHEATSHEETSSCRIPTSDIR="${SCRIPTS}/cheatsheets" ### cheatsheets
+export POWERSHELLSCRIPTSDIR="${SCRIPTS}/powershell" ### Powershell Scripts
+export PYTHONSCRIPTSDIR="${SCRIPTS}/python" ### Python Scripts
+export MPVSCRIPTSDIR="${SCRIPTS}/mpv-scripts"
+export BASHTEMPLATE_VERY_NICE_INDEED="${SCRIPTS}/bash/development/templates-bash/FULL-PACKAGE-ZSH-BASH-TEMPLATE"
+###}}}
+### [=]==================================[=]
 ### [~]............. GIMP ...............
 ### [=]==================================[=]
 ###{{{
@@ -311,8 +321,9 @@ export GIMPHOMECONFIGPATH='/home/dampsock/.config/GIMP/2.10'
 export GIMPHOMECACHEPATH='/home/dampsock/.cache/gimp/2.10'
 
 ###}}}
-
-### ASCIINEMA
+#### [=]==================================[=]
+### [~]............. ASCIINEMA ..........
+### [=]==================================[=]
 ###{{{
 export VIDEODIR="$HOME/videos"
 export YOUTUBEDOWNLOADSDIR="$VIDEODIR/youtube-downloads"
@@ -341,13 +352,6 @@ export METASPLOITPATH="/opt/metasploit"
 
 ###}}}
 ### [=]==================================[=]
-### [~]......... ZSH ASCII ART
-### [=]==================================[=]
-###{{{
-export ZSH_ASCII_ART_DIR="$HOME/.config/zsh/art-animations"
-
-###}}}
-### [=]==================================[=]
 ### [~]............ PYTHON
 ### [=]==================================[=]
 ###{{{
@@ -358,36 +362,16 @@ export IPYTHON_CONFIG="$IPYTHONDIR/profile_default/ipython_config.py"
 
 ###}}}
 ### [=]==================================[=]
-### [~]............ SCRIPTS
-### [=]==================================[=]
-###{{{
-### Bash Scripts
-export SCRIPTS="$HOME/scripts"
-export BASHSCRIPTSDIR="$HOME/scripts/bash"
-export BASHSNIPPETSDIR="$HOME/scripts/bash/development/snippets"
-export BASHTEMPLATEDIR_BEST="/home/dampsock/scripts/bash/development/snippets/templates-bash/best-script-templates/extended-cd"
-export BASHTEMPLATESDIR="$HOME/scripts/bash/development/snippets/templates-bash"
-### Powershell Scripts
-export CHEATSHEETSSCRIPTSDIR="$HOME/scripts/cheatsheets"
-### Powershell Scripts
-export POWERSHELLSCRIPTSDIR="$HOME/scripts/powershell"
-### Python Scripts
-export PYTHONSCRIPTSDIR="$HOME/scripts/python"
-
-###}}}
-### [=]==================================[=]
 ### [~]........... DOWNLOADS
 ### [=]==================================[=]
 ###{{{
 export DOWNLOADS="$HOME/Downloads"
-
 ###}}}
 ### [=]==================================[=]
 ### [~]............ BACKUPS
 ### [=]==================================[=]
 ###{{{
 export BACKUPDIR="/backups"
-
 ###}}}
 ### [=]==================================[=]
 ### [~]............ ICONS
@@ -396,22 +380,19 @@ export BACKUPDIR="/backups"
 export ICONSDIRGLOBAL="/usr/share/icons"
 export ICONSDIR="$HOME/pictures/icons"
 export ICONSTINYDIR="$HOME/pictures/icons/SuperTinyIcons/images"
-
 ###}}}
 ### [=]==================================[=]
 ### [~]............ FONTS
 ### [=]==================================[=]
 ###{{{
 export FONTSDIRGLOBAL="/usr/share/fonts"
-export FONTSDIR="/home/dampsock/.local/share/fonts"
-
+export FONTSDIR="${HOME}/.local/share/fonts"
 ###}}}
 ### [=]==================================[=]
 ### [~]............ THEMES
 ### [=]==================================[=]
 ###{{{
 export THEMEDIRGLOBAL="/usr/share/themes"
-
 ###}}}
 ### [=]==================================[=]
 ### [~]............ CAD / 3D
@@ -437,29 +418,20 @@ export FREECAD_DIR_MACRO_USER="$HOME/.FreeCAD/Macro"
 export THINGIVERSEAPI='f7143904e459b01c40bf591344023919'
 
 ###}}}
-
-### QT
+### [=]==================================[=]
+### [~]............, QT
+### [=]==================================[=]
 ###{{{
 ### QtProject
 export QtProject_Config="/home/dampsock/.config/QtProject"
 export QT_QPA_PLATFORMTHEME="/home/dampsock/.config/qt5ct"
-
-
 ###}}}
-
 ### [=]==================================[=]
 ### [~]............ MPV
 ### [=]==================================[=]
 ###{{{
-### MPV Scripts
-export MPVSCRIPTSDIR="$HOME/scripts/mpv-scripts"
-
-export TRANSMISSION_HOME="$XDG_CONFIG_HOME/transmission"
-export CLICOLOR=1
-export BASHTEMPLATE_VERY_NICE_INDEED='/home/dampsock/scripts/bash/development/templates-bash/FULL-PACKAGE-ZSH-BASH-TEMPLATE'
 
 ###}}}
-
 ### [=]==================================[=]
 ### [~]............ TMUX
 ### [=]==================================[=]
@@ -518,25 +490,15 @@ export _ZL_ROOT_MARKERS=".git,.svn,.hg,.root,package.json"
 
 ### MISC
 ###{{{
-
-
 export RAINBOW_CONFIGS="$XDG_CONFIG_HOME/rainbow"
-
 export BACKUPDIR_LOCAL="$HOME/backup"
 export PYENV_ROOT="$HOME/.pyenv"
-
 export COOKIECUTTER_CONFIG="$XDG_CONFIG_HOME/cookiecutters/cookiecutter-custom-config.yaml"
-
 export KITTY_CONFIG_DIR="$XDG_CONFIG_HOME/kitty"
 export KITTY_CONFIG="$KITTY_CONFIG_DIR/kitty.conf"
-
 export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 ###}}}
 
-export DOTFILES="${HOME}/.dotfiles"
-# if [[ -d "${DOTFILES}" ]]; then
-#    [[ -n "${DOTFILES}" ]] \
-#     && alias dotfiles="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}" \
-#     && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
-# fi
-#
+
+
+export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
