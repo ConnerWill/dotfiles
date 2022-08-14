@@ -55,14 +55,11 @@ function bat_preview_languages(){
     echo "$batlangs" | fzf --preview-window=right,80% --preview="bat --language={} --color=always $viewfile"
 } ; alias bat-preview-languages="bat_preview_languages"
 function c(){
-  local catthis="$1"
-  [[ -z "${catthis}" ]] && return
-  if   [[ -d "${catthis}" ]]; then
-    cd "${catthis}" || printf "\e[0;38;5;196mFailed to cd to %s\e[0m\n]]" "${catthis}" || return 1 && return 0
-  elif [[ -f "${catthis}" ]]; then
-    cat "${catthis}" || return 1 && return 0
-  else
-    clear && return 0 || return 1
+          local catthis="$1"
+  if   [[ -z "${catthis}" ]]; then clear && return 0 || return 1; fi
+  if   [[ -d "${catthis}" ]]; then cd  "${catthis}"  || printf "\e[0;38;5;196mFailed to cd to %s\e[0m\n]]" "${catthis}" || return 1 && return 0
+  elif [[ -f "${catthis}" ]]; then cat "${catthis}"  || return 1 && return 0
+  else return 0
   fi
 }
 alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
