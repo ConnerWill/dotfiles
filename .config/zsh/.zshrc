@@ -217,8 +217,11 @@ function _zshloadverbose(){
 
 
 ### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
+## Set NOTMUX to any value to disable automatic tmux
+NOTMUX=1
 # shellcheck disable=2148
 function _zshinittmux(){
+ [[ -n "${NOTMUX}" ]] && return 0
   # Check if tmux is installed, return if not
   command -v tmux >/dev/null 2>&1 || return 0
   if [[ -z $TMUX && -n $SSH_TTY ]]; then
