@@ -166,7 +166,7 @@ _set_nvim_man_pager
 export PAGER="less"
 export PAGER="bat"
 export BAT_PAGER="less -RFi"
-export GH_PAGER="/usr/bin/bat"
+export GH_PAGER="bat"
 export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
 
 man() {
