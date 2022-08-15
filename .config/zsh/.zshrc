@@ -128,7 +128,7 @@ export                \
   ZSH_USER_DIR_NAME   \
   ZSH_USER_DIR        \
   ZSH_USER_LOAD_DIR   \
-  LC_ALL  
+  LC_ALL
 ### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ### }}}
 
 
@@ -238,7 +238,7 @@ function _zshinittmux(){
     fi
   fi
 }
-_zshinittmux
+# _zshinittmux
 unfunction _zshinittmux
 ### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
 
