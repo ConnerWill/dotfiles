@@ -4,7 +4,6 @@
     tput smcup
     clear
       local selected
-      
       git --git-dir=$DOTFILES --work-tree=$HOME rev-parse --git-dir > /dev/null 2>&1 \
         || printf "\e[0;1;38;5;190;48;5;196m\t\t\t\tΣΣΣΣΣΣΣΣΣΣΣΣ\nᵈªʳⁿ\t\t\t\t\n\t\t WTF ?!?!?!\t\n\n\e[0m\n\n\e[0;1;38;5;201m\t\t You aint in no git repo\e[0m\n\e[0;1;3;4;38;5;87;48;5;201m\n\n\t\t Cant do shit ...\t\t\n\t\t\n\n\n\e[0m\n" \
         || return 1
