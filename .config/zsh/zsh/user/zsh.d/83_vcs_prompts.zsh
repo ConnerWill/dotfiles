@@ -137,53 +137,59 @@ _prompt_set_git
 # Options:  -i  add a whitespace at the end, if the output isn't empty
 ###
 function gitstatus(){
+
+  local \
+    branch              \
+    closebracket        \
+    color               \
+    color_reset         \
+    commit_diffs        \
+    dash                \
+    deleted             \
+    icon_branch         \
+    icon_commits_ahead  \
+    icon_commits_behind \
+    icon_deleted        \
+    icon_modified       \
+    icon_staged         \
+    icon_untracked      \
+    modified            \
+    openbracket         \
+    output              \
+    remote              \
+    staged              \
+    true_output         \
+    untracked
+
   if is_in_git_repository; then
-  unset PROMPT_PATH
-  unset PROMPTPATH
-  typeset -g PROMPTPATH
-  typeset -g PROMPT_PATH
+         unset PROMPT_PATH PROMPTPATH
+    typeset -g PROMPT_PATH PROMPTPATH
   else
     typeset -g PROMPTPATH='%F{66}%40<..<%~%<<'
     return 1
   fi
-  # PROMPTPATH='%F{66}%40<..<%~%<<'
-  local \
-    icon_commits_behind="↓" \
-     icon_commits_ahead="↓" \
-            icon_branch="" \
-          icon_modified="${modified}" \
-            icon_staged="${staged}"   \
-           icon_deleted="${deleted}"  \
-         icon_untracked="﬒${untracked}"
-      openbracket="%f%F{5}[%f" \
-      closebracket="%f%F{5}]%f" \
-      dash="%f%F{190}-%f" \
+
+    icon_commits_behind="⋄"
+     icon_commits_ahead="⋆"
+            icon_branch=""
+          icon_modified="⊕${modified}"
+            icon_staged="⥉${staged}"
+           icon_deleted="⊝${deleted}"
+         icon_untracked="⊙${untracked}"
+      openbracket="%f%F{5}[%f"
+      closebracket="%f%F{5}]%f"
+      dash="%f%F{190}-%f"
       color_reset="%f%b%u%k"
-            # icon_branch="" \
-  local \
-       commit_diffs \
-        true_output \
-          untracked \
-           modified \
-            deleted \
-             staged \
-             branch \
-             remote \
-             output \
-              color \
 
-    parse_git_status
-    modified="${STATUS[1]}"
-    staged="${STATUS[2]}"
-    deleted="${STATUS[3]}"
+  parse_git_status
+     modified="${STATUS[1]}"
+       staged="${STATUS[2]}"
+      deleted="${STATUS[3]}"
     untracked="${STATUS[4]}"
-    unset STATUS
+           unset STATUS
 
-    git_grab_current_branch
-    branch="${REPLY}"
-
-    git_grab_remote_branch
-    remote="${REPLY}"
+    git_grab_current_branch; branch="${REPLY}"
+    git_grab_remote_branch ; remote="${REPLY}"
 
     [[ -n "$remote" ]] \
         && git_local_remote_diffs "$branch" "$remote" \
@@ -192,14 +198,14 @@ function gitstatus(){
     git_determine_color $((modified + staged + deleted + untracked))
     color="${REPLY}"
 
-    (( modified > 0 ))  && modified="${icon_modified}${modified}"
-    (( staged > 0 ))    && staged="${icon_staged}${staged}"
-    (( deleted > 0 ))   && deleted="${icon_deleted}${deleted}"
+     (( modified > 0 )) &&  modified="${icon_modified}${modified}"
+       (( staged > 0 )) &&    staged="${icon_staged}${staged}"
+      (( deleted > 0 )) &&   deleted="${icon_deleted}${deleted}"
     (( untracked > 0 )) && untracked="${icon_untracked}${untracked}"
 
       output="${dash}"
       output+="${openbracket}"
-       output+="${color}"
+      output+="${color}"
       output+="${icon_branch}${branch}"
       output+="${commit_diffs}"
       output+="${modified}"
@@ -210,12 +216,9 @@ function gitstatus(){
  true_output="${output//[ \t]*$/}" # remove trailing whitespace
  # true_output="$(sed 's/[ \t]*$//' <<<"${output}")" # remove trailing whitespace
 
-    if [[ "$1" == "-i" ]]; then
-        true_output+=""
-    fi
+    [[ "$1" == "-i" ]] && true_output+=""
 
-    true_output+=$'%F{default}'
-    echo "${true_output}"
+    true_output+=$'%F{default}'; echo "${true_output}"
     unset REPLY
 }
 
@@ -331,9 +334,9 @@ function git_local_remote_diffs(){
 ###
 function git_determine_color(){
     if (( $1 > 0 )); then
-        typeset -g REPLY=$'%F{2}%B'
+        typeset -g REPLY=$'%F{196}%B'
     else
-        typeset -g REPLY=$'%F{green}'
+        typeset -g REPLY=$'%F{46}'
     fi
 }
 

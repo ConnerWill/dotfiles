@@ -17,8 +17,8 @@
 # Look for 'source'd files relative to the checked script,
 # and also look for absolute path
 # shellcheck source-path=SCRIPTDIR
-# shellcheck source-path=/etc/zsh/zshenv 
-# shellcheck source-path=/etc/zsh/zprofile 
+# shellcheck source-path=/etc/zsh/zshenv
+# shellcheck source-path=/etc/zsh/zprofile
 # shellcheck source=../../../.zshenv
 # shellcheck source=../../../.zprofile
 # shellcheck source=../../../.zshrc
