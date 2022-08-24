@@ -150,6 +150,10 @@ function _activate_pipenv() {
 }
 # Automatically switch virtualenv when $AUTOSWITCH_FILE file detected
 function check_venv(){
+    if ! type pwgen 1>/dev/null; then
+        printf "${RED}pwgen ${NORMAL}${BABYBLUE}is required for ${NORMAL}${CYAN}zsh-autoswitch-virtualenv${NORMAL}${BABYBLUE} to run${NORMAL}${NONE}\n"
+        return
+    fi
     local file_owner
     local file_permissions
     # Get the $AUTOSWITCH_FILE, scanning parent directories
@@ -351,7 +355,7 @@ function disable_autoswitch_virtualenv(){
 function _autoswitch_startup() {
     add-zsh-hook -D precmd _autoswitch_startup
     if ! type pwgen 1>/dev/null; then
-        printf "${RED}pwgen ${NORMAL}${BABYBLUE}is required for ${NORMAL}${CYAN}zsh-autoswitch-virtualenv${NORMAL}${BABYBLUE} to run${NORMAL}${NONE}\n"
+        printf ""
     else
         enable_autoswitch_virtualenv
         check_venv
