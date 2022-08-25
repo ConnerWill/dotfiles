@@ -257,6 +257,9 @@ echo -ne "\e[2K"
 ## Move cursor to beginning of line
 echo -ne "\r"
 
+printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m"
+
+
 # ~/.bin/revolver -s dots2 start "Loading zsh"
 
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
@@ -305,6 +308,13 @@ _zshloadendclear
 # ~/.bin/revolver -s dots2 stop "Loading zsh"
 ## Restore Cursor
 #echo -ne "\e[?25h"
+
+## Clear line
+echo -ne "\e[2K"
+
+## Move cursor to beginning of line
+echo -ne "\r"
+
 
 
 # {{{ Profile report
