@@ -41,18 +41,20 @@ setopt prompt_subst
        PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
 
 ## If connected via ssh, show hostname, otherwise only show username.
-if [[ -z "${SSH_CLIENT}" ]]; then
-  unset PROMPTATSYMBOL PROMPTHOSTNAME
-else
+# if [[ -z "${SSH_CLIENT}" ]]; then
+  # unset PROMPTATSYMBOL PROMPTHOSTNAME
+# else
   if [[ "${DISTRO}" == "Arch" ]]; then
     PROMPTATSYMBOL='%F{39} %f'
   elif [[ "${DISTRO}" == "Debian" ]]; then
     PROMPTATSYMBOL='%F{196} %f'
+  elif [[ "${DISTRO}" == "Android" ]]; then
+    PROMPTATSYMBOL='%F{46} %f'
   else
     PROMPTATSYMBOL='%F{201}@%f'
   fi
   PROMPTHOSTNAME='%F{8}%m%f'
-fi
+# fi
 # ------------------------------------------------------------------
 ### STANDARD PROMPT }}}
 
