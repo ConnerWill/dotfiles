@@ -38,11 +38,15 @@ setopt prompt_subst
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
-        PROMPTATSYMBOL='%F{201}  %f'
-        # PROMPTATSYMBOL='%F{201}@%f'
-        PROMPTHOSTNAME='%F{8}%m%f'
+       PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
 
-      PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
+## If connected via ssh, show hostname, otherwise only show username.
+if [[ -z "${SSH_CLIENT}" ]]; then
+  unset PROMPTATSYMBOL PROMPTHOSTNAME
+else
+  PROMPTATSYMBOL='%F{201} %f'
+  PROMPTHOSTNAME='%F{8}%m%f'
+fi
 # ------------------------------------------------------------------
 ### STANDARD PROMPT }}}
 
@@ -408,14 +412,10 @@ function define_combine_prompt(){
   #   PROMPTPATH='%F{66}%40<..<%~%<<'
   # fi
 
-
-
+      PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
-      # PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPT_CLOSE_BRACKETS"
            PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
  PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
- PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
-
            PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
   PROMPT="$PROMPT_FULL"
      PS1="$PROMPT_FULL"
