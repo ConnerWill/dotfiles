@@ -17,7 +17,9 @@ export DOTFILES="${HOME}/.dotfiles"
 #     && alias dotf="$(command -v git) --git-dir=${DOTFILES}/ --work-tree=${HOME}"
 # fi
 #
-export LESSHISTFILE="${XDG_CACHE_HOME:-${HOME}/.cache}/less/history"
+export LESSHISTFILE="${XDG_CACHE_HOME:-${HOME}/.cache}/less/lesshist"
+[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p $(dirname "${LESSHISTFILE}")
+
 # export XDG_STATE_HOME="$HOME/.local/state"
 # export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
 # export PYENV_ROOT="$XDG_DATA_HOME"/pyenv
