@@ -45,11 +45,11 @@ setopt prompt_subst
   # unset PROMPTATSYMBOL PROMPTHOSTNAME
 # else
   if [[ "${DISTRO}" == "Arch" ]]; then
-    PROMPTATSYMBOL='%F{39} %f'
+    PROMPTATSYMBOL='%F{39}  %f'
   elif [[ "${DISTRO}" == "Debian" ]]; then
-    PROMPTATSYMBOL='%F{196} %f'
+    PROMPTATSYMBOL='%F{196}  %f'
   elif [[ "${DISTRO}" == "Android" ]]; then
-    PROMPTATSYMBOL='%F{46} %f'
+    PROMPTATSYMBOL='%F{10}  %f'
   else
     PROMPTATSYMBOL='%F{201}@%f'
   fi
