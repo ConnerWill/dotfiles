@@ -224,6 +224,26 @@ function _zshloadverbose(){
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
 
 
+### ::::::::::::::::::::: OS TYPE ::::::::::::::::::::::::: ### {{{
+if [[ "${OSTYPE}" == "linux-gnu" ]]; then
+  if [[ -f /etc/os-release ]]; then
+    DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
+    export DISTRO
+  fi
+elif [[ "${OSTYPE}" == "linux-android" ]]; then
+  DISTRO="Android"
+  export DISTRO
+else
+  unset DISTRO
+fi
+###}}}
+
+
+
+
+
+
+
 
 ### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
 ## Set NOTMUX to any value to disable automatic tmux

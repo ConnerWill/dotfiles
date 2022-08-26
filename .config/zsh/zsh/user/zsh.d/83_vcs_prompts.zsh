@@ -44,7 +44,13 @@ setopt prompt_subst
 if [[ -z "${SSH_CLIENT}" ]]; then
   unset PROMPTATSYMBOL PROMPTHOSTNAME
 else
-  PROMPTATSYMBOL='%F{201} %f'
+  if [[ "${DISTRO}" == "Arch" ]]; then
+    PROMPTATSYMBOL='%F{39} %f'
+  elif [[ "${DISTRO}" == "Debian" ]]; then
+    PROMPTATSYMBOL='%F{196} %f'
+  else
+    PROMPTATSYMBOL='%F{201}@%f'
+  fi
   PROMPTHOSTNAME='%F{8}%m%f'
 fi
 # ------------------------------------------------------------------
