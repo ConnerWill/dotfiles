@@ -38,22 +38,54 @@ setopt prompt_subst
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
+        PROMPTHOSTNAME='%F{8}%m%f'
+        PROMPTATSYMBOL='%F{201}@%f'
        PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
+
+
+typeset -A distro_logos
+typeset -A distro_logo_color
+#shellcheck disable=2190,2034
+distro_logos=(
+ "Arch"       "  "
+ "Manjaro"    "  "
+ "Gentoo"     "  "
+ "Debian"     "  "
+ "Raspbian"   "  "
+ "Linuxmint"  "  "
+ "Ubuntu"     "  "
+ "Android"    "  "
+ "wsl"        "  "
+ "Freebsd"    "  "
+ "Openbsd"    " 🐡 "
+ "Darwin"     "  "
+ "other"      "@"
+)
+
+#shellcheck disable=2190,2034
+distro_logo_color=(
+ "Arch"       39
+ "Manjaro"    10
+ "Gentoo"     141
+ "Debian"     196
+ "Raspbian"   196
+ "Linuxmint"  85
+ "Ubuntu"     208
+ "Android"    10
+ "wsl"        255
+ "Freebsd"    196
+ "Openbsd"    190
+ "Darwin"     255
+ "other"      201
+)
+
+[[ -z "${DISTRO}" ]] && DISTRO="other"
+PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
 ## If connected via ssh, show hostname, otherwise only show username.
 # if [[ -z "${SSH_CLIENT}" ]]; then
   # unset PROMPTATSYMBOL PROMPTHOSTNAME
 # else
-  if [[ "${DISTRO}" == "Arch" ]]; then
-    PROMPTATSYMBOL='%F{39}  %f'
-  elif [[ "${DISTRO}" == "Debian" ]]; then
-    PROMPTATSYMBOL='%F{196}  %f'
-  elif [[ "${DISTRO}" == "Android" ]]; then
-    PROMPTATSYMBOL='%F{10}  %f'
-  else
-    PROMPTATSYMBOL='%F{201}@%f'
-  fi
-  PROMPTHOSTNAME='%F{8}%m%f'
 # fi
 # ------------------------------------------------------------------
 ### STANDARD PROMPT }}}
