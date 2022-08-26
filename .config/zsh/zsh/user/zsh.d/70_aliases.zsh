@@ -78,7 +78,8 @@ if [[ -f "$_LSD" ]]; then
   alias ll='clear && lsd --color always --icon always --oneline --long --almost-all' # List All On One Line Sort By Extension
   alias la='lsd --color always --icon always --almost-all'
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias lls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
+  alias lls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --no-symlink --color=always --total-size --almost-all --reverse"
+  alias llls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
   alias lsext='lsd --color always --icon always --oneline --almost-all --extensionsort' # List All On One Line Sort By Extension
   alias ls="lsd --almost-all"
   alias ls='lsd --color always --icon always'
