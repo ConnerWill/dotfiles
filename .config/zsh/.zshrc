@@ -282,7 +282,7 @@ printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m"
 function _loading_bar(){
   local bar_color sleep_time
   bar_color='\e[0;48;5;46m'
-  sleep_time=0.025
+  sleep_time=0.04
   for ((k = 0; k <= 10 ; k++)); do
     printf "" ## Start character
     for ((i = 0 ; i <= k; i++)); do
