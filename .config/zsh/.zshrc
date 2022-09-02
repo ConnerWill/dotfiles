@@ -279,6 +279,36 @@ echo -ne "\r"
 
 printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m"
 
+function _loading_bar(){
+  local bar_color sleep_time
+  bar_color='\e[0;48;5;46m'
+  sleep_time=0.025
+  for ((k = 0; k <= 10 ; k++)); do
+    printf "" ## Start character
+    for ((i = 0 ; i <= k; i++)); do
+      printf "${bar_color}   \e[0m"
+    done
+    for ((j = i ; j <= 10 ; j++)); do
+      printf "   "
+    done
+    v=$((k * 10))
+    printf " " ## End character
+    echo -n "$v %" $'\r'
+    sleep $sleep_time
+  done
+}
+
+# bar_color='\e[0;48;5;46m'
+# sleep_time=0.05
+# for ((k = 0; k <= 10 ; k++)); do
+#   printf ""
+#   for ((i = 0 ; i <= k; i++)); do printf "${bar_color}   \e[0m"; done
+#   for ((j = i ; j <= 10 ; j++)); do printf "   "; done
+#   v=$((k * 10))
+#   printf " "
+#   echo -n "$v %" $'\r'
+#   sleep $sleep_time
+# done
 
 # ~/.bin/revolver -s dots2 start "Loading zsh"
 
@@ -329,11 +359,16 @@ _zshloadendclear
 ## Restore Cursor
 #echo -ne "\e[?25h"
 
+_loading_bar
+
 ## Clear line
 echo -ne "\e[2K"
 
 ## Move cursor to beginning of line
 echo -ne "\r"
+
+
+
 
 
 
