@@ -75,11 +75,12 @@ _LSD=$(whereis lsd | awk '{print $2}')
 if [[ -f "$_LSD" ]]; then
 #  alias l='clear ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂" ; pwd ; echo -e "██████████████████████████████████" ; lsd --color always --oneline --all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
   alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
-  alias ll='clear && lsd --color always --icon always --oneline --long --almost-all' # List All On One Line Sort By Extension
+  alias ll='lsd --color always --icon always --oneline --long --almost-all' # List All On One Line Sort By Extension
   alias la='lsd --color always --icon always --almost-all'
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
   alias lls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --no-symlink --color=always --total-size --almost-all --reverse"
   alias llls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
+  alias lllll=" echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; dfc -c always -d -T -s -q name ; echo -e '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; lsd --long -A --sort=size --reverse --total-size ; echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'"
   alias lsext='lsd --color always --icon always --oneline --almost-all --extensionsort' # List All On One Line Sort By Extension
   alias ls="lsd --almost-all"
   alias ls='lsd --color always --icon always'
@@ -687,7 +688,6 @@ alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -color=auto'
 alias pping="prettyping"
-alias lllll=" echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; dfc -c always -d -T -s -q name ; echo -e '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; lsd --long -A --sort=size --reverse --total-size ; echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'"
 alias m="man"
 alias iptables-watch="sudo watch --differences --differences --color --interval 1 iptables -vnL --line-numbers"
 alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote '**' --close-quote '**' --reference-links --pad-tables --images-to-alt --no-wrap-links --hide-strikethrough --decode-errors=ignore"
