@@ -67,12 +67,13 @@ alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --la
 ### [~]............ ls
 ### [=]==================================[=]
 ### ls aliases
-alias lsls='command ls'
+alias ls='ls --color=always'
 alias l='ls --color=always -A -1'
 alias ll='ls --color=always -A -l'
 alias LS="ls"
 alias sl="ls"
 alias ks="ls"
+alias lsls='command ls'
 
 ### lsd
 alias sls="ls"
