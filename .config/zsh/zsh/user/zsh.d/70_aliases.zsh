@@ -66,24 +66,26 @@ alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --la
 ### [=]==================================[=]
 ### [~]............ ls
 ### [=]==================================[=]
-### [ ls ]
 ### ls aliases
-alias lsls='/usr/bin/ls'
-alias ls-plain='/usr/bin/ls --color --oneline'
+alias lsls='command ls'
 alias l='ls --color=always --all --long' # List All On One Line
+alias LS="ls"
+alias sl="ls"
+alias ks="ls"
+
+### lsd
+alias sls="ls"
 _LSD=$(whereis lsd | awk '{print $2}')
 if [[ -f "$_LSD" ]]; then
 #  alias l='clear ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂" ; pwd ; echo -e "██████████████████████████████████" ; lsd --color always --oneline --all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
+  alias ls='lsd --color always --icon always'
   alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
   alias ll='lsd --color always --icon always --oneline --long --almost-all' # List All On One Line Sort By Extension
   alias la='lsd --color always --icon always --almost-all'
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias lls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --no-symlink --color=always --total-size --almost-all --reverse"
-  alias llls="tput smcup ; clear ; printf 'o boi ...   This could take a  quick second ﭂ \n' ; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
-  alias lllll=" echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; dfc -c always -d -T -s -q name ; echo -e '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; lsd --long -A --sort=size --reverse --total-size ; echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'"
+  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
+  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
   alias lsext='lsd --color always --icon always --oneline --almost-all --extensionsort' # List All On One Line Sort By Extension
-  alias ls="lsd --almost-all"
-  alias ls='lsd --color always --icon always'
   alias lsa='command lsd --color always --icon always --almost-all .*(.)' # List Only Hidden Files
   alias lsar='command lsd --color always --icon always --almost-all --recursive .*(.)' # List Only Hidden Files Recurse
   alias lsl='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse' # List All On One Line Sort By Size Long List Reversed
@@ -101,6 +103,7 @@ if [[ -f "$_LSD" ]]; then
   alias ks='lsd --color always --icon always'
   alias s='lsd --color always --icon always'
 fi
+### exa
 _EXA=$(whereis exa | awk '{print $2}')
 if [[ -f "$_EXA" ]]; then
   alias llsa='clear && exa --all --color always --long --icons --group-directories-first --sort=size --no-permissions --no-time --no-user --tree --level 3'
@@ -113,30 +116,40 @@ if [[ -f "$_EXA" ]]; then
   alias ls-l="clear ; exa --sort=type --colour always --long --all"
   alias ls-l="clear ; exa --sort=type --colour always --long --all $"
   alias ls-lnc="clear ; exa --sort=type --colour never --long --all"
-  alias ls-ll-etcback="clear ; exa --sort=type --colour always --tree --recurse --long --all $etcbackup"
-  alias ls-ll2-etcback="clear ; exa --sort=type --colour always --tree --level 2 --long --all $etcbackup"
-  alias ls-ll4-etcback="clear ; exa --sort=type --colour always --tree --level 4 --long --all $etcbackup"
-  alias ls-l-etcback="clear ; exa --sort=type --colour always --long --all $etcbackup"
-  alias ls-l-etcback="clear ; exa --sort=type --colour always --long --all $ $etcbackup"
-  alias ls-lnc-etcback="clear ; exa --sort=type --colour never --long --all $etcbackup"
-  alias ls-ll-etc="clear ; exa --sort=type --colour always --tree --recurse --long --all /etc"
-  alias ls-ll2-etc="clear ; exa --sort=type --colour always --tree --level 2 --long --all /etc"
-  alias ls-ll4-etc="clear ; exa --sort=type --colour always --tree --level 4 --long --all /etc"
-  alias ls-l-etc="clear ; exa --sort=type --colour always --long --all /etc"
-  alias ls-l-etc="clear ; exa --sort=type --colour always --long --all $ /etc"
-  alias ls-lnc-etc="clear ; exa --sort=type --colour never --long --all /etc"
 fi
-alias LS="ls"
-alias sl="ls"
-alias sls="ls"
 alias list-open-files='lsof'
 alias list-open-files-repeat='lsof -r "m[~]========================[ Time: %T ]========================[~]"'
 alias list-open-internet-files='lsof -i -U'
+
 ### [=]==================================[=]
 ### [~]............ rm
 ### [=]==================================[=]
 alias rm="rm -v --preserve-root=all --interactive=once"
 alias rrm="rm -v"
+### [=]==================================[=]
+### [~]............ rm
+### [=]==================================[=]
+### Confirm Before Deletion
+alias rm="rm --verbose -i"
+alias rmf='rm --force --verbose'
+### Remove current empty directory. Execute \kbd{\cd ..; rmdir \$OLDCWD}
+alias rmcdir='cd ..; rmdir --verbose $OLDPWD || cd $OLDPWD'
+alias rmcwd="rmcdir"
+### Remove current directory
+alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
+alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
+### Remove .git folder
+alias rm-git="printf \"\n\e[0;38;5;196mThis will remove all \e[0;1;38;5;46m'.git' \e[0;38;5;196mdirectories below \e[0;1;38;5;93m'%s'\n\n\e[0;38;5;190mPress \e[0;1;38;5;87m<ENTER>\e[0;38;5;190m to confirm\e[0m: \" \"$(pwd)\"; read -s && fd --regex '\.git' --exclude='*config*' --exclude='*hook*' --type directory --hidden --exec rm '{}' --recursive --verbose"
+# Remove LICENSE file
+alias rm-license="rm -I -v LICENSE"
+### [=]==================================[=]
+### [~]............ mkdir
+### [=]==================================[=]
+### Create Folders
+# Automatically create subfolders
+alias mkdir='mkdir -p -v'
+#alias md='mkdir -p -v'
+
 ### [=]==================================[=]
 ### [~]............ mv
 ### [=]==================================[=]
@@ -163,41 +176,50 @@ alias cleart='clear'
 ### [=]==================================[=]
 ### [~]............ Package Managers
 ### [=]==================================[=]
-## [ Package Managers ]
-## Debian
-# apt
-# apt-get
-#alias apt-s="apt search"
-#alias apt-s="apt search"
-#alias apt-i="apt install -y"
-# apt update and upgrade
-#alias updgrate="apt-get update -y && apt-get full-upgrade -y"
-## Gentoo
-# emerge
-## Arch
-alias update='sudo pacman -Syuv' # Upgrade all system packages.
-alias update-repo='sudo pacman --sync --refresh --verbose' # Update the package databases
-alias update-repo-pgp='sudo pacman --sync --needed archlinux-keyring --verbose' # Update the local database of PGP keys used by the package maintainers.
-# pacman
-alias pacman='pacman --color always'
-alias pacs='pacman -Ss --color=always'
-alias pacsi='pacman -Sii --color always --verbose'
-alias pacinstall='sudo pacman -S --color always --verbose'
-alias paci='sudo pacman -S --color always --verbose'
-alias paclist-installed='sudo pacman -Q --color always'
-# yay
-alias yay='yay --color always'
-alias yays='yay -Ss --color always --sortby votes'
-alias yays-aur='yay -Ss --color always --sortby votes --aur'
-alias yaysi='yay -S -ii --color always'
-alias yaysearch='yay -Ss --color always'
-alias yaysearch-popular='yay -Ss --color always --sortby popularity'
-alias yaysearch-name='yay -Ss --color always --sortby name'
-alias yaysearch-modified='yay -Ss --color always --sortby modified'
-alias yaysearch-votes='yay -Ss --color always --sortby votes'
-alias yayinstall='yay -S --color always --verbose'
-alias yayi='yay -S --color always --verbose'
-alias yaylist='yay -Q --color always'
+## If DISTRO is defined
+if [[ -n "${DISTRO}" ]]; then
+  ## If distro is arch,artix,parabola,manjaro; load pacman aliases
+  if [[ ${DISTRO} == "Arch" ]] || [[ ${DISTRO} == "Parabola" ]] || [[ ${DISTRO} == "Artix" ]] || [[ ${DISTRO} == "Manjaro" ]]; then
+    ## If yay is found
+    if command -v pacman >/dev/null 2>&1; then
+      alias pacman='pacman --color always'
+      alias pacs='pacman -Ss --color=always'
+      alias pacsi='pacman -Sii --color always --verbose'
+      alias pacinstall='sudo pacman -S --color always --verbose'
+      alias paci='sudo pacman -S --color always --verbose'
+      alias paclist-installed='sudo pacman -Q --color always'
+      alias update='sudo pacman -Syuv' # Upgrade all system packages.
+      #alias update-repo='sudo pacman --sync --refresh --verbose' # Update the package databases
+      #alias update-repo-pgp='sudo pacman --sync --needed archlinux-keyring --verbose' # Update the local database of PGP keys used by the package maintainers.
+    fi
+    ## If yay is found
+    if command -v yay >/dev/null 2>&1; then
+      alias yay='yay --color always'
+      alias yays='yay -Ss --color always --sortby votes'
+      alias yays-aur='yay -Ss --color always --sortby votes --aur'
+      alias yaysi='yay -S -ii --color always'
+      alias yaysearch='yay -Ss --color always'
+      alias yaysearch-popular='yay -Ss --color always --sortby popularity'
+      alias yaysearch-name='yay -Ss --color always --sortby name'
+      alias yaysearch-modified='yay -Ss --color always --sortby modified'
+      alias yaysearch-votes='yay -Ss --color always --sortby votes'
+      alias yayinstall='yay -S --color always --verbose'
+      alias yayi='yay -S --color always --verbose'
+      alias yaylist='yay -Q --color always'
+    fi
+  ## If distro is debian,raspbian,ubuntu; load apt aliases
+  elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu" ]]; then
+    alias apts="apt search"
+    alias apti="apt install"
+    alias update="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y"
+    alias upgrade="printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\"; apt-get upgrade -y"
+    alias updgrate="clear; printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
+  ## If distro is gentoo
+  elif [[ ${DISTRO} == "Gentoo" ]]; then
+    printf ""
+    # alias emerge="emerge"
+  fi
+fi
 ### [=]==================================[=]
 ### [~]............ Markdown
 ### [=]==================================[=]
@@ -274,7 +296,6 @@ alias rclone-backup-scripts-to-onedrive="rclone copyto $HOME/scripts sk8:scripts
 alias rclone-sync-scripts='rclone sync "$HOME/scripts" "sk8:scripts" --dry-run  --interactive --create-empty-src-dirs --progress --color'
 alias rclone-tree='rclone tree sk8: --color --level 5 --verbose'
 alias rclone-tree-all='rclone tree sk8: --color --verbose'
-alias generate-passphrase='diceware --delimiter "." --specials 2 --caps --num 6 | xclip -selection Clipboard && echo "${fg_blue}Copied Passphrase To Clipboard ... ${reset_normal}"'
 ### [=]==================================[=]
 ### [~]............ pwd/realpath
 ### [=]==================================[=]
@@ -285,37 +306,6 @@ alias rp-all='rp-pwd .*'
 #alias rp-all='rp --no-symlinks $(ls --group-dirs=first --classic)'
 alias realpath-all='echo -e "$(rp $(ls --color=never --icon=never  *))"'
 
-
-### [=]==================================[=]
-### [~]............ cp
-### [=]==================================[=]
-
-
-
-### [=]==================================[=]
-### [~]............ rm
-### [=]==================================[=]
-### Confirm Before Deletion
-alias rm="rm --verbose -i"
-alias rmf='rm --force --verbose'
-### Remove current empty directory. Execute \kbd{\cd ..; rmdir \$OLDCWD}
-alias rmcdir='cd ..; rmdir --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd="rmcdir"
-### Remove current directory
-alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-### Remove .git folder
-alias rm-git="fd --regex '\.git' --exclude='*config*' --exclude='*hook*' --type directory --hidden --exec rm '{}' --recursive --verbose"
-# Remove LICENSE file
-alias rm-license="rm -I -v LICENSE"
-
-### [=]==================================[=]
-### [~]............ mkdir
-### [=]==================================[=]
-### Create Folders
-# Automatically create subfolders
-alias mkdir='mkdir -p -v'
-#alias md='mkdir -p -v'
 
 ### [=]==================================[=]
 ### [~]............ sudo
