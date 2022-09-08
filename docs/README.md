@@ -1,6 +1,6 @@
 <div align="justify">
  <div align="center">
-  <img src="assets/nvim-screenshot.jpg">
+  <img src="/docs/assets/nvim-screenshot.jpg">
 
 # **ｄｏｔｆｉｌｅｓ**
 
