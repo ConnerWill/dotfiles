@@ -1,6 +1,6 @@
 <div align="justify">
  <div align="center">
-  <img width="720" height="480" src="https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png">
+  <img width="720" height="480" src="docs/assets/nvim-screenshot.jpg">
 
 # **ｄｏｔｆｉｌｅｓ**
 
