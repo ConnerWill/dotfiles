@@ -33,9 +33,9 @@ rsync-timemachine(){
     --exclude-from="${excludes_file:?}"
   )
 
-mountpoint "${backup_destination}" \
-      || printf "\e[0;1;2;3;38;5;255;48;5;196m  FUCK  \e[0;38;5;190m  Error: destination is not mounted \e[0;38;5;201m :( \e[0;1;38;5;196m!\e[0m\n" \
-      || return 1
+#mountpoint "${backup_destination}" \
+#      || printf "\e[0;1;2;3;38;5;255;48;5;196m  FUCK  \e[0;38;5;190m  Error: destination is not mounted \e[0;38;5;201m :( \e[0;1;38;5;196m!\e[0m\n" \
+#      || return 1
 
   [[ -n "${DRY_RUN}" ]] && rsync_flags+=( --dry-run )
   printf "\n\e[0;38;5;93mDo you want to backup \e[0;38;5;190m'%s'\e[0;38;5;93mto\e[0;38;5;201m '%s'\e[0m\n" "$(print -lO "${backup_target[@]}")" "${backup_destination}"
