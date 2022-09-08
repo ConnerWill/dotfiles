@@ -74,7 +74,7 @@ function install_depends(){
 }
 
 function install_neovim(){
-  printf "\e[0;38;5;201m"
+  printf "\e[0;38;5;201m "
   git checkout "${CHECKOUT_BRANCH}"     || return 1 && printf "\e[0;38;5;87m"
   make CMAKE_BUILD_TYPE=RelWithDebInfo  || return 1 && printf "\e[0;38;5;46m"
   sudo make install                     || return 1
