@@ -139,7 +139,7 @@ alias rmcwd="rmcdir"
 alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
 alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
 ### Remove .git folder
-alias rm-git="printf \"\n\e[0;38;5;196mThis will remove all \e[0;1;38;5;46m'.git' \e[0;38;5;196mdirectories below \e[0;1;38;5;93m'%s'\n\n\e[0;38;5;190mPress \e[0;1;38;5;87m<ENTER>\e[0;38;5;190m to confirm\e[0m: \" \"$(pwd)\"; read -s && fd --regex '\.git' --exclude='*config*' --exclude='*hook*' --type directory --hidden --exec rm '{}' --recursive --verbose"
+alias rm-git="printf \"\n\e[0;38;5;196mThis will remove all \e[0;1;38;5;46m'.git' \e[0;38;5;196mdirectories below \e[0;1;38;5;93m'%s'\n\n\e[0;38;5;190mPress \e[0;1;38;5;87m<ENTER>\e[0;38;5;190m to confirm\e[0m: \" \"$(pwd)\"; read -s && printf \"\n\" && fd --regex '\.git' --exclude='*config*' --exclude='*hook*' --type directory --hidden --exec rm '{}' --recursive --verbose"
 # Remove LICENSE file
 alias rm-license="rm -I -v LICENSE"
 ### [=]==================================[=]
