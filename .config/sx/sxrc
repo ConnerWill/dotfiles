@@ -6,30 +6,29 @@
 # shellcheck source=~/.config/zsh/.zshrc
 ### Add 'shellcheck external-sources=true' to your shellcheckrc
 ### }}}
+
 ### [~]==================[~]
 ### [~]    xprofile
 ### [~]==================[~]
 ###{{{ xprofile
-###-----------------------------------------------------
 # Make sure this is before the 'exec' command or it won't be sourced.
 if [[ -f /etc/xprofile ]]; then
-  . /etc/xprofile || printf "Errors running '/etc/xprofile'\n"
+  . /etc/xprofile || printf "\e[0;1;38;5;196mErrors running '/etc/xprofile'\e[0m\n"
 else
-  printf "ERROR:%s:Cannot locate '/etc/xprofile'\n" "$0"
+  printf "\e[0;1;38;5;196mERROR:%s:Cannot locate '/etc/xprofile'\n\e[0m" "$0"
 fi
+
 if [[ -f ~/.xprofile   ]]; then
-  . ~/.xprofile   || printf "Errors running '~/.xprofile'\n"
+  . ~/.xprofile   || printf "\e[0;1;38;5;196mErrors running '~/.xprofile'\n\e[0m"
 else
-  printf "ERROR:%s: Cannot locate '~/.xprofile'\n" "$0"
+  printf "\e[0;1;38;5;196mERROR:%s: Cannot locate '~/.xprofile'\n\e[0m" "$0"
 fi
-###-----------------------------------------------------
 ### }}}
 
 ### [~]==================[~]
 ### [~]    AwesomeWM
 ### [~]==================[~]
 ###{{{ awesome
-###-----------------------------------------------------
 WM_PATH="$(command -v awesome)"            # /usr/bin/awesome"
 WM_LOGGING_DIR="${XDG_CACHE_HOME}/awesome" # ~/.cache/awesome
 WM_LOGGING_ENABLED=1                       # enable logging (comment out to disable logging)
@@ -82,14 +81,12 @@ else                              ## WM is not defined
   sleep 3
   return 1
 fi
-###-----------------------------------------------------
 ### }}}
 
 ### [~]==================[~]
 ### [~]    MAIN
 ### [~]==================[~]
 ### {{{ MAIN
-###-----------------------------------------------------
 if [[ -n ${WM_LOGGING_ENABLED} ]]; then     ## Check if logging is enabled
   if [[ -n "${WM_logging_enabled}" ]]; then ## If logging is enabled, start WM with logging
       start_WM_w_log && return 0 || return 1
@@ -99,5 +96,4 @@ else                                        ## If logging is enabled, start WM w
   unset WM_logging_enabled
   start_WM_no_log && return 0 || return 1
 fi
-###-----------------------------------------------------
 ### }}}
