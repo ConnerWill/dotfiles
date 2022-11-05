@@ -172,7 +172,7 @@ function comp_setup () {
 
     [[ -r /etc/hosts ]]             \
       && [[ "$NOETCHOSTS" -eq 0 ]]  \
-      && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0.\0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} \
+      && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0\.0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} \
       || _etc_hosts=()
 
     local localname
