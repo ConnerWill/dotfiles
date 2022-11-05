@@ -10,9 +10,10 @@
 	helper = cache --timeout=129000
 [credential "https://github.com"]
 	username = ConnerWill
-	helper = !gh auth git-credential
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper =
+	helper = 
 	helper = !/usr/bin/gh auth git-credential
 [credential "https://gitlab.com"]
 	username = ConnerWill

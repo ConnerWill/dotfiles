@@ -8,20 +8,36 @@
 ### }}}
 
 ### [~]==================[~]
+### [~]    Variables
+### [~]==================[~]
+###{{{ Variables
+
+color_reset='\e[0m'
+color_red='\e[0;38;5;196m'
+color_green='\e[0;38;5;46m'
+color_yellow='\e[0;38;5;190m'
+color_white='\e[0;38;5;15m'
+color_gray='\e[0;38;5;8m'
+color_magenta='\e[0;38;5;201m'
+color_cyan='\e[0;38;5;82m'
+
+###}}}
+
+### [~]==================[~]
 ### [~]    xprofile
 ### [~]==================[~]
 ###{{{ xprofile
 # Make sure this is before the 'exec' command or it won't be sourced.
 if [[ -f /etc/xprofile ]]; then
-  . /etc/xprofile || printf "\e[0;1;38;5;196mErrors running '/etc/xprofile'\e[0m\n"
+  . /etc/xprofile || printf "${color_red}Errors running '/etc/xprofile'${color_reset}\n"
 else
-  printf "\e[0;1;38;5;196mERROR:%s:Cannot locate '/etc/xprofile'\n\e[0m" "$0"
+  printf "${color_red}ERROR:%s:Cannot locate '/etc/xprofile'\n${color_reset}" "$0"
 fi
 
 if [[ -f ~/.xprofile   ]]; then
-  . ~/.xprofile   || printf "\e[0;1;38;5;196mErrors running '~/.xprofile'\n\e[0m"
+  . ~/.xprofile   || printf "${color_red}Errors running '~/.xprofile'\n${color_reset}"
 else
-  printf "\e[0;1;38;5;196mERROR:%s: Cannot locate '~/.xprofile'\n\e[0m" "$0"
+  printf "${color_red}ERROR:%s: Cannot locate '~/.xprofile'\n${color_reset}" "$0"
 fi
 ### }}}
 
@@ -58,26 +74,26 @@ if [[ -n "${WM_PATH}" ]]; then    ## Check if WM exists
     if WMloggingDirExists; then   ## directory exists, enable logging
       WM_logging_enabled=1
     else                          ## Cannot find logging dir, attempt to create dir
-      printf "\e[0;1;38;5;190mCannot locate '%s' log output directory: '%s'\e[0m\n" "${WM_PATH}" "${WM_LOGGING_DIR}"
-      printf "\e[0;1;38;5;190mCreating logging directory: '%s'\e[0m\n" "${WM_LOGGING_DIR}"
+      printf "${color_yellow}Cannot locate '%s' log output directory: '%s'${color_reset}\n" "${WM_PATH}" "${WM_LOGGING_DIR}"
+      printf "${color_yellow}Creating logging directory: '%s'${color_reset}\n" "${WM_LOGGING_DIR}"
       if createWMloggingDir; then ## Created directory, enable logging
         WM_logging_enabled=1
       else                        ## Unable to create directory, disable logging, and continue.
-        printf "\e[0;1;38;5;196mFailed to create logging directory: '%s'\e[0m\n" "${WM_LOGGING_DIR}"
-        printf "\e[0;1;38;5;190mStarting window manager without logging ... '\e[0m\n"
+        printf "${color_red}Failed to create logging directory: '%s'${color_reset}\n" "${WM_LOGGING_DIR}"
+        printf "${color_yellow}Starting window manager without logging ... '${color_reset}\n"
         WM_logging_enabled=""
         unset WM_logging_enabled
       fi
     fi
   else                            ## Cannot find  defined WM
-    printf "\e[0;1;38;5;196mCannot find window manager '%s' in PATH \e[0m\n" "${WM_PATH}"
+    printf "${color_red}Cannot find window manager '%s' in PATH ${color_reset}\n" "${WM_PATH}"
     sleep 3
     return 1
   fi
 else                              ## WM is not defined
   #shellcheck disable=2182
-  printf "\n\e[0;1;38;5;196mWindow manager is not defined\n\e[0;38;5;190mdefine environment variable: \e[0;38;5;46m'WM_PATH'\e[0;38;5;190m to the full path to your window manager \e[0;38;5;201m:)\e[0m\n" "${WM_PATH}"
-  printf "\e[0;38;5;190m\n\e[0;38;5;190m\te.g.  \e[0;38;5;8m(Replace 'awesome' with your window manager.)\e[0;38;5;87m\n\n\t\texport\e[0;38;5;46m WM_PATH\e[0;38;5;255m=\"\e[0;38;5;33m\$(\e[0;38;5;87mcommand\e[0;38;5;184m -v \e[0;38;5;255mawesome\e[0;38;5;33m)\e[0;38;5;255m\"\e[0m\n\n\e[0m"
+  printf "\n${color_red}Window manager is not defined\n${color_yellow}define environment variable: ${color_green}'WM_PATH'${color_yellow} to the full path to your window manager ${color_magenta}:)${color_reset}\n" "${WM_PATH}"
+  printf "${color_yellow}\n${color_yellow}\te.g.  ${color_gray}(Replace 'awesome' with your window manager.)${color_cyan}\n\n\t\texport${color_green} WM_PATH${color_white}=\"${color_magenta}\$(${color_cyan}command${color_magenta} -v ${color_white}awesome${color_magenta})\${color_white}\"${color_reset}\n\n${color_reset}"
   sleep 3
   return 1
 fi

@@ -15,8 +15,6 @@ local check_backspace = function()
 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
---cmp
---   פּ ﯟ   some other good icons
 local kind_icons = {
 	Text = "",
 	Method = "m",
@@ -102,9 +100,7 @@ cmp.setup({
 			"menu",
 		},
 		format = function(entry, vim_item)
-			-- Kind icons
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 			vim_item.menu = ({
 				nvim_lsp = "[LSP]",
 				luasnip  = "[Snippet]",
@@ -129,7 +125,7 @@ cmp.setup({
 				all_panes = false,
 				label = "[tmux]",
 				trigger_characters = { "." },
-				trigger_characters_ft = {}, -- { filetype = { '.' } }
+				trigger_characters_ft = {},
 			},
 		},
 		{ name = "path" },
@@ -140,21 +136,15 @@ cmp.setup({
 	},
 	window = {
     completion = {
-			-- border = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
-			-- border = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
 			border = "shadow",
       winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
       col_offset = -3,
       side_padding = 1,
     },
 		documentation = {
-			-- border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-			-- border = { "╓╔", "═", "╖╗", "║", "╜╝", "═", "╙╚", "║" },
-			-- border = { "╓╔", "─", "┈", "─", "╖╗", "║", "╜╝", "═", "╙╚", "║" },
-			-- border = { "╓", "─", "┈", "─", "╖", "║", "╜", "─", "┈", "─", "╙", "║" },
 			border = { "╔", "═", "╗", "║", "╝", "═", "╚", "║" },
       col_offset = -3,
-      side_padding = 1, k
+      side_padding = 1,
 		},
 	},
 	experimental = {
@@ -162,12 +152,7 @@ cmp.setup({
 		native_menu = false,
 	},
 })
-
-                   --
                    -- ╓╾─┈─╼╖
                    -- ║     ║
                    -- ╙╾─┈─╼╜
-                   --
-
-
 
