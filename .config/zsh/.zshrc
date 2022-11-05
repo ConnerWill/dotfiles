@@ -68,7 +68,7 @@
 ##:  If you're getting weird behavior and can't find the culprit,
 ##:  run the following command to enable debug mode:
 ##:
-##:      zsh -xv 2> >(tee ~/omz-debug.log &>/dev/null)
+##:      zsh -xv 2> >(tee ./omz-debug.log &>/dev/null)
 ##:
 ##:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
 ##:  and when you're done, run exit to stop the debugging session.
@@ -78,7 +78,7 @@
 ##:
 ##:  If you only need to debug the session initialization, you can do so with the command:
 ##:
-##:      zsh -xvic exit &> ~/omz-debug.log
+##:      zsh -xvic exit &> ./omz-debug.log
 ##:
 ##:  To list all keybindings, run this command
 ##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
