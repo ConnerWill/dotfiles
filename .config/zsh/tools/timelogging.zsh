@@ -3,10 +3,15 @@ zsh_timing_log_dir="${XDG_CACHE_HOME}/zsh/debug-logs/zsh_time_test_logs"
 zsh_timing_log_path="${zsh_timing_log_dir}/zsh_time_test.log"
 zsh_timing_diff_log_path="${zsh_timing_log_dir}/zsh_time_test_diff.log"
 
-function remove_old_timing_logs(){
-  find "${zsh_timing_log_dir}" -type f -name "*.log" | xargs -I'{}' rm -f '{}'
+
+function create-zsh-timing-log-dir(){
+  [[ -d "${zsh_timing_log_dir}" ]] || mkdir -p "${zsh_timing_log_dir}" >/dev/null 2>&1
 }
-#remove_old_timing_logs
+create-zsh-timing-log-dir
+
+function remove_old_timing_logs(){
+  find "${zsh_timing_log_dir}" -type f -name "*.log" | xargs -I'{}' rm -f '{}' >/dev/null 2>&1
+}
 
 function timelogging_start(){
   local INPUT
