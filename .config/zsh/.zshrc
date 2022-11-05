@@ -1,5 +1,5 @@
-
-
+source "${ZDOTDIR}/tools/timelogging.zsh"
+remove_old_timing_logs
 
 ###{{{ DOCUMENTATION
 #############################################################
@@ -92,10 +92,7 @@
 ########################
 ### }}}
 
-
 [ -n "$INHERIT_ENV" ] && return 0
-#
-
 
 ### {{{ VERBOSE LOADING
 
@@ -394,4 +391,7 @@ fi
   #}
 
 ### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
+
+
+
 

@@ -1,18 +1,13 @@
 
+timelogging_start "21"
+
 # $HISTFILE belongs in the data home, not with the configs
 HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zsh-history/history"
-[[ ! -f "$HISTFILE" ]] \
-  && mkdir -p "$HISTFILE:h" \
-  && touch "$HISTFILE"
+[[ ! -f "$HISTFILE" ]] && mkdir -p "$HISTFILE:h" && touch "$HISTFILE"
 
-# you can set $SAVEHIST and $HISTSIZE to anything greater than the ZSH defaults
-# (1000 and 2000 respectively), but if not we make them way bigger.
-#[[ $SAVEHIST -gt 1000 ]] || SAVEHIST=20000
-#[[ $HISTSIZE -gt 2000 ]] || HISTSIZE=100000
 SAVEHIST=20000
 HISTSIZE=100000
 export SAVEHIST HISTSIZE
-
 
 # history.zsh - http://zsh.sourceforge.net/Doc/Release/Options.html#History
 setopt APPEND_HISTORY          # append to history file
@@ -33,3 +28,5 @@ setopt SHARE_HISTORY           # Share history between all sessions
 
 # make the history command more useful
 alias history="fc -li"
+
+timelogging_end "21"

@@ -1,16 +1,15 @@
-#shellcheck disable=2148,2139
+#shellcheck disable=2148,2139,2059
+
+timelogging_start "70"
 
 alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 alias e="$EDITOR"
-#alias -s html='lynx'
-#alias -s org='lynx'
-#alias -s com='lynx'
 alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
+
 ### [=]==================================[=]
 ### [~]............ cd
 ### [=]==================================[=]
-### Directory Navigation ###
 alias cd..="cd .."
 alias ..="cd .."
 alias ....="cd .."
@@ -35,38 +34,48 @@ alias cdt="$TEMPDIR"
 alias cd-temp="$TEMPDIR"
 alias scd="cd"
 alias zshall="man zshall"
+
 ### [=]==================================[=]
 ### [~]............ cat
 ### [=]==================================[=]
-alias catp="bat --plain"
-alias ccat="bat --style=full"
-alias catf="bat --style=full"
-alias ca="bat --style=header,grid --plain *"
-alias scat="cat"
-alias car="cat"
-alias cat='bat --style=header,grid'
-alias ca='bat --style=header,grid *'
-function bat_preview_languages(){
-    local batlangsdirt batlangs viewfile
-    viewfile="$1"
-    [[ -z "$viewfile" ]] && local viewfile="$HOME/*"
-    batlangsdirt=$(bat --list-languages | sort --reverse)
-    batlangs=$(echo "$batlangsdirt" | awk -F ":" '{print $2}' | awk -F "," '{print $1}' | awk '{print $1}')
-    echo "$batlangs" | fzf --preview-window=right,80% --preview="bat --language={} --color=always $viewfile"
-} ; alias bat-preview-languages="bat_preview_languages"
+if command -v bat >/dev/null 2>&1; then
+  function bat_preview_languages(){
+    local viewfile
+    viewfile="${1}"
+    [[ -z "${viewfile}" ]] && viewfile="${HOME}/*"
+    bat --list-languages        \
+      | sort --reverse          \
+      | awk -F ":" '{print $2}' \
+      | awk -F "," '{print $1}' \
+      | awk '{print $1}'        \
+      | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
+  }
+  alias bat-preview-languages="bat_preview_languages"
+  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
+  alias catp="bat --plain"
+  alias ccat="bat --style=full"
+  alias catf="bat --style=full"
+  alias ca="bat --style=header,grid --plain *"
+  alias scat="cat"
+  alias car="cat"
+  alias cat='bat --style=header,grid'
+  alias ca='bat --style=header,grid *'
+fi
+
 function c(){
-          local catthis="$1"
+  local catthis
+  catthis="${1}"
   if   [[ -z "${catthis}" ]]; then clear && return 0 || return 1; fi
   if   [[ -d "${catthis}" ]]; then cd  "${catthis}"  || printf "\e[0;38;5;196mFailed to cd to %s\e[0m\n]]" "${catthis}" || return 1 && return 0
   elif [[ -f "${catthis}" ]]; then cat "${catthis}"  || return 1 && return 0
   else return 0
   fi
 }
-alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
+
+
 ### [=]==================================[=]
 ### [~]............ ls
 ### [=]==================================[=]
-### ls aliases
 alias ls='ls --color=always'
 alias l='ls --color=always -A -1'
 alias ll='ls --color=always -A -l'
@@ -74,51 +83,35 @@ alias LS="ls"
 alias sl="ls"
 alias ks="ls"
 alias lsls='command ls'
-
-### lsd
 alias sls="ls"
-_LSD=$(whereis lsd | awk '{print $2}')
-if [[ -f "$_LSD" ]]; then
-#  alias l='clear ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂" ; pwd ; echo -e "██████████████████████████████████" ; lsd --color always --oneline --all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
-  alias ls='lsd --color always --icon always'
-  alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   ' # List All On One Line
-  alias ll='lsd --color always --icon always --oneline --long --almost-all' # List All On One Line Sort By Extension
-  alias la='lsd --color always --icon always --almost-all'
-  alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
-  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
-  alias lsext='lsd --color always --icon always --oneline --almost-all --extensionsort' # List All On One Line Sort By Extension
-  alias lsa='command lsd --color always --icon always --almost-all .*(.)' # List Only Hidden Files
-  alias lsar='command lsd --color always --icon always --almost-all --recursive .*(.)' # List Only Hidden Files Recurse
-  alias lsl='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse' # List All On One Line Sort By Size Long List Reversed
-  alias lss='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse' # List All On One Line Sort By Size Long List Reversed
-  alias lsdir="lsd --color always --icon always --oneline --long --almost-all --sizesort --total-size --human-readable $1 2>/dev/null" # List All On One Line Sort By Size Long List Show Directory Sizes Reversed
-  alias lsdirr="lsd --color always --icon always --oneline --long --almost-all --recursive --sizesort --total-size --human-readable $1 2>/dev/null" # List All On One Line Recurse Sort By Size Long List Show Directory Sizes Reversed
-  alias lsdirg="lsd --color always --icon always --oneline --long --almost-all --recursive --group-dirs --total-size --human-readable $1 2>/dev/null" # List All On One Line Recurse Sort By Size Long List Show Directory Sizes Reversed
-  alias lsr="lsd --color always --icon always --oneline --long --almost-all --recursive --human-readable $1 2>/dev/null" # List All On One Line Recurse Long List
-  alias lst="lsd --color always --icon always --oneline --long --almost-all --recursive --timesort --human-readable $1 2>/dev/null" # List All On One Line Sort By Modification Time Long List Reversed
-  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
-  alias lstr="lsd --color always --icon always --oneline --long --almost-all --recursive --timesort --human-readable $1 2>/dev/null" # List All On One Line Recurse Sort By Modification Time Long List Reversed
-  alias lltree='clear ; echo -e "Gathering tree ...\n\nThis may take a while     " ; echo "$(lsd --color always --icon always --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)" | bat --color=never --plain'
-  alias lstree="lsd --color always --icon always --almost-all --tree --total-size --human-readable $1 2>/dev/null" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+
+if command -v lsd >/dev/null 2>&1; then
   alias 'cd ls'='lsd --almost-all --long'
   alias ks='lsd --color always --icon always'
+  alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
+  alias la='lsd --color always --icon always --almost-all'
+  alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
+  alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
+  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
+  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
+  alias ls='lsd --color always --icon always'
+  alias lsa='command lsd --color always --icon always --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
+  alias lsl='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
+  alias lss='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
+  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias lstree="lsd --color always --icon always --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias s='lsd --color always --icon always'
 fi
+
 ### exa
-_EXA=$(whereis exa | awk '{print $2}')
-if [[ -f "$_EXA" ]]; then
-  alias llsa='clear && exa --all --color always --long --icons --group-directories-first --sort=size --no-permissions --no-time --no-user --tree --level 3'
-  alias l1='exa --color always --icons --oneline --all --header' # List All On One Line
-#  alias l='exa --color always --icons --grid --all --header' # List All On One Line
-  alias lll='exa --color always --icons --long --all --header' # List All On One Line Long List
-  alias ls-ll="clear ; exa --sort=type --colour always --tree --recurse --long --all"
-  alias ls-ll2="clear ; exa --sort=type --colour always --tree --level 2 --long --all"
-  alias ls-ll4="clear ; exa --sort=type --colour always --tree --level 4 --long --all"
-  alias ls-l="clear ; exa --sort=type --colour always --long --all"
-  alias ls-l="clear ; exa --sort=type --colour always --long --all $"
-  alias ls-lnc="clear ; exa --sort=type --colour never --long --all"
+if command -v exa >/dev/null 2>&1; then
+  alias l1='exa --color always --icons --oneline --all --header'
+  alias lll='exa --color always --icons --long --all --header'
+  alias ls-l="exa --sort=type --colour always --long --all"
+  alias ls-ll="exa --sort=type --colour always --tree --recurse --long --all"
 fi
+
+## lsof
 alias list-open-files='lsof'
 alias list-open-files-repeat='lsof -r "m[~]========================[ Time: %T ]========================[~]"'
 alias list-open-internet-files='lsof -i -U'
@@ -128,35 +121,43 @@ alias list-open-internet-files='lsof -i -U'
 ### [=]==================================[=]
 alias rm="rm -v --preserve-root=all --interactive=once"
 alias rrm="rm -v"
-### [=]==================================[=]
-### [~]............ rm
-### [=]==================================[=]
-### Confirm Before Deletion
 alias rm="rm --verbose -i"
 alias rmf='rm --force --verbose'
-### Remove current empty directory. Execute \kbd{\cd ..; rmdir \$OLDCWD}
 alias rmcdir='cd ..; rmdir --verbose $OLDPWD || cd $OLDPWD'
 alias rmcwd="rmcdir"
-### Remove current directory
 alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
 alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-### Remove .git folder
-alias rm-git="printf \"\n\e[0;38;5;196mThis will remove all \e[0;1;38;5;46m'.git' \e[0;38;5;196mdirectories below \e[0;1;38;5;93m'%s'\n\n\e[0;38;5;190mPress \e[0;1;38;5;87m<ENTER>\e[0;38;5;190m to confirm\e[0m: \" \"$(pwd)\"; read -s && printf \"\n\" && fd --regex '\.git' --exclude='*config*' --exclude='*hook*' --type directory --hidden --exec rm '{}' --recursive --verbose"
-# Remove LICENSE file
 alias rm-license="rm -I -v LICENSE"
+function rm_git(){
+  local color_red color_yellow color_green color_purple color_cyan
+  color_red='\e[0;38;5;196m'
+  color_yellow='\e[0;38;5;190m'
+  color_green='\e[0;38;5;46m'
+  color_purple='\e[0;38;5;93m'
+  color_cyan='\e[0;1;38;5;87m'
+  printf "\n${color_red}This will remove all ${color_green}'.git' ${color_red}directories below ${color_purple}'%s'\n" "$(pwd)"
+  printf "\n${color_yellow}Press ${color_cyan}<ENTER>${color_yellow} to confirm\e[0m: "
+  read -r -s; printf "\n"
+  fd                      \
+    --regex '\.git'       \
+    --exclude='*config*'  \
+    --exclude='*hook*'    \
+    --type directory      \
+    --hidden              \
+    --exec rm '{}' --recursive --verbose
+}; alias rm-git="rm_git"
+
 ### [=]==================================[=]
 ### [~]............ mkdir
 ### [=]==================================[=]
-### Create Folders
-# Automatically create subfolders
 alias mkdir='mkdir -p -v'
-#alias md='mkdir -p -v'
 
 ### [=]==================================[=]
 ### [~]............ mv
 ### [=]==================================[=]
 alias mv="mv --verbose --interactive"
 alias mmv="mv -v"
+
 ### [=]==================================[=]
 ### [~]............ cp
 ### [=]==================================[=]
@@ -168,6 +169,7 @@ alias cpMISC='rsync --archive --human-readable --info=MISC'
 alias cpREMOVED='rsync --archive --human-readable --info=REMOVE'
 alias cpSKIPPED='rsync --archive --human-readable --info=SKIP'
 alias cpSTAT='rsync --archive --human-readable --info=STATS'
+
 ### [=]==================================[=]
 ### [~]............ clear
 ### [=]==================================[=]
@@ -175,6 +177,7 @@ alias cl="clear"
 alias cls='clear && ls'
 alias cler='clear'
 alias cleart='clear'
+
 ### [=]==================================[=]
 ### [~]............ Package Managers
 ### [=]==================================[=]
@@ -191,8 +194,6 @@ if [[ -n "${DISTRO}" ]]; then
       alias paci='sudo pacman -S --color always --verbose'
       alias paclist-installed='sudo pacman -Q --color always'
       alias update='sudo pacman -Syuv' # Upgrade all system packages.
-      #alias update-repo='sudo pacman --sync --refresh --verbose' # Update the package databases
-      #alias update-repo-pgp='sudo pacman --sync --needed archlinux-keyring --verbose' # Update the local database of PGP keys used by the package maintainers.
     fi
     ## If yay is found
     if command -v yay >/dev/null 2>&1; then
@@ -219,25 +220,21 @@ if [[ -n "${DISTRO}" ]]; then
   ## If distro is gentoo
   elif [[ ${DISTRO} == "Gentoo" ]]; then
     printf ""
-    # alias emerge="emerge"
   fi
 fi
+
 ### [=]==================================[=]
 ### [~]............ Markdown
 ### [=]==================================[=]
-#alias g="rich --markdown --padding 1,5,1,5 --panel rounded --line-numbers --center --text-full --pager --theme one-dark  --no-wrap --guides"
 alias markdown-cli-renderer="glow"
 alias markdown2HTML="markdown_py --output_format=html"
-### Kitty Terminal
 alias ekitty="$EDITOR $XDG_CONFIG_HOME/kitty/kitty.conf"
-### Terminator
-# YouTube Search/Watcher Using fzf
 alias youtube-fzf="ytfzf"
-# YouTube Search/Downloader Using fzf
 alias ytfzf-dl="cd $YOUTUBEDOWNLOADSDIR ; ytfzf --download --choose-from-history -f --preview-side=bottom --show-thumbnails ; cd $OLDPWD"
 alias youtube-fzf-dl="ytfzf-dl"
 alias stock-watch="watch --color -n 1 stonks -t icon -i 1m -W 80"
 alias stock-sheet="mop"
+
 ### [=]==================================[=]
 ### [~]....... Template Generators
 ### [=]==================================[=]
@@ -249,38 +246,29 @@ alias bash-snippet-copyElevatePermissions="cat $SCRIPTS/bash/development/snippet
 alias bash-snippet-copyReadExamples="cat $SCRIPTS/bash/development/snippets/read/read--wait-for-key-press.sh | xclip && echo -e 'Copied \e[1m Read Examples Snippet\e[0m' to clipboard"
 alias bash-snippet-copySplitLinesInFileToArray="cat $SCRIPTS/bash/development/snippets/split-lines-in-file-to-array/split-lines-in-file-to-array.sh | xclip && echo -e 'Copied \e[1m Splitt lines in file to arrays Snippet\e[0m' to clipboard"
 alias bash-dev-env="kitty --session $XDG_CONFIG_HOME/kitty/startup-sessions/kitty-startup-bash-dev &"
+
 ### [=]==================================[=]
 ### [~]............ AwesomeWM
 ### [=]==================================[=]
-### Edit ~/.config/awesome/rc.lua
 alias eawesome='$EDITOR ~/.config/awesome/rc.lua'
-#alias awesome-quit="echo 'awesome.quit()' | awesome-client"
 alias awesome-quit="awesome-client 'awesome.quit()'"
 alias awesome-restart="awesome-client 'awesome.restart()'"
-### Backup ~/.config/awesome/rc.lua , theme.lua
 alias bawesome='bash $HOME/.config/awesome/awesome-backups/awesome-backup-scripts/awesome-config-backup.sh'
-### Switch to ~/.config/awesome
 alias cdawesome='cd ~/.config/awesome'
-### Check Awesome config file for errors
 alias awesome-check='awesome --check'
 alias check-awesome='awesome --check'
-##### Open Awesome documentation Online
 alias awesomeh='xdg-open https://awesomewm.org/apidoc/index.html'
 alias awesomeh-easy='xdg-open https://awesomewm.org/apidoc/documentation/07-my-first-awesome.md.html'
+
 ### [=]==================================[=]
 ### [~]............ Vim/Neo-Vim
 ### [=]==================================[=]
-### Replace Vim with Neo-Vim
-alias vim='nvim'
-### Open 2 vertical windows in nvim
-alias vim-split='nvim -O2'
-### Edit nVim Configuration '$HOME/.config/nvim/init.vim'
-### Install nVim plugins from CLI
-#nvim -es -u "$HOME/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+alias vim='nvim'            ## Replace Vim with Neo-Vim
+alias vim-split='nvim -O2'  ## Open 2 vertical windows in nvim
+
 ### [=]==================================[=]
 ### [~]............ Permissions
 ### [=]==================================[=]
-# Preserve Root
 alias chmod='chmod --preserve-root'
 alias chmodex='chmod --preserve-root u+x --verbose'
 alias chmodexr='chmod --preserve-root u+x --verbose'
@@ -289,8 +277,8 @@ alias chown-dampsock="sudo chown --verbose --preserve-root dampsock:dampsock"
 alias chown-dampsock-recursive="sudo chown --verbose --preserve-root --recursive dampsock:dampsock"
 alias chgrp='chgrp --verbose'
 alias chgrpR='chgrp --verbose --recursive'
-# shellcheck disable=2139
 alias check-file-permissions="stat ${*} --printf=\"\n%n\n%F\n%A\n%a\n\""
+
 ### [=]==================================[=]
 ### [~]............ rclone
 ### [=]==================================[=]
@@ -298,21 +286,18 @@ alias rclone-backup-scripts-to-onedrive="rclone copyto $HOME/scripts sk8:scripts
 alias rclone-sync-scripts='rclone sync "$HOME/scripts" "sk8:scripts" --dry-run  --interactive --create-empty-src-dirs --progress --color'
 alias rclone-tree='rclone tree sk8: --color --level 5 --verbose'
 alias rclone-tree-all='rclone tree sk8: --color --verbose'
+
 ### [=]==================================[=]
 ### [~]............ pwd/realpath
 ### [=]==================================[=]
-### Real Path
 alias rp='realpath'
 alias rp-pwd='rp --no-symlinks $(ls --group-dirs=first --classic)'
 alias rp-all='rp-pwd .*'
-#alias rp-all='rp --no-symlinks $(ls --group-dirs=first --classic)'
 alias realpath-all='echo -e "$(rp $(ls --color=never --icon=never  *))"'
-
 
 ### [=]==================================[=]
 ### [~]............ sudo
 ### [=]==================================[=]
-## Allow mispelling of sudo "sudp"
 alias sudp='sudo'
 alias "sud["='sudo'
 
@@ -325,22 +310,11 @@ alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | gr
 ### [=]==================================[=]
 ### [~]............ Neofetch
 ### [=]==================================[=]
-## NeoFetch ##
 alias nf='clear && neofetch'
-
-### [=]==================================[=]
-### [~]............... Email
-### [=]==================================[=]
-## Email Clients ##
-alias cliemail='aerc'
-alias cli-email='aerc'
-alias email='aerc'
-alias thunderbird="thunderbird && birdtray"
 
 ### [=]==================================[=]
 ### [~]............ File Explorers
 ### [=]==================================[=]
-## File Explorers
 alias fe='pcmanfm &'
 
 ### [=]==================================[=]
@@ -348,37 +322,6 @@ alias fe='pcmanfm &'
 ### [=]==================================[=]
 alias lynx="lynx -session=$LYNX_SESSION"
 
-### [=]==================================[=]
-### [~]............ Firefox
-### [=]==================================[=]
-##~ Firefox
-# alias ff='firefox --ProfileManager $1 &'
-# alias ffox='firefox &'
-# alias firfox='firefox'
-# alias ffprofile='firefox --ProfileManager'
-# alias firefox-profile='firefox --ProfileManager'
-# alias ffprivate='firefox --ProfileManager --private-window'
-# alias ffp='firefox --ProfileManager --private-window &'
-# alias firefox-private='firefox --private-window &'
-# alias ffs='firefox --ProfileManager --search $1'
-# alias ffsarch='firefox "https://wiki.archlinux.org/index.php?search="$1'
-# alias ffh='firefox --help'
-### [=]==================================[=]
-### [~]........... LibreWolf
-### [=]==================================[=]
-## LibreWolf
-# alias lw='librewolf --ProfileManager $1 &'
-# alias librewolf='librewolf --ProfileManager $1 &'
-# alias lwolf='librewolf &'
-# alias librwolf='librewolf'
-# alias lwprofile='librewolf --ProfileManager'
-# alias librewolf-profile='librewolf --ProfileManager'
-# alias lwprivate='librewolf --private-window'
-# alias lwp='librewolf --private-window &'
-# alias librewolf-private='librewolf --private-window &'
-# alias lws='librewolf --search'
-# alias lwarch='librewolf --search "site:archlinux.org'
-# alias lwh='librewolf --help'
 ### [=]==================================[=]
 ### [~]............ git
 ### [=]==================================[=]
@@ -404,26 +347,25 @@ alias git-log-pretty="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow
 alias ghs='printf "\e[0;1;3;4;38;5;33mSearch GitHub\e[0m\n" ; gh s'
 alias ghs-shell='printf "\e[0;1;3;4;38;5;33mSearch GitHub For Shell\e[0m\n" ; gh s -l shell'
 alias ghs-view='printf "\e[0;1;3;4;38;5;33mSearch GitHub, Press <Enter> to view README\e[0m\n" ; gh repo view $(gh s) | g -'
+
 ### [=]==================================[=]
 ### [~]............ Clipboard
 ### [=]==================================[=]
-## Clipboard ##
 alias clip='xclip -selection clipboard -rmlastnl'
 alias copy='xclip -selection clipboard -rmlastnl'
 alias xcopy='xclip -selection clipboard -rmlastnl'
 alias pwd-to-clip='pwd | xclip -selection clipboard'
 alias pwd2clip='pwd | xclip -selection clipboard'
+
 ### [=]==================================[=]
 ### [~]............ Screen Capturing
 ### [=]==================================[=]
-### Screen Capturing
 alias screencap="scrot '%Y-%m-%d_$wx$h_screencapture.png' --overwrite --select -e && 'mv $f ~/images/screencaptures/$f'"
 alias sc="scrot '%Y-%m-%d_$wx$h_screencapture.png' --select -e 'mv $f $HOME/images/screencaptures/$f'"
 alias scap="scrot '%Y-%m-%d_$wx$h_screencapture.png' --overwrite -e 'mv $f ~/images/screencaptures/'"
 alias scrot="scrot '$HOME/pictures/screencaptures/%Y-%m-%d_%H%M%S_$wx$h_$a_Screenshot.png' --line style=dash,width=5 --select=hide --quality 100 -n \"-f '/usr/share/fonts/TTF/Inconsolata-ExtraBold.ttf/20' -x 5 -y 10 -c 0,0,0 -t '$USER $DATE'\" && echo -e \"\e[32mSaved Screenshot To Directory\e[33m:  \e[1m\e[33m'\e[3;4m\e[34m/home/dampsock/pictures/screencaptures/\e[0m\\e[33m'\e[0m\""
 alias screenc="scrot '$HOME/pictures/screencaptures/%Y-%m-%d_%H%M%S_$wx$h_$a_Screenshot.png' --line style=dash,width=5 --select=hide --quality 100 -n \"-f '/usr/share/fonts/TTF/Inconsolata-ExtraBold.ttf/20' -x 5 -y 10 -c 0,0,0 -t '$USER $DATE'\" && echo -e \"\e[32mSaved Screenshot To Directory\e[33m:  \e[1m\e[33m'\e[3;4m\e[34m/home/dampsock/pictures/screencaptures/\e[0m\\e[33m'\e[0m\""
 
-### Color Picker
 alias colorpicker='gpick'
 ## Icon Editor: ACYLS - https://github.com/worron/ACYLS ##
 alias iconedit='python3 ~/.icons/ACYLS/scripts/run.py & '
@@ -432,40 +374,11 @@ alias colorpicker-tui='rgb-tui'
 alias window-spy='xprop'
 ### Reset Wallpaper
 alias wp='nitrogen --restore'
-### [=]==================================[=]
-### [~]............ OFSEC
-### [=]==================================[=]
-#salias rootkit-search='sudo rkhunter --skip-keypress --summary --check --verbose-logging'
-#salias check-security='sudo rkhunter --skip-keypress --summary --check --verbose-logging && sudo lynis audit system && sudo checksec --proc-all --output=cli --verbose && tput setaf 46 && echo "\n\nDONE\n\n" && tput sgr0'
-#salias clamav-update='sudo systemctl stop clamav-freshclam.service && sudo freshclam && sudo systemctl start clamav-freshclam.service'
-#salias clamav-scan='sudo clamscan --infected --recursive --verbose /'
-#salias get-audit-daemon-log-summary='aureport'
-#salias list-file-permissions-ABSOLUTE="stat $@ --format=\"%n %A %a\""
-#salias list-loginctl-seats="loginctl list-seats && echo '\n\nTo view seat status, run command using the listed seats from the previous commands output\n\n \$\t loginctl seat-status seat0\n'"
-#salias Linux-Security-Auditing-Tool='lsat -v -o "/var/log/$DATE$TIME_lsat_audit.out"'
-#salias audit-linux-security='lsat -v -o "$DATE$TIME_lsat_audit.out"'
-#salias list-logins='lslogins'
-#salias list-login-groups='lslogins --supp-groups'
-#salias list-account-password-expirations='lslogins --acc-expiration'
+
 ### [=]==================================[=]
 ### [~]............ NMAP
 ### [=]==================================[=]
 if command -v nmap >/dev/null 2>&1; then
-  # Some useful nmap aliases for scan modes
-  # Nmap options are:
-  #  -sS - TCP SYN scan
-  #  -v - verbose
-  #  -T1 - timing of scan. Options are paranoid (0), sneaky (1), polite (2), normal (3), aggressive (4), and insane (5)
-  #  -sF - FIN scan (can sneak through non-stateful firewalls)
-  #  -PE - ICMP echo discovery probe
-  #  -PP - timestamp discovery probe
-  #  -PY - SCTP init ping
-  #  -g - use given number as source port
-  #  -A - enable OS detection, version detection, script scanning, and traceroute (aggressive)
-  #  -O - enable OS detection
-  #  -sA - TCP ACK scan
-  #  -F - fast scan
-  #  --script=vuln - also access vulnerabilities in target
   alias nmap_open_ports="nmap --open"
   alias nmap_list_interfaces="nmap --iflist"
   alias nmap_slow="sudo nmap -sS -v -T1"
@@ -478,7 +391,7 @@ if command -v nmap >/dev/null 2>&1; then
   alias nmap_check_for_vulns="nmap --script=vuln"
   alias nmap_full_udp="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
   alias nmap_traceroute="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
-  alias nmap_full_with_scripts="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all " 
+  alias nmap_full_with_scripts="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all "
   alias nmap_web_safe_osscan="sudo nmap -p 80,443 -O -v --osscan-guess --fuzzy "
   alias nmap_ping_scan="nmap -n -sP"
   alias nmap-vulscan="nmap -sV -vv --script=vulscan/vulscan.nse"
@@ -488,81 +401,74 @@ if command -v nmap >/dev/null 2>&1; then
   alias nmap-scan-local-script-scan='sudo nmap --traceroute -sV -sC -A --privileged -vv -oA "$NMAPSCANOUTPUTDIR/local-subnet/$DATE--nmap-scan--$IPGATEWAY-local-subnet" $IPGATEWAY/24'
   alias nmap-scan-external-ip-script-scan='sudo nmap --traceroute -sV -sC -A --privileged -vv -oA "$NMAPSCANOUTPUTDIR/external-ip/$DATE--nmap-scan--$(external-ip)-external-IP" $(external-ip)'
 fi
+
 ### [=]==================================[=]
 ### [~]............ MetaSploit
 ### [=]==================================[=]
-alias -s routersploit='clear && rsf'
+alias -s routersploit='rsf'
 if command -v msfconsole >/dev/null 2>&1; then
   alias msf='sudo msfconsole'
 fi
-### [=]==================================[=]
-### [~].......... PASSWORDS
-### [=]==================================[=]
-### Password Strength Checker
+
 ### [=]==================================[=]
 ### [~]............ Raspberry Pi
 ### [=]==================================[=]
 alias rpi-imager='sudo rpi-imager &'
 alias raspberrypi-imager='sudo rpi-imager &'
 alias raspberry-imager='sudo rpi-imager &'
+
 ### [=]==================================[=]
 ### [~]............ CAD / 3D Printing
 ### [=]==================================[=]
 alias slic3r='prusa-slicer &'
+
 ### [=]==================================[=]
 ### [~]............. DOCKER
 ### [=]==================================[=]
-if command docker >/dev/null 2>&1; then
-  alias docker-run-interactive="docker run --interactive --tty"
-  alias docker-lazy='lazydocker'
-  alias dockers="docker search --no-trunc"
-  #salias audit-docker-security='docker-bench-security'
-fi
-if command figlet-gallery >/dev/null 2>&1; then
-  alias figlet-preview="figlet-gallery"
-fi
+alias docker-run-interactive="docker run --interactive --tty"
+alias docker-lazy='lazydocker'
+alias dockers="docker search --no-trunc"
+
+alias figlet-preview="figlet-gallery"
 alias list--proprietary-software='absolutely-proprietary'
-### System Usage Monitors
 alias ram-usage="free -th"
 alias all-the-tops="$SCRIPTS/bash/all-the-tops/all-the-tops.sh"
 alias colortop='vtop'
-### [~]............ https://github.com/soxofaan/duviz
 alias disk-usage="dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on 2>/dev/null"
 alias disk-usage-2="dfc 2>/dev/null"
+
+export WATCH_INTERVAL WATCH_FAST_INTERVAL; WATCH_INTERVAL=1; WATCH_FAST_INTERVAL=0.1
 alias watch-disk-usage="watch -c --interval 0.5 --no-title --differences dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on"
 alias watch-disk-usage-2="watch -c --interval 0.5 --no-title --differences dfc -c always"
-# watch command interval (seconds)
-export WATCH_INTERVAL=1
-export WATCH_FAST_INTERVAL=0.1
 alias watch="watch --precise --interval $WATCH_INTERVAL"
 alias watch-fast="watch --precise --interval $WATCH_FAST_INTERVAL"
-### Python HTTP Server
+
 alias http-server='python -m http.server'
 alias xterm='xterm -fg white -bg black -cr red -bd blue'
+
+### [=]==================================[=]
+### [~]............ SSH
+### [=]==================================[=]
 alias ssh-audit='$HOME/.local/lib/python3.9/site-packages/ssh_audit/ssh_audit.py'
 alias ssh-copypublickey='copysshkeypublic'
 alias ssh-showpublickey='cat ~/.ssh/id_rsa.pub'
 alias tmux-ssh="tmux new-session ssh"
+
 ### [=]==================================[=]
 ### [~]............ VNC
 ### [=]==================================[=]
 alias vncviewer-custom='vncviewer --DotWhenNoCursor --UpdateScreenshot --PasswordStoreOffer --AutoReconnect --FullScreen --SecurityNotificationTimeout=0 --ToolbarIconSize=16 --SessionRecordAllowUserControl -FullScreen -AutoReconnect --KeepAliveResponseTimeout=30 --KeepAliveInterval=30 --NotificationPos=2 &'
 alias vnc-server-start="x11vnc -nevershared -forever -usepw &"
-### [=]==================================[=]
-### [~]............ MPV
-### [=]==================================[=]
-### [=]==================================[=]
-### [~]............ Linode
-### [=]==================================[=]
-alias lin='linode-cli'
-alias linode-list="linode-cli linodes list"
+
 ### [=]==================================[=]
 ### [~]............ man
 ### [=]==================================[=]
+alias m="man"
 alias man-bat='man --pager="bat --language=sh --plain --color=never" xkeyboard-config '
 alias man-bat-global-apropos='man --pager="bat --language=sh" --global-apropos'
 alias man-search='man --all --wildcard'
 alias man-search-name='man --all --names-only --regex'
+
 ### [=]==================================[=]
 ### [~]............ Crypto
 ### [=]==================================[=]
@@ -570,20 +476,18 @@ alias man-search-name='man --all --names-only --regex'
 alias monero-cli="monero-wallet-cli"
 alias monero-gui="monero-wallet-gui"
 alias psfzf="ps -ef | fzf --bind 'ctrl-r:reload(ps -ef)' --header 'Press (CTRL-R) to reload' --header-lines=1"
-# By default, NetworkManager stores passwords in clear text in the connection files at /etc/NetworkManager/system-connections/.
-# To print the stored passwords, use the following command:
-#salias get-wifipasswords="grep -r '^psk=' /etc/NetworkManager/system-connections/"
+
 ### [=]==================================[=]
 ### [~]........... FireJail
 ### [=]==================================[=]
 ## Firejail
 alias fj='firejail'
-## FireJail FireFox
 alias ffps='firejail firefox --private'
 alias firefoxj='firejail firefox --private'
 alias ffoxjail='firejail firefox --private'
 alias firejail-noprofile='firejail --noprofile'
 alias fj-np='FIREJAILRUNNOPROFILE=$1 && clear && echo -e "${fg_red}-------------------${res_norm}\n${bg_red}${fg_black}${fg_bold}${fg_underline}Firejail No Profile\n${res_norm}${fg_red}-------------------${res_norm}\n" && firejail --quiet --noprofile $FIREJAILRUNNOPROFILE'
+
 ### [=]==================================[=]
 ### [~]............ Networking
 ### [=]==================================[=]
@@ -609,40 +513,7 @@ alias tdl="$HOME/3D-CAD/3D-CAD-scripts/file-downloaders/thingiverse/thingiverse-
 alias xterm='xterm -fg white -bg black &'
 alias image2ascii="asciiview"
 alias pixel-art-editor='pxltrm'
-#alias reboot="clear ; echo -e \"\e[35mRebooting in \e[31m3 \e[35mseconds \e[31m... \e[0m\" ; sleep 3 ; clear ; echo -e \"\e[31m$(cat $ZSH_ASCII_ART_DIR/alien-flamethrower.txt --plain --paging never)\n$(cat $ZSH_ASCII_ART_DIR/REBOOTING.txt --plain --paging never)\e[0m\" ; sleep 1.5 ; reboot"
-### [=]==================================[=]
-### [~]............. BOXES
-### [=]==================================[=]
-###{{{ boxes
 
-### toilet --filter border TEXT
-
-#alias boxes-little="little_boxes"
-#alias box-draw-stdin="little_boxes --charset thick --title $DATE"
-#alias box-draw-stdin-right-aligned="boxes -d parchment -p h5 | boxes -s $(tput cols) -c x -a hr -i none | sed -e 's/^x/ /'"
-#alias box-draw-stdin-center-aligned="boxes -d parchment -p h5 | boxes -s $(tput cols) -c x -a hc -i none | cut -c 2-"
-#alias box-draw-stdin-center-aligned-twisted="boxes -d twisted -p h5 | boxes -s $(tput cols) -c x -a hc -i none | cut -c 2-"
-
-### boxes examples
-
-# 	$  figlet "boxes . . . !" | lolcat -f | boxes -d unicornthink
-
-#	$  echo $USER | figlet -f "ANSI Shadow" | boxes -d bear | lolcat
-
-#	$   echo $USER | figlet -f "pagga" | boxes -d bear | lolcat
-
-#	$   df -h | little_boxes -t $HOST -a | lolcat
-
-### [x]==================================[x]
-###}}}
-alias stat-permission-pwd="stat --printf='%a %A %n\t\t\t\t%F\n' *"
-alias stat-permission="stat --printf='%a %A %n\t\t\t\t%F\n'"
-alias stat-permissions-custom="find $1 -type $2 -exec stat --printf='%A %a %n' {} \;"
-alias stat-permissions-path-files="find $1 -type f -exec stat --printf='%A %a %n' {} \;"
-alias stat-permissions-type-etc="find /etc -type $2 -exec stat --printf='%A %a %n' {} \;"
-alias stat-permissions-type-etcback="find $etcbackup -type $2 -exec stat --printf='%A %a %n' {} \;"
-alias stat-permissions-files-pwd-1="find . -maxdepth 1 -type f -exec stat --printf='%A %a %n' {} \;"
-alias stat-permissions-dir-pwd-1="find . -maxdepth 1 -type d -exec stat --printf='%A %a %n' {} \;"
 alias chmod-exec-1="find $1 -maxdepth 1 -type $2 -exec chmod --verbose $3 {} \;"
 alias chmod-exec-x="find $1 -maxdepth $2 -type $3 -exec chmod --verbose $4 {} \;"
 alias chmod-exec="find $1 -type $2 -exec chmod --verbose $3 {} \;"
@@ -653,7 +524,9 @@ alias chmod-ref="chmod --preserve-root --verbose --reference $1 $2"
 alias chmod-dir-775-1="find $1 -maxdepth 1 -type d -exec chmod --verbose 775 {} \;"
 alias chmod-files-644-1="find $1 -maxdepth 1 -type f -exec chmod --verbose 644 {} \;"
 alias chmod-ref-dir="chmod --preserve-root --verbose --reference $etcbackup/$1 /etc/$1"
+
 alias lastlogin="loginctl"
+
 alias etckeeper="sudo etckeeper"
 alias etckeeper-diff="sudo etckeeper vcs status -u"
 alias etckeeper-diff="etckeeper vcs log --unified --color-words | diff-so-fancy --colors | less --tabs=2 -RFX"
@@ -661,6 +534,7 @@ alias etckeeper-modified="etckeeper vcs ls-files --modified"
 alias etckeeper-add="etckeeper vcs add /etc/* --verbose"
 alias etckeeper-add-interactive="etckeeper vcs add /etc/* --verbose --interactive"
 alias etckeeper-commit="echo -e \"\e[38;5;201metckeeper:\e[38;5;27m\tCommiting Changes ...\e[0m\" && etckeeper commit $COMMITMSG"
+
 alias list-zsh-keybindings="bindkey -L | bat --language=zsh --paging=always --style=plain --theme=Dracula"
 alias iptables-watch="sudo watch --differences --differences --color --interval 1 iptables -vnL --line-numbers"
 alias ping-graph="gping -4 --watch-interval 0.1"
@@ -680,11 +554,10 @@ alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -color=auto'
 alias pping="prettyping"
-alias m="man"
 alias iptables-watch="sudo watch --differences --differences --color --interval 1 iptables -vnL --line-numbers"
 alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote '**' --close-quote '**' --reference-links --pad-tables --images-to-alt --no-wrap-links --hide-strikethrough --decode-errors=ignore"
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias kernel-command-line-parameters="cat /proc/cmdline"
-# Count Files
 alias count='find . -type f | wc -l'
 
+timelogging_end 70

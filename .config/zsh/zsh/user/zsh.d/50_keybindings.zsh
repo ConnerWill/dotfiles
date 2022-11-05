@@ -1,5 +1,7 @@
 # shellcheck disable=1072,1073,1123
 
+timelogging_start "50"
+
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
 #   the `source' or `.' commands, then reference the key parameter in bindkey commands,
@@ -11,21 +13,21 @@
 #        [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
 #
 #######################################################################################
-###     [=]===========================================================[=]
-###    	[~] ------------------- ZSH KEYBINDINGS ----------------------[~]
-###     [=]===========================================================[=]
+## https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
+## https://raw.githubusercontent.com/sorin-ionescu/prezto/master/modules/editor/init.zsh
+## http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
+## http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
+## http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
+#######################################################################################
+
+### [=]===========================================================[=]
+###	[~] ------------------- ZSH KEYBINDINGS ----------------------[~]
+### [=]===========================================================[=]
 setopt autocd
 bindkey -e
 
 ## Press 'CTRL-x-z' to display keybindings
 alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
-
-# keybindings.zsh
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
-# https://raw.githubusercontent.com/sorin-ionescu/prezto/master/modules/editor/init.zsh
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
-# http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
@@ -38,7 +40,6 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
 			echoti rmkx
 		}
     zle -N zle-line-init ; zle -N zle-line-finish
-# shellcheck disable=1072,1123
 fi
 
 if [[ -n "${DISPLAY}" ]]; then
@@ -52,20 +53,13 @@ function toggle-monitors(){
     [[ "${monitor_status:l}" == "off" ]] && monitor_action="on"
 		xset dpms force "${monitor_action}"
   } ; zle -N toggle-monitors && bindkey -M vicmd "^[[24;5~" toggle-monitors
-		#&& bindkey -M vicmd "[38;2;248;248;242mu" toggle-monitors
-		#&& bindkey "^[[57362u" toggle-monitors
-	# ^[[57361;5u" toggle-monitors
-		##			 <Ctrl-PrintScreen>
 fi
 
 ############################
 # Emacs shift-select mode for Zsh - select text in the command line using Shift
 # as in many text editors, browsers and other GUI programs.
-#
-# Version: 0.1.1
 # Homepage: <https://github.com/jirutka/zsh-shift-select>
-# Move cursor to the end of the buffer.
-# This is an alternative to builtin end-of-buffer-or-history.
+# Move cursor to the end of the buffer. This is an alternative to builtin end-of-buffer-or-history.
 function end-of-buffer() {
 	CURSOR=${#BUFFER}
 	zle end-of-line -w  # trigger syntax highlighting redraw
@@ -107,7 +101,6 @@ autoload -U transpose-words-match
 zle -N transpose-words-match
 bindkey -M vicmd tm transpose-words-match
 
-
 # If the selection region is not active, set the mark at the cursor position,
 # switch to the shift-select keymap, and call $WIDGET without 'shift-select::'
 # prefix. This function must be used only for shift-select::<widget> widgets.
@@ -118,6 +111,7 @@ function shift-select::select-and-invoke() {
 	fi
 	zle ${WIDGET#shift-select::} -w
 }
+
 function {
 	emulate -L zsh
 	# Create a new keymap for the shift-selection mode.
@@ -126,8 +120,9 @@ function {
 	# as a fallback for "unbound" key sequences.
 	bindkey -M shift-select -R '^@'-'^?' shift-select::deselect-and-input
 	local kcap seq seq_mac widget
+
 	# Bind Shift keys in the emacs and shift-select keymaps.
-	for	kcap   seq          seq_mac    widget (             # key name
+	for	kcap   seq          seq_mac    widget (
 		kLFT   '^[[1;2D'    x          backward-char        # Shift + LeftArrow
 		kRIT   '^[[1;2C'    x          forward-char         # Shift + RightArrow
 		kri    '^[[1;2A'    x          up-line              # Shift + UpArrow
@@ -138,15 +133,11 @@ function {
 		x      '^[[1;4C'    '^[[1;4C'  forward-word         # Shift + Alt + RightArrow
 		x      '^[[1;4H'    '^[[1;4H'  beginning-of-buffer  # Shift + Alt + Home
 		x      '^[[1;4F'    '^[[1;4F'  end-of-buffer        # Shift + Alt + End
-#		x      '^[[97;6u'   x          beginning-of-line    # Shift + Alt + A
-#		x      '^[[101;6u'  x          end-of-line          # Shift + Alt + E
 	); do
-		# Use alternative sequence (Option instead of Ctrl) on macOS, if defined.
-		[[ "$OSTYPE" = darwin* && "$seq_mac" != x ]] && seq=$seq_mac
-
-		zle 		-N shift-select::$widget shift-select::select-and-invoke
-		bindkey -M emacs 				${terminfo[$kcap]:-$seq} shift-select::$widget
-		bindkey -M shift-select ${terminfo[$kcap]:-$seq} shift-select::$widget
+			[[ "$OSTYPE" = darwin* && "$seq_mac" != x ]] && seq=$seq_mac
+			zle 		-N shift-select::$widget shift-select::select-and-invoke
+			bindkey -M emacs 				${terminfo[$kcap]:-$seq} shift-select::$widget
+			bindkey -M shift-select ${terminfo[$kcap]:-$seq} shift-select::$widget
 	done
 
 	# Bind keys in the shift-select keymap.
@@ -157,12 +148,6 @@ function {
 		bindkey -M shift-select ${terminfo[$kcap]:-$seq} $widget
 	done
 }
-############################
-
-
-
-# Use emacs key bindings
-#bindkey -e
 
 # [PageUp] - Up a line of history
 if [[ -n "${terminfo[kpp]}" ]]; then
@@ -170,6 +155,7 @@ if [[ -n "${terminfo[kpp]}" ]]; then
     bindkey -M viins "${terminfo[kpp]}" up-line-or-history
     bindkey -M vicmd "${terminfo[kpp]}" up-line-or-history
 fi
+
 # [PageDown] - Down a line of history
 if [[ -n "${terminfo[knp]}" ]]; then
     bindkey -M emacs "${terminfo[knp]}" down-line-or-history
@@ -185,6 +171,7 @@ if [[ -n "${terminfo[kcuu1]}" ]]; then
     bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
     bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
+
 # Start typing + [Down-Arrow] - fuzzy find history backward
 if [[ -n "${terminfo[kcud1]}" ]]; then
     autoload -U down-line-or-beginning-search
@@ -201,6 +188,7 @@ if [[ -n "${terminfo[khome]}" ]]; then
     bindkey -M viins "${terminfo[khome]}" beginning-of-line
     bindkey -M vicmd "${terminfo[khome]}" beginning-of-line
 fi
+
 # [End] - Go to end of line
 if [[ -n "${terminfo[kend]}" ]]; then
     bindkey -M emacs "${terminfo[kend]}"    end-of-line
@@ -214,10 +202,12 @@ if [[ -n "${terminfo[kcbt]}" ]]; then
     bindkey -M viins "${terminfo[kcbt]}" reverse-menu-complete
     bindkey -M vicmd "${terminfo[kcbt]}" reverse-menu-complete
 fi
+
 # [Backspace] - delete backward
 bindkey -M emacs '^?' backward-delete-char
 bindkey -M viins '^?' backward-delete-char
 bindkey -M vicmd '^?' backward-delete-char
+
 # [Delete] - delete forward
 if [[ -n "${terminfo[kdch1]}" ]]; then
     bindkey -M emacs "${terminfo[kdch1]}" delete-char
@@ -242,6 +232,7 @@ bindkey -M vicmd '^[[3;5~' kill-word
 bindkey -M emacs '^[[1;5C' forward-word
 bindkey -M viins '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5C' forward-word
+
 # [Ctrl-LeftArrow] - move backward one word
 bindkey -M emacs '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5D' backward-word
@@ -260,7 +251,6 @@ bindkey '^r' history-incremental-search-backward
 # [Space] - don't do history expansion
 bindkey ' ' magic-space
 
-
 # [Ctrl-x Ctrl-e] - Edit the current command line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line
@@ -269,7 +259,6 @@ bindkey '\C-x\C-e' edit-command-line
 # [Alt-m] - file rename magick
 bindkey "^[m" copy-prev-shell-word
 
-
 # [Alt-3] - Toggle comments on current line
 # If there is no `#` character at the beginning of the current line, add one. If
 # there is one, remove it. The `INTERACTIVE_COMMENTS` option must be set for
@@ -277,7 +266,6 @@ bindkey "^[m" copy-prev-shell-word
 bindkey -M emacs 	"^[3"	vi-pound-insert
 bindkey -M viins 	"^[3"	vi-pound-insert
 bindkey -M vicmd 	"gc" 	vi-pound-insert
-
 bindkey -M vicmd 	"gg" 	beginning-of-buffer
 bindkey -M vicmd 	"G"		end-of-buffer
 
@@ -301,10 +289,8 @@ bindkey "^[#" push-input
 #* Ctrl+K + Ctrl+L to lowercase
 # bindkey '^K^U' _mtxr-to-upper # Ctrl+K + Ctrl+U
 # bindkey '^K^L' _mtxr-to-lower # Ctrl+K + Ctrl+L
-
 #In case of trouble, you probably need to unbind Ctrl+K</kbd>. Just add this before the bindings you will use:
 #bindkey -r '^K'
-
 ## This is a very simple plugin that binds Ctrl+h to navigating up a directory.
 ## It is now very easy to go up a few directories without having to type any commands.
 PROG='@a = split " ";
@@ -328,12 +314,7 @@ function _up-dir {
 zle -N _up-dir
 bindkey "^h" _up-dir
 
-
-
-
-
-
- # autoload history-search-multi-word
+# Autoload history-search-multi-word
 zle -N history-search-multi-word
 zle -N history-search-multi-word-backwards history-search-multi-word
 zle -N history-search-multi-word-pbackwards history-search-multi-word
@@ -341,46 +322,13 @@ zle -N history-search-multi-word-pforwards history-search-multi-word
 bindkey "^R" history-search-multi-word
 bindkey "^h" history-search-multi-word
 bindkey "^H" history-search-multi-word
-bindkey "^r" history-search-multi-word
-# This will bind to Ctrl-R
-#
-# Zstyles:
+bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
+
 # zstyle ":history-search-multi-word" page-size "8"
 # zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"
 # zstyle ":plugin:history-search-multi-word" synhl "yes"
 # zstyle ":plugin:history-search-multi-word" clear-on-cancel "no
 
-
-
-
-# zle -l 
-
-# Keyboard shortcut problems
-# Example:
-# bindkey '^L' clear-screen
-# Two main things could go wrong:
-#     The key sequence (^L in the example) does not match the key sequence being sent to the terminal:
-#     You can see the exact sequence a keyboard shortcut sends by pressing CTRL+V and then the keyboard shortcut. For example: CTRL+V, CTRL+L will output ^L (^ represents the Control key).
-#     The command executed (clear-screen in the example) has an error. In that case, post both the key binding and the definition of the command (if exists) like so:
-#
-#         key binding: bindkey '^[[1;6D'
-#         will print "^[[1;6D" insert-cycledleft
-#
-#         command definition: which insert-cycledleft
-#         will print insert-cycledleft () { ... }
-#
-#         Notice that sometimes the command is a builtin zle widget and so the which command won't work. If that's the case, just post the key binding and we'll figure it out.
-
-### Prepend text example
-  ## Prepend 'nvim' to buffer if it currently doesnt contain 'nvim'
-  #  prepend-nvim() {
-  #    if [[ $BUFFER != "nvim "* ]]; then
-  #      BUFFER="nvim $BUFFER"; CURSOR+=5
-  #    fi
-  #  }
-  #  zle -N prepend-nvim
-  ## Now assign widget to a key; in this example 'Alt+e'
-  #  bindkey "^[e" prepend-vim
 function vicmdZZ() {
 		zle kill-region -w
 		zle clear-screen
@@ -391,6 +339,7 @@ function vicmdZQ() {
 	exit
 }; zle -N vicmdZQ
 
-
 bindkey -M vicmd 	"ZZ" vicmdZZ
 bindkey -M vicmd 	"ZQ" vicmdZQ
+
+timelogging_end 50

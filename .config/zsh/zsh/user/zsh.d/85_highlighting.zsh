@@ -1,3 +1,4 @@
+timelogging_start "85"
 ### [==================================]
 ### [ --------- HIGHLIGHTING  -------- ]
 ### [==================================]
@@ -10,3 +11,4 @@ ZSH_HIGHLIGHTING_PLUGIN="$ZSH_HIGHLIGHTING_PLUGIN_DIR/$ZSH_HIGHLIGHTING_PLUGIN_N
 # Source highlighting
 # source "$ZSH_HIGHLIGHTING_PLUGIN"
 ### [==================================]
+timelogging_end 85

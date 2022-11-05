@@ -1,4 +1,7 @@
 # shellcheck disable=2148
+
+timelogging_start "20"
+
 ##############################
 ##          OPTIONS         ##
 ##############################
@@ -34,17 +37,4 @@ setopt VI                   ##
 # setopt WARN_CREATE_GLOBAL  ##
 setopt ZLE                  ##
 
-# This also has the effect of CHASE_DOTS,
-#
-#   ( i.e. a `..' path segment will be treated as referring 
-#     to the physical parent, even if the preceding path
-#     segment is a symbolic link. )
-###################################################################
-### Show configured ZSH options {{{
-# [[ -f "$ZSH_OPTIONS_DIR/show-zsh-option-status.zsh" ]] \
-  # && source "$ZSH_OPTIONS_DIR/show-zsh-option-status.zsh"
-###}}}
-###################################################################
-###################################################################
-
-
+timelogging_end 20

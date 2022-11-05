@@ -1,30 +1,17 @@
+timelogging_start "40"
 ## ShellCheck Setup{{{
 
-# Disable warnings of adding shebang or a 'shell' directive.
 # shellcheck disable=2148
-# Allow [ ! -z foo ] instead of suggesting -n
 # shellcheck disable=SC2236
-
-# Turn on warnings for unquoted variables with safe values
 # shellcheck enable=quote-safe-variables
-
-# Turn on warnings for unassigned uppercase variables
 # shellcheck enable=check-unassigned-uppercase
-
-# Suggest ${VAR} in place of $VAR
 # shellcheck enable=require-variable-braces
-
-# Look for 'source'd files relative to the checked script,
-# and also look for absolute path
 # shellcheck source-path=SCRIPTDIR
-
-# shellcheck source-path=/etc/zsh/zshenv 
-# shellcheck source-path=/etc/zsh/zprofile 
-
+# shellcheck source-path=/etc/zsh/zshenv
+# shellcheck source-path=/etc/zsh/zprofile
 # shellcheck source=./.zshenv
 # shellcheck source=./.zprofile
 # shellcheck source=./.zlogin
-
 # shellcheck source=./banner/zshbanner.zsh
 # shellcheck source=./variables/zshvariables.zsh
 # shellcheck source=./options/zshoptions.zsh
@@ -65,23 +52,18 @@ if [[ -d "${ZSH_PLUGINS_ENABLED}" ]]; then
   # shellcheck disable=SC1072,SC1058,SC1036,SC1073
   for ZSH_FILE in "${ZSH_PLUGINS_ENABLED}"/*.zsh(N); do
       _zshrc_VERBOSE_MESSEGE "  Plugin  " "$(basename ${ZSH_PLUGINS_ENABLED})/$(basename ${ZSH_FILE})" "201" "57"
-      source "${ZSH_FILE}" \
-        || _zshrc_VERBOSE_ERROR "Plugin Failed" "[${ZSH_FILE}]" "196" "190"
+      source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Plugin Failed" "[${ZSH_FILE}]" "196" "190"
   done
 else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_PLUGINS_ENABLED}]" "196" "124"
 fi
 
-
-# zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}$ZSH_PLUGINS_AVAILABLE/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
-# [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
-#   ; unset zsh_source_plugin_tmp
-
+timelogging_start "40"
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}" \
-  ; unset zsh_source_plugin_tmp
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
 
+timelogging_start "40"
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
-  ; unset zsh_source_plugin_tmp
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
 
+timelogging_end 40
