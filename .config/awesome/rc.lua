@@ -77,17 +77,16 @@ end
 -- =====================
 -- {{{
 
-terminal = "kitty" -- Terminal Emulator
-editor = os.getenv("EDITOR") or "nvim" -- Text Editor
-editor_cmd = terminal .. " -e " .. editor
-texteditor = "nvim" -- Text Editor
-filebrowser = "pcmanfm" -- File Explorer
-webbrowser = "firefox" -- WebBrowser
-torbrowser = "torbrowser-launcher" -- TOR WebBrowser
-cliwebbrowser = "lynx" -- cli WebBrowser
+terminal          = "kitty"                     -- Terminal Emulator
+editor            = os.getenv("EDITOR") or "nvim" -- Text Editor
+editor_cmd        = terminal .. " -e " .. editor
+texteditor        = "nvim"                    -- Text Editor
+filebrowser       = "pcmanfm"                -- File Explorer
+webbrowser        = "firefox"                 -- WebBrowser
+torbrowser        = "tor-browser"             -- TOR Browser
+cliwebbrowser     = "lynx"                 -- cli WebBrowser
 cliwebbrowser_cmd = terminal .. " -T lynx -e " .. cliwebbrowser
--- FreeCAD = "FreeCAD"                        -- CAD
-SignalMessager = "signal-desktop" -- Messager
+SignalMessager = "signal-desktop"      -- Messager
 
 --}}}
 
