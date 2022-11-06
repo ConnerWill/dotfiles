@@ -1,0 +1,232 @@
+# Used variables: __zsnap_key __zsnap_type __zsnap_opts __zsnap_tmp
+
+#
+# "Serialize" parameters
+#
+
+# k, t, opts, tmp, tmp2
+unset      __zsnap_key __zsnap_type __zsnap_opts __zsnap_tmp __zsnap_tmp2
+typeset -g __zsnap_key __zsnap_type __zsnap_opts __zsnap_tmp __zsnap_tmp2
+
+echo "#"
+echo "# Variables"
+echo "#"
+
+cat <<EOF
+builtin setopt noaliases
+unset __zsnap_key __zsnap_type __zsnap_arr __zsnap_arr2
+typeset -g __zsnap_key __zsnap_type
+typeset -ga __zsnap_arr __zsnap_arr2
+
+#
+# Variables that should not be unset
+#
+
+__zsnap_arr=( )
+__zsnap_arr+=( __zsnap_key __zsnap_type __zsnap_opts __zsnap_tmp __zsnap_tmp2 __zsnap_arr __zsnap_arr2 )
+# From manual page
+__zsnap_arr+=( COLUMNS LINES ARGV0 CORRECT_IGNORE CORRECT_IGNORE_FILE DIRSTACKSIZE ENV KEYBOARD_HACK )
+__zsnap_arr+=( KEYTIMEOUT LANG LC_ALL LC_COLLATE LC_CTYPE LC_MESSAGES LC_NUMERIC LC_TIME LISTMAX )
+__zsnap_arr+=( LOGCHECK MAIL MAILCHECK mailpath match mbegin mend MATCH MBEGIN MEND psvar REPORTTIME )
+__zsnap_arr+=( TIMEFMT ZBEEP ZDOTDIR ZLE_LINE_ABORTED ZLE_REMOVE_SUFFIX_CHARS ZLE_SPACE_SUFFIX_CHARS )
+__zsnap_arr+=( ZLE_RPROMPT_INDENT )
+# From other manual page
+__zsnap_arr+=( "!" "#" ARGC "$" "-" "*" "@" "?" status pipestatus CPUTYPE EUID ERRNO GID HISTCMD )
+__zsnap_arr+=( HOST LINENO LOGNAME MACHTYPE OLDPWD OPTARG OPTIND OSTYPE PPID TRY_BLOCK_ERROR )
+__zsnap_arr+=( TRY_BLOCK_INTERRUPT UID USERNAME VENDOR zsh_eval_context ZSH_NAME ZSH_PATCHLEVEL )
+__zsnap_arr+=( zsh_scheduled_events ZSH_SUBSHELL ZSH_VERSION )
+# Core variables
+__zsnap_arr+=( options aliases saliases galiases functions dis_aliases dis_saliases dis_galiases dis_functions )
+__zsnap_arr+=( 0 _ SHLVL SHELL RANDOM fignore FIGNORE watch WATCH WATCHFMT TTY TTYIDLE STTY )
+__zsnap_arr+=( histchars HISTCHARS HISTORY_IGNORE HISTFILE HISTSIZE SAVEHIST )
+__zsnap_arr+=( commands signals WORDCHARS TMPPREFIX TMPDIR IFS HOME module_path MODULE_PATH )
+__zsnap_arr+=( EGID ZSH_ARGZERO USER PWD )
+__zsnap_arr+=( fpath FPATH path PATH SECONDS TMOUT PERIOD )
+__zsnap_arr+=( NULLCMD READNULLCMD action cdpath CDPATH dirstack )
+
+# Application variables
+__zsnap_arr+=( ZCONVEY_FD ZCONVEY_ID ZCONVEY_REPO_DIR ZCONVEY_CONFIG ZCONVEY_IO_DIR ZCONVEY_LOCKS_DIR )
+__zsnap_arr+=( ZCONVEY_CONFIG_DIR ZCONVEY_RUN_SECONDS ZCONVEY_OTHER_DIR ZCONVEY_NAMES_DIR ZCONVEY_SCHEDULE_ORIGIN )
+__zsnap_arr+=( DISPLAY TERM TERMINFO TERM_PROGRAM TERM_PROGRAM_VERSION TERM_SESSION_ID SSH_AUTH_SOCK )
+__zsnap_arr+=( ITERM_PROFILE ITERM_SESSION_ID EDITOR FCEDIT LESS CVS_RSH )
+
+# Hook variables
+__zsnap_arr+=( preexec_functions precmd_functions periodic_functions zshexit_functions chpwd_functions )
+__zsnap_arr+=( zshaddhistory_functions zsh_directory_name_functions )
+
+#
+# Variables that even though not unset, should be object to typedef and assignment
+#
+
+__zsnap_arr2=( )
+__zsnap_arr2+=( SECONDS TMOUT PERIOD fpath FPATH path PATH match mbegin mend MATCH MBEGIN MEND psvar )
+__zsnap_arr2+=( cdpath CDPATH dirstack )
+
+# Hook variables
+__zsnap_arr2+=( preexec_functions precmd_functions periodic_functions zshexit_functions chpwd_functions )
+__zsnap_arr2+=( zshaddhistory_functions zsh_directory_name_functions )
+
+rm -f /tmp/removing
+for __zsnap_key in "\${(k)parameters[@]}"; do
+    __zsnap_type="\${parameters[\$__zsnap_key]}"
+    if [[ "\$__zsnap_type" != *-readonly* && "\${__zsnap_arr[(I)\$__zsnap_key]}" = "0" ]]; then
+        # echo "Removing: \$__zsnap_key" >> /tmp/removing
+        unset "\$__zsnap_key"
+    fi
+done
+EOF
+
+echo
+
+for __zsnap_key in "${(k)parameters[@]}"; do
+    __zsnap_type="${parameters[$__zsnap_key]}"
+
+    [[ "$__zsnap_key" = "__zsnap_key" || "$__zsnap_key" = "__zsnap_type" || "$__zsnap_key" = "__zsnap_opts" ]] && continue
+    [[ "$__zsnap_key" = "__zsnap_tmp" || "$__zsnap_key" = "__zsnap_tmp2" ]] && continue
+    [[ "$__zsnap_key" = "__zsnap_arr" || "$__zsnap_key" = "__zsnap_arr2" ]] && continue
+    [[ "$__zsnap_key" = "0" ]] && continue
+
+    __zsnap_opts="-"
+    if [[ "$__zsnap_type" = *-export* ]]; then
+        __zsnap_opts+="x"
+    fi
+    if [[ "$__zsnap_type" = *-hideval* ]]; then
+        __zsnap_opts+="H"
+    fi
+    if [[ "$__zsnap_type" = *-hide-* || "$__zsnap_type" = *-hide ]]; then
+        __zsnap_opts+="h"
+    fi
+    if [[ "$__zsnap_type" = *-readonly* ]]; then
+        __zsnap_opts+="r"
+    fi
+    if [[ "$__zsnap_type" = *-tag* ]]; then
+        __zsnap_opts+="__zsnap_type"
+    fi
+    if [[ "$__zsnap_type" = *-unique* ]]; then
+        __zsnap_opts+="U"
+    fi
+    if [[ "$__zsnap_type" = *-lower* ]]; then
+        __zsnap_opts+="l"
+    fi
+    if [[ "$__zsnap_type" = *-upper* ]]; then
+        __zsnap_opts+="u"
+    fi
+    if [[ "$__zsnap_type" = *-left* ]]; then
+        # Check for field width
+        __zsnap_tmp=`declare -p ${(q)__zsnap_key}`
+        __zsnap_tmp="${__zsnap_tmp##*-L}"
+        __zsnap_tmp="${__zsnap_tmp%% *}"
+        __zsnap_opts="-L$__zsnap_tmp $__zsnap_opts"
+    fi
+    if [[ "$__zsnap_type" = *-right_blanks* ]]; then
+        # Check for field width
+        __zsnap_tmp=`declare -p ${(q)__zsnap_key}`
+        __zsnap_tmp="${__zsnap_tmp##*-R}"
+        __zsnap_tmp="${__zsnap_tmp%% *}"
+        __zsnap_opts="-R$__zsnap_tmp $__zsnap_opts"
+    fi
+    if [[ "$__zsnap_type" = *-right_zeros* ]]; then
+        # Check for field width
+        __zsnap_tmp=`declare -p ${(q)__zsnap_key}`
+        __zsnap_tmp="${__zsnap_tmp##*-Z}"
+        __zsnap_tmp="${__zsnap_tmp%% *}"
+        __zsnap_opts="-Z$__zsnap_tmp $__zsnap_opts"
+    fi
+    if [[ "$__zsnap_type" = *-special* ]]; then
+        if [[ "$__zsnap_type" = *-hide-* || "$__zsnap_type" = *-hide || "$__zsnap_type" = *-readonly* ]]; then
+            # Skip variables that are hidden or readonly, and special
+            continue
+        fi
+    fi
+
+    __zsnap_opts="${__zsnap_opts%-}"
+
+    print -r "if [[ \"\${__zsnap_arr[(I)$__zsnap_key]}\" = \"0\" || \"\${__zsnap_arr2[(I)$__zsnap_key]}\" != \"0\" ]]; then"
+
+    if [[ "$__zsnap_type" = "array" || "$__zsnap_type" = array-* ]]; then
+        __zsnap_opts="-a $__zsnap_opts"
+        print -r -- "declare $__zsnap_opts $__zsnap_key"
+        print -r -- "$__zsnap_key=("
+        eval "__zsnap_tmp=\${#$__zsnap_key[@]}"
+        for (( __zsnap_tmp2=1; __zsnap_tmp2 <= __zsnap_tmp; __zsnap_tmp2 ++ )); do
+            eval "print -r -- \"\${(qq)${__zsnap_key}[__zsnap_tmp2]}\""
+        done
+        print -r -- ")"
+    elif [[ "$__zsnap_type" = "association" || "$__zsnap_type" = association-* ]]; then
+        __zsnap_opts="-A $__zsnap_opts"
+        print -r -- "declare $__zsnap_opts $__zsnap_key"
+        eval "print -r -- \"$__zsnap_key=( \${(qqkv)${__zsnap_key}[@]} )\""
+    elif [[ "$__zsnap_type" = "scalar" || "$__zsnap_type" = scalar-* ]]; then
+        print -r -- "declare $__zsnap_opts $__zsnap_key"
+        eval "print -r -- \"$__zsnap_key=\${(qq)$__zsnap_key}\""
+    elif [[ "$__zsnap_type" = "integer" || "$__zsnap_type" = integer-* ]]; then
+        # Check for base
+        __zsnap_tmp=`declare -p ${(q)__zsnap_key}`
+        __zsnap_tmp="${__zsnap_tmp##*-i}"
+        __zsnap_tmp="${__zsnap_tmp%% *}"
+        __zsnap_opts="-i$__zsnap_tmp $__zsnap_opts"
+        print -r -- "declare $__zsnap_opts $__zsnap_key"
+        eval "print -r -- \"$__zsnap_key=\${$__zsnap_key}\""
+    elif [[ "$__zsnap_type" = "float" || "$__zsnap_type" = float-* ]]; then
+        __zsnap_tmp=`declare -p ${(q)__zsnap_key}`
+        # -E or -F, get the base
+        if [ "$__zsnap_tmp" = "${__zsnap_tmp##*-F}" ]; then
+            __zsnap_tmp="${__zsnap_tmp##*-E}"
+            __zsnap_tmp="${__zsnap_tmp%% *}"
+            __zsnap_opts="-E$__zsnap_tmp $__zsnap_opts"
+        else
+            __zsnap_tmp="${__zsnap_tmp##*-F}"
+            __zsnap_tmp="${__zsnap_tmp%% *}"
+            __zsnap_opts="-F$__zsnap_tmp $__zsnap_opts"
+        fi
+        eval "print -r -- \"$__zsnap_key=\${$__zsnap_key}\""
+    fi
+
+    print -r "fi"
+    print
+done
+
+#
+# "Serialize" functions
+#
+
+echo
+echo "#"
+echo "# Functions"
+echo "#"
+echo "unfunction -m \*"
+declare -f
+
+#
+# Serialize zstyles
+#
+
+echo
+echo "#"
+echo "# Zstyles"
+echo "#"
+echo "zstyle -d"
+zstyle -L
+
+#
+# Serialize zle widgets
+#
+echo
+echo "#"
+echo "# Zle widgets"
+echo "#"
+
+cat <<EOF
+unset __zsnap_arr
+typeset -ga __zsnap_arr
+__zsnap_arr=( "\${(@f)"\$( "zle" "-la" )"}" )
+for __zsnap_key in \${__zsnap_arr[@]}; do
+    [[ "\${__zsnap_key[1]}" != "." ]] && zle -D "\$__zsnap_key"
+done
+EOF
+
+zle -lL
+
+echo "builtin setopt aliases"
+
+# vim:ft=zsh
