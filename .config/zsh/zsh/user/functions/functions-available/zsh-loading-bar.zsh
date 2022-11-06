@@ -40,30 +40,31 @@ function rainbowColor(){
   [[ $h -eq 5 ]] && echo "255 0 $q"
 }
 
-## Original
-for i in $(seq 0 127);      do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
-for i in $(seq 255 -1 128); do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
-for i in $(seq 0 127);      do setBackgroundColor 0 $i 0; echo -n " ";  done; resetOutput
-for i in $(seq 255 -1 128); do setBackgroundColor 0 $i 0; echo -n " ";  done; resetOutput
-for i in $(seq 0 127);      do setBackgroundColor 0 0 $i; echo -n " ";  done; resetOutput
-for i in $(seq 255 -1 128); do setBackgroundColor 0 0 $i; echo -n " ";  done; resetOutput
-for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput
-for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput
+function zsh-rainbow-loading-bar(){
+  ## Original
+  for i in $(seq 0 127);      do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
+  for i in $(seq 255 -1 128); do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
+  for i in $(seq 0 127);      do setBackgroundColor 0 $i 0; echo -n " ";  done; resetOutput
+  for i in $(seq 255 -1 128); do setBackgroundColor 0 $i 0; echo -n " ";  done; resetOutput
+  for i in $(seq 0 127);      do setBackgroundColor 0 0 $i; echo -n " ";  done; resetOutput
+  for i in $(seq 255 -1 128); do setBackgroundColor 0 0 $i; echo -n " ";  done; resetOutput
+  for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput
+  for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput
 
-## Rewrite on the same line
-for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  ## Rewrite on the same line
+  for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 0 127);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 255 -1 128); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
 
-## Rewrite on the same line, but trying to get the width correct
-for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
-
+  ## Rewrite on the same line, but trying to get the width correct
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+}
 
 ## Draw line across entire terminal
 # printf '%.s─' $(seq 0 $(tput cols))
