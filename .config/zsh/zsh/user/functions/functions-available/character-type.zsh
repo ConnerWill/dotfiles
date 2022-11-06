@@ -5,12 +5,12 @@ character-type(){
   assoc=('[0-9]' digit '[a-zA-Z]' letter '[^0-9a-zA-Z]' neither)
   inputarray=( ${(ie)*} )
 
-  echo "input array ${inputarray[(ie)]} \n len: ${#inputarray}"
+  echo "Input Array ${inputarray[(ie)]}\nArray length: ${#inputarray}\n"
 
   if (( ${#inputarray} > 0 )); then
     for inputchar in "${inputarray[@]}";
-    do 
-      echo "${inputchar}" 
+    do
+      echo "${inputchar}"
       case ${inputchar} in
         ([0-9]) print digit
         ;;

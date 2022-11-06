@@ -40,7 +40,7 @@ function rainbowColor(){
   [[ $h -eq 5 ]] && echo "255 0 $q"
 }
 
-function zsh-rainbow-loading-bar(){
+function zsh-loading-bar(){
   ## Original
   for i in $(seq 0 127);      do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
   for i in $(seq 255 -1 128); do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
