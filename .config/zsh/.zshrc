@@ -94,6 +94,7 @@ remove_old_timing_logs
 
 [ -n "$INHERIT_ENV" ] && return 0
 
+
 ### {{{ VERBOSE LOADING
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
@@ -261,20 +262,19 @@ function _zshinittmux(){
 # _zshinittmux
 unfunction _zshinittmux
 ### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
+#
+# rm -f stopspinning > /dev/null 2>&1
+# . $HOME/scripts/bash/progress-bars/spinners/spinner-orig/spinner.sh
+# SPINNER_SYMBOLS="UNI_PIPES" #"ASCII_PLUS" #"WIDE_UNI_GREYSCALE"
+# printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
+# (spinner &)
+#
+# echo -ne "\e[?25l" ## Hide Cursor
+#echo -ne "\e[1A" ## Move curser up 1 line
+#echo -ne "\e[2K" ## Clear line
+#echo -ne "\r"    ## Move cursor to beginning of line
 
-## Hide Cursor
-# echo -ne "\e[?25l"
-
-## Move curser up 1 line
-echo -ne "\e[1A"
-
-## Clear line
-echo -ne "\e[2K"
-
-## Move cursor to beginning of line
-echo -ne "\r"
-
-printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m"
+#printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
 
 function _loading_bar(){
   local bar_color sleep_time
@@ -294,20 +294,6 @@ function _loading_bar(){
     sleep $sleep_time
   done
 }
-
-# bar_color='\e[0;48;5;46m'
-# sleep_time=0.05
-# for ((k = 0; k <= 10 ; k++)); do
-#   printf ""
-#   for ((i = 0 ; i <= k; i++)); do printf "${bar_color}   \e[0m"; done
-#   for ((j = i ; j <= 10 ; j++)); do printf "   "; done
-#   v=$((k * 10))
-#   printf " "
-#   echo -n "$v %" $'\r'
-#   sleep $sleep_time
-# done
-
-# ~/.bin/revolver -s dots2 start "Loading zsh"
 
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
 ### Clear Screen
@@ -346,38 +332,22 @@ fi
 
 
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
-
 _zshloadendclear
 #: Clear Screen After Loading
-
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-# ~/.bin/revolver -s dots2 stop "Loading zsh"
-## Restore Cursor
-#echo -ne "\e[?25h"
-
-_loading_bar
-
-## Clear line
-echo -ne "\e[2K"
-
-## Move cursor to beginning of line
-echo -ne "\r"
-
-
-
-
-
+touch stopspinning
+#_loading_bar
+#echo -ne "\e[?25h" ## Restore Cursor
+#echo -ne "\e[2K"   ## Clear line
+#echo -ne "\r"      ## Move cursor to beginning of line
 
 # {{{ Profile report
-
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
   zprof # >! ~/zshrc.zprof
   #exit
 fi
-
 # }}}
-
 
 
 ### :::::::::::::: ZSHRC EXIT TRAPS ::::::::::::: ### {{{
@@ -389,9 +359,4 @@ fi
       #source "${ZDOTDIR}/.zlogout"
     #fi
   #}
-
 ### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
-
-
-
-

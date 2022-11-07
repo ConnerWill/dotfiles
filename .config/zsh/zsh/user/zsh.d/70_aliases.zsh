@@ -2,10 +2,13 @@
 
 timelogging_start "70"
 
+alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
+
 alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 alias e="$EDITOR"
 alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
+alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
 
 ### [=]==================================[=]
 ### [~]............ cd
@@ -425,6 +428,10 @@ alias slic3r='prusa-slicer &'
 ### [=]==================================[=]
 ### [~]............. DOCKER
 ### [=]==================================[=]
+
+
+
+alias docker-run-zsh='docker run -it archlinux sh -c "pacman -Syv --noconfirm zsh git vim && chsh --shell $(which zsh) && touch ~/.zshrc && echo "WyAtZiAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIiBdICYmIHNvdXJjZSAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIgoKZWNobyAtZSAiXG5cblxlWzA7MTszODs1OzIwMW1XQVpaWlpBUFBQUFxlWzBtXG5cbiIKCmFsaWFzIGxzPSJscyAtLWNvbG9yPWFsd2F5cyIKYWxpYXMgbD0ibHMgLS1jb2xvcj1hbHdheXMgLUEgLTEiCmFsaWFzIGxsPSJscyAtLWNvbG9yPWFsd2F5cyAtQSAtbCIKCiMgRXhhbXBsZSBpbnN0YWxsIHBsdWdpbnMKemFwcGx1ZyAienNoLXVzZXJzL3pzaC1hdXRvc3VnZ2VzdGlvbnMiCnphcHBsdWcgInpzaC11c2Vycy96c2gtc3ludGF4LWhpZ2hsaWdodGluZyIKemFwcGx1ZyAiaGxpc3NuZXIvenNoLWF1dG9wYWlyIgp6YXBwbHVnICJ6YXAtenNoL3ZpbSIKCiMgRXhhbXBsZSB0aGVtZQp6YXBwbHVnICJ6YXAtenNoL3phcC1wcm9tcHQiCgojIEV4YW1wbGUgaW5zdGFsbCBjb21wbGV0aW9uCnphcGNtcCAiZXNjL2NvbmRhLXpzaC1jb21wbGV0aW9uIiBmYWxzZQo=" | base64 -d >> ~/.zshrc && git clone https://github.com/zap-zsh/zap.git ~/zap && cd ~/zap && sh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.sh) && source ~/zap/zap.zsh && exec zsh; sleep 1; exec zsh"'
 alias docker-run-interactive="docker run --interactive --tty"
 alias docker-lazy='lazydocker'
 alias dockers="docker search --no-trunc"
@@ -452,6 +459,8 @@ alias xterm='xterm -fg white -bg black -cr red -bd blue'
 alias ssh-audit='$HOME/.local/lib/python3.9/site-packages/ssh_audit/ssh_audit.py'
 alias ssh-copypublickey='copysshkeypublic'
 alias ssh-showpublickey='cat ~/.ssh/id_rsa.pub'
+alias sshuttle-connerwill="sudo sshuttle --verbose --dns --remote connerwill.com 0.0.0.0/0"
+alias sshuttle-bigchugus="sudo sshuttle --verbose --dns --remote bigchungus 0.0.0.0/0"
 alias tmux-ssh="tmux new-session ssh"
 
 ### [=]==================================[=]
@@ -559,5 +568,7 @@ alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote 
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
+
+alias hugo-show-demo-site='clear; cd $HOME/temporary/hugo-test-teamaccounting/piko/exampleSite && firefox "http://localhost:1313" & hugo server --themesDir ../..'
 
 timelogging_end 70

@@ -28,19 +28,25 @@ function UpOneLine(){
 ## $red $green and $blue are integers
 ## ranging between 0 and 255 inclusive
 function rainbowColor(){ 
-  let h=$1/43
-  let f=$1-43*$h
-  let t=$f*255/43
-  let q=255-t
+  # let h=$1/43
+  # let f=$1-43*$h
+  # let t=$f*255/43
+  # let q=255-t
+  #
+  h=$(( $1 / 43 ))
+  f=$(( $1 - 43 * h ))
+  t=$(( f * 255 / 43 ))
+  q=$(( 255 - t ))
   [[ $h -eq 0 ]] && echo "255 $t 0"
   [[ $h -eq 1 ]] && echo "$q 255 0"
   [[ $h -eq 2 ]] && echo "0 255 $t"
   [[ $h -eq 3 ]] && echo "0 $q 255"
   [[ $h -eq 4 ]] && echo "$t 0 255"
   [[ $h -eq 5 ]] && echo "255 0 $q"
+  sleep 0.01
 }
 
-function zsh-loading-bar(){
+function zsh-rainbow-loading-bar(){
   ## Original
   for i in $(seq 0 127);      do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput
   for i in $(seq 255 -1 128); do setBackgroundColor $i 0 0; echo -en " "; done; resetOutput

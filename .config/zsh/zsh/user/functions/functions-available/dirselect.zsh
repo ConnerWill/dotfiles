@@ -11,7 +11,7 @@ function dirselect() {
   bar="━"
   sleeptime=0.5
   integer i=0
-  tput smcup
+  # tput smcup
   dirs -p | while read -r dir
   do
     local num="${$(printf "%-4d " ${i})/ /.}"
