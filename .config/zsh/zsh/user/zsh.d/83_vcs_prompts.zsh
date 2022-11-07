@@ -40,7 +40,6 @@ setopt prompt_subst
         PROMPTATSYMBOL='%F{201}@%f'
        PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
 
-
 typeset -A distro_logos
 typeset -A distro_logo_color
 #shellcheck disable=2190,2034
@@ -366,6 +365,11 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
 function define_combine_prompt(){
+  if [[ $(hostname) == "localhost" ]] && [[ $(whoami)   == "u0_a119"   ]]; then
+    #PROMPTUSERNAME='%F{99}user%f'
+    PROMPTHOSTNAME='%F{99}termux%f'
+  fi
+
       PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
       PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
            PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
