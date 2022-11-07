@@ -100,13 +100,6 @@ return packer.startup(function(use)
 
 	use ("Pocco81/AbbrevMan.nvim")
 
-	-- shell
-	use({ "Shougo/deol.nvim", require("cmp").setup({
-		sources = {
-			{ name = "deol" },
-		},
-	}) })
-
 	-- tmux
 	use({ "andersevenrud/cmp-tmux", require("cmp").setup({
 		sources = {
@@ -233,13 +226,16 @@ return packer.startup(function(use)
 	use "weirongxu/coc-explorer"
 	use "neoclide/coc-highlight"
 
+	-- shell
+	use({ "Shougo/deol.nvim", require("cmp").setup({
+		sources = {
+			{ name = "deol" },
+		},
+	}) })
+
 	-- zsh completions
 	use({ "Valodim/vim-zsh-completion" })
-
-	--zsh
-	use({
-		"tamago324/cmp-zsh",
-	})
+	use({ "tamago324/cmp-zsh"	})
 
 	-- Scrolling
 	use("karb94/neoscroll.nvim")
