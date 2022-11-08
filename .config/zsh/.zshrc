@@ -336,7 +336,7 @@ _zshloadendclear
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-touch stopspinning
+# touch stopspinning
 #_loading_bar
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[2K"   ## Clear line

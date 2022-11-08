@@ -39,8 +39,8 @@ function comp_setup () {
     zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle ':completion:*'                              completer _complete _match _approximate
     zstyle ':completion:*'                              completer _complete _match _approximate
-    zstyle ':completion:*'                              format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
-    zstyle ':completion:*'                              format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
+    zstyle ':completion:*'                              format ' %K{black}%F{blue}━━━ %d ━━━%f%k'
+    zstyle ':completion:*'                              format ' %K{black}%F{blue}░░▒▒▓▓██ %d ██▓▓▒▒░░%f%k'
     zstyle ':completion:*'                              group-name ''
     zstyle ':completion:*'                              group-name ''
     zstyle ':completion:*'                              list-colors ${(s.:.)LS_COLORS}
@@ -48,7 +48,6 @@ function comp_setup () {
     zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
     zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
     zstyle ':completion:*'                              matcher-list 'm:{a-z}={A-Z}'                                    ## Match uppercase from lowercase
-    zstyle ':completion:*'                              menu select
     zstyle ':completion:*'                              menu select
     zstyle ':completion:*'                              rehash true
     zstyle ':completion:*'                              rehash true
@@ -68,8 +67,7 @@ function comp_setup () {
     zstyle ':completion:*:correct:*'                    insert-unambiguous true                                         ## Start menu completion only if it could find no unambiguous initial string
     zstyle ':completion:*:correct:*'                    original true
     zstyle ':completion:*:corrections'                  format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
-    zstyle ':completion:*:corrections'                  format ' %F{green}-- %d (errors: %e) --%f'
-    zstyle ':completion:*:corrections'                  format ' %F{green}-- %d (errors: %e) --%f'
+    zstyle ':completion:*:corrections'                  format ' %F{yellow}-- %d (errors: %e) %f'
     zstyle ':completion:*:default'                      list-colors ${(s.:.)LS_COLORS}                                  ## Activate color-completion
     zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
     zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
