@@ -83,16 +83,50 @@ PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
 if [[ "${DISTRO}" == "Android" ]]; then
   function _rprompt_termux_battery(){
+    typeset -A battery_icon_array
+    typeset -A battery_charging_icon_array
+    typeset -A battery_horizontal_icon_array
+
+#shellcheck disable=2190,2034
+ # Vertical battery
+    battery_icon_array=(
+      100   ""
+       90   ""
+       80   ""
+       70   ""
+       60   ""
+       50   ""
+       40   ""
+       30   ""
+       20   ""
+       10   ""
+        0   ""
+    )
 
     #shellcheck disable=2190,2034
-    typeset -A distro_logo_color
-    # battery_icon_array=(
-    #
+    # Vertical Charging battery
+    battery_charging_icon_array=(
+      100   ""
+       90   ""
+       80   ""
+       60   ""
+       40   ""
+       30   ""
+       20   ""
+       10   ""
+     )
 
-#
+    #shellcheck disable=2190,2034
+    # horizontal battery
+    battery_horizontal_icon_array=(
+      100   ""
+       75   ""
+       50   ""
+       25   ""
+        0   ""
+    )
 
-    # )
-
+    # echo "${battery_charging_icon_array[$ZVM_CURSOR_UNDERLINE]}"
 
     export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
     TERMUX_BATTERY_STATUS="$(termux-battery-status)"
