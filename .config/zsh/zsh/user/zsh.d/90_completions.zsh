@@ -31,45 +31,35 @@ unset tmp
 ZCOMPCACHE_PATH=${ZCOMPCACHE_PATH:-${XDG_CACHE_HOME:-~/.cache}zsh/.cache/zcompcache}
 [[ ! -d ${ZCOMPCACHE_PATH:h} ]] && command mkdir -pv "${ZCOMPCACHE_PATH:h}"
 
+
+
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
     [[ -z "${NOMENU}" ]] && zstyle ':completion:*' menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
     zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle ':completion:*'                              completer _complete _match _approximate
-    zstyle ':completion:*'                              format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
-    zstyle ':completion:*'                              group-name ''
-    zstyle ':completion:*'                              list-colors ${(s.:.)LS_COLORS}
-    zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-    zstyle ':completion:*'                              menu select
-    zstyle ':completion:*'                              rehash true
-    zstyle ':completion:*'                              use-cache true
-    zstyle ':completion:*'                              verbose yes
-    zstyle ':completion:*:*:cdr:*:*'                    menu selection
-    zstyle ':completion:*:corrections'                  format ' %F{green}-- %d (errors: %e) --%f'
-    zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
-    zstyle ':completion:*:descriptions'                 format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
-    zstyle ':completion:*:functions'                    ignored-patterns '(_*|pre(cmd|exec))'
-    zstyle ':completion:*:match:*'                      original only
-    zstyle ':completion:*:matches'                      group 'yes'
-    zstyle ':completion:*:messages'                     format ' %F{yellow}⬛⬛ %d ⬛⬛%f'
-    zstyle ':completion:*:options'                      auto-description '%d'
-    zstyle ':completion:*:options'                      description 'yes'
-    zstyle ':completion:*:warnings'                     format ' %F{red}-- no matches found --%f'
-    zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle ':completion:*'                              completer _complete _match _approximate
     zstyle ':completion:*'                              format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
+    zstyle ':completion:*'                              format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
+    zstyle ':completion:*'                              group-name ''
     zstyle ':completion:*'                              group-name ''
     zstyle ':completion:*'                              list-colors ${(s.:.)LS_COLORS}
+    zstyle ':completion:*'                              list-colors ${(s.:.)LS_COLORS}
+    zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
     zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
     zstyle ':completion:*'                              matcher-list 'm:{a-z}={A-Z}'                                    ## Match uppercase from lowercase
     zstyle ':completion:*'                              menu select
+    zstyle ':completion:*'                              menu select
     zstyle ':completion:*'                              rehash true
-    zstyle ':completion:*'                              use-cache yes
+    zstyle ':completion:*'                              rehash true
     zstyle ':completion:*'                              use-cache true
+    zstyle ':completion:*'                              use-cache true
+    zstyle ':completion:*'                              use-cache yes
     zstyle ':completion:*'                              verbose true                                                    ## Provide verbose completion information
     zstyle ':completion:*'                              verbose yes                                                     ## Provide verbose completion information
     zstyle ':completion:*:*:-subscript-:*'              tag-order indexes parameters                                    ## Offer indexes before parameters in subscripts
     zstyle ':completion:*:*:cd:*:directory-stack'       menu yes select                                                 ## Automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
+    zstyle ':completion:*:*:cdr:*:*'                    menu selection
     zstyle ':completion:*:*:cdr:*:*'                    menu selection
     zstyle ':completion:*:*:zcompile:*'                 ignored-patterns '(*~|*.zwc)'                                   ## Define files to ignore for zcompile
     zstyle ':completion:*:approximate:'                 max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'      ## Allow one error for every three characters typed in approximate completer
@@ -79,11 +69,16 @@ function comp_setup () {
     zstyle ':completion:*:correct:*'                    original true
     zstyle ':completion:*:corrections'                  format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
     zstyle ':completion:*:corrections'                  format ' %F{green}-- %d (errors: %e) --%f'
+    zstyle ':completion:*:corrections'                  format ' %F{green}-- %d (errors: %e) --%f'
     zstyle ':completion:*:default'                      list-colors ${(s.:.)LS_COLORS}                                  ## Activate color-completion
+    zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
     zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
     zstyle ':completion:*:descriptions'                 format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'                ## Format on completion
     zstyle ':completion:*:descriptions'                 format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
+    zstyle ':completion:*:descriptions'                 format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
+    zstyle ':completion:*:descriptions'                 format '%U%B%d%b%u'
     zstyle ':completion:*:expand:*'                     tag-order all-expansions                                        ## Insert all expansions for expand completer
+    zstyle ':completion:*:functions'                    ignored-patterns '(_*|pre(cmd|exec))'
     zstyle ':completion:*:functions'                    ignored-patterns '(_*|pre(cmd|exec))'
     zstyle ':completion:*:history-words'                list false
     zstyle ':completion:*:history-words'                menu yes                                                        ## Activate menu
@@ -93,15 +88,21 @@ function comp_setup () {
     zstyle ':completion:*:manuals'                      separate-sections true                                          ## Complete manual by their section
     zstyle ':completion:*:manuals.*'                    insert-sections   true
     zstyle ':completion:*:match:*'                      original only
+    zstyle ':completion:*:match:*'                      original only
+    zstyle ':completion:*:matches'                      group 'yes'
     zstyle ':completion:*:matches'                      group 'yes'                                                     ## Separate matches into groups
+    zstyle ':completion:*:messages'                     format ' %F{yellow}⬛⬛ %d ⬛⬛%f'
     zstyle ':completion:*:messages'                     format ' %F{yellow}⬛⬛ %d ⬛⬛%f'
     zstyle ':completion:*:messages'                     format '%d'
     zstyle ':completion:*:options'                      auto-description '%d'
+    zstyle ':completion:*:options'                      auto-description '%d'
+    zstyle ':completion:*:options'                      description 'yes'
     zstyle ':completion:*:options'                      description 'yes'                                               ## Describe options in full
     zstyle ':completion:*:processes'                    command 'ps -au$USER'                                           ## On processes completion complete all user processes
     zstyle ':completion:*:processes-names'              command 'ps c -u ${USER} -o command | uniq'                     ## provide more processes in completion of programs like killall:
     zstyle ':completion:*:urls'                         local 'www' '/var/www/' 'public_html'                           ## Command for process lists, the local web server details and host completion
     zstyle ':completion:*:warnings'                     format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'               ## Set format for warnings
+    zstyle ':completion:*:warnings'                     format ' %F{red}-- no matches found --%f'
     zstyle ':completion:*:warnings'                     format ' %F{red}-- no matches found --%f'
     zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'                                           ## Ignore completion functions for commands you don't have:
     zstyle ':completion:correct:'                       prompt '🖳 correct to: %e'
@@ -125,16 +126,16 @@ function comp_setup () {
     else
         setopt correct
         zstyle -e ':completion:*' completer '
-            if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-                _last_try="$HISTNO$BUFFER$CURSOR"
-                reply=(_complete _match _ignored _prefix _files)
+        if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+            _last_try="$HISTNO$BUFFER$CURSOR"
+            reply=(_complete _match _ignored _prefix _files)
+        else
+            if [[ $words[1] == (rm|mv) ]] ; then
+                reply=(_complete _files)
             else
-                if [[ $words[1] == (rm|mv) ]] ; then
-                    reply=(_complete _files)
-                else
-                    reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-                fi
-            fi'
+                reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
+            fi
+        fi'
     fi
 
     ## Host Completion
