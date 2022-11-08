@@ -33,6 +33,7 @@ setopt prompt_subst
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
 ### {{{ STANDARD PROMPT
+unset RPS1
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
@@ -79,6 +80,21 @@ distro_logo_color=(
 [[ -z "${DISTRO}" ]] && DISTRO="other"
 PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
+
+if [[ "${DISTRO}" == "Android" ]]; then
+  function _rprompt_termux_battery(){
+    export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
+    TERMUX_BATTERY_STATUS="$(termux-battery-status)"
+    TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
+    RPROMPT="${TERMUX_BATTERY_PERCENTAGE}\%"
+    RPS1="${RPS1} ${RPROMPT}"
+  }
+  _rprompt_termux_battery
+fi
+
+
+
+
 ## CHECK TERMINAL SUPPORTS 256 colors, if not, load zshmodule "zsh/nearcolor"
 ## The zsh/nearcolor module replaces colours specified as hex triplets with the nearest
 ## colour in the 88 or 256 colour palettes that are widely used by terminal emulators.
@@ -101,7 +117,7 @@ function _rprompt_set_ssh(){
     RPROMPT_SSH_COLOR_RESET='%f'
     RPROMPT_SSH="${RPROMPT_SSH_COLOR}${SSH_CLIENT}${RPROMPT_SSH_COLOR_RESET}"
     RPROMPT="${RPROMPT_SSH}"
-    RPS1="${RPROMPT}"
+    RPS1="${RPS1} ${RPROMPT}"
     export RPROMPT RPS1
   fi
 }
