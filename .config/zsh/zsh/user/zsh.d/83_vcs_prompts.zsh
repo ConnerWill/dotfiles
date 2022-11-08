@@ -1,6 +1,6 @@
 # shellcheck disable=2148,2016,2182,1087,2154
 
-timelogging_start "83"
+#timelogging_start "83"
 
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
@@ -84,10 +84,13 @@ PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 if [[ "${DISTRO}" == "Android" ]]; then
   function _rprompt_termux_battery(){
 
-    typeset -A distro_logo_color
     #shellcheck disable=2190,2034
+    typeset -A distro_logo_color
     # battery_icon_array=(
-   #  #
+    #
+
+#
+
     # )
 
 
@@ -388,36 +391,49 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
 ### [===============================]
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
-function define_combine_prompt(){
-  if [[ $(hostname) == "localhost" ]] && [[ $(whoami)   == "u0_a119"   ]]; then
-    #PROMPTUSERNAME='%F{99}user%f'
-    PROMPTHOSTNAME='%F{99}termux%f'
-  fi
 
-      PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
-      PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
-           PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
- PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
-           PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-  PROMPT="$PROMPT_FULL"
-     PS1="$PROMPT_FULL"
-    export PROMPT PS1
-}
-if define_combine_prompt; then
-  unfunction define_combine_prompt
-else
+
+function replacehostnameinprompt(){
+## Replace 'localhost' with a different "hostname" in the prompt
+  local newhostname
+  newhostname="termux"
+  [[ $(uname -n) == "archlinux" && $(whoami) == "u0_a119" ]] && PROMPTHOSTNAME='%F{99}$newhostname%f'
+  export PROMPTHOSTNAME
+}; replacehostnameinprompt; unset -f replacehostnameinprompt
+
+function backup_prompt_incase_of_failure(){
+  ## Set a prompt in case of failure
   printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
-    if autoload -Uz promptinit && promptinit; then
-      if autoload -Uz colors && colors; then
-        prompt fire blue magenta blue black green cyan
-      else
-        prompt adam2
-      fi
+  if [[ autoload -Uz promptinit && promptinit ]] && [[ autoload -Uz colors && colors ]]; then
+    return 0
+  else
+    if prompt fire blue magenta blue black green cyan || prompt adam2; then
+      return 0
     else
-      printf "\e[0;1;38;5;196m The backup prompt failed to load ... >:(\e[0;1;38;5;201m\n\n\tWell... you are on your own now, buddy :0\n" \
-      export PROMPT='%F{196}(╯°□°）╯︵ ┻━┻%f %F{93}[>:%f ' \
-      export RPROMPT='%F{87}(⌐■_■)%f  %F{46}¯\_(ツ)_/¯%f'
+      printf "\e[0;1;38;5;196m The backup prompt failed to load ... >:(\e[0;1;38;5;201m\n\n\tWell... you are on your own now, buddy :0\n"
+      PROMPT='%F{196}(╯°□°）╯︵ ┻━┻%f %F{93}[>:%f ' \
+      RPROMPT='%F{87}(⌐■_■)%f  %F{46}¯\_(ツ)_/¯%f'
+      export PROMPT RPROMPT
     fi
-fi
+  fi
+}
 
-timelogging_end 83
+function define_combine_prompt(){
+  ## 'Stich' all parts of the PS1 (prompt) together
+  export PROMPT PS1
+  PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
+  PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
+  PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
+  PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
+  PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+  PROMPT="$PROMPT_FULL"
+  PS1="$PROMPT_FULL"
+}
+
+define_combine_prompt \
+  && unset -f define_combine_prompt \
+  || backup_prompt_incase_of_failure
+unset -f backup_prompt_incase_of_failure
+
+
+#timelogging_end 83

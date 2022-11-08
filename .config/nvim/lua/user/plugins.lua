@@ -234,8 +234,8 @@ return packer.startup(function(use)
 	}) })
 
 	-- zsh completions
-	use({ "Valodim/vim-zsh-completion" })
 	use({ "tamago324/cmp-zsh"	})
+	use({ "Valodim/vim-zsh-completion" })
 
 	-- Scrolling
 	use("karb94/neoscroll.nvim")

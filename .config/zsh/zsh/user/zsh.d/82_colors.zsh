@@ -1,7 +1,8 @@
+
 timelogging_start "82"
 
 function _zsh_256color_debug(){
-	[[ -n "${ZSH_256COLOR_DEBUG}" ]] && echo "zsh-256color: $@" >&2
+	[[ -n "${ZSH_256COLOR_DEBUG}" ]] && echo "zsh-256color: ${*}" >&2
 }
 
 function _zsh_terminal_set_256color(){
