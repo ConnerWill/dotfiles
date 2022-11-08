@@ -83,6 +83,14 @@ PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
 if [[ "${DISTRO}" == "Android" ]]; then
   function _rprompt_termux_battery(){
+
+    typeset -A distro_logo_color
+    #shellcheck disable=2190,2034
+    # battery_icon_array=(
+   #  #
+    # )
+
+
     export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
     TERMUX_BATTERY_STATUS="$(termux-battery-status)"
     TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
