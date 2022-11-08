@@ -36,3 +36,11 @@ require "user.vim-illuminate"
 require "user.abbrev-man"
 -- require "user.twilight"
 -- require "user.snippets"
+
+
+
+
+-- need to install luacheck selene and ec
+--
+--   $  yay -Syv--needed --noconfirm luacheck editorconfig-checker selene-linter
+--
