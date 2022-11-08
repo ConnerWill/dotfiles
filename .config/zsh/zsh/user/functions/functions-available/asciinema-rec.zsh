@@ -1,4 +1,4 @@
-function asciinema-rec(){
+function asciinemarec(){
 	local USERINPUT ASCIINEMA_OUTPUT_DIR ASCIINEMA_OUTPUT_DIR_DEFAULT ASCIINEMA_OUTPUT_NAME ASCIINEMA_OUTPUT_PATH
 	command -v asciinema >/dev/null 2>&1 \
 		|| printf "asciinema is not installed :(\n" \
@@ -6,7 +6,7 @@ function asciinema-rec(){
 	## Define output directory and file name
 	## If user passes input into this function, that input will be used as 'ASCIINEMA_OUTPUT_PATH'
 	USERINPUT="${*}"
-	ASCIINEMA_OUTPUT_DIR_DEFAULT="${PWD}"
+	ASCIINEMA_OUTPUT_DIR_DEFAULT="${HOME}/asciinema"
 	ASCIINEMA_OUTPUT_NAME_DEFAULT="$(date +%Y%m%d_%H%M%S)-asciinema-terminal-recording.yml"
 	ASCIINEMA_OUTPUT_DIR="${ASCIINEMA_OUTPUT_DIR:-${ASCIINEMA_OUTPUT_DIR_DEFAULT:-${PWD}}}"
 	ASCIINEMA_OUTPUT_PATH="${USERINPUT:-${ASCIINEMA_OUTPUT_DIR/${ASCIINEMA_OUTPUT_NAME_DEFAULT}}}"
@@ -19,7 +19,7 @@ function asciinema-rec(){
 			|| ASCIINEMA_OUTPUT_DIR="${ASCIINEMA_OUTPUT_DIR_DEFAULT}" \
 			|| printf "Cannot create directory. Saving recording to current directory:\t%s\n" "${ASCIINEMA_OUTPUT_PATH}"
 	fi
-	printf "\n\n\n\#[0;1;38;5;9mStarting recording\e[0m"; sleep 1; printf "\t3 "; sleep 1; printf "\t2"; sleep 1; printf "\t1"; sleep 1; printf "\n"
+	printf "\n\n\n\e[0;1;38;5;9mStarting recording\e[0m"; sleep 1; printf "\t3 "; sleep 1; printf "\t2"; sleep 1; printf "\t1"; sleep 1; printf "\n"
 	if asciinema rec "${OUTPUT_PATH_TEMP}"; then
 		printf "Re-rendering recording\n"
 		asciinema rec "asciinema play -s 5 -i 2 ${OUTPUT_PATH_TEMP}" -t "${ASCIINEMA_OUTPUT_NAME}" "${ASCIINEMA_OUTPUT_PATH}" \
