@@ -131,24 +131,7 @@ alias rmcwd="rmcdir"
 alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
 alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
 alias rm-license="rm -I -v LICENSE"
-function rm_git(){
-  local color_red color_yellow color_green color_purple color_cyan
-  color_red='\e[0;38;5;196m'
-  color_yellow='\e[0;38;5;190m'
-  color_green='\e[0;38;5;46m'
-  color_purple='\e[0;38;5;93m'
-  color_cyan='\e[0;1;38;5;87m'
-  printf "\n${color_red}This will remove all ${color_green}'.git' ${color_red}directories below ${color_purple}'%s'\n" "$(pwd)"
-  printf "\n${color_yellow}Press ${color_cyan}<ENTER>${color_yellow} to confirm\e[0m: "
-  read -r -s; printf "\n"
-  fd                      \
-    --regex '\.git'       \
-    --exclude='*config*'  \
-    --exclude='*hook*'    \
-    --type directory      \
-    --hidden              \
-    --exec rm '{}' --recursive --verbose
-}; alias rm-git="rm_git"
+
 
 ### [=]==================================[=]
 ### [~]............ mkdir
@@ -572,3 +555,4 @@ alias count='find . -type f | wc -l'
 alias hugo-show-demo-site='clear; cd $HOME/temporary/hugo-test-teamaccounting/piko/exampleSite && firefox "http://localhost:1313" & hugo server --themesDir ../..'
 
 timelogging_end 70
+alias git-url="git config --local --get remote.origin.url"

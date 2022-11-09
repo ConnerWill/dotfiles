@@ -1,0 +1,1 @@
+../functions-available/rm-git.zsh

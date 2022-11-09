@@ -82,6 +82,7 @@ PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
 
 if [[ "${DISTRO}" == "Android" ]]; then
+ #clear; for i in $(seq 100 -10 0); do ~/battery.zsh $i && sleep 0.5 && clear; done
   function _rprompt_termux_battery(){
     export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
     typeset -A battery_icon_array
@@ -91,58 +92,53 @@ if [[ "${DISTRO}" == "Android" ]]; then
     #shellcheck disable=2190,2034
     # Vertical battery
     battery_icon_array=(
-      100   ""
-       90   ""
-       80   ""
-       70   ""
-       60   ""
-       50   ""
-       40   ""
-       30   ""
-       20   ""
-       10   ""
-        0   ""
+      "100" ""
+      "90"  ""
+      "80"  ""
+      "70"  ""
+      "60"  ""
+      "50"  ""
+      "40"  ""
+      "30"  ""
+      "20"  ""
+      "10"  ""
+      "0"   ""
     )
 
     #shellcheck disable=2190,2034
     # Vertical Charging battery
     battery_charging_icon_array=(
-      100   ""
-       90   ""
-       80   ""
-       60   ""
-       40   ""
-       30   ""
-       20   ""
-       10   ""
-     )
+      "100" ""
+      "90"  ""
+      "80"  ""
+      "60"  ""
+      "40"  ""
+      "30"  ""
+      "20"  ""
+      "10"  ""
+    )
 
     #shellcheck disable=2190,2034
     # horizontal battery
     battery_horizontal_icon_array=(
-      100   ""
-       75   ""
-       50   ""
-       25   ""
-        0   ""
+      "100" ""
+      "75"  ""
+      "50"  ""
+      "25"  ""
+      "0"   ""
     )
 
 
-    TERMUX_BATTERY_STATUS="$(termux-battery-status)"
-    TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
+    #TERMUX_BATTERY_STATUS="$(termux-battery-status)"
+    #TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
 
-    echo "${battery_charging_icon_array[${TERMUX_BATTERY_STATUS}]}"
+    TERMUX_BATTERY_PERCENTAGE="${*}"
 
+    BATT_ICON="${battery_charging_icon_array[$TERMUX_BATTERY_PERCENTAGE]}"
+    printf "Batt: %s\n" "${BATT_ICON}"
 
-
-#    RPROMPT="${TERMUX_BATTERY_PERCENTAGE}\%"
-#    RPS1="${RPS1} ${RPROMPT}"
-   }; _rprompt_termux_battery
-
+   }; _rprompt_termux_battery "${@}"
 fi
-
-
-
 
 ## CHECK TERMINAL SUPPORTS 256 colors, if not, load zshmodule "zsh/nearcolor"
 ## The zsh/nearcolor module replaces colours specified as hex triplets with the nearest
@@ -482,59 +478,4 @@ unset -f backup_prompt_incase_of_failure
 
 
 #timelogging_end 83
- #clear; for i in $(seq 100 -10 0); do ~/battery.zsh $i && sleep 0.5 && clear; done
-  function _rprompt_termux_battery(){
-    export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
-    typeset -A battery_icon_array
-    typeset -A battery_charging_icon_array
-    typeset -A battery_horizontal_icon_array
 
-    #shellcheck disable=2190,2034
-    # Vertical battery
-    battery_icon_array=(
-      "100" ""
-      "90"  ""
-      "80"  ""
-      "70"  ""
-      "60"  ""
-      "50"  ""
-      "40"  ""
-      "30"  ""
-      "20"  ""
-      "10"  ""
-      "0"   ""
-    )
-
-    #shellcheck disable=2190,2034
-    # Vertical Charging battery
-    battery_charging_icon_array=(
-      "100" ""
-      "90"  ""
-      "80"  ""
-      "60"  ""
-      "40"  ""
-      "30"  ""
-      "20"  ""
-      "10"  ""
-    )
-
-    #shellcheck disable=2190,2034
-    # horizontal battery
-    battery_horizontal_icon_array=(
-      "100" ""
-      "75"  ""
-      "50"  ""
-      "25"  ""
-      "0"   ""
-    )
-
-
-    #TERMUX_BATTERY_STATUS="$(termux-battery-status)"
-    #TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
-
-    TERMUX_BATTERY_PERCENTAGE="${*}"
-
-    BATT_ICON="${battery_charging_icon_array[$TERMUX_BATTERY_PERCENTAGE]}"
-    printf "Batt: %s\n" "${BATT_ICON}"
-
-   }; _rprompt_termux_battery "${@}"
