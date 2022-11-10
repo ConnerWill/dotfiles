@@ -10,8 +10,7 @@ wdotf () {
 	if [[ "${1}" == "help" ]] || [[ "${1}" == "-h" ]]; then
 		printf "wdotf help : enter help msg here\n"
 	elif [[ "${1}" == "add-all" ]]; then
-		$(command -v git) --git-dir="${WDOTFILES}" --work-tree="${WDOTFILES_WORKTREE}" diff --name-only \
-			| xargs -I{} "sh -c "$(command -v git) --git-dir="${WDOTFILES}" --work-tree="${WDOTFILES_WORKTREE}" add --verbose "${WDOTFILES_WORKTREE}" /{}""
+		$(command -v git) --git-dir="${WDOTFILES}" --work-tree="${WDOTFILES_WORKTREE}" diff --name-only | xargs -I{} "sh -c "git --git-dir="${WDOTFILES}" --work-tree="${WDOTFILES_WORKTREE}" add --verbose "${WDOTFILES_WORKTREE}" /{}""
 	else
 		if [[ $# -gt 0 ]]; then
 			$(command -v git) --git-dir="${WDOTFILES}" --work-tree="${WDOTFILES_WORKTREE}" "${@}"
