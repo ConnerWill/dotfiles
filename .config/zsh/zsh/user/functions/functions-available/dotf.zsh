@@ -1,4 +1,4 @@
-odotf(){
+dotf(){
 	export DOTFILES DOTFILES_WORKTREE
 	local dotfiles_worktree dotfiles_git_dir
 
