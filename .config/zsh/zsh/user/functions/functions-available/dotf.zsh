@@ -12,7 +12,7 @@ dotf(){
 
 	elif [[ "${1}" == "add-all" ]]; then
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" diff --name-only \
-			| xargs -I{} "sh -c "$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" add --verbose "${DOTFILES_WORKTREE}" /{}""
+			| xargs -I{} sh -c "$(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} add -v ${HOME}/{}"
 
 	else
 		[[ $# -gt 0 ]] \
