@@ -551,8 +551,8 @@ alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote 
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
-
-alias hugo-show-demo-site='clear; cd $HOME/temporary/hugo-test-teamaccounting/piko/exampleSite && firefox "http://localhost:1313" & hugo server --themesDir ../..'
+alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
+alias ez="exec ${SHELL}"
 
 timelogging_end 70
 alias git-url="git config --local --get remote.origin.url"

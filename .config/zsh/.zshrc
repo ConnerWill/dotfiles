@@ -240,6 +240,8 @@ fi
 
 
 
+source ~/zsh-keybindings.zsh
+
 
 
 

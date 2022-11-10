@@ -151,23 +151,11 @@ alias list-colors-printf="listcolorsprintf"
 ### =============================
 
 function listcolorANSI(){
+	for code in {0..255}
+	do
+		echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
 
-
-
-
-    ## Pause For User Input
-    clear
-    echo -e "\n\e[38;5;189mPress \e[0m\e[38;5;9mENTER\e[0m\e[38;5;189m to display list of ANSI color codes ...\e[0m\n"
-    read
-    clear
-
-    ## Show More Colored Text
-    #  This will list more colors
-    for code in {0..255}
-    do
-        echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
-
-    done
+	done
 }
 
 alias list-colors-ANSI="listcolorANSI"
