@@ -2,17 +2,37 @@
 ### [=]===========================================================[=]
 ###	[~] -------------------- ZSH VARIABLES -----------------------[~]
 ### [=]===========================================================[=]
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export ZSHRC="$ZDOTDIR/.zshrc"
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+
+export ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+export ZSHRC="${ZSHRC:-${ZDOTDIR/.zshrc}}"
+
+export DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
+
+
+
+
+
+
+
+
+
+
+export LESSHISTFILE="${LESSHISTFILE:-${XDG_CACHE_HOME}/less/lesshist}"
+[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p "$(dirname "${LESSHISTFILE}")"
+
+export chpwd_recent_dirs="${chpwd_recent_dirs:-${XDG_CACHE_HOME}/zsg/.chpwd-recent-dirs}"
+
+## marked for removal
 export ZSHRC_USER="${ZSHRC}"
-export ZSHRC_GLOBAL="/etc/zsh/zshrc"
-export ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache"
-export COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME}/zsh/zcompdump}
-export DOTFILES="${HOME}/.dotfiles"
-export LESSHISTFILE="${XDG_CACHE_HOME:-${HOME}/.cache}/less/lesshist"
-[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p $(dirname "${LESSHISTFILE}")
+export ZSHRC_GLOBAL="${ZSHRC_GLOBAL:-/etc/zsh/zshrc}"
+## marked for removal
+
+
+
 
 ### [=]==================================[=]
 ### [~]........ TERM COLORS
@@ -120,7 +140,7 @@ export TEMPDIR="$HOME/temporary"
 AWESOMEWM_CONFIG_DIR="$XDG_CONFIG_HOME/awesome"
 [[ -d "$AWESOMEWM_CONFIG_DIR" ]] \
 	&& export AWESOMEWM_CONFIG_DIR \
-	&& export AWESOME_THEMES_PATH="$AWESOMEWM_CONFIG_DIR/themes" 
+	&& export AWESOME_THEMES_PATH="$AWESOMEWM_CONFIG_DIR/themes"
 
 ### [=]==================================[=]
 ### [~]............ Lynx
@@ -284,5 +304,3 @@ export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 
 export WGETHSTS="${WGETHSTS:-${HOME}/.cache/.wget-hsts}"
-
-

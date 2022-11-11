@@ -1,4 +1,4 @@
-rm -fv ~/temporary/temporay-path.zsh
+# rm -fv ~/temporary/temporay-path.zsh
 
 
 ###{{{ DOCUMENTATION
@@ -263,10 +263,15 @@ unfunction _zshinittmux
 # printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
 # (spinner &)
 #
-# echo -ne "\e[?25l" ## Hide Cursor
-#echo -ne "\e[1A"    ## Move curser up 1 line
-#echo -ne "\e[2K"    ## Clear line
-#echo -ne "\r"       ## Move cursor to beginning of line
+#echo -ne "\e[?25l" ## Hide Cursor
+#echo -ne "\e[?25h" ## Restore Cursor
+#echo -ne "\e[1A"   ## Move curser up 1 line
+#echo -ne "\e[2K"   ## Clear line
+#echo -ne "\r"      ## Move cursor to beginning of line
+#echo -ne "\e[2K"   ## Clear line
+#echo -ne "\r"      ## Move cursor to beginning of line
+
+
 
 #printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
 function _loading_bar(){
