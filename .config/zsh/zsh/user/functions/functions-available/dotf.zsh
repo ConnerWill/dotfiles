@@ -19,7 +19,7 @@ dotf(){
 	## commit and push
 	elif [[ "${1}" == "upload" ]] || [[ "${1}" == "up" ]]; then
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
-			commit --verbose -m "${2}" \
+			commit --status --branch --allow-empty-message --verbose -m "${2}" \
 		&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
       push --verbose
 
