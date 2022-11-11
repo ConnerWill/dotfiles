@@ -1,4 +1,4 @@
-timelogging_start "80"
+
 
 ### REMEMBERING RECENT DIRECTORIES
 ###     cdr allows you to change the working directory to a previous
@@ -87,4 +87,4 @@ add-zsh-hook chpwd chpwd_recent_dirs
 #       and the function zdn_mywrapper would contain only the following:
 #
 #              zsh_directory_name_generic "$@"
-timelogging_end 80
+

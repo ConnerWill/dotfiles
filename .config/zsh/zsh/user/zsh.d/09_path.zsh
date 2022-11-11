@@ -20,15 +20,7 @@ ZSH_USER_FPATH_DIR="${ZSH_USER_DIR}/fpath"
 [[ -d "${ZSH_USER_FPATH_DIR}" ]] \
   && fpath+=( "${ZSH_USER_FPATH_DIR}" )
 
-
 # automatically remove duplicates from these arrays
 #shellcheck disable=2034
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
-
-#timelogging_end ./09_path.zsh
-
-
-echo "=== start ===================" >> ~/temporary/temporay-path.zsh
-print -l ${path} >> ~/temporary/temporay-path.zsh
-echo "=== end ====================" >> ~/temporary/temporay-path.zsh
 

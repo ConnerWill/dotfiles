@@ -1,6 +1,6 @@
 #shellcheck disable=2148,2139,2059
 
-timelogging_start "70"
+
 
 alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
 
@@ -554,5 +554,5 @@ alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 alias ez="exec ${SHELL}"
 
-timelogging_end 70
+
 alias git-url="git config --local --get remote.origin.url"

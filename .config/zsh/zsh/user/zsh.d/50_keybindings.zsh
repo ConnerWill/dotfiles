@@ -1,6 +1,6 @@
 # shellcheck disable=1072,1073,1123
 
-timelogging_start "50"
+
 
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
@@ -342,4 +342,4 @@ function vicmdZQ() {
 bindkey -M vicmd 	"ZZ" vicmdZZ
 bindkey -M vicmd 	"ZQ" vicmdZQ
 
-timelogging_end 50
+

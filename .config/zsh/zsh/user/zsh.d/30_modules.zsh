@@ -1,4 +1,4 @@
-timelogging_start "30"
+
 
 
 autoload -Uz url-quote-magic
@@ -7,4 +7,4 @@ autoload -Uz ztodo
 autoload -Uz vcs_info
 
 
-timelogging_end 30
+

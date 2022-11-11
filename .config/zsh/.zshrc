@@ -1,6 +1,5 @@
-source "${ZDOTDIR}/tools/timelogging.zsh"
 rm -fv ~/temporary/temporay-path.zsh
-remove_old_timing_logs
+
 
 ###{{{ DOCUMENTATION
 #############################################################
@@ -238,18 +237,6 @@ fi
 ###}}}
 
 
-
-
-echo "=== zshrc start ===================" >> ~/temporary/temporay-path.zsh
-print -l ${path} >> ~/temporary/temporay-path.zsh
-echo "=== end ====================" >> ~/temporary/temporay-path.zsh
-
-
-source ~/zsh-keybindings.zsh
-
-
-
-
 ### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
 ## Set NOTMUX to any value to disable automatic tmux
 NOTMUX=1
@@ -282,7 +269,6 @@ unfunction _zshinittmux
 #echo -ne "\r"       ## Move cursor to beginning of line
 
 #printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-
 function _loading_bar(){
   local bar_color sleep_time
   bar_color='\e[0;48;5;46m'
@@ -323,10 +309,6 @@ _zshloadstartclear
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
-
-echo "=== zshrc part 2 start ===================" >> ~/temporary/temporay-path.zsh
-print -l ${path} >> ~/temporary/temporay-path.zsh
-echo "=== end ====================" >> ~/temporary/temporay-path.zsh
 
 # shellcheck disable=SC1009
 if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then

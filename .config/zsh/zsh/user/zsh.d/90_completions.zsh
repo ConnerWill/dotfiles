@@ -1,4 +1,4 @@
-timelogging_start "90"
+
 # shellcheck disable=1091,2296,2086,2016
 [[ -z "${ZCOMPCACHE_PATH}" ]] && ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache" && export ZCOMPCACHE_PATH
 
@@ -193,4 +193,4 @@ function comp_setup () {
 comp_setup
 unfunction comp_setup
 
-timelogging_end 90
+

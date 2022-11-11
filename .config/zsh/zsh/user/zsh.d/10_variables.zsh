@@ -1,4 +1,4 @@
-timelogging_start "10"
+
 ### [=]===========================================================[=]
 ###	[~] -------------------- ZSH VARIABLES -----------------------[~]
 ### [=]===========================================================[=]
@@ -285,4 +285,4 @@ export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 
 export WGETHSTS="${WGETHSTS:-${HOME}/.cache/.wget-hsts}"
 
-timelogging_end 10
+
