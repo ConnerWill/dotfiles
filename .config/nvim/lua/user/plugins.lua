@@ -53,7 +53,7 @@ return packer.startup(function(use)
 	-- PLUGIN LIST{{
 
 	-- Libraries
-	use("nvim-lua/plenary.nvim") -- Useful lua functions used ny lots of plugins
+	use("nvim-lua/plenary.nvim") -- Useful lua functions used by lots of plugins
 
 	-- LSP
 	use("neovim/nvim-lspconfig") -- enable LSP
@@ -204,12 +204,12 @@ return packer.startup(function(use)
 	-- Position
 	use("ethanholz/nvim-lastplace")
 
-	-- Telescope
-	use("nvim-telescope/telescope.nvim")
-
 	-- fzf vim
 	use("junegunn/fzf.vim")
 	use("junegunn/rainbow_parentheses.vim")
+
+	-- Telescope
+	use("nvim-telescope/telescope.nvim")
 
 	-- languages
 	use("sheerun/vim-polyglot")
@@ -228,10 +228,12 @@ return packer.startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 
 	-- coc
+--[[
   use({ "neoclide/coc.nvim", branch = "release" })
 	use("neoclide/coc-yank")
 	use "weirongxu/coc-explorer"
 	use "neoclide/coc-highlight"
+ ]]
 
 	-- shell
 	use({ "Shougo/deol.nvim", require("cmp").setup({
