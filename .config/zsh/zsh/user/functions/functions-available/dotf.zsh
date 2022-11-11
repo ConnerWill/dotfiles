@@ -22,7 +22,8 @@ dotf(){
 			commit --status --branch --allow-empty-message --verbose -m "${2}" \
 		&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
       push --verbose
-
+	
+	## git
 	else
 		[[ $# -gt 0 ]] \
 			&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" "${@}" \
