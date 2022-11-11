@@ -1,3 +1,4 @@
+# https://notes.burke.libbey.me/ansi-escape-codes/
 function listcolors(){
 
 	clear
@@ -153,7 +154,7 @@ alias list-colors-printf="listcolorsprintf"
 function listcolorANSI(){
 	for code in {0..255}
 	do
-		echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
+		printf "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m\t\e[48;5;${code}m"'\\e[48;5;'"$code"m"\e[0m\n"
 
 	done
 }

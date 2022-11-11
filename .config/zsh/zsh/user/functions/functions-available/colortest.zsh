@@ -1,5 +1,6 @@
 
 colortest() {
+    [[ $COLUMNS -lt 80 ]] && printf "\n\e[0;38;5;190mCOLUMNS is less that 80. The output of this command may not look right.\n" && sleep 2
     local T='gYw'   # The test text
 
     local fg
