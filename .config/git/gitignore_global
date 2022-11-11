@@ -48,9 +48,6 @@ _book
 *.3
 *.4
 
-# zsh
-#zsh_*
-
 # History
 *history*
 

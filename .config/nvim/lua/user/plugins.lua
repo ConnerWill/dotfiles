@@ -100,21 +100,6 @@ return packer.startup(function(use)
 
 	use ("Pocco81/AbbrevMan.nvim")
 
-	-- shell
-	use({ "Shougo/deol.nvim", require("cmp").setup({
-		sources = {
-			{ name = "deol" },
-		},
-	}) })
-
-	-- zsh
---	use({
---		"tamago324/cmp-zsh",
---		require("cmp_zsh").setup({
---			zshrc = true, -- Source the zshrc (adding all custom completions). default: false
---			filetypes = { "deoledit", "zsh" }, -- Filetypes to enable cmp_zsh source. default: {"*"}
---		}),
---	})
 	-- tmux
 	use({ "andersevenrud/cmp-tmux", require("cmp").setup({
 		sources = {
@@ -122,9 +107,8 @@ return packer.startup(function(use)
 		},
 	}) })
 
-	-- zsh completions
-	use({ "Valodim/vim-zsh-completion" })
-
+	use "wellle/tmux-complete.vim"
+  --
 	-- mkdir
 	use({ "jghauser/mkdir.nvim" })
 
@@ -138,8 +122,6 @@ return packer.startup(function(use)
 	use("lewis6991/impatient.nvim")
 	use("lukas-reineke/indent-blankline.nvim")
 	use("antoinemadec/FixCursorHold.nvim") -- This is needed to fix lsp doc highlight
-
-	-- use("jbyuki/venn.nvim") -- Draw ASCII diagrams in Neovim
 
 	-- Marks
 	use("chentoast/marks.nvim")
@@ -175,6 +157,8 @@ return packer.startup(function(use)
 	use("folke/tokyonight.nvim") -- favorite
 	use("lunarvim/darkplus.nvim")
 
+	use "preservim/tagbar"
+
 	-- Color Visualizers
 	use("norcalli/nvim-colorizer.lua")
 	use("tjdevries/colorbuddy.nvim")
@@ -190,6 +174,12 @@ return packer.startup(function(use)
 			})
 		end,
 	})
+
+  use "justinmk/vim-sneak"
+
+	use "PProvost/vim-ps1"
+
+  use "preservim/vim-wheel"
 
 	use("RRethy/vim-illuminate")
 
@@ -230,6 +220,23 @@ return packer.startup(function(use)
 	-- Git
 	use("lewis6991/gitsigns.nvim")
 
+	-- coc
+  use({ "neoclide/coc.nvim", branch = "release" })
+	use("neoclide/coc-yank")
+	use "weirongxu/coc-explorer"
+	use "neoclide/coc-highlight"
+
+	-- shell
+	use({ "Shougo/deol.nvim", require("cmp").setup({
+		sources = {
+			{ name = "deol" },
+		},
+	}) })
+
+	-- zsh completions
+	use({ "tamago324/cmp-zsh"	})
+	use({ "Valodim/vim-zsh-completion" })
+
 	-- Scrolling
 	use("karb94/neoscroll.nvim")
 
@@ -257,10 +264,6 @@ return packer.startup(function(use)
 	-- })
 	--
 
-	-- coc
-	-- use({ "neoclide/coc.nvim", branch = "release" })
-	-- use("neoclide/coc-yank")
-
 	-- use("chr4/sslsecure.vim")
 
 	-- GPG
@@ -277,22 +280,15 @@ return packer.startup(function(use)
 	-- })
 	--
 	-- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
-	-- use "weirongxu/coc-explorer"
-	-- use "neoclide/coc-highlight"
 	-- linebox
 	-- use "yoshi1123/vim-linebox"
 	-- use "ms-jpq/coq_nvim"
 	--  calendar app
 	-- use "itchyny/calendar.vim"
-	-- use "preservim/tagbar"
-	-- use "preservim/vim-wheel"
-	-- use "wellle/tmux-complete.vim"
 	-- use "tomtom/tskeletons"
 	-- use "tomtom/tskeleton_vim"
 	-- use "SirVer/ultisnips"
 	-- use "ipod825/vim-netranger"
-	-- use "PProvost/vim-ps1"
-	-- use "justinmk/vim-sneak"
 	-- use "liuchengxu/vim-which-key"
 	--  zen-mode
 	-- use {
@@ -305,16 +301,7 @@ return packer.startup(function(use)
 	--     }
 	--   end
 	-- }
-	--  VimWiki
-	-- use "vimwiki/vimwiki"
-	--  Make sure _these_ options are set:
-	--            │
-	--            ╰  set nocompatible
-	--                filetype plugin on
-	--                syntax on
-
 	--}}}
-
 	-- End Plugin List}}
 
 	--Sync Packer{{{

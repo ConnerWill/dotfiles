@@ -1,16 +1,8 @@
 lastupdatecheck: 0
 recentrepos:
+- /home/dampsock/MYPROJECTS/ConnerWill/Project-Template
 - /home/dampsock/.local/share/nvim/site/pack/packer/start/packer.nvim
-- /home/dampsock/MYPROJECTS/ConnerWill/pi-builder
-- /home/dampsock/.config/awesome/net_widgets
-- /home/dampsock/scripts/MYPROJECTS/ConnerWill/cheat-fzf
-- /home/dampsock/scripts/MYPROJECTS/ConnerWill/pi-builder
-- /home/dampsock/MYPROJECTS/ConnerWill/fzf-rclone
-- /home/dampsock/.config/zsh/functions/zsh-fzf-functions/fzf-rclone
-- /home/dampsock/raspberryPi/gentoo-rpi/GenBerry
-- /home/dampsock/.config/zsh/functions/zsh-fzf-functions/fzf-journalctl
-- /home/dampsock/MYPROJECTS/ConnerWill/CAPshift
-- /home/dampsock/.zsh/aliases
+- /home/dampsock/MYPROJECTS/conner.will/get-vaultcertificate
 startuppopupversion: 5
 customcommandshistory:
 - ls

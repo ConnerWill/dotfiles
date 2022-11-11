@@ -1,6 +1,6 @@
 # shellcheck disable=2148,2016,2182,1087,2154
 
-timelogging_start "83"
+#timelogging_start "83"
 
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
@@ -33,13 +33,13 @@ setopt prompt_subst
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
 ### {{{ STANDARD PROMPT
+unset RPS1
   PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
  PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
         PROMPTUSERNAME='%F{99}%n%f'
         PROMPTHOSTNAME='%F{8}%m%f'
         PROMPTATSYMBOL='%F{201}@%f'
        PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
-
 
 typeset -A distro_logos
 typeset -A distro_logo_color
@@ -80,6 +80,66 @@ distro_logo_color=(
 [[ -z "${DISTRO}" ]] && DISTRO="other"
 PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 
+
+if [[ "${DISTRO}" == "Android" ]]; then
+ #clear; for i in $(seq 100 -10 0); do ~/battery.zsh $i && sleep 0.5 && clear; done
+  function _rprompt_termux_battery(){
+    export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
+    typeset -A battery_icon_array
+    typeset -A battery_charging_icon_array
+    typeset -A battery_horizontal_icon_array
+
+    #shellcheck disable=2190,2034
+    # Vertical battery
+    battery_icon_array=(
+      "100" ""
+      "90"  ""
+      "80"  ""
+      "70"  ""
+      "60"  ""
+      "50"  ""
+      "40"  ""
+      "30"  ""
+      "20"  ""
+      "10"  ""
+      "0"   ""
+    )
+
+    #shellcheck disable=2190,2034
+    # Vertical Charging battery
+    battery_charging_icon_array=(
+      "100" ""
+      "90"  ""
+      "80"  ""
+      "60"  ""
+      "40"  ""
+      "30"  ""
+      "20"  ""
+      "10"  ""
+    )
+
+    #shellcheck disable=2190,2034
+    # horizontal battery
+    battery_horizontal_icon_array=(
+      "100" ""
+      "75"  ""
+      "50"  ""
+      "25"  ""
+      "0"   ""
+    )
+
+
+    #TERMUX_BATTERY_STATUS="$(termux-battery-status)"
+    #TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
+
+    TERMUX_BATTERY_PERCENTAGE="${*}"
+
+    BATT_ICON="${battery_charging_icon_array[$TERMUX_BATTERY_PERCENTAGE]}"
+    printf "Batt: %s\n" "${BATT_ICON}"
+
+   }; _rprompt_termux_battery "${@}"
+fi
+
 ## CHECK TERMINAL SUPPORTS 256 colors, if not, load zshmodule "zsh/nearcolor"
 ## The zsh/nearcolor module replaces colours specified as hex triplets with the nearest
 ## colour in the 88 or 256 colour palettes that are widely used by terminal emulators.
@@ -94,6 +154,13 @@ PROMPTUSERNAME='%F{99}%n%f'
 PROMPTPATH='%F{66}%40<..<%~%<<'
 PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} ' # Random color delimiter ':'
 
+
+
+
+
+
+
+
 function _rprompt_set_ssh(){
   if [[ "$SSH_CLIENT" = *.* || "$REMOTEHOST" = *.* ]]; then
     setopt TRANSIENT_RPROMPT
@@ -102,7 +169,7 @@ function _rprompt_set_ssh(){
     RPROMPT_SSH_COLOR_RESET='%f'
     RPROMPT_SSH="${RPROMPT_SSH_COLOR}${SSH_CLIENT}${RPROMPT_SSH_COLOR_RESET}"
     RPROMPT="${RPROMPT_SSH}"
-    RPS1="${RPROMPT}"
+    RPS1="${RPS1} ${RPROMPT}"
     export RPROMPT RPS1
   fi
 }
@@ -365,31 +432,157 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
 ### [===============================]
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
-function define_combine_prompt(){
-      PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
-      PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
-           PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
- PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
-           PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
-  PROMPT="$PROMPT_FULL"
-     PS1="$PROMPT_FULL"
-    export PROMPT PS1
-}
-if define_combine_prompt; then
-  unfunction define_combine_prompt
-else
-  printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
-    if autoload -Uz promptinit && promptinit; then
-      if autoload -Uz colors && colors; then
-        prompt fire blue magenta blue black green cyan
-      else
-        prompt adam2
-      fi
-    else
-      printf "\e[0;1;38;5;196m The backup prompt failed to load ... >:(\e[0;1;38;5;201m\n\n\tWell... you are on your own now, buddy :0\n" \
-      export PROMPT='%F{196}(╯°□°）╯︵ ┻━┻%f %F{93}[>:%f ' \
-      export RPROMPT='%F{87}(⌐■_■)%f  %F{46}¯\_(ツ)_/¯%f'
-    fi
-fi
 
-timelogging_end 83
+
+function replacehostnameinprompt(){
+## Replace 'localhost' with a different "hostname" in the prompt
+  local newhostname
+  newhostname="termux"
+  [[ $(uname -n) == "archlinux" && $(whoami) == "u0_a119" ]] && PROMPTHOSTNAME='%F{99}$newhostname%f'
+  export PROMPTHOSTNAME
+}; replacehostnameinprompt; unset -f replacehostnameinprompt
+
+function backup_prompt_incase_of_failure(){
+  ## Set a prompt in case of failure
+  printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
+  if [[ autoload -Uz promptinit && promptinit ]] && [[ autoload -Uz colors && colors ]]; then
+    return 0
+  else
+    if prompt fire blue magenta blue black green cyan || prompt adam2; then
+      return 0
+    else
+      printf "\e[0;1;38;5;196m The backup prompt failed to load ... >:(\e[0;1;38;5;201m\n\n\tWell... you are on your own now, buddy :0\n"
+      PROMPT='%F{196}(╯°□°）╯︵ ┻━┻%f %F{93}[>:%f ' \
+      RPROMPT='%F{87}(⌐■_■)%f  %F{46}¯\_(ツ)_/¯%f'
+      export PROMPT RPROMPT
+    fi
+  fi
+}
+
+function define_combine_prompt(){
+  ## 'Stich' all parts of the PS1 (prompt) together
+  export PROMPT PS1
+  PROMPT_EXIT_CODE='$EXIT_CODE_PROMPT'
+  PROMPT_USER_HOST="$PROMPT_OPEN_BRACKETS$PROMPTUSERNAME$PROMPTATSYMBOL$PROMPTHOSTNAME$PROMPT_CLOSE_BRACKETS"
+  PROMPT_PATH="$PROMPT_OPEN_BRACKETS$PROMPTPATH$PROMPT_CLOSE_BRACKETS"
+  PROMPT_USER_HOST_PATH="$PROMPT_USER_HOST$PROMPT_PATH"
+  PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
+  PROMPT="$PROMPT_FULL"
+  PS1="$PROMPT_FULL"
+}
+
+define_combine_prompt \
+  && unset -f define_combine_prompt \
+  || backup_prompt_incase_of_failure
+unset -f backup_prompt_incase_of_failure
+
+
+#timelogging_end 83
+
+
+
+
+
+
+## cool prompt features 
+# The first step is to configure the appearance of the prompt in its compact form. Let’s assume we have a variable, $_vbe_prompt_compact set to 1 when we want a compact prompt. We use the following function to define the prompt appearance:
+#
+# _vbe_prompt () {
+#     local retval=$?
+#
+#     # When compact, just time + prompt sign
+#     if (( $_vbe_prompt_compact )); then
+#         # Current time (with timezone for remote hosts)
+#         _vbe_prompt_segment cyan default "%D{%H:%M${SSH_TTY+ %Z}}"
+#         # Hostname for remote hosts
+#         [[ $SSH_TTY ]] && \
+#             _vbe_prompt_segment black magenta "%B%M%b"
+#         # Status of the last command
+#         if (( $retval )); then
+#             _vbe_prompt_segment red default ${PRCH[reta]}
+#         else
+#             _vbe_prompt_segment green cyan ${PRCH[ok]}
+#         fi
+#         # End of prompt
+#         _vbe_prompt_end
+#         return
+#     fi
+#
+#     # Regular prompt with many information
+#     # […]
+# }
+# setopt prompt_subst
+# PS1='$(_vbe_prompt) '
+# Update (2021-05)
+#
+# The following part has been rewritten to be more robust. The code is stolen from Powerlevel10k’s issue #888. See the comments for more details.
+#
+# Our next step is to redraw the prompt after accepting a command. We wrap Zsh line editor into a function:
+#
+# _vbe-zle-line-init() {
+#     [[ $CONTEXT == start ]] || return 0
+#
+#     # Start regular line editor
+#     (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[1]
+#     zle .recursive-edit
+#     local -i ret=$?
+#     (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[2]
+#
+#     # If we received EOT, we exit the shell
+#     if [[ $ret == 0 && $KEYS == $'\4' ]]; then
+#         _vbe_prompt_compact=1
+#         zle .reset-prompt
+#         exit
+#     fi
+#
+#     # Line edition is over. Shorten the current prompt.
+#     _vbe_prompt_compact=1
+#     zle .reset-prompt
+#     unset _vbe_prompt_compact
+#
+#     if (( ret )); then
+#         # Ctrl-C
+#         zle .send-break
+#     else
+#         # Enter
+#         zle .accept-line
+#     fi
+#     return ret
+# }
+# zle -N zle-line-init _vbe-zle-line-init
+# That’s all!
+#
+# One downside of using the powerline fonts is that it messes with copy/paste. As I am using tmux, I use the following snippet to work around this issue and use only standard Unicode characters when copying from the terminal:
+#
+# bind-key -T copy-mode M-w \
+#   send -X copy-pipe-and-cancel "sed 's/.*/%/g' | xclip -i -selection clipboard" \;\
+#   display-message "Selection saved to clipboard!"
+# Copying and pasting the text from the screenshot above yields the following text:
+#
+# ssh eizo.luffy.cx
+# Linux eizo 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64
+# Last login: Fri Apr 23 14:20:39 2021 from 2a01:cb00:3f:b02:9db6:efa4:d85:7f9f
+# uname -a
+# Linux eizo 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64 GNU/Linux
+#
+# Connection to eizo.luffy.cx closed.
+# git status
+# On branch article/zsh-transient
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#         ../../media/images/zsh-compact-prompt@2x.jpg
+#
+# nothing added to commit but untracked files present (use "git add" to track)
+# We have to manually enable bracketed paste because Zsh does it after zle-line-init. ↩︎
+
+
+
+
+
+
+
+
+
+
+
+

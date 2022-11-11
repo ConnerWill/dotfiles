@@ -283,4 +283,6 @@ export KITTY_CONFIG="$KITTY_CONFIG_DIR/kitty.conf"
 export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 
+export WGETHSTS="${WGETHSTS:-${HOME}/.cache/.wget-hsts}"
+
 timelogging_end 10

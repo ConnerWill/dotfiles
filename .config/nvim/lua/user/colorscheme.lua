@@ -1,6 +1,7 @@
 -- Example config in Lua
+
 --vim.g.dampsocktheme_style = "night"
-vim.g.dampsocktheme_italic_comments = true
+vim.g.dampsocktheme_italic_comments = false
 vim.g.dampsocktheme_sidebars = { "qf", "vista_kind", "terminal", "packer" }
 vim.g.dampsocktheme_dark_sidebar = true
 vim.g.dampsocktheme_dark_float = true

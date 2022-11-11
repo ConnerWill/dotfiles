@@ -245,6 +245,8 @@ print -l ${path} >> ~/temporary/temporay-path.zsh
 echo "=== end ====================" >> ~/temporary/temporay-path.zsh
 
 
+source ~/zsh-keybindings.zsh
+
 
 
 
@@ -275,9 +277,9 @@ unfunction _zshinittmux
 # (spinner &)
 #
 # echo -ne "\e[?25l" ## Hide Cursor
-#echo -ne "\e[1A" ## Move curser up 1 line
-#echo -ne "\e[2K" ## Clear line
-#echo -ne "\r"    ## Move cursor to beginning of line
+#echo -ne "\e[1A"    ## Move curser up 1 line
+#echo -ne "\e[2K"    ## Clear line
+#echo -ne "\r"       ## Move cursor to beginning of line
 
 #printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
 
@@ -345,7 +347,7 @@ _zshloadendclear
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-touch stopspinning
+# touch stopspinning
 #_loading_bar
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[2K"   ## Clear line

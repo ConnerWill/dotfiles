@@ -1,10 +1,11 @@
 
+--UserProfile="user"
+
 require "user.options"
 require "user.keymaps"
 require "user.plugins"
 require "user.colorscheme"
 require "user.cmp"
--- require "user.snippets"
 require "user.lsp"
 require "user.telescope"
 require "user.treesitter"
@@ -30,7 +31,16 @@ require "user.vim-functions.vim-functions"
 require "user.neoscroll"
 require "user.marks"
 require "user.venn"
--- require "user.twilight"
 require "user.align"
 require "user.vim-illuminate"
 require "user.abbrev-man"
+-- require "user.twilight"
+-- require "user.snippets"
+
+
+
+
+-- need to install luacheck selene and ec
+--
+--   $  yay -Syv--needed --noconfirm luacheck editorconfig-checker selene-linter
+--

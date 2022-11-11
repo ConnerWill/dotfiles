@@ -18,6 +18,14 @@ function fzfcolor () {
      COLOR_POINTER='#53FFAD'     COLOR_MARKER='#00FF00' 
 
 
+typeset -a COLOR_SCHEME
+    COLOR_SCHEME[0]='bg:${COLOR_BG},bg+:${COLOR_BGP},info:${COLOR_INFO},hl:${COLOR_HL},fg:${COLOR_FG},header:${COLOR_HEADER},fg+:${COLOR_FGP},pointer:${COLOR_POINTER},marker:${COLOR_MARKER},prompt:${COLOR_PROMPT},hl+:${COLOR_HLP},border:${COLOR_BORDER},preview-fg:${COLOR_PREVIEW_FG},preview-bg:${COLOR_PREVIEW_BG}'
+    COLOR_SCHEME[1]='fg:#00FFFF,bg:#101010,hl:#4909bb,hl+:#ff00ff,preview-fg:#ffffff,preview-bg:#020202,gutter:#000000,header:#666666,border:#900aff'
+	  COLOR_SCHEME[2]='hl:#00ffff,hl+:#ff00ff,fg:#505050,fg+:#00ffff,bg:#010101,bg+:#202020,query:#00ff00,info:#9090a0,spinner:#ff00ff,border:#ff00ff,preview-fg:#ffffff,preview-bg:#200050,gutter:#101010,pointer:#ff00ff,info:#020202'
+    size=${#array[@]}
+    index=$((RANDOM % size))
+    COLOR_SCHEME=${array[$index]}
+
     INITIAL_QUERY="${*}"
 	local tiebreak="end" 
 	local margin="1" 
@@ -65,12 +73,7 @@ function fzfcolor () {
         --scroll-off=0  \
         --hscroll-off=100  \
         --ansi  \
-        --color=bg:${COLOR_BG},bg+:${COLOR_BGP},info:${COLOR_INFO} \
-        --color=hl:${COLOR_HL},fg:${COLOR_FG},header:${COLOR_HEADER},fg+:${COLOR_FGP} \
-        --color=pointer:${COLOR_POINTER},marker:${COLOR_MARKER} \
-        --color=prompt:${COLOR_PROMPT},hl+:${COLOR_HLP} \
-        --color=border:${COLOR_BORDER} \
-        --color=preview-fg:${COLOR_PREVIEW_FG},preview-bg:${COLOR_PREVIEW_BG} \
+        --color="${COLOR_SCHEME}" \
         --bind 'pgdn:preview-page-down'  \
         --bind 'pgup:preview-page-up'  \
         --bind 'shift-up:preview-top'  \
