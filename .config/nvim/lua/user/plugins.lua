@@ -82,6 +82,13 @@ return packer.startup(function(use)
 		end,
 	})
 
+	use({
+    "mcauley-penney/tidy.nvim",
+    config = function()
+        require("tidy").setup()
+    end
+	})
+
 	-- File Explorer
 	use("kyazdani42/nvim-tree.lua") -- use("ms-jpq/chadtree")
 

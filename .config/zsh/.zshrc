@@ -50,7 +50,7 @@ rm -fv ~/temporary/temporay-path.zsh
 ##                          ( user )                       ##
 ##                                                         ##
 ##  ${ZSH_USER_DIR}:::::: Path to current config profile   ##
-##             ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user ) ##      
+##             ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user ) ##
 ##                                                         ##
 ##  ${ZSHDDIR}::::::::::: Directory containing configs that##
 ##                        will be sourced in numeric order ##
@@ -162,17 +162,17 @@ _ZSH_SHOW_ERRORS="TRUE"              #: Show error messeges. This is unrelated t
 ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"  #: Directory that ZSH logs will be written to.
 
 _ZSH_DEBUGGING_ENABLED="TRUE"        #┌ If this option is set, a debug log will
-                                     #└─ be written to '$ZSH_DEBUG_LOG_DIR' 
+                                     #└─ be written to '$ZSH_DEBUG_LOG_DIR'
 
 # _ZSH_BANNER_SHOW="TRUE"              #: Show banner art
 
 # _ZSH_BANNER_START="TRUE"             #┌ Show banner art before loading other files.
                                      #├─ If this option is enabled (default), banner art will
                                      #├─  be shown before other files are loaded.
-                                     #├─ If this option is disabled, banner art will 
+                                     #├─ If this option is disabled, banner art will
                                      #├─  be shown after all files are loaded.
                                      #└┐
-                                     # ├──── NOTE: Banner art will only be shown if 
+                                     # ├──── NOTE: Banner art will only be shown if
                                      # └─────────── also '_ZSH_BANNER_SHOW' is enabled.
 
 
@@ -306,7 +306,7 @@ _zshloadstartclear
 
 
 ### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
-#Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
+#Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
 
@@ -353,4 +353,3 @@ fi
     #fi
   #}
 ### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
-
