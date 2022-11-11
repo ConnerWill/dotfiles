@@ -27,7 +27,7 @@ function UpOneLine(){
 ## Echoes "$red $green $blue" where
 ## $red $green and $blue are integers
 ## ranging between 0 and 255 inclusive
-function rainbowColor(){ 
+function rainbowColor(){
   # let h=$1/43
   # let f=$1-43*$h
   # let t=$f*255/43
@@ -72,6 +72,18 @@ function zsh-rainbow-loading-bar(){
   for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
 }
 
+function zsh-rainbow-loading-bar-oneline(){
+  ## Rewrite on the same line, but trying to get the width correct
+  #echo -ne "\x1b[1A\r\e[2K"
+  echo -ne "\x1b[1A\r"
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine; echo -ne "\x1b[\r"
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine; echo -ne "\x1b[\r"
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine; echo -ne "\x1b[\r"
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine; echo -ne "\x1b[\r"
+  for i in $(seq 0 $COLUMNS);      do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine; echo -ne "\x1b[\r"
+  for i in $(seq 255 -1 $COLUMNS); do setBackgroundColor $(rainbowColor $i); echo -n " "; done; resetOutput; UpOneLine
+}
+
 ## Draw line across entire terminal
 # printf '%.s─' $(seq 0 $(tput cols))
 
@@ -89,5 +101,3 @@ function zsh-rainbow-loading-bar(){
 
 #echo "▁"
 #echo "▔"
-
-
