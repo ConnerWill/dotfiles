@@ -1,4 +1,5 @@
 source "${ZDOTDIR}/tools/timelogging.zsh"
+rm -fv ~/temporary/temporay-path.zsh
 remove_old_timing_logs
 
 ###{{{ DOCUMENTATION
@@ -239,6 +240,10 @@ fi
 
 
 
+echo "=== zshrc start ===================" >> ~/temporary/temporay-path.zsh
+print -l ${path} >> ~/temporary/temporay-path.zsh
+echo "=== end ====================" >> ~/temporary/temporay-path.zsh
+
 
 
 
@@ -317,6 +322,10 @@ _zshloadstartclear
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
 
+echo "=== zshrc part 2 start ===================" >> ~/temporary/temporay-path.zsh
+print -l ${path} >> ~/temporary/temporay-path.zsh
+echo "=== end ====================" >> ~/temporary/temporay-path.zsh
+
 # shellcheck disable=SC1009
 if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
   # shellcheck disable=SC1072,SC1058,SC1036,SC1073
@@ -360,3 +369,4 @@ fi
     #fi
   #}
 ### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
+
