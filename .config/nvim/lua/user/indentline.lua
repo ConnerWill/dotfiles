@@ -18,7 +18,7 @@ indent_blankline.setup({
 	show_trailing_blankline_indent = false,
 	show_first_indent_level = true,
 	use_treesitter = true,
-	char = "▏", -- "▎" "│"
+	char = "⦙", -- "", -- ┋", -- "▏", "▎" "│" "┋" ""
 	space_char_blankline = " ",
 	char_highlight_list = {
 		"IndentBlanklineIndent1",

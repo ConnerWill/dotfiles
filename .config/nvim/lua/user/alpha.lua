@@ -15,9 +15,6 @@ end
 
 	--ART {{{
 
-
-
-
 local dashboard = require("alpha.themes.dashboard")
 dashboard.section.header.val = {
 	[[                    ...                                   ]],
@@ -69,15 +66,7 @@ dashboard.section.buttons.val = {
 	--Footer{{{
 
 local function footer()
-	-- NOTE: requires the fortune-mod package to work
-	-- local handle = io.popen("fortune")
-	-- local fortune = handle:read("*a")
-	-- handle:close()
-	-- return fortune
-	return "    "
-	--     \n🖳 🖧 🖹 "
-	--          "
-	--       " 💁      👽☽     ﬍  🗔      ☢ l
+	return "      " --   💁      👽☽   ﬍  🗔      ☢🖳 🖧 🖹     "
 end
 
 	--}}}

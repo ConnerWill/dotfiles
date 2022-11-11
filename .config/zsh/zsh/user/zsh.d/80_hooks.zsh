@@ -1,10 +1,13 @@
-timelogging_start "80"
+
 
 ### REMEMBERING RECENT DIRECTORIES
 ###     cdr allows you to change the working directory to a previous
-###     working directory from a list maintained automatically.
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-add-zsh-hook chpwd chpwd_recent_dirs
+###     working directory from a list maintained automatically.=
+
+# export chpwd_recent_dirs="${chpwd_recent_dirs:-${XDG_CACHE_HOME}/zsg/.chpwd-recent-dirs}"
+# autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+# add-zsh-hook chpwd chpwd_recent_dirs
+
 ### Completion for the argument to cdr is available if compinit
 ### has been run; menu selection is recommended, using:
 # zstyle ':completion:*:*:cdr:*:*' menu selection
@@ -46,8 +49,8 @@ add-zsh-hook chpwd chpwd_recent_dirs
 
 
 #   Complete example
-#       Here  is  a  full fictitious but usable autoloadable definition of the example function defined by the code above.  So ~[gs:p:s] expands to /scratch/$USER/git/myscratchproject/top/srcdir (with $USER
-#       also expanded).
+#       Here  is  a  full fictitious but usable autoloadable definition of the example function defined by the code above.
+#       So ~[gs:p:s] expands to /scratch/$USER/git/myscratchproject/top/srcdir (with $USER also expanded).
 #
 #              local -A zdn_top=(
 #                g   ~/git
@@ -76,7 +79,8 @@ add-zsh-hook chpwd chpwd_recent_dirs
 #              autoload -Uz zsh_directory_name_generic
 #              zsh_directory_name_generic "$@
 #
-#       It is also possible to use global associative arrays, suitably named, and set the style for the context of your wrapper function to refer to this.  Then your set up code would contain the following:
+#       It is also possible to use global associative arrays, suitably named, and set the style for the context of your wrapper function to refer to this.
+#       Then your set up code would contain the following:
 #
 #              typeset -A zdn_mywrapper_top=(...)
 #              # ... and so on for other associative arrays ...
@@ -87,4 +91,3 @@ add-zsh-hook chpwd chpwd_recent_dirs
 #       and the function zdn_mywrapper would contain only the following:
 #
 #              zsh_directory_name_generic "$@"
-timelogging_end 80

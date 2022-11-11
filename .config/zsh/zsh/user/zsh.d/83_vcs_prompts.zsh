@@ -1,6 +1,6 @@
 # shellcheck disable=2148,2016,2182,1087,2154
 
-#timelogging_start "83"
+#
 
 ### [=========================================]
 ### [ ---------------- PROMPT --------------- ]
@@ -477,7 +477,7 @@ define_combine_prompt \
 unset -f backup_prompt_incase_of_failure
 
 
-#timelogging_end 83
+#
 
 
 

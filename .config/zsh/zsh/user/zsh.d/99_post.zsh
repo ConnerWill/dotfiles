@@ -28,7 +28,7 @@
 # shellcheck source=./99_post.zsh
 ##}}}
 
-timelogging_start "99"
+
 
 ## Load final plugins
 [[ -z "${ZSH_USER_DIR}" ]] && export ZSH_USER_DIR="${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}"
@@ -74,4 +74,4 @@ function zsh_banner_load(){
   fi
 }; zsh_banner_load
 
-timelogging_end 99
+
