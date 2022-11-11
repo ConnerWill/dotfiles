@@ -27,19 +27,16 @@ setopt autocd
 bindkey -e
 
 ## Press 'CTRL-x-z' to display keybindings
-alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
+# alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
 # shellcheck disable=1009
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init  () {
-			echoti smkx
-		}
-    function zle-line-finish() {
-			echoti rmkx
-		}
-    zle -N zle-line-init ; zle -N zle-line-finish
+    function zle-line-init(){ echoti smkx; }
+    function zle-line-finish(){ echoti rmkx; }
+    zle -N zle-line-init
+		zle -N zle-line-finish
 fi
 
 if [[ -n "${DISPLAY}" ]]; then
@@ -52,7 +49,9 @@ function toggle-monitors(){
     [[ "${monitor_status:l}" == "on"  ]] && monitor_action="off"
     [[ "${monitor_status:l}" == "off" ]] && monitor_action="on"
 		xset dpms force "${monitor_action}"
-  } ; zle -N toggle-monitors && bindkey -M vicmd "^[[24;5~" toggle-monitors
+  }
+	zle -N toggle-monitors
+	bindkey -M vicmd "^[[24;5~" toggle-monitors
 fi
 
 ############################
@@ -90,15 +89,13 @@ function shift-select::deselect-and-input() {
 
 
 autoload -U transpose-lines
-zle -N transpose-lines
-bindkey -M vicmd gl transpose-lines
-
 autoload -U transpose-words
-zle -N transpose-words
-bindkey -M vicmd tw transpose-words
-
 autoload -U transpose-words-match
+zle -N transpose-lines
+zle -N transpose-words
 zle -N transpose-words-match
+bindkey -M vicmd gl transpose-lines
+bindkey -M vicmd tw transpose-words
 bindkey -M vicmd tm transpose-words-match
 
 # If the selection region is not active, set the mark at the cursor position,
@@ -246,7 +243,7 @@ bindkey -s '\el' 'ls\n'
 
 # [Ctrl-r] - Search backward incrementally for a specified string.
 # The string may begin with ^ to anchor the search to the beginning of the line.
-bindkey '^r' history-incremental-search-backward
+# bindkey '^r' history-incremental-search-backward
 
 # [Space] - don't do history expansion
 bindkey ' ' magic-space
@@ -260,9 +257,12 @@ bindkey '\C-x\C-e' edit-command-line
 bindkey "^[m" copy-prev-shell-word
 
 # [Alt-3] - Toggle comments on current line
-# If there is no `#` character at the beginning of the current line, add one. If
-# there is one, remove it. The `INTERACTIVE_COMMENTS` option must be set for
-# this to have any usefulness. ( See also pound-insert (unbound) (#) (unbound) )
+# If there is no `#` character at
+# the beginning of the current line, add one.
+# If there is one, remove it.
+# The `INTERACTIVE_COMMENTS` option must be set for
+# this to have any usefulness.
+# ( See also pound-insert (unbound) (#) (unbound) )
 bindkey -M emacs 	"^[3"	vi-pound-insert
 bindkey -M viins 	"^[3"	vi-pound-insert
 bindkey -M vicmd 	"gc" 	vi-pound-insert
@@ -273,7 +273,6 @@ if autoload -Uz surround; then
 	zle -N delete-surround surround
 	zle -N add-surround surround
 	zle -N change-surround surround
-
 	bindkey -a 				"cs" change-surround
 	bindkey -a 				"ds" delete-surround
 	bindkey -a 				"ys" add-surround
@@ -314,6 +313,9 @@ function _up-dir {
 zle -N _up-dir
 bindkey "^h" _up-dir
 
+# Remove bindings to ctrl+r
+bindkey -r '^r'
+
 # Autoload history-search-multi-word
 zle -N history-search-multi-word
 zle -N history-search-multi-word-backwards history-search-multi-word
@@ -335,11 +337,8 @@ function vicmdZZ() {
 		zle reset-prompt
 }; zle -N vicmdZZ
 
-function vicmdZQ() {
-	exit
-}; zle -N vicmdZQ
+function vicmdZQ(){ exit; }; zle -N vicmdZQ
 
 bindkey -M vicmd 	"ZZ" vicmdZZ
 bindkey -M vicmd 	"ZQ" vicmdZQ
-
-timelogging_end 50
+bindkey -M vicmd  "^?" vi-backward-char
