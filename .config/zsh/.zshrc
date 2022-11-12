@@ -256,13 +256,7 @@ function _zshinittmux(){
 # _zshinittmux
 unfunction _zshinittmux
 ### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
-#
-# rm -f stopspinning > /dev/null 2>&1
-# . $HOME/scripts/bash/progress-bars/spinners/spinner-orig/spinner.sh
-# SPINNER_SYMBOLS="UNI_PIPES" #"ASCII_PLUS" #"WIDE_UNI_GREYSCALE"
-# printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-# (spinner &)
-#
+
 #echo -ne "\e[?25l" ## Hide Cursor
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[1A"   ## Move curser up 1 line
@@ -334,7 +328,6 @@ _zshloadendclear
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-# touch stopspinning
 #_loading_bar
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[2K"   ## Clear line
