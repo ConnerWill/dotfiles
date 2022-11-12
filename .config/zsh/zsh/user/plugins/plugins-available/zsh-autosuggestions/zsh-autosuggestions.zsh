@@ -138,7 +138,6 @@ typeset -g ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 	typeset -ga ZSH_AUTOSUGGEST_STRATEGY
 	ZSH_AUTOSUGGEST_STRATEGY=(history)
 }
-
 # Widgets that clear the suggestion
 (( ! ${+ZSH_AUTOSUGGEST_CLEAR_WIDGETS} )) && {
 	typeset -ga ZSH_AUTOSUGGEST_CLEAR_WIDGETS

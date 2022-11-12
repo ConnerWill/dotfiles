@@ -91,7 +91,7 @@ alias sls="ls"
 if command -v lsd >/dev/null 2>&1; then
   alias 'cd ls'='lsd --almost-all --long'
   alias ks='lsd --color always --icon always'
-  alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
+  alias l='lsd --color always --no-symlink --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
   alias la='lsd --color always --icon always --almost-all'
   alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'

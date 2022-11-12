@@ -1,0 +1,2 @@
+# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
+# reload () { exec "${SHELL}" "$@"; }
