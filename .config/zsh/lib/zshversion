@@ -1,0 +1,50 @@
+# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
+# check for version/system
+# check for versions (compatibility reasons)
+
+is4()   { [[ $ZSH_VERSION == <4->*                                                          ]]; }
+is41()  { [[ $ZSH_VERSION == 4.<1->*    || $ZSH_VERSION == <5->*                            ]]; }
+is42()  { [[ $ZSH_VERSION == 4.<2->*    || $ZSH_VERSION == <5->*                            ]]; }
+is425() { [[ $ZSH_VERSION == 4.2.<5->*  || $ZSH_VERSION == 4.<3->* || $ZSH_VERSION == <5->* ]]; }
+is43()  { [[ $ZSH_VERSION == 4.<3->*    || $ZSH_VERSION == <5->*                            ]]; }
+is433() { [[ $ZSH_VERSION == 4.3.<3->*  || $ZSH_VERSION == 4.<4->* || $ZSH_VERSION == <5->* ]]; }
+is437() { [[ $ZSH_VERSION == 4.3.<7->*  || $ZSH_VERSION == 4.<4->* || $ZSH_VERSION == <5->* ]]; }
+is439() { [[ $ZSH_VERSION == 4.3.<9->*  || $ZSH_VERSION == 4.<4->* || $ZSH_VERSION == <5->* ]]; }
+is51()  { [[ $ZSH_VERSION == 5.<1->*                                                        ]]; }
+is59()  { [[ $ZSH_VERSION == 5.<9->*                                                        ]]; }
+is6()  { [[ $ZSH_VERSION == 6.*                                                             ]]; }
+
+
+is-zsh-at-least() {
+  emulate -L zsh
+  local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version order
+  min_ver=(${=1})
+  version=(${=2:-$ZSH_VERSION} 0)
+  while (( $min_cnt <= ${#min_ver} ))
+  do
+    while [[ "$part" != <-> ]]
+    do
+      (( ++ver_cnt > ${#version} )) && return 0
+      if [[ ${version[ver_cnt]} = *[0-9][^0-9]* ]]
+      then
+        order=(${version[ver_cnt]} ${min_ver[ver_cnt]})
+        if [[ ${version[ver_cnt]} = <->* ]]
+        then
+          [[ $order != ${${(On)order}} ]] && return 1
+        else
+          [[ $order != ${${(O)order}} ]] && return 1
+        fi
+        [[ $order[1] != $order[2] ]] && return 0
+      fi
+      part=${version[ver_cnt]##*[^0-9]}
+    done
+    while true
+    do
+      (( ++min_cnt > ${#min_ver} )) && return 0
+      [[ ${min_ver[min_cnt]} = <-> ]] && break
+    done
+    (( part > min_ver[min_cnt] )) && return 0
+    (( part < min_ver[min_cnt] )) && return 1
+    part=''
+  done
+}

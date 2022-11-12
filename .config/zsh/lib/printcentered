@@ -1,0 +1,87 @@
+# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
+
+function zshlib_printcentered {
+
+  local printstring=()
+  local flag_verbose=false
+  local fill=myfile
+
+  declare -A colors
+  colors[reset]='[0m'
+  colors[bold]='[1m'
+  colors[italic]='[3m'
+  colors[underline]='[4m'
+  colors[Black]='[30m'
+  colors[Gray]='[38;5;7m'
+  colors[DarkGray]='[38;5;8m'
+  colors[White]='[37m'
+  colors[Red]='[38;5;196m'
+  colors[Green]='[38;5;46m'
+  colors[Yellow]='[38;5;190m'
+  colors[Blue]='[38;5;33m'
+  colors[Purple]='[38;5;93m'
+  colors[Cyan]='[38;5;87m'
+
+  local usage=(
+    "${colors[bold]}${colors[underline]}${colors[Green]}${0}${colors[reset]}:" #;38;5;15m\"<phrase to center>\" \"<1 char to fill empty space>\" \e[38;5;240m[<number of columns>] [<1 char to surround the whole result>\e[0m\n" >&2 \
+    " "
+    " ${colors[bold]}USAGE${colors[reset]}:"
+    " "
+    "   ${0} ${colors[italic]}${colors[Gray]}[-h|--help]${colors[reset]}"
+    "   ${0} ${colors[italic]}${colors[Gray]}[-f|--fill=<string>] [-s|--surround=<string>] ${colors[bold]}[<string>]${colors[reset]}"
+    "  "
+    " "
+    " ${colors[bold]}OPTIONS${colors[reset]}:"
+    " "
+    "   [-h|--help]              Show this help"
+    "   [-f|--fill=<string>]     Character to fill empty space (single character)"
+    "   [-s|--surround=<string>] Character to surround the whole result with (single character)"
+    " "
+    " "
+    " ${colors[bold]}EXAMPLES${colors[reset]}:"
+    " "
+    "   $ ${0} ${colors[italic]}${colors[Gray]}--fill='═' --surround='╪' ' HOWDY '${colors[reset]}"
+  )
+
+  opterr() { printf >&2 "%s:${colors[reset]}${colors[Red]}%s ${colors[yellow]}%s${colors[reset]}" "${1}" "${2}" "${3}"; printf "%s\n" $usage && return 1; }
+
+  while (( $# )); do
+    case $1 in
+      --)                 shift; printstring+=("${@[@]}"); break ;;
+      -h|--help)          printf "%s\n" $usage && return         ;;
+      -f|--fill)          shift; fill=${1}                         ;;
+      -f=*|--fill=*)      fill="${1#*=}"                         ;;
+      -s|--surround)      shift; surround=${1}                     ;;
+      -s=*|--surround=*)  surround="${1#*=}"                     ;;
+      -*)                 opterr "${0}" "Unknowm option:" ${1} && printf "%s\n" $usage && return 2                  ;;
+      *)                  printstring+=("${@[@]}"); break        ;;
+    esac
+    shift
+  done
+
+  [[ $# == 0 ]] && opterr "${0}" "No input string to display!"
+
+  declare -i NB_COLS filler_len str_len
+  NB_COLS=$(( $COLUMNS - $(( ${#surround} * 2 )) )) # $((  )) ))
+  str_len="${#printstring}"
+  filler_len="$(( (NB_COLS - str_len) / 2 ))"          # Build the chars to add before and after the given text
+  #[[ $# -ge 3 ]] && NB_COLS=$3 || NB_COLS="$(tput cols)"
+  #[[ $# -ge 4 ]] #& surround=${4:0:1} && NB_COLS=$((NB_COLS - 2 ))
+
+  # [[ $str_len -ge $NB_COLS ]] && echo "$1" && return 0            # Simply displays the text if it exceeds the maximum length
+
+  [[ $# -ge 2 ]] && ch="${2:0:1}" || ch=" "
+  # [[ $# -ge 2 ]] && ch="${2:0:1}" || ch=" "
+
+  # filler=""
+  # unset filler
+  for (( i = 0; i < filler_len; i++ )); do
+    filler="${filler}${ch}"
+  done
+
+  printf "%s%s%s%s%s" "$surround" "$filler" "$printstring" "$filler" "$surround"  # Add an additional filler char at the end if the result length is not even
+
+  [[ $(( (NB_COLS - str_len) % 2 )) -ne 0 ]] && printf "%s" "${ch}"
+  printf "%s\n" "${SURROUNDING_CHAR}"
+  return 0
+}
