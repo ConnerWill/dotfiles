@@ -341,9 +341,4 @@ function vicmdZQ(){ exit; }; zle -N vicmdZQ
 
 bindkey -M vicmd 	"ZZ" vicmdZZ
 bindkey -M vicmd 	"ZQ" vicmdZQ
-<<<<<<< HEAD
 bindkey -M vicmd  "^?" vi-backward-char
-=======
-
-
->>>>>>> 37f0896a63fa13031320b14d539ba35d7d4b5619
