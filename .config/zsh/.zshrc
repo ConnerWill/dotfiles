@@ -88,9 +88,10 @@
 ##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
 ##:
 ###########################################################################
+###}}}
+########################
 ####   DEBUGGING    ####
 ########################
-### }}}
 
 [ -n "$INHERIT_ENV" ] && return 0
 
@@ -106,8 +107,12 @@ fi
 
 #  Profiling
 # ZSH_PROFILE_RC=1
-[[ -n "$ZSH_PROFILE_RC" ]] && which zmodload >&/dev/null && zmodload zsh/zprof
-
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  which zmodload >&/dev/null && zmodload zsh/zprof
+  PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
+  exec 3>&2 2>/tmp/zshstart.$$.log
+  setopt xtrace prompt_subst
+fi
 # }}}
 
 
@@ -334,8 +339,12 @@ _zshloadendclear
 #echo -ne "\r"      ## Move cursor to beginning of line
 
 # {{{ Profile report
+
+
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
-  zprof # >! ~/zshrc.zprof
+unsetopt xtrace
+exec 2>&3 3>&-
+  #zprof # >! ~/zshrc.zprof
   #exit
 fi
 # }}}
