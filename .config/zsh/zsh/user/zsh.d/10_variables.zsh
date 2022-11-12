@@ -145,12 +145,16 @@ AWESOMEWM_CONFIG_DIR="$XDG_CONFIG_HOME/awesome"
 ### [=]==================================[=]
 ### [~]............ Lynx
 ### [=]==================================[=]
-export LYNX_CONFIG_DIR_LOCAL="$XDG_CONFIG_HOME/lynx"
-export LYNX_CONFIG_DIR_GLOBAL="/usr/share/lynx"
-export LYNX_CFG="$LYNX_CONFIG_DIR_LOCAL/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
-export LYNX_SESSION="$LYNX_CONFIG_DIR_LOCAL/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
-export LYNX_LSS="$LYNX_CONFIG_DIR_LOCAL/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
-export LYNX_CFG_PATH="$LYNX_CONFIG_DIR_LOCALL"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
+export LYNXDOTDIR="${XDG_CONFIG_HOME}/lynx"
+
+export LYNX_CFG="${LYNXDOTDIR}/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
+export LYNX_LSS="${LYNXDOTDIR}/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
+
+export LYNX_SESSION="${XDG_CACHE_HOME}/lynx/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
+[[ -n "${commands[lynx]}" ]] && [[ ! -d "${LYNX_SESSION:h}" ]] \
+	&& mkdir -p "${LYNX_SESSION:h}"
+
+export LYNX_CFG_PATH="${LYNXDOTDIR}"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
 export LYNX_HELPFILE="$LYNX_CONFIG_DIR_GLOBAL/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
 export WWW_HOME="$LYNX_CONFIG_DIR_GLOBAL/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
 
