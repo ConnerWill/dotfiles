@@ -269,7 +269,7 @@ bindkey -M vicmd 	"gc" 	vi-pound-insert
 bindkey -M vicmd 	"gg" 	beginning-of-buffer
 bindkey -M vicmd 	"G"		end-of-buffer
 
-if autoload -Uz surround; then
+if autoload -Uz surround >/dev/null 2>&1; then
 	zle -N delete-surround surround
 	zle -N add-surround surround
 	zle -N change-surround surround
@@ -330,6 +330,7 @@ bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
 # zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"
 # zstyle ":plugin:history-search-multi-word" synhl "yes"
 # zstyle ":plugin:history-search-multi-word" clear-on-cancel "no
+
 
 function vicmdZZ() {
 		zle kill-region -w

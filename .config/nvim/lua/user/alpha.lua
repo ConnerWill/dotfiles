@@ -52,16 +52,16 @@ dashboard.section.header.val = {
 	--Menu Items{{{
 dashboard.section.buttons.val = {
 	dashboard.button("r", "  Recent files", ":Telescope oldfiles <CR>"),
-	dashboard.button("R", "🥆  RipGrepFZF", ":Telescope fd <CR>"),
+	dashboard.button("R", "  RipGrepFZF", ":Telescope fd <CR>"),
 	dashboard.button("f", "  Find files", ":Telescope find_files <CR>"),
 	dashboard.button("F", "  FZF", ":FZF <CR>"),
 	dashboard.button("t", "  Find text", ":Telescope live_grep <CR>"),
 	dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
 	dashboard.button("p", "  Projects", ":Telescope projects <CR>"),
-	dashboard.button("T", "  Terminal", ":ToggleTerm <CR>"),
+	dashboard.button("T", "  Terminal", ":ToggleTerm <CR>"),
 	dashboard.button("C", "  Configuration", ":e ~/.config/nvim <CR>"),
 	dashboard.button("K", "  Keybindings", ":WhichKey <CR>"),
-	dashboard.button("h", "📖 Help", ":h <CR>"),
+	dashboard.button("h", "  Help", ":Telescope help_tags<CR>"),
 	dashboard.button("q", "  EXIT NEOVIM", ":qa<CR>"),
 }
 
