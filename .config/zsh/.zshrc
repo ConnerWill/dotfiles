@@ -106,7 +106,7 @@ fi
 
 
 #  Profiling
-ZSH_PROFILE_RC=1
+# ZSH_PROFILE_RC=1
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
   which zmodload >&/dev/null && zmodload zsh/zprof
   PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
