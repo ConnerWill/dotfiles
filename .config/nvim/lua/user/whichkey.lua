@@ -29,9 +29,12 @@ local setup = {
   key_labels = {
     -- override the label used to display some keys. It doesn't effect WK in any other way.
     -- For example:
-    -- ["<space>"] = "SPC",
-    -- ["<cr>"] = "RET",
-    -- ["<tab>"] = "TAB",
+    ["<space>"] = "SPACE",
+    ["<cr>"] = " ",
+    ["<tab>"] = " ",
+    ["<esc>"] = "ESC",
+    ["<bs>"] = " ",
+    ["<leader>"] = "<leader>",
   },
   icons = {
     breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
@@ -68,7 +71,14 @@ local setup = {
     i = { "j", "k" },
     v = { "j", "k" },
   },
+    -- disable the WhichKey popup for certain buf types and file types.
+    -- Disabled by deafult for Telescope
+  disable = {
+    buftypes = {},
+    filetypes = { "TelescopePrompt" },
+  },
 }
+
 local opts = {
   mode = "n", -- NORMAL mode
   prefix = "<leader>",
@@ -92,6 +102,7 @@ local mappings = {
     ["v"] = { "<cmd>Format<cr>",                                                                                                          "Format" },
     ["T"] = { "<cmd>Telescope treesitter theme=ivy<cr>",                                                                              "TreeSitter" },
     ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>",                                                       "Projects" },
+    ["W"] = { "<cmd>WhichKey <CR>",                                                                                         "List all keybindings" },
     ["w"] = { "<cmd>w!<CR>",                                                                                                                "Save" },
     ["q"] = { "<cmd>q!<CR>",                                                                                                                "Quit" },
     p = {

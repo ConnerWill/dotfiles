@@ -1,16 +1,15 @@
 
 
---{{{ New /Simplified 
+--{{{ New /Simplified
 
 local status_ok, wilder = pcall(require, "wilder")
 if not status_ok then
 	return
 end
--- local wilder = require('wilder')
 
+-- local wilder = require('wilder')
 wilder.setup({modes = {':', '/', '?'}})
--- Disable Python remote plugin
-wilder.set_option('use_python_remote_plugin', 0)
+wilder.set_option('use_python_remote_plugin', 0) -- Disable Python remote plugin
 
 wilder.set_option('pipeline', {
 	wilder.branch(
@@ -23,19 +22,12 @@ wilder.set_option('pipeline', {
 
 wilder.set_option('renderer', wilder.renderer_mux({
 	[':'] = wilder.popupmenu_renderer({
-		highlighter = wilder.basic_highlighter(),
-		left = {
-			' ',
-			wilder.popupmenu_devicons()
-		},
-		right = {
-			' ',
-			wilder.popupmenu_scrollbar()
-		},
+		highlighter =  wilder.basic_highlighter(),
+		left =  { ' ', wilder.popupmenu_devicons()  },
+		right = { ' ', wilder.popupmenu_scrollbar() },
 	}),
 	['/'] = wilder.wildmenu_renderer({
-	-- wilder.	
-		highlighter = wilder.basic_highlighter(),
+		highlighter = wilder.basic_highlighter(),  -- wilder.
 	}),
 }))
 
@@ -221,4 +213,3 @@ wilder.set_option('renderer', wilder.renderer_mux({
 -- }))
 
 ---}}}
-
