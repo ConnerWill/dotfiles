@@ -93,7 +93,7 @@ if command -v lsd >/dev/null 2>&1; then
   alias la='lsd --color always --icon always --almost-all'
   alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
+  alias llls="printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
   alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
   alias ls='lsd --color always --icon always'
   alias lsa='command lsd --color always --icon always --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
@@ -200,7 +200,7 @@ if [[ -n "${DISTRO}" ]]; then
     alias apti="apt install"
     alias update="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y"
     alias upgrade="printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\"; apt-get upgrade -y"
-    alias updgrate="clear; printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
+    alias updgrate="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
   ## If distro is gentoo
   elif [[ ${DISTRO} == "Gentoo" ]]; then
     printf ""
@@ -294,7 +294,7 @@ alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | gr
 ### [=]==================================[=]
 ### [~]............ Neofetch
 ### [=]==================================[=]
-alias nf='clear && neofetch'
+alias nf='neofetch'
 
 ### [=]==================================[=]
 ### [~]............ File Explorers
