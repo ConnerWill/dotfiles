@@ -30,10 +30,10 @@ require "user.linebox"
 require "user.vim-functions.vim-functions"
 require "user.neoscroll"
 require "user.marks"
-require "user.venn"
 require "user.align"
 require "user.vim-illuminate"
 require "user.abbrev-man"
+--[[ require "user.venn" ]]
 -- require "user.twilight"
 -- require "user.snippets"
 

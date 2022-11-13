@@ -103,7 +103,7 @@ return packer.startup(function(use)
 	-- snippets
 	use("L3MON4D3/LuaSnip") --snippet engine
 	use("rafamadriz/friendly-snippets") -- a bunch of snippets to use
-	use("dbeniamine/cheat.sh-vim") -- cheat (cht.sh) Vim plugin
+	--[[ use("dbeniamine/cheat.sh-vim") -- cheat (cht.sh) Vim plugin ]]
 
 	use ("Pocco81/AbbrevMan.nvim")
 
@@ -122,6 +122,7 @@ return packer.startup(function(use)
 	-- Misc
 	use("nvim-lua/popup.nvim") -- An implementation of the Popup API from vim in Neovim
 	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
+	use("windwp/nvim-ts-autotag") -- Autotags, like autopairs but for html
 	use("kyazdani42/nvim-web-devicons")
 	use("akinsho/bufferline.nvim")
 	use("moll/vim-bbye")

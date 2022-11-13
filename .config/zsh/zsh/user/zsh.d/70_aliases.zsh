@@ -1,11 +1,10 @@
 #shellcheck disable=2148,2139,2059
 
-
-
-alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
-
-alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 alias e="$EDITOR"
+alias ez="exec ${SHELL}"
+alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
+alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+
 alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
@@ -15,13 +14,12 @@ alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool sel
 ### [=]==================================[=]
 alias cd..="cd .."
 alias ..="cd .."
-alias ....="cd .."
 alias ..etc="cd /etc"
 alias ../="cd /"
 alias ..='cd ..'
 alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
+alias ....='cd ../..'
+alias .....='cd ../../..'
 alias cd..='cd ..'
 alias cdls='cd .. && ls'
 alias 'c d'='cd'
@@ -553,7 +551,6 @@ alias difff="diff --color=always --minimal --suppress-common-lines --side-by-sid
 alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
-alias ez="exec ${SHELL}"
 
 
 alias git-url="git config --local --get remote.origin.url"

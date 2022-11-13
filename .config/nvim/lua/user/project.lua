@@ -20,17 +20,17 @@ project.setup({
 	--- order matters: if one is not detected, the other is used as fallback. You
 	--- can also delete or rearangne the detection methods.
 	-- detection_methods = { "lsp", "pattern" }, -- NOTE: lsp detection will get annoying with multiple langs in one project
-	detection_methods = { "pattern" },
+	detection_methods = { "lsp", "pattern" },
 
 	---@usage patterns used to detect root dir, when **"pattern"** is in detection_methods
 	patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
 
 	---@ Show hidden files in telescope when searching for files in a project
-	show_hidden = false,
+	show_hidden = true,
 
 	---@usage When set to false, you will get a message when project.nvim changes your directory.
 	-- When set to false, you will get a message when project.nvim changes your directory.
-	silent_chdir = true,
+	silent_chdir = false,
 
 	---@usage list of lsp client names to ignore when using **lsp** detection. eg: { "efm", ... }
 	ignore_lsp = {},
