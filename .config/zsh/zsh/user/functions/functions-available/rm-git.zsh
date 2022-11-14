@@ -13,7 +13,7 @@ function rm_git(){
   foundfiles="$(find -writable -user $(whoami) \
     -name '.git' -or -name '.gitignore' \
     -or -name '.gitkeep' -or -name '.gitattributes' \
-    -or -name 'LICENSE' -or -name '.github' -not -name '.gitconfig')"
+    -or -name 'LICENSE' -or -name '.gitmodules' -or -name '.github' -not -name '.gitconfig')"
 
   foundfilesnum="$(echo "${foundfiles}" | wc -l)"
 

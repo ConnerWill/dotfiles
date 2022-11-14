@@ -88,9 +88,10 @@
 ##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
 ##:
 ###########################################################################
+###}}}
+########################
 ####   DEBUGGING    ####
 ########################
-### }}}
 
 [ -n "$INHERIT_ENV" ] && return 0
 
@@ -106,8 +107,12 @@ fi
 
 #  Profiling
 # ZSH_PROFILE_RC=1
-[[ -n "$ZSH_PROFILE_RC" ]] && which zmodload >&/dev/null && zmodload zsh/zprof
-
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  which zmodload >&/dev/null && zmodload zsh/zprof
+  PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
+  exec 3>&2 2>${ZSH_DEBUG_LOG_DIR:-/tmp}/zshstart.$$.log
+  setopt xtrace prompt_subst
+fi
 # }}}
 
 
@@ -256,13 +261,7 @@ function _zshinittmux(){
 # _zshinittmux
 unfunction _zshinittmux
 ### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
-#
-# rm -f stopspinning > /dev/null 2>&1
-# . $HOME/scripts/bash/progress-bars/spinners/spinner-orig/spinner.sh
-# SPINNER_SYMBOLS="UNI_PIPES" #"ASCII_PLUS" #"WIDE_UNI_GREYSCALE"
-# printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-# (spinner &)
-#
+
 #echo -ne "\e[?25l" ## Hide Cursor
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[1A"   ## Move curser up 1 line
@@ -334,15 +333,18 @@ _zshloadendclear
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-# touch stopspinning
 #_loading_bar
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[2K"   ## Clear line
 #echo -ne "\r"      ## Move cursor to beginning of line
 
 # {{{ Profile report
+
+
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
-  zprof # >! ~/zshrc.zprof
+unsetopt xtrace
+exec 2>&3 3>&-
+  #zprof # >! ~/zshrc.zprof
   #exit
 fi
 # }}}

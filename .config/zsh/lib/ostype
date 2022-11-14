@@ -1,0 +1,8 @@
+# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
+
+OSTYPE=$(uname -s)
+islinux()  { [[ $OSTYPE == "Linux"   ]]; }
+isfreebsd(){ [[ $OSTYPE == "FreeBSD" ]]; }
+isopenbsd(){ [[ $OSTYPE == "OpenBSD" ]]; }
+isdarwin() { [[ $OSTYPE == "Darwin"  ]]; }
+issolaris(){ [[ $OSTYPE == "SunOS"   ]]; }

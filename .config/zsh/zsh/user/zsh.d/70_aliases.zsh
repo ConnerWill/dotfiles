@@ -1,11 +1,10 @@
 #shellcheck disable=2148,2139,2059
 
-
-
-alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
-
-alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 alias e="$EDITOR"
+alias ez="exec ${SHELL}"
+alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
+alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+
 alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
@@ -28,6 +27,9 @@ alias cdold="cd $OLDPWD"
 alias cdtemp="$TEMPDIR"
 alias cdt="$TEMPDIR"
 alias cd-temp="$TEMPDIR"
+
+
+
 alias zshall="man zshall"
 
 ### [=]==================================[=]
@@ -72,6 +74,7 @@ alias l='ls -A -1'; alias ll='ls -A -l'
 alias LS="ls"     ; alias sl="ls"
 alias ks="ls"     ; alias sls="ls"
 alias lsls='command ls'
+alias octal="stat --dereference --printf='\e[0;38;5;190m%a \e[0;38;5;87m%A \e[0;38;5;196m%T \e[0;1;38;5;46m%n\e[0m\n'"
 
 ### exa
 if [[ "${commands[exa]}" ]]; then
@@ -85,11 +88,11 @@ fi
 if [[ "${commands[exa]}" ]]; then
   alias 'cd ls'='lsd --almost-all --long'
   alias ks='lsd --color always --icon always'
-  alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
+  alias l='lsd --color always --no-symlink --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
   alias la='lsd --color always --icon always --almost-all'
   alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
+  alias llls="printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
   alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
   alias ls='lsd --color always --icon always'
   alias lsa='command lsd --color always --icon always --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
@@ -111,21 +114,6 @@ alias list-open-internet-files='lsof -i -U'
 alias rm="rm --verbose --preserve-root=all --interactive=once"
 alias rrm="rm"
 alias rmf='rm --force'
-function rmcwd(){
-  local color_reset color_error color_warning color_success RMDIR RMDIR_parent
-  color_error='\e[0;1;38;5;196m'   color_reset='\e[0m'
-  color_warning='\e[0;1;38;5;190m' color_success='\e[0;1;38;5;46m'
-  RMDIR="${PWD}"
-  cd .. || printf "${color_error}Cannot move out of '%s'${color_reset}\n" "${RMDIR}" || return 1
-  RMDIR_parent="${PWD}"
-  rmdir --verbose "${RMDIR}" || printf "${color_error}Cannot remove '%s'${color_reset}\n" "${RMDIR}" || return 1
-
-}
-
-alias rmcdir='[[ cd .. ||
-alias rmcwd="rmcdir"
-alias rmcdir-force='cd ..; rm --interactive=once --recursive --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd-force='cd ..; rm --interactive=once -r --verbose $OLDPWD || cd $OLDPWD'
 alias rm-license="find . -type f -name 'LICENSE' | xargs -I{} rm --interactive=once --preserve-root --recursive --verbose {}"
 
 
@@ -198,7 +186,7 @@ if [[ -n "${DISTRO}" ]]; then
     alias apti="apt install"
     alias update="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y"
     alias upgrade="printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\"; apt-get upgrade -y"
-    alias updgrate="clear; printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
+    alias updgrate="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
   ## If distro is gentoo
   elif [[ ${DISTRO} == "Gentoo" ]]; then
     printf ""
@@ -292,7 +280,7 @@ alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | gr
 ### [=]==================================[=]
 ### [~]............ Neofetch
 ### [=]==================================[=]
-alias nf='clear && neofetch'
+alias nf='neofetch'
 
 ### [=]==================================[=]
 ### [~]............ File Explorers
@@ -387,8 +375,8 @@ fi
 ### [=]==================================[=]
 ### [~]............ MetaSploit
 ### [=]==================================[=]
-[[ -n "${commands[rsf}" ]] && alias -s routersploit='rsf'
-[[ -n "${commands[metasploit]}" ]] && alias msf='sudo msfconsole'
+[[ "${commands[rsf]}" ]] && alias -s routersploit='rsf'
+[[ "${commands[metasploit]}" ]] && alias msf='sudo msfconsole'
 
 ### [=]==================================[=]
 ### [~]............ Raspberry Pi
@@ -547,7 +535,6 @@ alias difff="diff --color=always --minimal --suppress-common-lines --side-by-sid
 alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
-alias ez="exec ${SHELL}"
 
 [[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh"
 
