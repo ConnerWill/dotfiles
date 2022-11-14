@@ -13,21 +13,14 @@ alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool sel
 ### [=]==================================[=]
 ### [~]............ cd
 ### [=]==================================[=]
-alias cd..="cd .."
-alias ..="cd .."
-alias ....="cd .."
+alias ....="cd ../.."   ; alias ../="cd /"
+alias ..='cd ..'        ; alias ...='cd ../..'
+alias ....='cd ../../..'; alias .....='cd ../../../..'
+alias cd..='cd ..'      ; alias cd-1="cd $OLDPWD"
+alias 'c d'='cd'        ; alias 'ls cd'='cd'
+alias ccd='cd'          ; alias scd="cd"
+alias cdls='cd .. && ls'; alias cdl='cd .. && ls'
 alias ..etc="cd /etc"
-alias ../="cd /"
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias cd..='cd ..'
-alias cdls='cd .. && ls'
-alias 'c d'='cd'
-alias cdl='cd .. && ls'
-alias ccd='cd'
-alias 'ls cd'='cd'
 alias home='cd $HOME ; ls ; pwd'
 alias cdhome='cd $HOME ; ls ; pwd'
 alias cdhometemp='cd $HOME/Temporary ; ls ; pwd'
@@ -35,13 +28,18 @@ alias cdold="cd $OLDPWD"
 alias cdtemp="$TEMPDIR"
 alias cdt="$TEMPDIR"
 alias cd-temp="$TEMPDIR"
-alias scd="cd"
 alias zshall="man zshall"
 
 ### [=]==================================[=]
 ### [~]............ cat
 ### [=]==================================[=]
-if command -v bat >/dev/null 2>&1; then
+if [[ "${commands[exa]}" ]]; then
+  alias catp="bat --plain"            ; alias ccat="bat --style=full"
+  alias catf="bat --style=full"       ; alias ca="bat --style=header,grid --plain *"
+  alias scat="cat"                    ; alias car="cat"
+  alias cat='bat --style=header,grid' ; alias ca='bat --style=header,grid *'
+  alias bat-preview-languages="bat_preview_languages"
+  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
   function bat_preview_languages(){
     local viewfile
     viewfile="${1}"
@@ -53,16 +51,6 @@ if command -v bat >/dev/null 2>&1; then
       | awk '{print $1}'        \
       | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
   }
-  alias bat-preview-languages="bat_preview_languages"
-  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
-  alias catp="bat --plain"
-  alias ccat="bat --style=full"
-  alias catf="bat --style=full"
-  alias ca="bat --style=header,grid --plain *"
-  alias scat="cat"
-  alias car="cat"
-  alias cat='bat --style=header,grid'
-  alias ca='bat --style=header,grid *'
 fi
 
 function c(){
@@ -80,15 +68,21 @@ function c(){
 ### [~]............ ls
 ### [=]==================================[=]
 alias ls='ls --color=always'
-alias l='ls --color=always -A -1'
-alias ll='ls --color=always -A -l'
-alias LS="ls"
-alias sl="ls"
-alias ks="ls"
+alias l='ls -A -1'; alias ll='ls -A -l'
+alias LS="ls"     ; alias sl="ls"
+alias ks="ls"     ; alias sls="ls"
 alias lsls='command ls'
-alias sls="ls"
 
-if command -v lsd >/dev/null 2>&1; then
+### exa
+if [[ "${commands[exa]}" ]]; then
+  alias exa='exa --color always --icons'
+  alias l1='exa --oneline --all --header'
+  alias lll='exa --long --all --header'
+  alias ls-l="exa --sort=type --long --all"
+  alias ls-ll="exa --sort=type --tree --recurse --long --all"
+fi
+
+if [[ "${commands[exa]}" ]]; then
   alias 'cd ls'='lsd --almost-all --long'
   alias ks='lsd --color always --icon always'
   alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
@@ -106,14 +100,6 @@ if command -v lsd >/dev/null 2>&1; then
   alias s='lsd --color always --icon always'
 fi
 
-### exa
-if command -v exa >/dev/null 2>&1; then
-  alias l1='exa --color always --icons --oneline --all --header'
-  alias lll='exa --color always --icons --long --all --header'
-  alias ls-l="exa --sort=type --colour always --long --all"
-  alias ls-ll="exa --sort=type --colour always --tree --recurse --long --all"
-fi
-
 ## lsof
 alias list-open-files='lsof'
 alias list-open-files-repeat='lsof -r "m[~]========================[ Time: %T ]========================[~]"'
@@ -122,15 +108,25 @@ alias list-open-internet-files='lsof -i -U'
 ### [=]==================================[=]
 ### [~]............ rm
 ### [=]==================================[=]
-alias rm="rm -v --preserve-root=all --interactive=once"
-alias rrm="rm -v"
-alias rm="rm --verbose -i"
-alias rmf='rm --force --verbose'
-alias rmcdir='cd ..; rmdir --verbose $OLDPWD || cd $OLDPWD'
+alias rm="rm --verbose --preserve-root=all --interactive=once"
+alias rrm="rm"
+alias rmf='rm --force'
+function rmcwd(){
+  local color_reset color_error color_warning color_success RMDIR RMDIR_parent
+  color_error='\e[0;1;38;5;196m'   color_reset='\e[0m'
+  color_warning='\e[0;1;38;5;190m' color_success='\e[0;1;38;5;46m'
+  RMDIR="${PWD}"
+  cd .. || printf "${color_error}Cannot move out of '%s'${color_reset}\n" "${RMDIR}" || return 1
+  RMDIR_parent="${PWD}"
+  rmdir --verbose "${RMDIR}" || printf "${color_error}Cannot remove '%s'${color_reset}\n" "${RMDIR}" || return 1
+
+}
+
+alias rmcdir='[[ cd .. ||
 alias rmcwd="rmcdir"
-alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-alias rm-license="rm -I -v LICENSE"
+alias rmcdir-force='cd ..; rm --interactive=once --recursive --verbose $OLDPWD || cd $OLDPWD'
+alias rmcwd-force='cd ..; rm --interactive=once -r --verbose $OLDPWD || cd $OLDPWD'
+alias rm-license="find . -type f -name 'LICENSE' | xargs -I{} rm --interactive=once --preserve-root --recursive --verbose {}"
 
 
 ### [=]==================================[=]
@@ -364,7 +360,7 @@ alias wp='nitrogen --restore'
 ### [=]==================================[=]
 ### [~]............ NMAP
 ### [=]==================================[=]
-if command -v nmap >/dev/null 2>&1; then
+if [[ -n "${commands[nmap]}" ]] ; then
   alias nmap_open_ports="nmap --open"
   alias nmap_list_interfaces="nmap --iflist"
   alias nmap_slow="sudo nmap -sS -v -T1"
@@ -391,10 +387,8 @@ fi
 ### [=]==================================[=]
 ### [~]............ MetaSploit
 ### [=]==================================[=]
-alias -s routersploit='rsf'
-if command -v msfconsole >/dev/null 2>&1; then
-  alias msf='sudo msfconsole'
-fi
+[[ -n "${commands[rsf}" ]] && alias -s routersploit='rsf'
+[[ -n "${commands[metasploit]}" ]] && alias msf='sudo msfconsole'
 
 ### [=]==================================[=]
 ### [~]............ Raspberry Pi
@@ -555,5 +549,6 @@ alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 alias ez="exec ${SHELL}"
 
+[[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh"
 
 alias git-url="git config --local --get remote.origin.url"
