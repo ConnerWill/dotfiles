@@ -37,11 +37,10 @@ UNMARK(){ $e "\033[27m";}                        # normalize current line text
 
 ```
 
-## embeded hyperlink
+## Embedded Hyperlink
 
 ```shell
 
-]8;;https://connerwill.comconnerwill.sh]8;;
-
+printf "[0;1;4;38;5;201m]8;;https://connerwill.comconnerwill.sh]8;;[0m\n"
 
 ```
