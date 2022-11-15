@@ -228,6 +228,16 @@ function _zshloadverbose(){
 
 
 ### ::::::::::::::::::::: OS TYPE ::::::::::::::::::::::::: ### {{{
+#ZSHLIB="${ZDOTDIR}/lib"
+#if [[ -d "${ZSHLIB}" ]]; then
+#  if [[ -f "${ZSHLIB}/ostype" ]]; then
+#    source "${ZSHLIB}/ostype"
+#    islinux && OSTYPE="linux"
+#    isandroid
+#
+#
+#
+
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
   if [[ -f /etc/os-release ]]; then
     DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
@@ -239,10 +249,10 @@ elif [[ "${OSTYPE}" == "linux-android" ]]; then
 else
   unset DISTRO
 fi
-###}}}
+###}iuuuuuuuui}}
 
 
-### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
+### ::::::::::zR::::::::::: START TMUX :::::::::::::::::::::: ### }}}
 ## Set NOTMUX to any value to disable automatic tmux
 NOTMUX=1
 # shellcheck disable=2148

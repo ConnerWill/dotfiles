@@ -6,3 +6,5 @@ isfreebsd(){ [[ $OSTYPE == "FreeBSD" ]]; }
 isopenbsd(){ [[ $OSTYPE == "OpenBSD" ]]; }
 isdarwin() { [[ $OSTYPE == "Darwin"  ]]; }
 issolaris(){ [[ $OSTYPE == "SunOS"   ]]; }
+isandroid(){ uname -r | grep --silent 'android'; }  
+
