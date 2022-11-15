@@ -111,9 +111,11 @@ alias list-open-internet-files='lsof -i -U'
 ### [=]==================================[=]
 ### [~]............ rm
 ### [=]==================================[=]
-alias rm="rm --verbose --preserve-root=all --interactive=once"
+# alias rm="rm --verbose --preserve-root=all --interactive=once"
+alias rm="rm --verbose --preserve-root=all --interactive"
 alias rrm="rm"
 alias rmf='rm --force'
+alias rmbsd="rm -v -I"
 alias rm-license="find . -type f -name 'LICENSE' | xargs -I{} rm --interactive=once --preserve-root --recursive --verbose {}"
 
 

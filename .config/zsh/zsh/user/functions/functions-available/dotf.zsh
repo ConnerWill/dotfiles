@@ -16,13 +16,22 @@ dotf(){
 			diff --name-only \
 			| xargs -I{} sh -c "$(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} add -v ${HOME}/{}"
 
+	elif [[ "${1}" == "status" ]]; then
+		if [[ "${2}" == "-u" ]]; then
+			$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+				status -u | grep "config"
+		else
+			$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+				status
+		fi
+
 	## commit and push
 	elif [[ "${1}" == "upload" ]] || [[ "${1}" == "up" ]]; then
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
 			commit --status --branch --allow-empty-message --verbose -m "${2}" \
 		&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
       push --verbose
-	
+
 	## git
 	else
 		[[ $# -gt 0 ]] \
@@ -30,4 +39,3 @@ dotf(){
 			|| $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" status
 	fi
 }
-
