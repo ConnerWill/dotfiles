@@ -35,12 +35,11 @@ alias zshall="man zshall"
 ### [=]==================================[=]
 ### [~]............ cat
 ### [=]==================================[=]
-if [[ "${commands[exa]}" ]]; then
-  alias catp="bat --plain"            ; alias ccat="bat --style=full"
-  alias catf="bat --style=full"       ; alias ca="bat --style=header,grid --plain *"
-  alias scat="cat"                    ; alias car="cat"
-  alias cat='bat --style=header,grid' ; alias ca='bat --style=header,grid *'
-  alias bat-preview-languages="bat_preview_languages"
+if [[ "${commands[bat]}" ]]; then
+  alias cat='bat --style=header,grid'
+  alias ca='bat' ; alias scat="cat"; alias car="cat"; alias cay="cat"
+  alias cau="cat"; alias cst="cat" ; alias cau="cat"; alias ca="bat"
+  alias catp="bat -p"; alias catf="bat --style=full"
   alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
   function bat_preview_languages(){
     local viewfile
@@ -52,7 +51,7 @@ if [[ "${commands[exa]}" ]]; then
       | awk -F "," '{print $1}' \
       | awk '{print $1}'        \
       | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
-  }
+  }; alias bat-preview-languages="bat_preview_languages"
 fi
 
 function c(){
