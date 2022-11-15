@@ -228,14 +228,15 @@ function _zshloadverbose(){
 
 
 ### ::::::::::::::::::::: OS TYPE ::::::::::::::::::::::::: ### {{{
-#ZSHLIB="${ZDOTDIR}/lib"
-#if [[ -d "${ZSHLIB}" ]]; then
-#  if [[ -f "${ZSHLIB}/ostype" ]]; then
-#    source "${ZSHLIB}/ostype"
-#    islinux && OSTYPE="linux"
-#    isandroid
+# ZSHLIB="${ZDOTDIR}/lib"
+# if [[ -d "${ZSHLIB}" ]]; then
+#   if [[ -f "${ZSHLIB}/ostype" ]]; then
+#     source "${ZSHLIB}/ostype"
+#     islinux && OSTYPE="linux"
+#     isandroid && OSTYPE="linux"
+#     ismacos &&
 #
-#
+
 #
 
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
