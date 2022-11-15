@@ -35,12 +35,11 @@ alias zshall="man zshall"
 ### [=]==================================[=]
 ### [~]............ cat
 ### [=]==================================[=]
-if [[ "${commands[exa]}" ]]; then
-  alias catp="bat --plain"            ; alias ccat="bat --style=full"
-  alias catf="bat --style=full"       ; alias ca="bat --style=header,grid --plain *"
-  alias scat="cat"                    ; alias car="cat"
-  alias cat='bat --style=header,grid' ; alias ca='bat --style=header,grid *'
-  alias bat-preview-languages="bat_preview_languages"
+if [[ "${commands[bat]}" ]]; then
+  alias cat='bat --style=header,grid'
+  alias ca='bat' ; alias scat="cat"; alias car="cat"; alias cay="cat"
+  alias cau="cat"; alias cst="cat" ; alias cau="cat"; alias ca="bat"
+  alias catp="bat -p"; alias catf="bat --style=full"
   alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
   function bat_preview_languages(){
     local viewfile
@@ -52,7 +51,7 @@ if [[ "${commands[exa]}" ]]; then
       | awk -F "," '{print $1}' \
       | awk '{print $1}'        \
       | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
-  }
+  }; alias bat-preview-languages="bat_preview_languages"
 fi
 
 function c(){
@@ -85,22 +84,22 @@ if [[ "${commands[exa]}" ]]; then
   alias ls-ll="exa --sort=type --tree --recurse --long --all"
 fi
 
-if [[ "${commands[exa]}" ]]; then
-  alias 'cd ls'='lsd --almost-all --long'
-  alias ks='lsd --color always --icon always'
+if [[ "${commands[lsd]}" ]]; then
+  alias ls='lsd --color always --icon always'
   alias l='lsd --color always --no-symlink --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
-  alias la='lsd --color always --icon always --almost-all'
   alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
+  alias ks='lsd --color always --icon always'
+  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
+  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias la='lsd --color always --icon always --almost-all'
   alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
   alias llls="printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
-  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
-  alias ls='lsd --color always --icon always'
   alias lsa='command lsd --color always --icon always --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
   alias lsl='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
   alias lss='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lstree="lsd --color always --icon always --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias s='lsd --color always --icon always'
+  alias 'cd ls'='lsd --almost-all --long'
 fi
 
 ## lsof
