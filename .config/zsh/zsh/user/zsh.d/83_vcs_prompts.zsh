@@ -440,7 +440,7 @@ function replacehostnameinprompt(){
   newhostname="termux"
   [[ $(uname -n) == "archlinux" && $(whoami) == "u0_a119" ]] && PROMPTHOSTNAME='%F{99}$newhostname%f'
   [[ $(hostname) == "archdesk" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='' PROMPTATSYMBOL=''
-  [[ $(hostname) == "connerwill.com" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='connerwill.com'
+  [[ $(hostname) == "connerwill.com" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='%F{99}connerwill%f%F{196}.%f%F{99}com%f'
   export PROMPTHOSTNAME
 }; replacehostnameinprompt; unset -f replacehostnameinprompt
 
