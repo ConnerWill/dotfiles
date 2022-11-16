@@ -539,4 +539,5 @@ alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 
 [[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh"
 
+alias cdwww="cd /var/www/connerwill.com"
 alias git-url="git config --local --get remote.origin.url"
