@@ -10,7 +10,7 @@ function zshlib_template {
   local fill=myfile
 
   declare -A colors
-  colors[reset]='[0m'
+  colors[ColorOff]='[0m'
   colors[bold]='[1m'
   colors[italic]='[3m'
   colors[underline]='[4m'
@@ -24,6 +24,7 @@ function zshlib_template {
   colors[Blue]='[38;5;33m'
   colors[Purple]='[38;5;93m'
   colors[Cyan]='[38;5;87m'
+  colors[reset]='[0m'
 
   local usage=(
     "${colors[bold]}${colors[underline]}${colors[Green]}${0}${colors[reset]}:" #;38;5;15m\"<phrase to center>\" \"<1 char to fill empty space>\" \e[38;5;240m[<number of columns>] [<1 char to surround the whole result>\e[0m\n" >&2 \
