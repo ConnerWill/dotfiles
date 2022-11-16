@@ -555,4 +555,5 @@ alias count='find . -type f | wc -l'
 alias hugo-show-demo-site='clear; cd $HOME/temporary/hugo-test-teamaccounting/piko/exampleSite && firefox "http://localhost:1313" & hugo server --themesDir ../..'
 
 timelogging_end 70
+alias cdwww="cd /var/www/connerwill.com"
 alias git-url="git config --local --get remote.origin.url"
