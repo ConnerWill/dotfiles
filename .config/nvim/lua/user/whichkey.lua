@@ -29,9 +29,12 @@ local setup = {
   key_labels = {
     -- override the label used to display some keys. It doesn't effect WK in any other way.
     -- For example:
-    -- ["<space>"] = "SPC",
-    -- ["<cr>"] = "RET",
-    -- ["<tab>"] = "TAB",
+    ["<space>"] = "SPACE",
+    ["<cr>"] = " ",
+    ["<tab>"] = " ",
+    ["<esc>"] = "ESC",
+    ["<bs>"] = " ",
+    ["<leader>"] = "<leader>",
   },
   icons = {
     breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
@@ -68,7 +71,14 @@ local setup = {
     i = { "j", "k" },
     v = { "j", "k" },
   },
+    -- disable the WhichKey popup for certain buf types and file types.
+    -- Disabled by deafult for Telescope
+  disable = {
+    buftypes = {},
+    filetypes = { "TelescopePrompt" },
+  },
 }
+
 local opts = {
   mode = "n", -- NORMAL mode
   prefix = "<leader>",
@@ -78,25 +88,30 @@ local opts = {
   nowait = true, -- use `nowait` when creating keymaps
 }
 local mappings = {
-    ["A"] = { "<cmd>Alpha<cr>"                                  , "Alpha"                                                                          },
+    ["A"] = { "<cmd>Alpha<cr>",                                                                                                           "Alpha"  },
     ["B"] = { "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",          "Buffers" },
     ["e"] = { "<cmd>NvimTreeToggle<cr>",                                                                                                "Explorer" },
     ["c"] = { "<cmd>Bdelete!<CR>",                                                                                                  "Close Buffer" },
+    ["C"] = { "<cmd>LuaSnipListAvailable<CR>",                                                                                     "List Snippets" },
+    ["d"] = { "<cmd>TroubleToggle<cr>",                                                                                                  "Trouble" },
     ["h"] = { "<cmd>nohlsearch<CR>",                                                                                                "No Highlight" },
     ["r"] = { "<cmd>Telescope oldfiles<cr>",                                                                                        "Recent Files" },
     ["f"] = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",    "Find files" },
     ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>",                                                                                "Find Text" },
+    ["z"] = { "<cmd>FZF<cr>",                                                                                                                "FZF" },
+    ["v"] = { "<cmd>Format<cr>",                                                                                                          "Format" },
     ["T"] = { "<cmd>Telescope treesitter theme=ivy<cr>",                                                                              "TreeSitter" },
     ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>",                                                       "Projects" },
+    ["W"] = { "<cmd>WhichKey <CR>",                                                                                         "List all keybindings" },
     ["w"] = { "<cmd>w!<CR>",                                                                                                                "Save" },
     ["q"] = { "<cmd>q!<CR>",                                                                                                                "Quit" },
     p = {
       name = "Packer",
-      c = { "<cmd>PackerCompile<cr>"                            , "Compile"                },
-      i = { "<cmd>PackerInstall<cr>"                            , "Install"                },
-      s = { "<cmd>PackerSync<cr>",    "Sync"                                               },
-      S = { "<cmd>PackerStatus<cr>",  "Status"                                             },
-      u = { "<cmd>PackerUpdate<cr>",  "Update"                                             },
+      s = { "<cmd>PackerSync<cr>",     "Sync"    },
+      c = { "<cmd>PackerCompile<cr>",  "Compile" },
+      i = { "<cmd>PackerInstall<cr>",  "Install" },
+      S = { "<cmd>PackerStatus<cr>",   "Status"  },
+      u = { "<cmd>PackerUpdate<cr>",   "Update"  },
     },
     g = {
       name = "Git",
@@ -132,14 +147,23 @@ local mappings = {
     },
     s = {
       name = "Search",
-      b = { "<cmd>Telescope git_branches<cr>", "Checkout branch"  },
-      c = { "<cmd>Telescope colorscheme<cr>" , "Colorscheme"      },
-      h = { "<cmd>Telescope help_tags<cr>"   , "Find Help"        },
-      M = { "<cmd>Telescope man_pages<cr>"   , "Man Pages"        },
-      r = { "<cmd>Telescope oldfiles<cr>"    , "Open Recent File" },
-      R = { "<cmd>Telescope registers<cr>"   , "Registers"        },
-      k = { "<cmd>Telescope keymaps<cr>"     , "Keymaps"          },
-      C = { "<cmd>Telescope commands<cr>"    , "Commands"         },
+      f = { "<cmd>Telescope fd<cr>",                   "fzf fd"               },
+      r = { "<cmd>Telescope oldfiles<cr>",             "Recent File"          },
+      g = { "<cmd>Telescope live_grep<cr>",            "Grep"                 },
+      a = { "<cmd>Telescope autocommands<cr>",         "Auto Commands"        },
+      c = { "<cmd>Telescope commands<cr>",             "Commands"             },
+      k = { "<cmd>Telescope keymaps<cr>",              "Keymaps"              },
+      h = { "<cmd>Telescope help_tags<cr>",            "Help Pages"            },
+      M = { "<cmd>Telescope man_pages<cr>",            "Man Pages"            },
+      R = { "<cmd>Telescope registers<cr>",            "Registers"            },
+      Y = { "<cmd>Telescope command_history<cr>",      "Command History"      },
+      G = { "<cmd>Telescope searh_history<cr>",        "Searh History"        },
+      S = { "<cmd>Telescope lsp_document_symbols<cr>", "LSP Document Symbols" },
+      d = { "<cmd>Telescope lsp_definitions<cr>",      "LSP Definitions"      },
+      D = { "<cmd>Telescope diagnostic<cr>",           "Diagnostics"          },
+      C = { "<cmd>Telescope colorscheme<cr>",          "Colorschemes"         },
+      H = { "<cmd>Telescope highlights<cr>",           "Highlights"           },
+      P = { "<cmd>Telescope planets<cr>" ,             "Planets"              },
     },
     a = {
       name = "Align",
@@ -158,14 +182,21 @@ local mappings = {
   },
   t = {
       name = "Terminal",
-      b = { "<cmd>lua _BTOP_TOGGLE()<cr>"                      , "Btop"       },
-      u = { "<cmd>lua _NCDU_TOGGLE()<cr>"                      , "NCDU"       },
-      n = { "<cmd>lua _NODE_TOGGLE()<cr>"                      , "Node"       },
-      t = { "<cmd>lua _HTOP_TOGGLE()<cr>"                      , "Htop"       },
-      p = { "<cmd>lua _PYTHON_TOGGLE()<cr>"                    , "Python"     },
-      f = { "<cmd>ToggleTerm direction=float<cr>"              , "Float"      },
-      h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>" , "Horizontal" },
-      v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>"   , "Vertical"   },
+      T = { "<cmd>ToggleTerm size=80 direction=vertical<cr>",    "Full"       },
+      v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>",    "Vertical"   },
+      h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>",  "Horizontal" },
+      f = { "<cmd>ToggleTerm direction=float<cr>",               "Float"      },
+      z = { "<cmd>lua _ZSH_TOGGLE()<cr>",                        "zsh"        },
+      p = { "<cmd>lua _PYTHON_TOGGLE()<cr>",                     "python"     },
+      n = { "<cmd>lua _NODE_TOGGLE()<cr>",                       "node"       },
+      b = { "<cmd>lua _BTOP_TOGGLE()<cr>",                       "btop"       },
+      t = { "<cmd>lua _HTOP_TOGGLE()<cr>",                       "htop"       },
+      u = { "<cmd>lua _NCDU_TOGGLE()<cr>",                       "ncdu"       },
+      s = {
+          name = "SSH",
+          c = { "<cmd>lua _SSH_CONNERWILL_TOGGLE_()<cr>",    "ssh connerwill" },
+          p = { "<cmd>lua _SSH_BIGCHUNGUS_TOGGLE_()<cr>",    "ssh bigchungus" },
+      },
   },
 }
 which_key.setup(setup)

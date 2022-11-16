@@ -15,9 +15,6 @@ end
 
 	--ART {{{
 
-
-
-
 local dashboard = require("alpha.themes.dashboard")
 dashboard.section.header.val = {
 	[[                    ...                                   ]],
@@ -54,12 +51,17 @@ dashboard.section.header.val = {
 
 	--Menu Items{{{
 dashboard.section.buttons.val = {
-	dashboard.button("r", "  Recent files", ":Telescope oldfiles <CR>"),
-	dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
+	dashboard.button("r", "  Recent files", ":Telescope oldfiles <CR>"),
+	dashboard.button("R", "  RipGrepFZF", ":Telescope fd <CR>"),
 	dashboard.button("f", "  Find files", ":Telescope find_files <CR>"),
+	dashboard.button("F", "  FZF", ":FZF <CR>"),
 	dashboard.button("t", "  Find text", ":Telescope live_grep <CR>"),
+	dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
 	dashboard.button("p", "  Projects", ":Telescope projects <CR>"),
-	dashboard.button("c", "  Configuration", ":e ~/.config/nvim <CR>"),
+	dashboard.button("T", "  Terminal", ":ToggleTerm <CR>"),
+	dashboard.button("C", "  Configuration", ":e ~/.config/nvim <CR>"),
+	dashboard.button("K", "  Keybindings", ":WhichKey <CR>"),
+	dashboard.button("h", "  Help", ":Telescope help_tags<CR>"),
 	dashboard.button("q", "  EXIT NEOVIM", ":qa<CR>"),
 }
 
@@ -69,15 +71,7 @@ dashboard.section.buttons.val = {
 	--Footer{{{
 
 local function footer()
-	-- NOTE: requires the fortune-mod package to work
-	-- local handle = io.popen("fortune")
-	-- local fortune = handle:read("*a")
-	-- handle:close()
-	-- return fortune
-	return "    "
-	--     \n🖳 🖧 🖹 "
-	--          "
-	--       " 💁      👽☽     ﬍  🗔      ☢ l
+	return "      " --   💁      👽☽   ﬍  🗔      ☢🖳 🖧 🖹     "
 end
 
 	--}}}

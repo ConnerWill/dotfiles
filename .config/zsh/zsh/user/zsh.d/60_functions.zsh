@@ -23,7 +23,7 @@
 #shellcheck source=./completions/zshcompletions.zsh
 ##}}}
 
-timelogging_start "60"
+
 
 ### [=============================]
 ### [------- ZSH FUNCTIONS -------]
@@ -47,4 +47,4 @@ if [[ -d "${ZSH_FUNCTIONS_ENABLED}" ]]; then
     _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_FUNCTIONS_ENABLED}]" "196" "124"
 fi
 
-timelogging_end 60
+

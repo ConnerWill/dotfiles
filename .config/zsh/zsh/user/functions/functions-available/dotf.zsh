@@ -1,24 +1,41 @@
-#shellcheck disable=1072,1073
-(){
-  [[ -z "${DOTFILES}" ]] && DOTFILES="${HOME}/.dotfiles"
-  if [[ -d "${DOTFILES}" ]]; then
-    export DOTFILES
-    # No arguments: `git status` With arguments: acts like `git`
-    dotf() {
-      if [[ ${1} == "help" ]]; then
-        printf "dotf help : enter help msg here\n"
-      elif [[ ${1} == "add-all" ]]; then
-         $(command -v git) --git-dir=$DOTFILES --work-tree=$HOME diff --name-only | xargs -I{} sh -c "$(command -v git) --git-dir=$DOTFILES --work-tree=$HOME add -v $HOME/{}"
-      else
-        if [[ $# -gt 0 ]]; then
-          $(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} "$@"
-        else
-          $(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} status
-        fi
-      fi
-    }
-  else
-    unset DOTFILES
-    unfunction dotf
-  fi
+dotf(){
+	export DOTFILES DOTFILES_WORKTREE
+	local dotfiles_worktree dotfiles_git_dir
+
+	dotfiles_worktree="${HOME}"
+	dotfiles_git_dir="${HOME}/.dotfiles"
+	DOTFILES="${DOTFILES:-${dotfiles_git_dir}}"
+	DOTFILES_WORKTREE="${DOTFILES_WORKTREE:-${dotfiles_worktree}}"
+
+	if [[ "${1}" == "help" ]] || [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
+		printf "dotf help:\n\n\tFunction for managing .dotfiles\n\n"
+
+	## Add all changes
+	elif [[ "${1}" == "add-all" ]]; then
+		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+			diff --name-only \
+			| xargs -I{} sh -c "$(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} add -v ${HOME}/{}"
+
+	elif [[ "${1}" == "status" ]]; then
+		if [[ "${2}" == "-u" ]]; then
+			$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+				status -u | grep "config"
+		else
+			$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+				status
+		fi
+
+	## commit and push
+	elif [[ "${1}" == "upload" ]] || [[ "${1}" == "up" ]]; then
+		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+			commit --status --branch --allow-empty-message --verbose -m "${2}" \
+		&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
+      push --verbose
+
+	## git
+	else
+		[[ $# -gt 0 ]] \
+			&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" "${@}" \
+			|| $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" status
+	fi
 }

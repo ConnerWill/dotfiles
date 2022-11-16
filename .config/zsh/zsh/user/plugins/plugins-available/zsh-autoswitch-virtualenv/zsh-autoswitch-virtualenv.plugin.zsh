@@ -1,9 +1,9 @@
 export AUTOSWITCH_VERSION="3.3.2"
 export AUTOSWITCH_FILE=".venv"
 
-### [][][][][][==========][][][][][][]
-### [|].......... COLORS ..........[|]
-### [=]============================[=]
+##[][][][][][============][][][][][][]
+##[|].......... COLORS ............[|]
+##[=]==============================[=]
 NORMAL="\e[0m"                    # []
 BOLD="\e[1m"                      # []
 WHITE="\e[38;5;15m"               # []
@@ -23,8 +23,9 @@ DARKRED="\e[38;5;52m"             # []
 DARKBLUE="\e[38;5;18m"            # []
 DARKGREEN="\e[38;5;22m"           # []
 BABYBLUE="\e[38;5;39m"            # []
-### [================================]
+##[=]==============================[=]
 
+##[Start Function====================]
 function _validated_source() {
     local target_path="$1"
     if [[ "$target_path" == *'..'* ]]; then
@@ -36,12 +37,20 @@ function _validated_source() {
         source "$target_path"
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _virtual_env_dir() {
     local venv_name="$1"
     local VIRTUAL_ENV_DIR="${AUTOSWITCH_VIRTUAL_ENV_DIR:-$HOME/.virtualenvs}"
     mkdir -p "$VIRTUAL_ENV_DIR"
     printf "%s/%s" "$VIRTUAL_ENV_DIR" "$venv_name"
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _python_version() {
     local PYTHON_BIN="$1"
     if [[ -f "$PYTHON_BIN" ]] then
@@ -51,11 +60,19 @@ function _python_version() {
         printf "unknown"
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _autoswitch_message() {
     if [ -z "$AUTOSWITCH_SILENT" ]; then
         (>&2 printf "$@")
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _get_venv_type() {
     local venv_dir="$1"
     local venv_type="${2:-virtualenv}"
@@ -68,6 +85,10 @@ function _get_venv_type() {
     fi
     printf "%s" "$venv_type"
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _get_venv_name() {
     local venv_dir="$1"
     local venv_type="$2"
@@ -79,6 +100,10 @@ function _get_venv_name() {
 
     printf "%s" "$venv_name"
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _maybeworkon() {
     local venv_dir="$1"
     local venv_type="$2"
@@ -112,6 +137,10 @@ function _maybeworkon() {
         _validated_source "$activate_script"
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # Gives the path to the nearest target file
 function _check_path(){
     local check_dir="$1"
@@ -130,6 +159,10 @@ function _check_path(){
         _check_path "$(dirname "$check_dir")"
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _activate_poetry() {
     # check if any environments exist before trying to activate
     # if env list is empty, then no environment exists that can be activated
@@ -140,6 +173,10 @@ function _activate_poetry() {
     fi
     return 1
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _activate_pipenv() {
     # unfortunately running pipenv each time we are in a pipenv project directory is slow :(
     if venv_path="$(PIPENV_IGNORE_VIRTUALENVS=1 pipenv --venv 2>/dev/null)"; then
@@ -148,6 +185,10 @@ function _activate_pipenv() {
     fi
     return 1
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # Automatically switch virtualenv when $AUTOSWITCH_FILE file detected
 function check_venv(){
     if ! type pwgen 1>/dev/null; then
@@ -200,6 +241,10 @@ function check_venv(){
     fi
     _default_venv
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # Switch to the default virtual environment
 function _default_venv(){
     local venv_type="$(_get_venv_type "$OLDPWD")"
@@ -211,6 +256,10 @@ function _default_venv(){
         deactivate
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # remove project environment for current directory
 function rmvenv(){
     local venv_type="$(_get_venv_type "$PWD" "unknown")"
@@ -244,6 +293,10 @@ function rmvenv(){
         fi
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function _missing_error_message(){
     local command="$1"
     printf "${BOLD}${RED}"
@@ -253,6 +306,10 @@ function _missing_error_message(){
     printf "${LIGHTGRAY}then make sure the ${NORMAL}${YELLOW}${BOLD}$command${NORMAL}${LIGHTGRAY} command is in your PATH.\n" $command
     printf "\n"
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # helper function to create a project environment for the current directory
 function mkvenv(){
     local venv_type="$(_get_venv_type "$PWD" "unknown")"
@@ -307,6 +364,10 @@ function mkvenv(){
         fi
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function install_requirements(){
     if [[ -f "$AUTOSWITCH_DEFAULT_REQUIREMENTS" ]]; then
         printf "${LIGHTGRAY}Install default requirements? (${NORMAL}${CYAN}$AUTOSWITCH_DEFAULT_REQUIREMENTS${NORMAL}) ${GRAY}[${NORMAL}${BOLD}${GREEN}y${NORMAL}${GRAY}/${RED}N${NORMAL}${GRAY}]${NORMAL}${GRAY}:${NORMAL} "
@@ -340,13 +401,25 @@ function install_requirements(){
         fi
     done
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function enable_autoswitch_virtualenv(){
     disable_autoswitch_virtualenv
     add-zsh-hook chpwd check_venv
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 function disable_autoswitch_virtualenv(){
     add-zsh-hook -D chpwd check_venv
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 # This function is only used to startup zsh-autoswitch-virtualenv
 # the first time a terminal is started up
 # it waits for the terminal to be ready using precmd and then
@@ -361,5 +434,9 @@ function _autoswitch_startup() {
         check_venv
     fi
 }
+##[End Function======================]
+
+
+##[Start Function====================]
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _autoswitch_startup

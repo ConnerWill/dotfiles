@@ -1,5 +1,5 @@
 
-timelogging_start "21"
+
 
 # $HISTFILE belongs in the data home, not with the configs
 HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zsh-history/history"
@@ -29,4 +29,4 @@ setopt SHARE_HISTORY           # Share history between all sessions
 # make the history command more useful
 alias history="fc -li"
 
-timelogging_end "21"
+

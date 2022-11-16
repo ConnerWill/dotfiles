@@ -1,18 +1,38 @@
-timelogging_start "10"
+
 ### [=]===========================================================[=]
 ###	[~] -------------------- ZSH VARIABLES -----------------------[~]
 ### [=]===========================================================[=]
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export ZSHRC="$ZDOTDIR/.zshrc"
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+
+export ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+export ZSHRC="${ZSHRC:-${ZDOTDIR/.zshrc}}"
+
+export DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
+
+
+
+
+
+
+
+
+
+
+export LESSHISTFILE="${LESSHISTFILE:-${XDG_CACHE_HOME}/less/lesshist}"
+[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p "$(dirname "${LESSHISTFILE}")"
+
+export chpwd_recent_dirs="${chpwd_recent_dirs:-${XDG_CACHE_HOME}/zsg/.chpwd-recent-dirs}"
+
+## marked for removal
 export ZSHRC_USER="${ZSHRC}"
-export ZSHRC_GLOBAL="/etc/zsh/zshrc"
-export ZCOMPCACHE_PATH="${XDG_CACHE_HOME}/zsh/zcompcache"
-export COMPDUMPFILE=${COMPDUMPFILE:-${XDG_CACHE_HOME}/zsh/zcompdump}
-export DOTFILES="${HOME}/.dotfiles"
-export LESSHISTFILE="${XDG_CACHE_HOME:-${HOME}/.cache}/less/lesshist"
-[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p $(dirname "${LESSHISTFILE}")
+export ZSHRC_GLOBAL="${ZSHRC_GLOBAL:-/etc/zsh/zshrc}"
+## marked for removal
+
+
+
 
 ### [=]==================================[=]
 ### [~]........ TERM COLORS
@@ -120,17 +140,21 @@ export TEMPDIR="$HOME/temporary"
 AWESOMEWM_CONFIG_DIR="$XDG_CONFIG_HOME/awesome"
 [[ -d "$AWESOMEWM_CONFIG_DIR" ]] \
 	&& export AWESOMEWM_CONFIG_DIR \
-	&& export AWESOME_THEMES_PATH="$AWESOMEWM_CONFIG_DIR/themes" 
+	&& export AWESOME_THEMES_PATH="$AWESOMEWM_CONFIG_DIR/themes"
 
 ### [=]==================================[=]
 ### [~]............ Lynx
 ### [=]==================================[=]
-export LYNX_CONFIG_DIR_LOCAL="$XDG_CONFIG_HOME/lynx"
-export LYNX_CONFIG_DIR_GLOBAL="/usr/share/lynx"
-export LYNX_CFG="$LYNX_CONFIG_DIR_LOCAL/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
-export LYNX_SESSION="$LYNX_CONFIG_DIR_LOCAL/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
-export LYNX_LSS="$LYNX_CONFIG_DIR_LOCAL/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
-export LYNX_CFG_PATH="$LYNX_CONFIG_DIR_LOCALL"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
+export LYNXDOTDIR="${XDG_CONFIG_HOME}/lynx"
+
+export LYNX_CFG="${LYNXDOTDIR}/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
+export LYNX_LSS="${LYNXDOTDIR}/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
+
+export LYNX_SESSION="${XDG_CACHE_HOME}/lynx/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
+[[ -n "${commands[lynx]}" ]] && [[ ! -d "${LYNX_SESSION:h}" ]] \
+	&& mkdir -p "${LYNX_SESSION:h}"
+
+export LYNX_CFG_PATH="${LYNXDOTDIR}"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
 export LYNX_HELPFILE="$LYNX_CONFIG_DIR_GLOBAL/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
 export WWW_HOME="$LYNX_CONFIG_DIR_GLOBAL/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
 
@@ -283,4 +307,4 @@ export KITTY_CONFIG="$KITTY_CONFIG_DIR/kitty.conf"
 export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 
-timelogging_end 10
+export WGETHSTS="${WGETHSTS:-${HOME}/.cache/.wget-hsts}"

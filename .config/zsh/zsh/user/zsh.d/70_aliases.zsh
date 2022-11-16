@@ -1,11 +1,10 @@
 #shellcheck disable=2148,2139,2059
 
-timelogging_start "70"
-
-alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
-
-alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 alias e="$EDITOR"
+alias ez="exec ${SHELL}"
+alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
+alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+
 alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
@@ -13,21 +12,14 @@ alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool sel
 ### [=]==================================[=]
 ### [~]............ cd
 ### [=]==================================[=]
-alias cd..="cd .."
-alias ..="cd .."
-alias ....="cd .."
+alias ....="cd ../.."   ; alias ../="cd /"
+alias ..='cd ..'        ; alias ...='cd ../..'
+alias ....='cd ../../..'; alias .....='cd ../../../..'
+alias cd..='cd ..'      ; alias cd-1="cd $OLDPWD"
+alias 'c d'='cd'        ; alias 'ls cd'='cd'
+alias ccd='cd'          ; alias scd="cd"
+alias cdls='cd .. && ls'; alias cdl='cd .. && ls'
 alias ..etc="cd /etc"
-alias ../="cd /"
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias cd..='cd ..'
-alias cdls='cd .. && ls'
-alias 'c d'='cd'
-alias cdl='cd .. && ls'
-alias ccd='cd'
-alias 'ls cd'='cd'
 alias home='cd $HOME ; ls ; pwd'
 alias cdhome='cd $HOME ; ls ; pwd'
 alias cdhometemp='cd $HOME/Temporary ; ls ; pwd'
@@ -35,13 +27,20 @@ alias cdold="cd $OLDPWD"
 alias cdtemp="$TEMPDIR"
 alias cdt="$TEMPDIR"
 alias cd-temp="$TEMPDIR"
-alias scd="cd"
+
+
+
 alias zshall="man zshall"
 
 ### [=]==================================[=]
 ### [~]............ cat
 ### [=]==================================[=]
-if command -v bat >/dev/null 2>&1; then
+if [[ "${commands[bat]}" ]]; then
+  alias cat='bat --style=header,grid'
+  alias ca='bat' ; alias scat="cat"; alias car="cat"; alias cay="cat"
+  alias cau="cat"; alias cst="cat" ; alias cau="cat"; alias ca="bat"
+  alias catp="bat -p"; alias catf="bat --style=full"
+  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
   function bat_preview_languages(){
     local viewfile
     viewfile="${1}"
@@ -52,17 +51,7 @@ if command -v bat >/dev/null 2>&1; then
       | awk -F "," '{print $1}' \
       | awk '{print $1}'        \
       | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
-  }
-  alias bat-preview-languages="bat_preview_languages"
-  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
-  alias catp="bat --plain"
-  alias ccat="bat --style=full"
-  alias catf="bat --style=full"
-  alias ca="bat --style=header,grid --plain *"
-  alias scat="cat"
-  alias car="cat"
-  alias cat='bat --style=header,grid'
-  alias ca='bat --style=header,grid *'
+  }; alias bat-preview-languages="bat_preview_languages"
 fi
 
 function c(){
@@ -80,38 +69,37 @@ function c(){
 ### [~]............ ls
 ### [=]==================================[=]
 alias ls='ls --color=always'
-alias l='ls --color=always -A -1'
-alias ll='ls --color=always -A -l'
-alias LS="ls"
-alias sl="ls"
-alias ks="ls"
+alias l='ls -A -1'; alias ll='ls -A -l'
+alias LS="ls"     ; alias sl="ls"
+alias ks="ls"     ; alias sls="ls"
 alias lsls='command ls'
-alias sls="ls"
+alias octal="stat --dereference --printf='\e[0;38;5;190m%a \e[0;38;5;87m%A \e[0;38;5;196m%T \e[0;1;38;5;46m%n\e[0m\n'"
 
-if command -v lsd >/dev/null 2>&1; then
-  alias 'cd ls'='lsd --almost-all --long'
-  alias ks='lsd --color always --icon always'
-  alias l='lsd --color always --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
-  alias la='lsd --color always --icon always --almost-all'
-  alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
-  alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
-  alias llls="clear; printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
-  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
+### exa
+if [[ "${commands[exa]}" ]]; then
+  alias exa='exa --color always --icons'
+  alias l1='exa --oneline --all --header'
+  alias lll='exa --long --all --header'
+  alias ls-l="exa --sort=type --long --all"
+  alias ls-ll="exa --sort=type --tree --recurse --long --all"
+fi
+
+if [[ "${commands[lsd]}" ]]; then
   alias ls='lsd --color always --icon always'
+  alias l='lsd --color always --no-symlink --oneline --almost-all ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
+  alias ll='lsd --color always --icon always --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
+  alias ks='lsd --color always --icon always'
+  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
+  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias la='lsd --color always --icon always --almost-all'
+  alias lla='lsd --all --long --total-size --sizesort --reverse --color always --icon always'
+  alias llls="printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
   alias lsa='command lsd --color always --icon always --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
   alias lsl='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
   alias lss='lsd --color always --icon always --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lst="lsd --color always --icon always --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lstree="lsd --color always --icon always --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias s='lsd --color always --icon always'
-fi
-
-### exa
-if command -v exa >/dev/null 2>&1; then
-  alias l1='exa --color always --icons --oneline --all --header'
-  alias lll='exa --color always --icons --long --all --header'
-  alias ls-l="exa --sort=type --colour always --long --all"
-  alias ls-ll="exa --sort=type --colour always --tree --recurse --long --all"
+  alias 'cd ls'='lsd --almost-all --long'
 fi
 
 ## lsof
@@ -122,15 +110,12 @@ alias list-open-internet-files='lsof -i -U'
 ### [=]==================================[=]
 ### [~]............ rm
 ### [=]==================================[=]
-alias rm="rm -v --preserve-root=all --interactive=once"
-alias rrm="rm -v"
-alias rm="rm --verbose -i"
-alias rmf='rm --force --verbose'
-alias rmcdir='cd ..; rmdir --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd="rmcdir"
-alias rmcdir-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-alias rmcwd-force='cd ..; rm -I -r --verbose $OLDPWD || cd $OLDPWD'
-alias rm-license="rm -I -v LICENSE"
+# alias rm="rm --verbose --preserve-root=all --interactive=once"
+alias rm="rm --verbose --preserve-root=all --interactive"
+alias rrm="rm"
+alias rmf='rm --force'
+alias rmbsd="rm -v -I"
+alias rm-license="find . -type f -name 'LICENSE' | xargs -I{} rm --interactive=once --preserve-root --recursive --verbose {}"
 
 
 ### [=]==================================[=]
@@ -202,7 +187,7 @@ if [[ -n "${DISTRO}" ]]; then
     alias apti="apt install"
     alias update="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y"
     alias upgrade="printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\"; apt-get upgrade -y"
-    alias updgrate="clear; printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
+    alias updgrate="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
   ## If distro is gentoo
   elif [[ ${DISTRO} == "Gentoo" ]]; then
     printf ""
@@ -296,7 +281,7 @@ alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | gr
 ### [=]==================================[=]
 ### [~]............ Neofetch
 ### [=]==================================[=]
-alias nf='clear && neofetch'
+alias nf='neofetch'
 
 ### [=]==================================[=]
 ### [~]............ File Explorers
@@ -364,7 +349,7 @@ alias wp='nitrogen --restore'
 ### [=]==================================[=]
 ### [~]............ NMAP
 ### [=]==================================[=]
-if command -v nmap >/dev/null 2>&1; then
+if [[ -n "${commands[nmap]}" ]] ; then
   alias nmap_open_ports="nmap --open"
   alias nmap_list_interfaces="nmap --iflist"
   alias nmap_slow="sudo nmap -sS -v -T1"
@@ -391,10 +376,8 @@ fi
 ### [=]==================================[=]
 ### [~]............ MetaSploit
 ### [=]==================================[=]
-alias -s routersploit='rsf'
-if command -v msfconsole >/dev/null 2>&1; then
-  alias msf='sudo msfconsole'
-fi
+[[ "${commands[rsf]}" ]] && alias -s routersploit='rsf'
+[[ "${commands[metasploit]}" ]] && alias msf='sudo msfconsole'
 
 ### [=]==================================[=]
 ### [~]............ Raspberry Pi
@@ -414,7 +397,8 @@ alias slic3r='prusa-slicer &'
 
 
 
-alias docker-run-zsh='docker run -it archlinux sh -c "pacman -Syv --noconfirm zsh git vim && chsh --shell $(which zsh) && touch ~/.zshrc && echo "WyAtZiAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIiBdICYmIHNvdXJjZSAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIgoKZWNobyAtZSAiXG5cblxlWzA7MTszODs1OzIwMW1XQVpaWlpBUFBQUFxlWzBtXG5cbiIKCmFsaWFzIGxzPSJscyAtLWNvbG9yPWFsd2F5cyIKYWxpYXMgbD0ibHMgLS1jb2xvcj1hbHdheXMgLUEgLTEiCmFsaWFzIGxsPSJscyAtLWNvbG9yPWFsd2F5cyAtQSAtbCIKCiMgRXhhbXBsZSBpbnN0YWxsIHBsdWdpbnMKemFwcGx1ZyAienNoLXVzZXJzL3pzaC1hdXRvc3VnZ2VzdGlvbnMiCnphcHBsdWcgInpzaC11c2Vycy96c2gtc3ludGF4LWhpZ2hsaWdodGluZyIKemFwcGx1ZyAiaGxpc3NuZXIvenNoLWF1dG9wYWlyIgp6YXBwbHVnICJ6YXAtenNoL3ZpbSIKCiMgRXhhbXBsZSB0aGVtZQp6YXBwbHVnICJ6YXAtenNoL3phcC1wcm9tcHQiCgojIEV4YW1wbGUgaW5zdGFsbCBjb21wbGV0aW9uCnphcGNtcCAiZXNjL2NvbmRhLXpzaC1jb21wbGV0aW9uIiBmYWxzZQo=" | base64 -d >> ~/.zshrc && git clone https://github.com/zap-zsh/zap.git ~/zap && cd ~/zap && sh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.sh) && source ~/zap/zap.zsh && exec zsh; sleep 1; exec zsh"'
+# alias docker-run-zsh='docker run -it archlinux sh -c "pacman -Syv --noconfirm zsh git vim && chsh --shell $(which zsh) && touch ~/.zshrc && echo "WyAtZiAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIiBdICYmIHNvdXJjZSAiJEhPTUUvLmxvY2FsL3NoYXJlL3phcC96YXAuenNoIgoKZWNobyAtZSAiXG5cblxlWzA7MTszODs1OzIwMW1XQVpaWlpBUFBQUFxlWzBtXG5cbiIKCmFsaWFzIGxzPSJscyAtLWNvbG9yPWFsd2F5cyIKYWxpYXMgbD0ibHMgLS1jb2xvcj1hbHdheXMgLUEgLTEiCmFsaWFzIGxsPSJscyAtLWNvbG9yPWFsd2F5cyAtQSAtbCIKCiMgRXhhbXBsZSBpbnN0YWxsIHBsdWdpbnMKemFwcGx1ZyAienNoLXVzZXJzL3pzaC1hdXRvc3VnZ2VzdGlvbnMiCnphcHBsdWcgInpzaC11c2Vycy96c2gtc3ludGF4LWhpZ2hsaWdodGluZyIKemFwcGx1ZyAiaGxpc3NuZXIvenNoLWF1dG9wYWlyIgp6YXBwbHVnICJ6YXAtenNoL3ZpbSIKCiMgRXhhbXBsZSB0aGVtZQp6YXBwbHVnICJ6YXAtenNoL3phcC1wcm9tcHQiCgojIEV4YW1wbGUgaW5zdGFsbCBjb21wbGV0aW9uCnphcGNtcCAiZXNjL2NvbmRhLXpzaC1jb21wbGV0aW9uIiBmYWxzZQo=" | base64 -d >> ~/.zshrc && git clone https://github.com/zap-zsh/zap.git ~/zap && cd ~/zap && sh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.sh) && source ~/zap/zap.zsh && exec zsh; sleep 1; exec zsh# "'
+alias docker-run-zsh='docker run -it archlinux sh -c "pacman -Syv --noconfirm zsh git vim && chsh --shell $(which zsh) && cd ~ && clear && curl -sL https://github.com/vincentbernat/zshrc/releases/download/latest/zsh-install.sh | sh && exec zsh; sleep 1; exec zsh"'
 alias docker-run-interactive="docker run --interactive --tty"
 alias docker-lazy='lazydocker'
 alias dockers="docker search --no-trunc"
@@ -551,9 +535,9 @@ alias html2md="html2text --mark-code --unicode-snob --body-width=0 --open-quote 
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
 alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
+alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 
-alias hugo-show-demo-site='clear; cd $HOME/temporary/hugo-test-teamaccounting/piko/exampleSite && firefox "http://localhost:1313" & hugo server --themesDir ../..'
+[[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh"
 
-timelogging_end 70
 alias cdwww="cd /var/www/connerwill.com"
 alias git-url="git config --local --get remote.origin.url"

@@ -1,4 +1,4 @@
-timelogging_start "40"
+
 ## ShellCheck Setup{{{
 
 # shellcheck disable=2148
@@ -58,12 +58,12 @@ else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_PLUGINS_ENABLED}]" "196" "124"
 fi
 
-timelogging_start "40"
+
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
 [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
 
-timelogging_start "40"
+
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
 
-timelogging_end 40
+

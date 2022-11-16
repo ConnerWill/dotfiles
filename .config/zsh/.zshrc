@@ -1,5 +1,5 @@
-source "${ZDOTDIR}/tools/timelogging.zsh"
-remove_old_timing_logs
+# rm -fv ~/temporary/temporay-path.zsh
+
 
 ###{{{ DOCUMENTATION
 #############################################################
@@ -50,7 +50,7 @@ remove_old_timing_logs
 ##                          ( user )                       ##
 ##                                                         ##
 ##  ${ZSH_USER_DIR}:::::: Path to current config profile   ##
-##             ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user ) ##      
+##             ( ${$ZDOTDIR:-$HOME/.config/zsh}/zsh/user ) ##
 ##                                                         ##
 ##  ${ZSHDDIR}::::::::::: Directory containing configs that##
 ##                        will be sourced in numeric order ##
@@ -88,9 +88,10 @@ remove_old_timing_logs
 ##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
 ##:
 ###########################################################################
+###}}}
+########################
 ####   DEBUGGING    ####
 ########################
-### }}}
 
 [ -n "$INHERIT_ENV" ] && return 0
 
@@ -106,8 +107,12 @@ fi
 
 #  Profiling
 # ZSH_PROFILE_RC=1
-[[ -n "$ZSH_PROFILE_RC" ]] && which zmodload >&/dev/null && zmodload zsh/zprof
-
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  which zmodload >&/dev/null && zmodload zsh/zprof
+  PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
+  exec 3>&2 2>${ZSH_DEBUG_LOG_DIR:-/tmp}/zshstart.$$.log
+  setopt xtrace prompt_subst
+fi
 # }}}
 
 
@@ -162,17 +167,17 @@ _ZSH_SHOW_ERRORS="TRUE"              #: Show error messeges. This is unrelated t
 ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"  #: Directory that ZSH logs will be written to.
 
 _ZSH_DEBUGGING_ENABLED="TRUE"        #┌ If this option is set, a debug log will
-                                     #└─ be written to '$ZSH_DEBUG_LOG_DIR' 
+                                     #└─ be written to '$ZSH_DEBUG_LOG_DIR'
 
 # _ZSH_BANNER_SHOW="TRUE"              #: Show banner art
 
 # _ZSH_BANNER_START="TRUE"             #┌ Show banner art before loading other files.
                                      #├─ If this option is enabled (default), banner art will
                                      #├─  be shown before other files are loaded.
-                                     #├─ If this option is disabled, banner art will 
+                                     #├─ If this option is disabled, banner art will
                                      #├─  be shown after all files are loaded.
                                      #└┐
-                                     # ├──── NOTE: Banner art will only be shown if 
+                                     # ├──── NOTE: Banner art will only be shown if
                                      # └─────────── also '_ZSH_BANNER_SHOW' is enabled.
 
 
@@ -223,6 +228,17 @@ function _zshloadverbose(){
 
 
 ### ::::::::::::::::::::: OS TYPE ::::::::::::::::::::::::: ### {{{
+# ZSHLIB="${ZDOTDIR}/lib"
+# if [[ -d "${ZSHLIB}" ]]; then
+#   if [[ -f "${ZSHLIB}/ostype" ]]; then
+#     source "${ZSHLIB}/ostype"
+#     islinux && OSTYPE="linux"
+#     isandroid && OSTYPE="linux"
+#     ismacos &&
+#
+
+#
+
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
   if [[ -f /etc/os-release ]]; then
     DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
@@ -234,16 +250,10 @@ elif [[ "${OSTYPE}" == "linux-android" ]]; then
 else
   unset DISTRO
 fi
-###}}}
+###}iuuuuuuuui}}
 
 
-
-
-
-
-
-
-### ::::::::::::::::::::: START TMUX :::::::::::::::::::::: ### }}}
+### ::::::::::zR::::::::::: START TMUX :::::::::::::::::::::: ### }}}
 ## Set NOTMUX to any value to disable automatic tmux
 NOTMUX=1
 # shellcheck disable=2148
@@ -262,20 +272,18 @@ function _zshinittmux(){
 # _zshinittmux
 unfunction _zshinittmux
 ### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
-#
-# rm -f stopspinning > /dev/null 2>&1
-# . $HOME/scripts/bash/progress-bars/spinners/spinner-orig/spinner.sh
-# SPINNER_SYMBOLS="UNI_PIPES" #"ASCII_PLUS" #"WIDE_UNI_GREYSCALE"
-# printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-# (spinner &)
-#
-# echo -ne "\e[?25l" ## Hide Cursor
-#echo -ne "\e[1A" ## Move curser up 1 line
-#echo -ne "\e[2K" ## Clear line
-#echo -ne "\r"    ## Move cursor to beginning of line
+
+#echo -ne "\e[?25l" ## Hide Cursor
+#echo -ne "\e[?25h" ## Restore Cursor
+#echo -ne "\e[1A"   ## Move curser up 1 line
+#echo -ne "\e[2K"   ## Clear line
+#echo -ne "\r"      ## Move cursor to beginning of line
+#echo -ne "\e[2K"   ## Clear line
+#echo -ne "\r"      ## Move cursor to beginning of line
+
+
 
 #printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-
 function _loading_bar(){
   local bar_color sleep_time
   bar_color='\e[0;48;5;46m'
@@ -313,7 +321,7 @@ _zshloadstartclear
 
 
 ### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
-#Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop 
+#Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
 
@@ -336,15 +344,18 @@ _zshloadendclear
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
 
-# touch stopspinning
 #_loading_bar
 #echo -ne "\e[?25h" ## Restore Cursor
 #echo -ne "\e[2K"   ## Clear line
 #echo -ne "\r"      ## Move cursor to beginning of line
 
 # {{{ Profile report
+
+
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
-  zprof # >! ~/zshrc.zprof
+unsetopt xtrace
+exec 2>&3 3>&-
+  #zprof # >! ~/zshrc.zprof
   #exit
 fi
 # }}}

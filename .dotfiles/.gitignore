@@ -53,10 +53,6 @@ docs/zsdoc/data
 /tests/_output/*
 !/tests/_output/.gitkeep
 
-### C
-# Prerequisites
-*.d
-
 # Object files
 *.o
 *.ko

@@ -1,3 +1,41 @@
+# https://notes.burke.libbey.me/ansi-escape-codes/
+
+function listcolorANSI(){
+	local fgbg
+	fgbf=48 ## Background
+	for code in {0..2}; do
+		for code in {0..255}; do
+			printf "\t\e[${fgbf};5;${code}m"'\\e['"${fgbg}"';5;'"$code"m"\e[0m" ## Foreground
+		done
+		fgbf=38  ## Foreground
+	done
+}
+function listcolorANSI(){
+	for code in {0..255}; do
+		printf "\e[38;5;${code}m"'▌║█║▌│║▌│║▌║▌█║\\e[38;5;'"$code"m"▌│║▌║▌│║║▌█║▌║█\e[0m\n" #\t\e[48;5;${code}m"'\\e[48;5;'"$code"m"\e[0m\n"
+		# printf "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m\t\e[48;5;${code}m"'\\e[48;5;'"$code"m"\e[0m\n"
+	done
+}
+ # ▌║█║▌│║▌│║▌║▌█║\\e[38;5; m ▌│║▌║▌│║║▌█║▌║█
+alias list-colors-ANSI="listcolorANSI"
+
+## =============================
+# ██▓▒▒░░░░░░▒▒▓████▓▒▒░░░░░░▒▒▓██
+# ░░░▒▒▓████▓▒▒░░░░░░▒▒▓████▓▒▒░░░
+# ██▓▒▒░░░░░░▒▒▓████▓▒▒░░░░░░▒▒▓██
+# ░░░▒▒▓████▓▒▒░░░░░░▒▒▓████▓▒▒░░░
+# ██▓▒▒░░░░░░▒▒▓████▓▒▒░░░░░░▒▒▓██
+# ░░░▒▒▓████▓▒▒░░░░░░▒▒▓████▓▒▒░░░
+# ██▓▒▒░░░░░░▒▒▓████▓▒▒░░░░░░▒▒▓██
+# ░░░▒▒▓████▓▒▒░░░░░░▒▒▓████▓▒▒░░░
+# ██▓▒▒░░░░░░▒▒▓████▓▒▒░░░░░░▒▒▓██
+# ░░░▒▒▓████▓▒▒░░░░░░▒▒▓████▓▒▒░░░
+
+
+
+
+
+
 function listcolors(){
 
 	clear
@@ -147,29 +185,5 @@ function listcolorsprintf(){
 }
 
 alias list-colors-printf="listcolorsprintf"
-
-### =============================
-
-function listcolorANSI(){
-
-
-
-
-    ## Pause For User Input
-    clear
-    echo -e "\n\e[38;5;189mPress \e[0m\e[38;5;9mENTER\e[0m\e[38;5;189m to display list of ANSI color codes ...\e[0m\n"
-    read
-    clear
-
-    ## Show More Colored Text
-    #  This will list more colors
-    for code in {0..255}
-    do
-        echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
-
-    done
-}
-
-alias list-colors-ANSI="listcolorANSI"
 
 ### =============================

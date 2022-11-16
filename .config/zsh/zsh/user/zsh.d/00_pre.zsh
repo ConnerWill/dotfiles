@@ -1,4 +1,4 @@
-timelogging_start "00"
+
 # Pre-Load ZSH Config
 
 if [[ -n "$_ZSH_BANNER_SHOW" ]]; then
@@ -70,4 +70,4 @@ function _StartGPGAgent(){
 #     fi
 #   fi
 # fi
-timelogging_end "00"
+

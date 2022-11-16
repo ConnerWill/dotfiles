@@ -53,7 +53,7 @@ return packer.startup(function(use)
 	-- PLUGIN LIST{{
 
 	-- Libraries
-	use("nvim-lua/plenary.nvim") -- Useful lua functions used ny lots of plugins
+	use("nvim-lua/plenary.nvim") -- Useful lua functions used by lots of plugins
 
 	-- LSP
 	use("neovim/nvim-lspconfig") -- enable LSP
@@ -82,6 +82,13 @@ return packer.startup(function(use)
 		end,
 	})
 
+	use({
+    "mcauley-penney/tidy.nvim",
+    config = function()
+        require("tidy").setup()
+    end
+	})
+
 	-- File Explorer
 	use("kyazdani42/nvim-tree.lua") -- use("ms-jpq/chadtree")
 
@@ -96,7 +103,7 @@ return packer.startup(function(use)
 	-- snippets
 	use("L3MON4D3/LuaSnip") --snippet engine
 	use("rafamadriz/friendly-snippets") -- a bunch of snippets to use
-	use("dbeniamine/cheat.sh-vim") -- cheat (cht.sh) Vim plugin
+	--[[ use("dbeniamine/cheat.sh-vim") -- cheat (cht.sh) Vim plugin ]]
 
 	use ("Pocco81/AbbrevMan.nvim")
 
@@ -115,6 +122,7 @@ return packer.startup(function(use)
 	-- Misc
 	use("nvim-lua/popup.nvim") -- An implementation of the Popup API from vim in Neovim
 	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
+	use("windwp/nvim-ts-autotag") -- Autotags, like autopairs but for html
 	use("kyazdani42/nvim-web-devicons")
 	use("akinsho/bufferline.nvim")
 	use("moll/vim-bbye")
@@ -197,12 +205,12 @@ return packer.startup(function(use)
 	-- Position
 	use("ethanholz/nvim-lastplace")
 
-	-- Telescope
-	use("nvim-telescope/telescope.nvim")
-
 	-- fzf vim
 	use("junegunn/fzf.vim")
 	use("junegunn/rainbow_parentheses.vim")
+
+	-- Telescope
+	use("nvim-telescope/telescope.nvim")
 
 	-- languages
 	use("sheerun/vim-polyglot")
@@ -221,10 +229,12 @@ return packer.startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 
 	-- coc
+--[[
   use({ "neoclide/coc.nvim", branch = "release" })
 	use("neoclide/coc-yank")
 	use "weirongxu/coc-explorer"
 	use "neoclide/coc-highlight"
+ ]]
 
 	-- shell
 	use({ "Shougo/deol.nvim", require("cmp").setup({

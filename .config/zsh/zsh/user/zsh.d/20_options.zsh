@@ -1,6 +1,6 @@
 # shellcheck disable=2148
 
-timelogging_start "20"
+
 
 ##############################
 ##          OPTIONS         ##
@@ -37,4 +37,4 @@ setopt VI                   ##
 # setopt WARN_CREATE_GLOBAL  ##
 setopt ZLE                  ##
 
-timelogging_end 20
+
