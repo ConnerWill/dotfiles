@@ -439,6 +439,7 @@ function replacehostnameinprompt(){
   local newhostname
   newhostname="termux"
   [[ $(uname -n) == "archlinux" && $(whoami) == "u0_a119" ]] && PROMPTHOSTNAME='%F{99}$newhostname%f'
+  [[ $(hostname) == "archdesk" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='' PROMPTATSYMBOL=''
   export PROMPTHOSTNAME
 }; replacehostnameinprompt; unset -f replacehostnameinprompt
 
@@ -484,7 +485,7 @@ unset -f backup_prompt_incase_of_failure
 
 
 
-## cool prompt features 
+## cool prompt features
 # The first step is to configure the appearance of the prompt in its compact form. Let’s assume we have a variable, $_vbe_prompt_compact set to 1 when we want a compact prompt. We use the following function to define the prompt appearance:
 #
 # _vbe_prompt () {
@@ -574,15 +575,3 @@ unset -f backup_prompt_incase_of_failure
 #
 # nothing added to commit but untracked files present (use "git add" to track)
 # We have to manually enable bracketed paste because Zsh does it after zle-line-init. ↩︎
-
-
-
-
-
-
-
-
-
-
-
-
