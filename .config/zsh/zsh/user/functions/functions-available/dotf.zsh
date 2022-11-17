@@ -33,6 +33,7 @@ dotf(){
   colors[Cyan]='\e[38;5;87m'
   colors[reset]='\e[0m'
 
+  ###{{{ commented out
   # local usage=(
   #   "${colors[bold]}${colors[underline]}${colors[Green]}${0}${colors[reset]}:" #;38;5;15m\"<phrase to center>\" \"<1 char to fill empty space>\" \e[38;5;240m[<number of columns>] [<1 char to surround the whole result>\e[0m\n" >&2 \
   #   " "
@@ -71,6 +72,7 @@ dotf(){
   #   shift
   # done
   #
+  ###}}} commented out
 
 local usage_full=(
     "${colors[Magenta]}================================================================================${colors[reset]}\n"
@@ -163,44 +165,80 @@ local usage_full=(
 }
 
 
-	# ## If subcomamnd is status, show status
-	# elif [[ "${1}" == "status" ]]; then
-	# 	if [[ "${2}" == "-u" ]]; then
-	# 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
-	# 			status -u | grep "config"
-	# 	else
-	# 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
-	# 			status
-	# 	fi
-	#
-# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
+#################### DOTFZF ################################
+# Enhanced Git Status (Open multiple files with tab + diff preview)
+function _dotf-fzf-status(){
+  tput smcup
+  clear
+    local selected
+    git --git-dir=$DOTFILES --work-tree=$HOME rev-parse --git-dir > /dev/null 2>&1 \
+      || printf "\e[0;1;38;5;190;48;5;196m\t\t\t\tΣΣΣΣΣΣΣΣΣΣΣΣ\nᵈªʳⁿ\t\t\t\t\n\t\t WTF ?!?!?!\t\n\n\e[0m\n\n\e[0;1;38;5;201m\t\t You aint in no git repo\e[0m\n\e[0;1;3;4;38;5;87;48;5;201m\n\n\t\t Cant do shit ...\t\t\n\t\t\n\n\n\e[0m\n" \
+      || return 1
+    selected=$( \
+      git --git-dir=$DOTFILES --work-tree=$HOME -c color.status=always status --short \
+        | fzf                                                                                                                                                       \
+            --border                                                                                                                                                \
+            -m                                                                                                                                                      \
+            --ansi                                                                                                                                                  \
+            --reverse                                                                                                                                               \
+            --inline-info                                                                                                                                           \
+            --preview-window='down,80%'                                                                                                                             \
+            --header-first                                                                                                                                          \
+            --color='fg:#00FFFF,bg:#101010,hl:#4909bb,hl+:#ff00ff,preview-fg:#ffffff,preview-bg:#020202,gutter:#000000,header:#666666,border:#900aff'               \
+            --header="$(git --git-dir=$DOTFILES --work-tree=$HOME remote get-url --all origin)"                                                                     \
+            --nth 2..,..                                                                                                                                            \
+            --preview "(git --git-dir=$DOTFILES --work-tree=$HOME diff --color=always --text -- {-1} | sed 1,4d; cat {-1}) | head -500"                             \
+            --bind 'ctrl-/:toggle-preview'                                                                                                                          \
+            --bind 'pgdn:preview-page-down'                                                                                                                         \
+            --bind 'pgup:preview-page-up'                                                                                                                           \
+            --bind 'j:down'                                                                                                                                         \
+            --bind 'k:up'                                                                                                                                           \
+            --bind "J:preview-down"                                                                                                                                 \
+            --bind "K:preview-up"                                                                                                                                   \
+            --bind 'home:last'                                                                                                                                      \
+            --bind 'end:first'                                                                                                                                      \
+            --bind "ctrl-p:execute(${PAGER} {})"                                                                                                                    \
+            --bind "ctrl-e:execute(${EDITOR} {})"                                                                                                                   \
+            --bind "enter:execute(git --git-dir=$DOTFILES --work-tree=$HOME diff --color=always --text -- {-1} | sed 1,4d; cat {-1} | less --RAW-CONTROL-CHARS)"    \
+            --bind "ctrl-a:execute(git --git-dir=$DOTFILES --work-tree=$HOME add -v {})"                                                                            \
+            --bind "ctrl-r:execute(git --git-dir=$DOTFILES --work-tree=$HOME rm --cached {})" \
+            --bind "ctrl-e:execute(${EDITOR} {1})" \
+        | cut -c4- \
+          | sed 's/.* -> //' \
+    )
+    if [[ $selected ]]; then
+      for prog in ${selected};
+      do
+        "${EDITOR}" "${prog}"
+      done
+    fi
+  # tput rmcup
+}
 
+# Checkout to existing branch or else create new branch. gco <branch-name>.
+# Falls back to fuzzy branch selector list powered by fzf if no args.
+function _dotf-fzf-checkout(){
+    if git --git-dir=$DOTFILES --work-tree=$HOME rev-parse --git-dir > /dev/null 2>&1; then
+        if [[ "$#" -eq 0 ]]; then
+            local branches branch
+            branches=$(git --git-dir=$DOTFILES --work-tree=$HOME branch -a) &&
+            branch=$(echo "$branches" |
+            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m -- --reverse --color='fg:#00FFFF,fg+:#ff0000,bg:#202020v,hl:#eeff00,hl+:#ff00ff' --header="$(git --git-dir=$DOTFILES --work-tree=$HOME remote get-url --all origin)" ) &&
+            git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+     elif git --git-dir=$DOTFILES --work-tree=$HOME rev-parse --verify --quiet "$@" || git --git-dir=$DOTFILES --work-tree=$HOME branch --remotes | grep  --extended-regexp "^[[:space:]]+origin/${*}" ]; then
+            echo "Checking out to existing branch"
+            git --git-dir=$DOTFILES --work-tree=$HOME checkout "$*"
+        else
+            echo "Creating new branch"
+            git --git-dir=$DOTFILES --work-tree=$HOME checkout -b "$*"
+        fi
+    else
+      printf "\e[0;1;38;5;190;48;5;196m\t\t\t\tΣΣΣΣΣΣΣΣΣΣΣΣ\nᵈªʳⁿ\t\t\t\t\n\t\t WTF ?!?!?!\t\n\n\e[0m\n\n\e[0;1;38;5;201m\t\t You aint in no git repo\e[0m\n\e[0;1;3;4;38;5;87;48;5;201m\n\n\t\t Cant do shit ...\t\t\n\t\t\n\n\n\e[0m\n"
+      printf "\e[0;1;38;5;87;48;5;46m\t \t\t \t\t \t\t \t\t \t\t \t\t \t\t \t         ⇙⇐⇖⇑⇗⇒⇘⇓\t \t\t \t\t \t\t \t\t \t\t \t       \e[0m\e[0;1;38;5;8m\t \t\t \t\t \t\t \t\t \t\t \t\t \t\t \t\t \t         bye\e[0m\e[0;1;3;4;38;5;249;48;5;8m∞πΣ±_‹[]\e[0m"
+      return 1
+    fi
+}
 
-
-#
-#   [[ $# == 0 ]] && opterr "${0}" "No input string to display!"
-#
-#   declare -i NB_COLS filler_len str_len
-#   NB_COLS=$(( $COLUMNS - $(( ${#surround} * 2 )) )) # $((  )) ))
-#   str_len="${#printstring}"
-#   filler_len="$(( (NB_COLS - str_len) / 2 ))"          # Build the chars to add before and after the given text
-#   #[[ $# -ge 3 ]] && NB_COLS=$3 || NB_COLS="$(tput cols)"
-#   #[[ $# -ge 4 ]] #& surround=${4:0:1} && NB_COLS=$((NB_COLS - 2 ))
-#
-#   # [[ $str_len -ge $NB_COLS ]] && echo "$1" && return 0            # Simply displays the text if it exceeds the maximum length
-#
-#   [[ $# -ge 2 ]] && ch="${2:0:1}" || ch=" "
-#   # [[ $# -ge 2 ]] && ch="${2:0:1}" || ch=" "
-#
-#   # filler=""
-#   # unset filler
-#   for (( i = 0; i < filler_len; i++ )); do
-#     filler="${filler}${ch}"
-#   done
-#
-#   printf "%s%s%s%s%s" "$surround" "$filler" "$printstring" "$filler" "$surround"  # Add an additional filler char at the end if the result length is not even
-#
-#   [[ $(( (NB_COLS - str_len) % 2 )) -ne 0 ]] && printf "%s" "${ch}"
-#   printf "%s\n" "${SURROUNDING_CHAR}"
-#   return 0
-# }
+alias dotfzf="_dotf-fzf-status"
+alias dotf-fzf="_dotf-fzf-status"
+alias dotf-fzf-checkout="_dotf-fzf-checkout"

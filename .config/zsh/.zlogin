@@ -1,11 +1,9 @@
 
 funtion login-motd(){
   figletfont="ANSI Shadow"
-  #printf "[1;34m"
   printf "\e[0;38;5;13m"
   figlet -f "$figletfont" $(hostname --short)
   printf "\e[0m"
-  #printf "[0m"
   [[ -f /etc/os-release ]] && source /etc/os-release || PRETTY_NAME="Linux"
   printf "\e[0;38;5;87m%s \e[0;38;5;46m%s\t\e[0;38;5;27m%s\e[0m\n"  "$PRETTY_NAME" "$(uname -r)" "$(date)"
   printf "\e[0;38;5;93m"
@@ -27,6 +25,5 @@ funtion login-motd(){
    timeout --signal=kill 2s df -h | grep -E "^(/dev/|Filesystem)"
   fi
   printf "\n"
-
 }
 #login-motd
