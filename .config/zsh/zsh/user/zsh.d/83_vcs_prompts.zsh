@@ -84,8 +84,8 @@ PROMPTATSYMBOL='%F{$distro_logo_color[$DISTRO]}$distro_logos[$DISTRO]%f'
 if [[ "${DISTRO}" == "Android" ]]; then
  #clear; for i in $(seq 100 -10 0); do ~/battery.zsh $i && sleep 0.5 && clear; done
   function _rprompt_termux_battery(){
-    export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE
-    typeset -A battery_icon_array
+    export RPS1 TERMUX_BATTERY_STATUS TERMUX_BATTERY_PERCENTAGE TERMUX_BATTERY_PERCENTAGE_short
+    typeset -Ag battery_icon_array
     typeset -A battery_charging_icon_array
     typeset -A battery_horizontal_icon_array
 
@@ -129,15 +129,22 @@ if [[ "${DISTRO}" == "Android" ]]; then
     )
 
 
-    #TERMUX_BATTERY_STATUS="$(termux-battery-status)"
-    #TERMUX_BATTERY_PERCENTAGE="$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)"
+    TERMUX_BATTERY_STATUS="$(termux-battery-status)"
+    TERMUX_BATTERY_PERCENTAGE="${$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)}"
+    TERMUX_BATTERY_PERCENTAGE_short="${TERMUX_BATTERY_STATUS[2]}"
 
-    TERMUX_BATTERY_PERCENTAGE="${*}"
+    #TERMUX_BATTERY_PERCENTAGE="${*}"
 
-    BATT_ICON="${battery_charging_icon_array[$TERMUX_BATTERY_PERCENTAGE]}"
-    printf "Batt: %s\n" "${BATT_ICON}"
+    BATT_ICON="${battery_charging_icon_array[${TERMUX_BATTERY_PERCENTAGE_short}]}"
+    # printf "Batt: %s\n" "${BATT_ICON}"
+    printf "\e[?25l"
+    for i in ${battery_icon_array[@]}; do
+      printf "\e[2K\r%s" "${i}"; sleep 0.01
+    done
+    printf "\e[?25h"
 
-   }; _rprompt_termux_battery "${@}"
+   }
+   #_rprompt_termux_battery "${@}"
 fi
 
 ## CHECK TERMINAL SUPPORTS 256 colors, if not, load zshmodule "zsh/nearcolor"
