@@ -1,11 +1,14 @@
 #shellcheck disable=2148
 
 wdotf () {
-	export WDOTFILES WDOTFILES_WORKTREE WINDOWSHOME
+	export WDOTFILES WDOTFILES_WORKTREE WINDOWSHOME PDOTDIR
 
 	WINDOWSHOME="/home/conner.will" #WINDOWSHOME="${WINDOWSHOME:-/C:/Users/conner.will}"
 	WDOTFILES="${WINDOWSHOME}/.dotfiles"
 	WDOTFILES_WORKTREE="${WINDOWSHOME}"
+
+	### Powershell profile directory
+	PDOTDIR="${WINDOWSHOME}/Documents/PowerShell"
 
 	## If subcommand or switch is help, show help
 	if [[ "${1}" == "help" ]] || [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then

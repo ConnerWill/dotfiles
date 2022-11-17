@@ -179,7 +179,6 @@ export BASHSNIPPETSDIR="${SCRIPTS}/bash/development/snippets"
 export BASHTEMPLATEDIR_BEST="${SCRIPTS}/bash/development/snippets/templates-bash/best-script-templates/extended-cd"
 export BASHTEMPLATESDIR="${SCRIPTS}/bash/development/snippets/templates-bash"
 export CHEATSHEETSSCRIPTSDIR="${SCRIPTS}/cheatsheets" ### cheatsheets
-export POWERSHELLSCRIPTSDIR="${SCRIPTS}/powershell" ### Powershell Scripts
 export PYTHONSCRIPTSDIR="${SCRIPTS}/python" ### Python Scripts
 export MPVSCRIPTSDIR="${SCRIPTS}/mpv-scripts"
 export BASHTEMPLATE_VERY_NICE_INDEED="${SCRIPTS}/bash/development/templates-bash/FULL-PACKAGE-ZSH-BASH-TEMPLATE"

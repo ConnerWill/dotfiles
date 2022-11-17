@@ -1,5 +1,4 @@
-# shellcheck disable=1091,2296,2086,2016
-
+# shellcheck disable=1091,2296,2086,2016,1072,1058,1036,1073
 
 ## Load Completions System
 ## Autoload zsh modules when they are referenced
@@ -20,40 +19,30 @@ export ZCOMPDUMP=${ZCOMPDUMP:-${ZSH_CACHE_DIR}/zcompdump}
 
 # shellcheck disable=2298
 # We can use a cache in order to speed things up
-[[ ! -d "${ZSH_CACHE_DIR}" ]] && mkdir -pv "${ZSH_CACHE_DIR}" # [[ ! -d ${ZCOMPCACHE:h} ]] && command mkdir -pv "${ZCOMPCACHE:h}"; [[ ! -d ${ZCOMPDUMP:h} ]] && command mkdir -pv "${ZCOMPDUMP:h}"
+[[ ! -d "${ZSH_CACHE_DIR}" ]] && mkdir -pv "${ZSH_CACHE_DIR}"
 
-
-run_compdump=1
 # glob qualifiers description:
 #   N    turn on NULL_GLOB for this expansion
 #   .    match only plain files
 #   m-1  check if the file was modified today
 # see "Filename Generation" in zshexpn(1)
+run_compdump=1
 for match in "${ZCOMPDUMP}"(N.m-1); do
     run_compdump=0; break
 done; unset match
 
-#echo -ne "\e[?25l" ## Hide Cursor
-#echo -ne "\e[?25h" ## Restore Cursor
-#echo -ne "\e[1A"   ## Move curser up 1 line
-#echo -ne "\e[2K"   ## Clear line
-#echo -ne "\r"      ## Move cursor to beginning of line
-
-
-if (( $run_compdump )); then
-    # print -r -- "$0: Rebuilding zsh completion dump"
-    printf "\e[0;38;5;190mRebuilding zsh completion dump\e[0m:\t"
-    compinit -D -d "${ZCOMPDUMP}" # -D flag turns off compdump loading
-    compdump
-    sleep 0.5; print "\e[2K\r\e[2K\e[1A"   ## Move curser up 1 line
-else
+if (( run_compdump )){
+    printf "\e[0;38;5;8mRebuilding zsh completion dump\e[0m:\t"
+    compinit -D -d "${ZCOMPDUMP}"; compdump; sleep 0.5
+    print "\e[2K\r\e[2K\e[1A" ## Move curser up 1 line
+} else {
     compinit -C -d "${ZCOMPDUMP}" "${tmp[@]}" # -C flag disables some checks performed by compinit - they are not needed because we already have a fresh compdump
-fi; unset tmp run_compdump
-
+}; unset tmp run_compdump
 
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
-    [[ -z "${NOMENU}" ]] && zstyle ':completion:*' menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
+    [[ -z "${NOMENU}" ]] &&
+    zstyle ':completion:*'                              menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
     zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle ':completion:*'                              completer _complete _match _approximate
     zstyle ':completion:*'                              format '%K{black}%F{blue}░░▒▒▓▓██ %d ██▓▓▒▒░░%f%k' ## %K{black}%F{blue}━━━ %d ━━━%f%k'
@@ -111,84 +100,111 @@ function comp_setup () {
         haldaemon halt hsqldb ident junkbust ldap lp mail mailman mailnull mldonkey mysql nagios named netdump news nfsnobody nobody nscd       \
         ntp nut nx openvpn operator pcap postfix postgres privoxy pulse pvm quagga radvd rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs ## Don't complete uninteresting users
 
-    function _force_rehash () { # run rehash on completion so new installed program are found automatically:
-        (( CURRENT == 1 )) && rehash
-        return 1
-    }
+    # Run rehash on completion so new installed program are found automatically:
+    function _force_rehash() { (( CURRENT )) && rehash; return 1; }
 
     ## Correction
-    if [[ -n "${NOCOR}" ]]; then # set 'NOCOR=true' to deactivate it
+    #NOCOR=0 ## (Default: 0 (Correction enabled))
+    if (( NOCOR )) { # set 'NOCOR=0' to deactivate it
         zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _files _ignored
         setopt nocorrect
-    ## Try to be smart about when to use what completer...
-    else
+    } else {
         setopt correct
-        zstyle -e ':completion:*' completer '
-        if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-            _last_try="$HISTNO$BUFFER$CURSOR"
-            reply=(_complete _match _ignored _prefix _files)
-        else
-            if [[ $words[1] == (rm|mv) ]] ; then
-                reply=(_complete _files)
-            else
-                reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-            fi
-        fi'
-    fi
+        correction_codeblock='if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] { _last_try="$HISTNO$BUFFER$CURSOR"; reply=(_complete _match _ignored _prefix _files) } else { if [[ $words[1] == (rm|mv) ]] { reply=(_complete _files) } else { reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files); }; }'
+        zstyle -e ':completion:*' completer ${correction_codeblock}
+    }
 
     ## Host Completion
-    ## Defined variable 'NOETCHOSTS' to disable completing hosts from /etc/hosts
-    SSH_DIR="${SSH_DIR:-${HOME}/.ssh}"
-    [[ -r "${SSH_DIR}/config" ]]                                                                                    \
-      && _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*})   \
-      || _ssh_config_hosts=()
+    ## Define variable 'NOHOSTSCOMPL' to disable completing hosts
+    ## Define variable 'NOETCHOSTS' to disable completing hosts from /etc/hosts
+    #NOHOSTSCOMPL=true ## (Default: <undefined>)
+    #NOETCHOSTS=true   ## (Default: <undefined>)
+    if [[ -z "${NOHOSTSCOMPL}" ]] {
+      SSH_DIR="${SSH_DIR:-${HOME}/.ssh}"
+      SSH_USER_CONFIG="${SSH_DIR:-${HOME}/.ssh/config}"
+      SSH_USER_KNOWNHOSTS="${SSH_DIR:-${HOME}/.ssh/known_hosts}"
 
-    [[ -r "${SSH_DIR}/known_hosts" ]]                                           \
-      && _ssh_hosts=(${${${${(f)"$(<$SSH_DIR/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
-      || _ssh_hosts=()
+      [[ -r "${SSH_USER_CONFIG}" ]]                                                                                    \
+        && _ssh_config_hosts=(${${(s: :)${(ps:\t:)${${(@M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }}}:#*[*?]*})   \
+        || _ssh_config_hosts=()
 
-    [[ -r /etc/hosts ]]                                                                                                                                 \
-      && [[ "$NOETCHOSTS" -eq 0 ]]                                                                                                                      \
-      && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0\.0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}}   \
-      || _etc_hosts=()
+      [[ -r "${SSH_USER_KNOWNHOSTS}" ]]                                           \
+        && _ssh_hosts=(${${${${(f)"$(<$SSH_DIR/known_hosts)"}:#[\|]*}%%\ *}%%,*}) \
+        || _ssh_hosts=()
 
-    local localname
-    localname="$(uname -n)"
-    hosts=(
-        "${localname}"
-        "${_ssh_config_hosts[@]}"
-        "${_ssh_hosts[@]}"
-        "${_etc_hosts[@]}"
-        localhost
-    )
-    zstyle ':completion:*:hosts' hosts "${hosts[@]}"
-    typeset -a compcom_list
-    compcom_list=(
-                   cp
-                   deborphan
-                   df
-                   feh
-                   fetchipac
-                   gpasswd
-                   head
-                   hnb
-                   ipacsum
-                   mv
-                   pal
-                   stow
-                   uname
-    )
-    for compcom in "${compcom_list[@]}"; do
-        [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic "${compcom}"
-    done
+      [[ -r /etc/hosts ]]                                                                                                                                 \
+        && [[ "$NOETCHOSTS" -eq 0 ]]                                                                                                                      \
+        && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(grep -v '^0\.0\.0\.0\|^127\.0\.0\.1\|^::1 ' /etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}}   \
+        || _etc_hosts=()
 
-    ## See upgrade function in this file
-    unset compcom compcom_list
-    compdef _hosts upgrade
+      local localname
+      localname="$(uname -n)"
+
+      typeset -a custom_hosts
+      custom_hosts-(
+                     "192.168.1.0/24"
+                     "10.0.0.0/24"
+                     "10.0.0.0/16"
+      )
+      hosts=(
+              "${localname}"
+              "${_ssh_config_hosts[@]}"
+              "${_ssh_hosts[@]}"
+              "${_etc_hosts[@]}"
+              "${custom_hosts[@]}"
+              localhost
+      )
+      zstyle ':completion:*:hosts' hosts "${hosts[@]}"
+      typeset -a compcom_list
+      compcom_list=(
+                     cp
+                     deborphan
+                     df
+                     feh
+                     fetchipac
+                     gpasswd
+                     head
+                     hnb
+                     ipacsum
+                     mv
+                     pal
+                     stow
+                     uname
+                     gping
+      )
+      for compcom in "${compcom_list[@]}"; do
+          [[ -z ${_comps[$compcom]} ]] && compdef _gnu_generic "${compcom}"
+      done
+
+      ## See upgrade function in this file
+      unset compcom compcom_list
+      compdef _hosts upgrade
+  }
+}
 
     # Completion for dotf command (dotfiles)
     dotf >/dev/null 2>&1 && compdef dotf=git
     dotfiles >/dev/null 2>&1 && compdef dotf=git
-}
+
 comp_setup
 unfunction comp_setup
+
+
+
+
+
+
+
+
+
+
+        # if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+        #     _last_try="$HISTNO$BUFFER$CURSOR"
+        #     reply=(_complete _match _ignored _prefix _files)
+        # else
+        #     if [[ $words[1] == (rm|mv) ]] ; then
+        #         reply=(_complete _files)
+        #     else
+        #         reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
+        #     fi
+        # fi'
