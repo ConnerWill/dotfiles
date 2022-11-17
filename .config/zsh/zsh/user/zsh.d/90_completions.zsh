@@ -41,8 +41,7 @@ if (( run_compdump )){
 
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                             # Make sure the completion system is initialised
-    [[ -z "${NOMENU}" ]] &&
-    zstyle ':completion:*'                              menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
+    [[ -z "${NOMENU}" ]] &&    zstyle ':completion:*'                              menu select=2 || setopt no_auto_menu      # if there are more than N options allow selecting from a menu
     zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle ':completion:*'                              completer _complete _match _approximate
     zstyle ':completion:*'                              format '%K{black}%F{blue}░░▒▒▓▓██ %d ██▓▓▒▒░░%f%k' ## %K{black}%F{blue}━━━ %d ━━━%f%k'
@@ -119,7 +118,7 @@ function comp_setup () {
     ## Define variable 'NOETCHOSTS' to disable completing hosts from /etc/hosts
     #NOHOSTSCOMPL=true ## (Default: <undefined>)
     #NOETCHOSTS=true   ## (Default: <undefined>)
-    if [[ -z "${NOHOSTSCOMPL}" ]] {
+    # if [[ -z "${NOHOSTSCOMPL}" ]] {
       SSH_DIR="${SSH_DIR:-${HOME}/.ssh}"
       SSH_USER_CONFIG="${SSH_DIR:-${HOME}/.ssh/config}"
       SSH_USER_KNOWNHOSTS="${SSH_DIR:-${HOME}/.ssh/known_hosts}"
@@ -139,19 +138,11 @@ function comp_setup () {
 
       local localname
       localname="$(uname -n)"
-
-      typeset -a custom_hosts
-      custom_hosts-(
-                     "192.168.1.0/24"
-                     "10.0.0.0/24"
-                     "10.0.0.0/16"
-      )
       hosts=(
               "${localname}"
               "${_ssh_config_hosts[@]}"
               "${_ssh_hosts[@]}"
               "${_etc_hosts[@]}"
-              "${custom_hosts[@]}"
               localhost
       )
       zstyle ':completion:*:hosts' hosts "${hosts[@]}"
@@ -180,7 +171,7 @@ function comp_setup () {
       unset compcom compcom_list
       compdef _hosts upgrade
   }
-}
+# }
 
     # Completion for dotf command (dotfiles)
     dotf >/dev/null 2>&1 && compdef dotf=git
