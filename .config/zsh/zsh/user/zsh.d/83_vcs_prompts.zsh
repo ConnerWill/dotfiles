@@ -440,15 +440,41 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
 
-
 function replacehostnameinprompt(){
-## Replace 'localhost' with a different "hostname" in the prompt
-  local newhostname
-  newhostname="termux"
-  [[ $(uname -n) == "archlinux" && $(whoami) == "u0_a119" ]] && PROMPTHOSTNAME='%F{99}$newhostname%f'
-  [[ $(hostname) == "archdesk" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='' PROMPTATSYMBOL=''
-  [[ $(hostname) == "connerwill.com" && $(whoami) == "dampsock" ]] && PROMPTHOSTNAME='%F{99}connerwill%f%F{196}.%f%F{99}com%f'
-  export PROMPTHOSTNAME
+  export PROMPTUSERNAME PROMPTHOSTNAME PROMPTATSYMBOL
+
+## android
+  [[                          \
+     "${DISTRO}" == "android" \
+    && $(whoami) == "u0_a119" \
+  ]] \
+      && PROMPTHOSTNAME='%F{99}termux%f'  #  \
+      # && PROMPTATSYMBOL="${PROMPTATSYMBOL}"
+
+## archdesk
+  [[ \
+    $(<'/etc/hostname') == "archdesk"  \
+            && $(whoami) == "dampsock" \
+  ]] \
+      && unset PROMPTHOSTNAME \
+      && unset PROMPTATSYMBOT
+
+## archbox
+  [[ \
+    $(<'/etc/hostname') == "archbox"  \
+           && $(whoami) == "dampsock" \
+  ]] \
+      && unset PROMPTHOSTNAME \
+      && unset PROMPTATSYMBOL
+
+## connerwill.com
+  [[ \
+    $(<'/etc/hostname') == "connerwill.com" \
+    && $(whoami) == "dampsock"              \
+  ]] \
+      && PROMPTHOSTNAME='%F{99}connerwill%f%F{196}.%f%F{99}com%f' \
+      && PROMPTATSYMBOL=''
+
 }; replacehostnameinprompt; unset -f replacehostnameinprompt
 
 function backup_prompt_incase_of_failure(){
@@ -478,20 +504,18 @@ function define_combine_prompt(){
   PROMPT_FULL="$PROMPT_EXIT_CODE$PROMPT_USER_HOST_PATH$_VCS_INFO_PROMPT$PROMPTDELIMITER"
   PROMPT="$PROMPT_FULL"
   PS1="$PROMPT_FULL"
-}
+}; define_combine_prompt && unset -f define_combine_prompt || backup_prompt_incase_of_failure; unset -f backup_prompt_incase_of_failure
 
-define_combine_prompt \
-  && unset -f define_combine_prompt \
-  || backup_prompt_incase_of_failure
-unset -f backup_prompt_incase_of_failure
+unset \
+  EXIT_CODE_PROMPT PROMPT_EXIT_CODE            \
+  PROMPTUSERNAME PROMPTATSYMBOL PROMPTHOSTNAME \
+  PROMPTPATH PROMPT_PATH                       \
+  PROMPT_USER_HOST PROMPT_USER_HOST_PATH       \
+  PROMPTDELIMITER                              \
+  PROMPT_CLOSE_BRACKETS PROMPT_OPEN_BRACKETS   \
+  PROMPT_FULL
 
-
-#
-
-
-
-
-
+###############################################################
 
 ## cool prompt features
 # The first step is to configure the appearance of the prompt in its compact form. Let’s assume we have a variable, $_vbe_prompt_compact set to 1 when we want a compact prompt. We use the following function to define the prompt appearance:
