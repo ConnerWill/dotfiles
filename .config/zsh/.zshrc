@@ -1,5 +1,4 @@
-# rm -fv ~/temporary/temporay-path.zsh
-
+# vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
 
 ###{{{ DOCUMENTATION
 #############################################################
@@ -24,15 +23,11 @@
 
 ########################
 #### DOCUMENTATION  ####
-###########################################################################
+#############################################################
 ###
 ##:
 ##:
-##:
-##:
-###########################################################################
-#### DOCUMENTATION  ####
-########################
+#############################################################
 
 #############################################################
 ##;:::::::::::::::::::;---ZSHRC---;:::::::::::::::::::::::;##
@@ -59,9 +54,19 @@
 ##_________________________________________________________##
 #############################################################
 
+# \e[?25l ## Hide Cursor
+# \e[?25h ## Restore Cursor
+# \e[2K   ## Clear line
+# \e[1A   ## Move curser up 1 line
+# \e[5A   ## Move curser up 5 lines
+# \r      ## Move cursor to beginning of line
+
+###}}}
+
+### ::::::::::::::::::::::: DEBUGGING :::::::::::::::::::::: ###{{{
 ########################
 ####   DEBUGGING    ####
-###########################################################################
+############################################################
 ###: To run a diagnostics dump, run command:# For boolean options:
 ##:      zsh_diagnostic_dump
 ##:
@@ -87,24 +92,14 @@
 ##:
 ##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
 ##:
-###########################################################################
-###}}}
-########################
-####   DEBUGGING    ####
-########################
-
+###########################################################
 [ -n "$INHERIT_ENV" ] && return 0
-
-
-### {{{ VERBOSE LOADING
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
 #: VERY Verbose loading zshrc
 if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
-
-
 #  Profiling
 # ZSH_PROFILE_RC=1
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
@@ -113,10 +108,10 @@ if [[ -n "$ZSH_PROFILE_RC" ]]; then
   exec 3>&2 2>${ZSH_DEBUG_LOG_DIR:-/tmp}/zshstart.$$.log
   setopt xtrace prompt_subst
 fi
-# }}}
 
+### ::::::::::::::::::: END DEBUGGING :::::::::::::::::::::: ###}}}
 
-### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ### {{{
+### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ###{{{
 export LC_ALL="en_US.UTF-8"
 unset                 \
   _ZSH_LOAD_VERBOSE   \
@@ -132,10 +127,9 @@ export                \
   ZSH_USER_DIR        \
   ZSH_USER_LOAD_DIR   \
   LC_ALL
-### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ### }}}
+### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ###}}}
 
-
-### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ### {{{
+### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ###{{{
 ########################
 #┌─ Config options ####
 #├─┐ For boolean options:
@@ -182,10 +176,9 @@ _ZSH_DEBUGGING_ENABLED="TRUE"        #┌ If this option is set, a debug log wil
 
 
 
-### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ### }}}
+### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ###}}}
 
-
-### :::::::::::::: ZSHRC VERBOSE MESSEGES ::::::::::::::::: ### {{{
+### :::::::::::::: ZSHRC VERBOSE MESSEGES ::::::::::::::::: ###{{{
 ### VERBOSE / ERROR Displaying
 function _zshrc_VERBOSE_MESSEGE(){
   if [[ -n "${_ZSH_LOAD_VERBOSE}" ]]; then
@@ -224,10 +217,9 @@ function _zshloadverbose(){
     unset zsh_load_section
     unset zsh_load_section_error
 }
-### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ### }}}
+### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ###}}}
 
-
-### ::::::::::::::::::::: OS TYPE ::::::::::::::::::::::::: ### {{{
+### :::::::::::::: OS TYPE ::::::::::::::::::::::::: ###{{{
 # ZSHLIB="${ZDOTDIR}/lib"
 # if [[ -d "${ZSHLIB}" ]]; then
 #   if [[ -f "${ZSHLIB}/ostype" ]]; then
@@ -235,10 +227,6 @@ function _zshloadverbose(){
 #     islinux && OSTYPE="linux"
 #     isandroid && OSTYPE="linux"
 #     ismacos &&
-#
-
-#
-
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
   if [[ -f /etc/os-release ]]; then
     DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
@@ -250,10 +238,9 @@ elif [[ "${OSTYPE}" == "linux-android" ]]; then
 else
   unset DISTRO
 fi
-###}iuuuuuuuui}}
+### ::::::::::::::::: END OS TYPE ::::::::::::::::::::::: ###}}}
 
-
-### ::::::::::zR::::::::::: START TMUX :::::::::::::::::::::: ### }}}
+### :::::::::::::: TMUX :::::::::::::::::::::::: ###{{{
 ## Set NOTMUX to any value to disable automatic tmux
 NOTMUX=1
 # shellcheck disable=2148
@@ -271,20 +258,11 @@ function _zshinittmux(){
 }
 # _zshinittmux
 unfunction _zshinittmux
-### ::::::::::::::::::: END START TMUX :::::::::::::::::::: ### }}}
+### :::::::::::::: END TMUX ::::::::::::::::: ###}}}
 
-#echo -ne "\e[?25l" ## Hide Cursor
-#echo -ne "\e[?25h" ## Restore Cursor
-#echo -ne "\e[1A"   ## Move curser up 1 line
-#echo -ne "\e[2K"   ## Clear line
-#echo -ne "\r"      ## Move cursor to beginning of line
-#echo -ne "\e[2K"   ## Clear line
-#echo -ne "\r"      ## Move cursor to beginning of line
-
-
-
-#printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
+### :::::::::::::: LOADING BAR ::::::::::::::::::::: ###{{{
 function _loading_bar(){
+  printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
   local bar_color sleep_time
   bar_color='\e[0;48;5;46m'
   sleep_time=0.04
@@ -302,25 +280,19 @@ function _loading_bar(){
     sleep $sleep_time
   done
 }
+### :::::::::::::::::: END LOADING BAR ::::::::::::::::::: ###}}}
 
-### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ### {{{
-### Clear Screen
-function _zshloadstartclear(){
-    [[ -z "$zsh_load_start_clear" ]] || clear
-}
-function _zshloadendclear(){
-    [[ -z "$zsh_load_end_clear" ]] || clear
-}
-### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ### }}}
+### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ###{{{
+function _zshloadstartclear(){ [[ -z "$zsh_load_start_clear" ]] || clear; }
+function _zshloadendclear(){ [[ -z "$zsh_load_end_clear" ]] || clear; }
+### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ###}}}
 
-
-### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
+### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
 _zshloadstartclear
 #: Clear Screen Before Loading
-### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ### }}}
+### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ###}}}
 
-
-### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ### {{{
+### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ###{{{
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop
 #plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
 #You can then easily source the files in your .zshrc file with something like
@@ -336,33 +308,25 @@ if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
 else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "${ZSH_USER_LOAD_DIR}" "196" "124"
 fi
-### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ### }}}
+### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ###}}}
 
-
-### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ### {{{
+### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
 _zshloadendclear
 #: Clear Screen After Loading
-### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ### }}}
+### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ###}}}
 
-#_loading_bar
-#echo -ne "\e[?25h" ## Restore Cursor
-#echo -ne "\e[2K"   ## Clear line
-#echo -ne "\r"      ## Move cursor to beginning of line
-
-# {{{ Profile report
-
+### ::::::::::::::::::: DEBUGGING STOP :::::::::::::::::::: ###{{{
 
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
-unsetopt xtrace
-exec 2>&3 3>&-
+  unsetopt xtrace
+  exec 2>&3 3>&-
   #zprof # >! ~/zshrc.zprof
   #exit
 fi
-# }}}
 
+### ::::::::::::::::::: END DEBUGGING STOP :::::::::::::::: ###}}}
 
-### :::::::::::::: ZSHRC EXIT TRAPS ::::::::::::: ### {{{
-
+### :::::::::::::: ZSHRC EXIT TRAPS ::::::::::::: ###{{{
  # TRAPEXIT() {
     # commands to run here, e.g. if you
     # always want to run .zlogout: if [[ ! -o login ]]; then
@@ -370,4 +334,4 @@ fi
       #source "${ZDOTDIR}/.zlogout"
     #fi
   #}
-### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ### }}}
+### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ###}}}

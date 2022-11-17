@@ -310,7 +310,7 @@ globalkeys = gears.table.join(
 		awful.client.focus.byidx(1)
 	end, { description = "focus next client by index", group = "client" }),
 	-- Change Focus to the Previous Window by Index
-	awful.key({ modkey }, "k", function()
+	awful.key({ modkey }, "k", function(slock awesomewm)
 		awful.client.focus.byidx(-1)
 	end, { description = "focus previous client by index", group = "client" }),
 
@@ -393,7 +393,7 @@ globalkeys = gears.table.join(
 	awful.key({ modkey, "Shift", "Control" }, "b", function()
 		awful.spawn(torbrowser)
 	end, { description = "launch tor browser", group = "launcher" }),
-	-- Spawn Signal Desktop 
+	-- Spawn Signal Desktop
 	awful.key({ modkey, "Shift", "Control" }, "s", function()
 		awful.spawn(SignalMessager)
 	end, { description = "launch signal-desktop", group = "launcher" }),
@@ -463,7 +463,7 @@ globalkeys = gears.table.join(
 
 -- ========= WINDOW MANIPULATION ========={{{
 
--- Toggle Focused Windows to be Fullscreen
+-- Toggle Focused Windows to be Fullscreen with Mod + Ctrl + f
 clientkeys = gears.table.join(
 	awful.key({ modkey, "Shift" }, "f", function(c)
 		c.fullscreen = not c.fullscreen
