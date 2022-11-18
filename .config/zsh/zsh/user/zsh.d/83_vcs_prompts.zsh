@@ -32,20 +32,33 @@ setopt prompt_subst
 ### [===============================]
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
+
 ### {{{ STANDARD PROMPT
+
+
+
 unset RPS1
-  PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
- PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
-        PROMPTUSERNAME='%F{99}%n%f'
-        PROMPTHOSTNAME='%F{8}%m%f'
-        PROMPTATSYMBOL='%F{201}@%f'
-       PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} '
+PROMPTATSYMBOL='%F{201}@%f'
+PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} ' # Random color delimiter ':'
+PROMPTHOSTNAME='%F{8}%m%f'
+PROMPTHOSTNAME='%F{99}%m%f'
+PROMPTPATH='%F{66}%40<..<%~%<<'
+PROMPTUSERNAME='%F{99}%n%f'
+PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
+PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
+
+
+
+
+### STANDARD PROMPT }}}
+
+###{{{ PROMPT ICONS
 
 typeset -A distro_logos
 typeset -A distro_logo_color
 #shellcheck disable=2190,2034
 distro_logos=(
- "Arch"       "  "
+ "Arch"        ""
  "Manjaro"    "  "
  "Gentoo"     "  "
  "Debian"     "  "
@@ -147,21 +160,15 @@ if [[ "${DISTRO}" == "Android" ]]; then
    #_rprompt_termux_battery "${@}"
 fi
 
+###}}} PROMPT ICONS
+
+
 ## CHECK TERMINAL SUPPORTS 256 colors, if not, load zshmodule "zsh/nearcolor"
 ## The zsh/nearcolor module replaces colours specified as hex triplets with the nearest
 ## colour in the 88 or 256 colour palettes that are widely used by terminal emulators.
 autoload -U promptinit ; promptinit
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 setopt PROMPT_SUBST
-
-PROMPT_OPEN_BRACKETS='%F{51}%B[%b%f'
-PROMPT_CLOSE_BRACKETS='%F{51}%B]%b%f'
-PROMPTHOSTNAME='%F{99}%m%f'
-PROMPTUSERNAME='%F{99}%n%f'
-PROMPTPATH='%F{66}%40<..<%~%<<'
-PROMPTDELIMITER=$'%{\e[$((color=$((30+$RANDOM % 8))))m%}:%{\e[00m%} ' # Random color delimiter ':'
-
-
 
 
 
@@ -187,7 +194,6 @@ _rprompt_set_ssh
   # unset PROMPTATSYMBOL PROMPTHOSTNAME
 # else
 # fi
-### STANDARD PROMPT }}}
 
 
 ### [=========================================]
@@ -472,8 +478,8 @@ function replacehostnameinprompt(){
      $(uname -n) == "archbox"  \
     && $(whoami) == "dampsock" \
   ]] \
-      && unset PROMPTHOSTNAME \
-      && unset PROMPTATSYMBOL
+      && unset PROMPTUSERNAME \
+      && unset PROMPTHOSTNAME
 
 ## connerwill.com
   [[ \
