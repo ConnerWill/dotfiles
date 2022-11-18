@@ -1,8 +1,11 @@
 
 function highlight () {
+  hl_color='\e[1;4;38;5;196m'
+  #hl_color='\e[0;1;3;4;38;5;46mMATCH:\e[0m--->\t\e[1;38;5;196m'
+
   [[ "${commands[perl]}" ]] \
-        || printf "'perl' is nowhere to be found. Make sure it is installed!\n" \
-        || return 1
+        || printf "\e[1;38;5;190m'perl' \e[38;5;196mis nowhere to be found. Make sure it is installed!\e[0m\n" \
+        || return
 
   local INPUT PATTERN
   PATTERN="${1}" INPUT="${2}"
@@ -13,9 +16,13 @@ function highlight () {
   fi
 
   if [[ -z "${INPUT}" ]]; then 
-    perl -pe "s/$PATTERN/\e[1;38;5;196m$&\e[0m/g"
+    perl -pe "s/$PATTERN/${hl_color}$&\e[0m/g"
+    exitstatus=$?
   else 
     [[ -f "${INPUT}" ]] && INPUT=$(<"${INPUT}")
-    printf "%s" "${INPUT}" | perl -pe "s/$1/\e[1;38;5;196m$&\e[0m/g"
+    printf "%s\n" "${INPUT}" | perl -pe "s/$1/${hl_color}$&\e[0m/g"
+    exitstatus=$?
   fi
+  return $?
+
 }
