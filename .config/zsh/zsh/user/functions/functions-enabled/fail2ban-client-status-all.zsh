@@ -1,0 +1,1 @@
+../functions-available/fail2ban-client-status-all.zsh
