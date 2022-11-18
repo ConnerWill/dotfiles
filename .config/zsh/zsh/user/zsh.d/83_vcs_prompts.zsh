@@ -58,7 +58,7 @@ typeset -A distro_logos
 typeset -A distro_logo_color
 #shellcheck disable=2190,2034
 distro_logos=(
- "Arch"        ""
+ "Arch"       "  "
  "Manjaro"    "  "
  "Gentoo"     "  "
  "Debian"     "  "
@@ -470,16 +470,14 @@ function replacehostnameinprompt(){
      $(uname -n) == "archdesk"  \
     && $(whoami) == "dampsock" \
   ]] \
-      && unset PROMPTHOSTNAME \
-      && unset PROMPTATSYMBOL
+      && unset PROMPTHOSTNAME && unset PROMPTATSYMBOL
 
 ## archbox
   [[ \
      $(uname -n) == "archbox"  \
     && $(whoami) == "dampsock" \
   ]] \
-      && unset PROMPTUSERNAME \
-      && unset PROMPTHOSTNAME
+      && unset PROMPTUSERNAME #&& unset PROMPTHOSTNAME
 
 ## connerwill.com
   [[ \
