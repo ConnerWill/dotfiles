@@ -52,7 +52,7 @@ distro_logos=(
  "Raspbian"   "  "
  "Linuxmint"  "  "
  "Ubuntu"     "  "
- "Android"    "  "
+ "Android"     ""
  "wsl"        "  "
  "Freebsd"    "  "
  "Openbsd"    " 🐡 "
@@ -213,6 +213,11 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd check_last_exit_code
 # ------------------------------------------------------------------
 ### EXIT CODE PROMPT }}}
+
+
+
+
+###{{{ GIT PROMPT
 
 function _prompt_set_git(){
   setopt PROMPT_SUBST
@@ -434,49 +439,54 @@ _VCS_INFO_PROMPT='${vcs_info_msg_0_}$(gitstatus -i)'
        # shellcheck disable=2154,2034
        GITPROMPT="{$vcs_info_msg_0_}"
 # ------------------------------------------------------------------
-### GIT PROMPT }}}
+###}}} GIT PROMPT
 
 ### [===============================]
 ### [ ---------- PROMPT ----------- ]
 ### [===============================]
-
+###{{{ Replace hostname and username in prompt
 function replacehostnameinprompt(){
   export PROMPTUSERNAME PROMPTHOSTNAME PROMPTATSYMBOL
 
 ## android
-  [[                          \
-     "${DISTRO}" == "android" \
-    && $(whoami) == "u0_a119" \
+  [[ \
+   (( "${DISTRO}" == "Android" || "$(uname -n)" == "android" )) \
+     && $(whoami) == "u0_a119" \
   ]] \
-      && PROMPTHOSTNAME='%F{99}termux%f'  #  \
-      # && PROMPTATSYMBOL="${PROMPTATSYMBOL}"
+      && PROMPTHOSTNAME='' \
+      && unset PROMPTUSERNAME #\
+      # && PROMPTHOSTNAME='%F{99}termux%f' \
+      # && PROMPTHOSTNAME="${PROMPTHOSTNAME}${PROMPTATSYMBOL}" \
+      # && PROMPTUSERNAME='%F{99}termux%f' \
 
 ## archdesk
   [[ \
-    $(<'/etc/hostname') == "archdesk"  \
-            && $(whoami) == "dampsock" \
+     $(uname -n) == "archdesk"  \
+    && $(whoami) == "dampsock" \
   ]] \
       && unset PROMPTHOSTNAME \
-      && unset PROMPTATSYMBOT
+      && unset PROMPTATSYMBOL
 
 ## archbox
   [[ \
-    $(<'/etc/hostname') == "archbox"  \
-           && $(whoami) == "dampsock" \
+     $(uname -n) == "archbox"  \
+    && $(whoami) == "dampsock" \
   ]] \
       && unset PROMPTHOSTNAME \
       && unset PROMPTATSYMBOL
 
 ## connerwill.com
   [[ \
-    $(<'/etc/hostname') == "connerwill.com" \
-    && $(whoami) == "dampsock"              \
+     $(uname -n) == "connerwill.com" \
+    && $(whoami) == "dampsock"      \
   ]] \
       && PROMPTHOSTNAME='%F{99}connerwill%f%F{196}.%f%F{99}com%f' \
       && PROMPTATSYMBOL=''
 
 }; replacehostnameinprompt; unset -f replacehostnameinprompt
+###}}} Replace hostname and username in prompt
 
+###{{{ Prompt: PLAN B
 function backup_prompt_incase_of_failure(){
   ## Set a prompt in case of failure
   printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
@@ -493,7 +503,9 @@ function backup_prompt_incase_of_failure(){
     fi
   fi
 }
+###}}} Prompt: PLAN B
 
+###{{{ Create PROMPT
 function define_combine_prompt(){
   ## 'Stich' all parts of the PS1 (prompt) together
   export PROMPT PS1
@@ -515,6 +527,10 @@ unset \
   PROMPT_CLOSE_BRACKETS PROMPT_OPEN_BRACKETS   \
   PROMPT_FULL
 
+###}}} Create PROMPT
+
+
+###{{{ Other: (commented out)
 ###############################################################
 
 ## cool prompt features
@@ -607,3 +623,5 @@ unset \
 #
 # nothing added to commit but untracked files present (use "git add" to track)
 # We have to manually enable bracketed paste because Zsh does it after zle-line-init. ↩︎
+
+###}}} Other: (commented out)
