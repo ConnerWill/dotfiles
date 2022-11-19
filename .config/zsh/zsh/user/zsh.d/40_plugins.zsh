@@ -59,9 +59,9 @@ else
 fi
 
 
-#zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
-#[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
+zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
 
 
-#zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-#[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
+zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
