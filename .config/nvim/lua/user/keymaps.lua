@@ -9,30 +9,14 @@
 --   command_mode = "c",
 
 -- SETUP {{{
-
--- Key Mapping - Settings/Setup{{{
-
-local opts = {
-	noremap = true,
-	silent = true,
-}
-
-local term_opts = {
-	silent = true,
-}
--- }}} Key Mapping Settings Setup
-
--- Define remap variable name {{{
-
-local keymap = vim.api.nvim_set_keymap
-
--- Define remap variable name }}}
-
+local opts = { noremap = true, silent = true } -- Key Mapping Setup
+local term_opts = { silent = true }            -- Key Mapping Setup
+local keymap = vim.api.nvim_set_keymap         -- Define remap variable name
 -- SETUP }}}
 
 -- {{{ MAPPINGS
 
---Remap leader key{{{
+-- Leader Key{{{
 
 keymap("", "\\", "<Nop>", opts)
 vim.g.mapleader = "\\"
@@ -48,10 +32,8 @@ keymap("n", "<A-f>", ":FZF<CR>", opts)
 -- Map F1 to Esc
 keymap("n", "<F1>", "<Esc>", opts)
 
-
 -- Map Ctrl+s to :w
 keymap("n", "<C-s>", ":w<CR>", opts)
-
 
 -- Map F1 to Esc
 keymap("n", "<Insert>", "<Esc>", opts)
@@ -63,47 +45,42 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- faster cursor movement (Ctrl ⇑⇒⇓⇐)
-keymap("n", "<S-Up>",    "k",    opts)
-keymap("n", "<S-Down>",  "j",  opts)
-keymap("n", "<S-Left>",  "b",  opts)
-keymap("n", "<S-Right>", "w", opts)
+keymap("n", "<S-Up>",    "2k",  opts)
+keymap("n", "<S-Down>",  "2j",  opts)
+keymap("n", "<S-Left>",  "2b",  opts)
+keymap("n", "<S-Right>", "2w",  opts)
 -- even faster cursor movement (Shift ⇑⇒⇐⇓)
-keymap("n", "<C-Up>",    "2k", opts)
-keymap("n", "<C-Down>",  "2j",  opts)
-keymap("n", "<C-Left>",  "2b",  opts)
-keymap("n", "<C-Right>", "2w", opts)
-
+keymap("n", "<C-Up>",    "4k", opts)
+keymap("n", "<C-Down>",  "4j", opts)
+keymap("n", "<C-Left>",  "4b", opts)
+keymap("n", "<C-Right>", "4w", opts)
 
 -- Resize with arrows (Alt+Arrow keys  →←↑↓⇑⇓⇒⇐)
-keymap("n", "<A-Up>", ":resize +1<CR>", opts)
-keymap("n", "<A-Down>", ":resize -1<CR>", opts)
-keymap("n", "<A-Right>", ":vertical resize -1<CR>", opts)
-keymap("n", "<A-Left>", ":vertical resize +1<CR>", opts)
+keymap("n", "<A-Up>",    ":resize -2<CR>",          opts)
+keymap("n", "<A-Down>",  ":resize +2<CR>",          opts)
+keymap("n", "<A-Right>", ":vertical resize -2<CR>", opts)
+keymap("n", "<A-Left>",  ":vertical resize +2<CR>", opts)
 -- keymap("n", "<C-S-Left>", ":vertical resize +1<CR>", opts)
 
-
 -- Navigate buffers
-keymap("n", "<S-l>", ":bnext<CR>", opts)
+keymap("n", "<S-l>", ":bnext<CR>",     opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
 
 -- Move text up and down (Alt+j Alt+k)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 
--- Map Ctrl+c  to :q or ZZ
+-- Map Ctrl+c Ctrl+c to ZZ
 keymap("n", "<C-c><C-c>", "ZZ", opts)
--- keymap("n", "<C-C>", ":q<CR>", opts)
+
+-- Map Ctrl+c Ctrl+q to ZQ
+keymap("n", "<C-c><C-q>", "ZQ", opts)
 
 -- Telescope help search (Altt+h)
 keymap("n", "<A-h>", ":Telescope help_tags<CR>", opts)
+
 -- Telescope man search (Alt+m)
 keymap("n", "<A-m>", ":Telescope man_pages<CR>", opts)
-
-
---[[ keymap("n", "<C-Up>", ":resize +1<CR>", opts) ]]
---[[ keymap("n", "<C-Down>", ":resize -1<CR>", opts) ]]
---[[ keymap("n", "<C-Right>", ":vertical resize -1<CR>", opts) ]]
---[[ keymap("n", "<C-Left>", ":vertical resize +1<CR>", opts) ]]
 
 --}}}
 
@@ -115,16 +92,11 @@ keymap("i", "<F1>", "<Esc>", opts)
 -- Map Ctrl+c  to Esc
 keymap("i", "<C-c>", "<ESC>", opts)
 
--- faster cursor movement (Ctrl ⇑⇒⇓⇐)
-keymap("i", "<S-Up>",    "k",    opts)
-keymap("i", "<S-Down>",  "j",  opts)
-keymap("i", "<S-Left>",  "b",  opts)
-keymap("i", "<S-Right>", "w", opts)
--- even iaster cursor movement (Shift ⇑⇒⇐⇓)
-keymap("i", "<C-Up>",    "2k", opts)
-keymap("i", "<C-Down>",  "2j",  opts)
-keymap("i", "<C-Left>",  "2b",  opts)
-keymap("i", "<C-Right>", "2w", opts)
+-- even iaster cursor movement (Ctrl ⇑⇒⇐⇓)
+--[[ keymap("i", "<C-Up>",    "\4<Up><Up>", opts) ]]
+--[[ keymap("i", "<C-Down>",  "\4<Down><Down>", opts) ]]
+--[[ keymap("i", "<C-Left>",  "\4<Left><Left>", opts) ]]
+--[[ keymap("i", "<C-Right>", "\4<Right><Right>", opts) ]]
 
 --}}}
 
@@ -157,22 +129,19 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 --}}}
 
 -- Terminal ---{{{
-
 -- Better terminal navigation
 -- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
 -- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
 -- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 -- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
-
 --}}}
 
--- }}} MAPPINGS
 
 -- Clear search highlighting
 -- map <leader><space>
-
 -- vim.g.map
---
 -- keymap("", "\\", "<Nop>", opts)
 -- vim.g.mapleader = "\\"
 -- vim.g.maplocalleader = "\\"
+
+-- }}} MAPPINGS
