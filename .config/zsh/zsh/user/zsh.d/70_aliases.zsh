@@ -262,6 +262,7 @@ alias rp='realpath'
 alias rp-pwd='rp --no-symlinks $(ls --group-dirs=first --classic)'
 alias rp-all='rp-pwd .*'
 alias realpath-all='echo -e "$(rp $(ls --color=never --icon=never  *))"'
+alias rl="readlink"
 
 ### [=]==================================[=]
 ### [~]............ sudo
