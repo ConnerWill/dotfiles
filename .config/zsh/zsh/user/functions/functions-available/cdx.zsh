@@ -47,7 +47,7 @@ function cdz() {
 			&& return 0 \
 				|| printf '\e[0;3;38;5;196mFailed Editing:\t"\e[0;1;3;38;5;226m%s\e[0;3;38;5;196m"\e[0m\n' "$_Destination" \
 				|| echo -e -n "\e[0m" \
-			|| return 1	
+			|| return 1
 	fi
 }
 
@@ -56,8 +56,8 @@ if [[ -n "$ZDOTDIR" ]]; then
 	if [[ -n "$ZSH_USER_DIR" ]]; then
 		if [[ -d "$ZSH_USER_DIR" ]]; then
 			alias cdz-="cdz"
-			alias cdz-f="cdz '$ZSH_USER_DIR/functions'"
-			alias cdz-p="cdz $ZSH_USER_DIR/plugins'"
+			alias cdz-f="cdz $ZSH_USER_DIR/functions"
+			alias cdz-p="cdz $ZSH_USER_DIR/plugins"
 			alias cdz-d="cdz $ZSH_USER_DIR/zsh.d"
 		fi
 	fi
@@ -95,7 +95,7 @@ fi
 if [[ -n "$KITTY_CONFIG_DIR" ]]; then
 	KITTY_CONFIG_DIR="$XDG_CONFIG_HOME/kitty"
 	if [[ -d "$KITTY_CONFIG_DIR" ]]; then
-		export KITTY_CONFIG_DIR 
+		export KITTY_CONFIG_DIR
 		alias cdk="cdz $KITTY_CONFIG_DIR"
 		alias cdk-="cdz $KITTY_CONFIG_DIR"
 		alias cdk-d="cdz $KITTY_CONFIG_DIR/kitty.d"

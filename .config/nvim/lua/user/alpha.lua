@@ -11,11 +11,9 @@ end
 
 
 -- Content {{{
-
-
-	--ART {{{
-
 local dashboard = require("alpha.themes.dashboard")
+
+-- ART {{{
 dashboard.section.header.val = {
 	[[                    ...                                   ]],
 	[[                   ;::::;                                 ]],
@@ -48,6 +46,7 @@ dashboard.section.header.val = {
 	[[     ░   ░ ░    ░   ░ ░ ░ ▒       ░░   ▒ ░░      ░        ]],
 	[[           ░    ░  ░    ░ ░        ░   ░         ░        ]],
 }
+-- Art }}}
 
 	--Menu Items{{{
 dashboard.section.buttons.val = {
@@ -56,34 +55,28 @@ dashboard.section.buttons.val = {
 	dashboard.button("f", "  Find files", ":Telescope find_files <CR>"),
 	dashboard.button("F", "  FZF", ":FZF <CR>"),
 	dashboard.button("t", "  Find text", ":Telescope live_grep <CR>"),
-	dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
+	dashboard.button("n", "  New file", ":enew <BAR> startinsert <CR>"),
 	dashboard.button("p", "  Projects", ":Telescope projects <CR>"),
 	dashboard.button("T", "  Terminal", ":ToggleTerm <CR>"),
-	dashboard.button("C", "  Configuration", ":e ~/.config/nvim <CR>"),
-	dashboard.button("K", "  Keybindings", ":WhichKey <CR>"),
+	dashboard.button("C", "  Configuration", ":edit ~/.config/nvim/lua/user <CR>"),
+	dashboard.button("k", "  Keybindings", ":WhichKey <CR>"),
+	dashboard.button("K", "  Search Keybindings", ":Telescope keymaps <CR>"),
 	dashboard.button("h", "  Help", ":Telescope help_tags<CR>"),
-	dashboard.button("q", "  EXIT NEOVIM", ":qa<CR>"),
+	dashboard.button("H", "  Man", ":Telescope man_pages <CR>"),
+	dashboard.button("q", "  EXIT NEOVIM", ":quitall<CR>"),
 }
-
 	--}}}
 
-
 	--Footer{{{
-
 local function footer()
 	return "      " --   💁      👽☽   ﬍  🗔      ☢🖳 🖧 🖹     "
 end
-
 	--}}}
-
-
 
 --}}}
 
 
 --Setup{{{
-
-
 dashboard.section.footer.val = footer()
 dashboard.section.footer.opts.hl = "Type"
 dashboard.section.header.opts.hl = "Include"
@@ -91,6 +84,4 @@ dashboard.section.buttons.opts.hl = "Keyword"
 dashboard.opts.opts.noautocmd = true
 -- vim.cmd([[autocmd User AlphaReady echo 'ready']])
 alpha.setup(dashboard.opts)
-
-
 --}}}

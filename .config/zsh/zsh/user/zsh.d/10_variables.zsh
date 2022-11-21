@@ -14,6 +14,17 @@ export DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
 
 
 
+export _ZL_CMD="z"
+export _ZL_MATCH_MODE="1"
+export _ZL_ECHO="1"
+export _ZL_HYPHEN="1"
+export _ZL_CLINK_PROMPT_PRIORITY="99"
+export _ZL_MAXAGE="100000"
+export _ZL_ROOT_MARKERS=".git,.svn,.hg,.root,package.json"
+
+[[ ! -d "$XDG_CACHE_HOME/zsh/z.lua" ]] \
+	&& mkdir -v -p "$XDG_CACHE_HOME/zsh/z.lua" \
+	|| export _ZL_DATA="$XDG_CACHE_HOME/zsh/z.lua/zlua"
 
 
 
@@ -21,8 +32,7 @@ export DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
 
 
 
-export LESSHISTFILE="${LESSHISTFILE:-${XDG_CACHE_HOME}/less/lesshist}"
-[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p "$(dirname "${LESSHISTFILE}")"
+
 
 export chpwd_recent_dirs="${chpwd_recent_dirs:-${XDG_CACHE_HOME}/zsg/.chpwd-recent-dirs}"
 
@@ -31,8 +41,18 @@ export ZSHRC_USER="${ZSHRC}"
 export ZSHRC_GLOBAL="${ZSHRC_GLOBAL:-/etc/zsh/zshrc}"
 ## marked for removal
 
+### [=]==================================[=]
+### [~]........... MAIL
+### [=]==================================[=]
+export EMAIL="Conner.Will@connerwill.com"
 
+### [=]==================================[=]
+### [~]............ EDITOR
+### [=]==================================[=]
 
+[[ "${commands[nvim]}" ]] && EDITOR="${EDITOR:-nvim}" || EDITOR="${EDITOR:-vim}"
+FCEDIT="${EDITOR}"
+export EDITOR FCEDIT
 
 ### [=]==================================[=]
 ### [~]........ TERM COLORS
@@ -55,31 +75,20 @@ esac
 [[ -z "$DISPLAY" ]] && export BROWSER="/usr/bin/lynx"
 
 ### [=]==================================[=]
-### [~]............ EDITOR
+### [~]........... MAN
 ### [=]==================================[=]
-export EDITOR="nvim" # "nano" # "vim"
-export FCEDIT="$EDITOR"
-export NVIMDIR="$XDG_CONFIG_HOME/nvim"
-
-### [=]==================================[=]
-### [~]........... MANPAGER
-### [=]==================================[=]
-export MANPAGER='nvim +Man!'
-MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 4 )) ))"
-export MANWIDTH #=120
+MANPAGER='nvim +Man!'
+MANWIDTH="$(( COLUMNS - (( COLUMNS / 4 )) ))"
 function _set_nvim_man_pager() {
 	if [ -z "$MANPAGER" ]; then  # Return if MANPAGER is already set
-		export NVIMBINPATH
 		NVIMBINPATH="$(which nvim)" # Check if nvim is installed
 		if [ -n "$NVIMBINPATH" ]; then
-			export NVIMPAGER
 			NVIMPAGER="$(which nvimpager)" # Check if nvimpager is installed
 			if [ -n "$NVIMPAGER" ]; then # Define NVIMPAGER as MANPAGER
 				MANPAGER="${NVIMPAGER}"
 			else # Define nvim as MANPAGER
 				MANPAGER='nvim +Man!'
 			fi
-		export MANPAGER="$MANPAGER" # Export MANPAGER
 		return 0
 		else # Cannot find MANPAGER
 			[[ -z "$MANPAGER" ]] \
@@ -89,17 +98,8 @@ function _set_nvim_man_pager() {
 	else # "manpager is already set to $MANPAGER"
 		return 0
 	fi
-}
-_set_nvim_man_pager
+}; _set_nvim_man_pager; unset _set_nvim_man_pager
 
-## [=]==================================[=]
-## [~]............ PAGER
-## [=]==================================[=]
-export PAGER="less"
-export PAGER="bat"
-export BAT_PAGER="less -RFi"
-export GH_PAGER="bat"
-export BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
 man() {
 	export MANWIDTH="$(( $COLUMNS - (( $COLUMNS / 1 )) ))"
     env \
@@ -115,73 +115,90 @@ man() {
     man "$@"
 }
 
+## [=]==================================[=]
+## [~]............ PAGER
+## [=]==================================[=]
+export LESSHISTFILE="${LESSHISTFILE:-${XDG_CACHE_HOME}/less/lesshist}"
+[[ ! -d $(dirname "${LESSHISTFILE}") ]] && mkdir -p "$(dirname "${LESSHISTFILE}")"
+
+PAGER="less"
+if [[ "${commands[bat]}" ]]; then
+  PAGER="bat"
+	BAT_PAGER="less -RFi"
+	BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
+	export BAT_PAGER BAT_CONFIG_PATH
+elif [[ "${commands[batcat]}" ]]; then
+  PAGER="batcat"
+	BAT_PAGER="less -RFi"
+	BAT_CONFIG_PATH="${XDG_CONFIG_HOME}/bat/config"
+	export BAT_PAGER BAT_CONFIG_PATH
+else PAGER="less"; fi
+
+export NVIMDIR="${XDG_CONFIG_HOME}/nvim"
+export MANPAGER MANWIDTH NVIMBINPATH NVIMPAGER PAGER
+
+### [=]==================================[=]
+### [~]............ git
+### [=]==================================[=]
+GITHUB_URL="https://github.com"
+GH_URL="https://github.com"
+GH_EDITOR="/usr/bin/nvim"
+GH_BROWSER="kitty --title GitHub /usr/bin/lynx"
+GH_CONFIG_DIR="${XDG_CONFIG_HOME}/gh"
+GIT_CONFIG_DIR="${XDG_CONFIG_HOME}/git"
+GITIGNORE_DIR="${HONE}/.gitignore-boilerplates"
+GIT_MAN_VIEWER="${MANPAGER:-man}"
+GH_PAGER="${PAGER}"
+
+export GITHUB_URL GH_URL GH_EDITOR GH_BROWSER GH_CONFIG_DIR GIT_CONFIG_DIR GITIGNORE_DIR GIT_MAN_VIEWER GH_PAGER
+
 ### [=]==================================[=]
 ### [~]........... GPG / SSH
 ### [=]==================================[=]
 GNUPGHOME="$XDG_CONFIG_HOME/.gnupg"
 GPG_TTY=$(tty)
 GPG_TUI_CONFIG="$XDG_CONFIG_HOME/gpg-tui/gpg-tui.toml"
-export GNUPGHOME GPG_TTY
-export GPG_TUI_CONFIG
-
-### [=]==================================[=]
-### [~]........... MAIL
-### [=]==================================[=]
-export EMAIL="Conner.Will@connerwill.com"
+export GNUPGHOME GPG_TTY GPG_TUI_CONFIG
 
 ### [=]==================================[=]
 ### [~]........... TEMP
 ### [=]==================================[=]
-export TEMPDIR="$HOME/temporary"
+export TEMPDIR="${HONE}/temporary"
 
 ### [=]==================================[=]
 ### [~]........... AWESOMEWM
 ### [=]==================================[=]
-AWESOMEWM_CONFIG_DIR="$XDG_CONFIG_HOME/awesome"
-[[ -d "$AWESOMEWM_CONFIG_DIR" ]] \
-	&& export AWESOMEWM_CONFIG_DIR \
-	&& export AWESOME_THEMES_PATH="$AWESOMEWM_CONFIG_DIR/themes"
+if [[ "${commands[awesome]}" ]]; then
+	AWESOMEWM_CONFIG_DIR="${XDG_CONFIG_HOME}/awesome"
+	[[ -d "${AWESOMEWM_CONFIG_DIR}" ]] && export AWESOMEWM_CONFIG_DIR
+fi
+
+### [=]==================================[=]
+### [~]............ Kitty
+### [=]==================================[=]
+export KITTY_CONFIG_DIR="$XDG_CONFIG_HOME/kitty"
+export KITTY_CONFIG="$KITTY_CONFIG_DIR/kitty.conf"
 
 ### [=]==================================[=]
 ### [~]............ Lynx
 ### [=]==================================[=]
-export LYNXDOTDIR="${XDG_CONFIG_HOME}/lynx"
-
-export LYNX_CFG="${LYNXDOTDIR}/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
-export LYNX_LSS="${LYNXDOTDIR}/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
-
-export LYNX_SESSION="${XDG_CACHE_HOME}/lynx/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
-[[ -n "${commands[lynx]}" ]] && [[ ! -d "${LYNX_SESSION:h}" ]] \
-	&& mkdir -p "${LYNX_SESSION:h}"
-
-export LYNX_CFG_PATH="${LYNXDOTDIR}"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
-export LYNX_HELPFILE="$LYNX_CONFIG_DIR_GLOBAL/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
-export WWW_HOME="$LYNX_CONFIG_DIR_GLOBAL/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
-
-### [=]==================================[=]
-### [~]............ git
-### [=]==================================[=]
-export GITHUB_URL="https://github.com"
-export GH_URL="https://github.com"
-export GH_EDITOR="/usr/bin/nvim"
-export GH_BROWSER="kitty --title GitHub /usr/bin/lynx"
-export GH_CONFIG_DIR="$XDG_CONFIG_HOME/gh"
-export GIT_CONFIG_DIR="$XDG_CONFIG_HOME/git"
-export GITIGNORE_DIR="$HOME/.gitignore-boilerplates"
-export MYPROJECTS="$HOME/scripts/MYPROJECTS"
+if [[ -n "${commands[lynx]}" ]] ; then
+	LYNXDOTDIR="${XDG_CONFIG_HOME}/lynx"
+	LYNX_CFG="${LYNXDOTDIR}/lynx.cfg"                  # This variable, if set, will override the default location and name of the global configuration file (normally, lynx.cfg) that was defined by the  LYNX_CFG_FILE  constant  in  the userdefs.h file, during installation.
+	LYNX_LSS="${LYNXDOTDIR}/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
+	LYNX_SESSION="${XDG_CACHE_HOME}/lynx/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
+	LYNX_CFG_PATH="${LYNXDOTDIR}"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
+	LYNX_HELPFILE="${LYNX_CONFIG_DIR_GLOBAL}/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
+	WWW_HOME="${LYNX_CONFIG_DIR_GLOBAL}/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
+	[[ ! -d "${LYNX_SESSION:h}" ]] && mkdir -p "${LYNX_SESSION:h}"
+	export LYNXDOTDIR LYNX_CFG LYNX_LSS LYNX_SESSION LYNX_CFG_PATH LYNX_HELPFILE WWW_HOME
+fi
 
 ### [=]==================================[=]
 ### [~]............ SCRIPTS
 ### [=]==================================[=]
-export SCRIPTS="$HOME/scripts"
-export BASHSCRIPTSDIR="${SCRIPTS}/bash"
-export BASHSNIPPETSDIR="${SCRIPTS}/bash/development/snippets"
-export BASHTEMPLATEDIR_BEST="${SCRIPTS}/bash/development/snippets/templates-bash/best-script-templates/extended-cd"
-export BASHTEMPLATESDIR="${SCRIPTS}/bash/development/snippets/templates-bash"
-export CHEATSHEETSSCRIPTSDIR="${SCRIPTS}/cheatsheets" ### cheatsheets
-export PYTHONSCRIPTSDIR="${SCRIPTS}/python" ### Python Scripts
-export MPVSCRIPTSDIR="${SCRIPTS}/mpv-scripts"
-export BASHTEMPLATE_VERY_NICE_INDEED="${SCRIPTS}/bash/development/templates-bash/FULL-PACKAGE-ZSH-BASH-TEMPLATE"
+export MYPROJECTS="${HOME}/MYPROJECTS"
+export SCRIPTS="${HONE}/scripts"
 
 ### [=]==================================[=]
 ### [~]............. GIMP ...............
@@ -194,10 +211,10 @@ export GIMPHOMECACHEPATH='/home/dampsock/.cache/gimp/2.10'
 #### [=]==================================[=]
 ### [~]............. ASCIINEMA ..........
 ### [=]==================================[=]
-export VIDEODIR="$HOME/videos"
+export VIDEODIR="${HONE}/videos"
 export YOUTUBEDOWNLOADSDIR="$VIDEODIR/youtube-downloads"
 export ASCIINEMA_CONFIG_HOME="$XDG_CONFIG_HOME/asciinema"
-export ASCIINEMA_OUTPUT_DIR="$HOME/videos/terminal-recordings"
+export ASCIINEMA_OUTPUT_DIR="${HONE}/videos/terminal-recordings"
 
 ### [=]==================================[=]
 ### [~]............. NMAP ...............[~]
@@ -205,9 +222,8 @@ export ASCIINEMA_OUTPUT_DIR="$HOME/videos/terminal-recordings"
 export NMAPAUTOSCANOUTPUTDIR="$NMAPSCANOUTPUTDIR/local-subnet/nmap-auto"
 export NMAPDIR="/usr/share/nmap"
 export NMAPSCRIPTSDIR="/usr/share/nmap"
-export NMAPSCANOUTPUTDIR="$HOME/security/nmap-scans"
+export NMAPSCANOUTPUTDIR="${HONE}/security/nmap-scans"
 export nmapAutomatorPATH="/scripts/pentest/nmapAutomator"
-
 
 ### [=]==================================[=]
 ### [~]............ METASPLOIT
@@ -215,31 +231,30 @@ export nmapAutomatorPATH="/scripts/pentest/nmapAutomator"
 export METASPLOITMODULESPATH="/opt/metasploit/modules"
 export METASPLOITPATH="/opt/metasploit"
 
-
 ### [=]==================================[=]
 ### [~]............ PYTHON
 ### [=]==================================[=]
 export GENCOMPL_PY="python"
-export PYTHONPATH="$HOME/.local/bin:$PATH"
-export IPYTHONDIR="$HOME/.config/ipython"
+export PYTHONPATH="${HONE}/.local/bin:$PATH"
+export IPYTHONDIR="${HONE}/.config/ipython"
 export IPYTHON_CONFIG="$IPYTHONDIR/profile_default/ipython_config.py"
 
 ### [=]==================================[=]
 ### [~]........... DOWNLOADS
 ### [=]==================================[=]
-export DOWNLOADS="$HOME/Downloads"
+export DOWNLOADS="${HONE}/Downloads"
 
 ### [=]==================================[=]
 ### [~]............ BACKUPS
 ### [=]==================================[=]
 export BACKUPDIR="/backups"
-
+export BACKUPDIR_LOCAL="${HONE}/backup"
 ### [=]==================================[=]
 ### [~]............ ICONS
 ### [=]==================================[=]
 export ICONSDIRGLOBAL="/usr/share/icons"
-export ICONSDIR="$HOME/pictures/icons"
-export ICONSTINYDIR="$HOME/pictures/icons/SuperTinyIcons/images"
+export ICONSDIR="${HONE}/pictures/icons"
+export ICONSTINYDIR="${HONE}/pictures/icons/SuperTinyIcons/images"
 
 ### [=]==================================[=]
 ### [~]............ FONTS
@@ -255,22 +270,17 @@ export THEMEDIRGLOBAL="/usr/share/themes"
 ### [=]==================================[=]
 ### [~]............ CAD / 3D
 ### [=]==================================[=]
-export CAD="$HOME/3D-CAD"
-export CADMODELSDIR="$HOME/3D-CAD/3d-models"
-export MODELS="$HOME/3D-CAD/3d-models"
+export CAD="${HONE}/3D-CAD"
+export CADMODELSDIR="${HONE}/3D-CAD/3d-models"
+export MODELS="${HONE}/3D-CAD/3d-models"
 ### OPENSCAD
-export OPENSCADPATH="$HOME/.local/share/OpenSCAD/libraries"
-
+export OPENSCADPATH="${HONE}/.local/share/OpenSCAD/libraries"
 ### OpenSCAD Scripts
-export OPENSCADSCRIPTSDIR="$HOME/3D-CAD/3D-CAD-scripts/openscad-scripts"
-
-### FREECAD
+export OPENSCADSCRIPTSDIR="${HONE}/3D-CAD/3D-CAD-scripts/openscad-scripts"
+### Freecad
 export FREECAD_DIR_MOD_SYSTEM="/usr/share/freecad/Mod"
-export FREECAD_DIR_MOD_USER="$HOME/.FreeCAD/Mod"
-export FREECAD_DIR_MACRO_USER="$HOME/.FreeCAD/Macro"
-
-### THINGIVERSE
-export THINGIVERSEAPI='f7143904e459b01c40bf591344023919'
+export FREECAD_DIR_MOD_USER="${HONE}/.FreeCAD/Mod"
+export FREECAD_DIR_MACRO_USER="${HONE}/.FreeCAD/Macro"
 
 ### [=]==================================[=]
 ### [~]............, QT
@@ -287,22 +297,10 @@ export TSM_BACKUPS_DIR="$TSM_HOME/backups"
 export TSM_DEFAULT_SESSION_FILE="$TSM_HOME/default-session.txt"
 export TSM_BACKUPS_COUNT=30
 
-export _ZL_CMD="z"
-[[ ! -d "$XDG_CACHE_HOME/zsh/z.lua" ]] && mkdir -v -p "$XDG_CACHE_HOME/zsh/z.lua" || export _ZL_DATA="$XDG_CACHE_HOME/zsh/z.lua/zlua"
-export _ZL_MAXAGE="100000"
-export _ZL_ECHO="1"
-export _ZL_MATCH_MODE="1"
-export _ZL_HYPHEN="1"
-export _ZL_CLINK_PROMPT_PRIORITY="99"
-export _ZL_ROOT_MARKERS=".git,.svn,.hg,.root,package.json"
-
 ### MISC
 export RAINBOW_CONFIGS="$XDG_CONFIG_HOME/rainbow"
-export BACKUPDIR_LOCAL="$HOME/backup"
-export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_ROOT="${HONE}/.pyenv"
 export COOKIECUTTER_CONFIG="$XDG_CONFIG_HOME/cookiecutters/cookiecutter-custom-config.yaml"
-export KITTY_CONFIG_DIR="$XDG_CONFIG_HOME/kitty"
-export KITTY_CONFIG="$KITTY_CONFIG_DIR/kitty.conf"
 export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 

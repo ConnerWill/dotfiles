@@ -64,6 +64,8 @@ zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosugg
 
 
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
-
-
+[[ -e "${zsh_source_plugin_tmp}" ]] \
+  && if source "${zsh_source_plugin_tmp}"; then
+       fast-theme dampsock2 >/dev/null 2>&1
+  fi
+unset zsh_source_plugin_tmp

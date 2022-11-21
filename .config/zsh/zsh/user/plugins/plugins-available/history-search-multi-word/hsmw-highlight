@@ -34,32 +34,32 @@ typeset -gA __hsmw_highlight_main__command_type_cache
 typeset -gA HSMW_HIGHLIGHT_STYLES
 : ${HSMW_HIGHLIGHT_STYLES[default]:=none}
 : ${HSMW_HIGHLIGHT_STYLES[unknown-token]:=fg=red,bold}
-: ${HSMW_HIGHLIGHT_STYLES[reserved-word]:=fg=yellow}
-: ${HSMW_HIGHLIGHT_STYLES[alias]:=fg=green}
+: ${HSMW_HIGHLIGHT_STYLES[reserved-word]:=fg=88}
+: ${HSMW_HIGHLIGHT_STYLES[alias]:=fg=84}
 : ${HSMW_HIGHLIGHT_STYLES[suffix-alias]:=fg=green}
 : ${HSMW_HIGHLIGHT_STYLES[builtin]:=fg=green}
-: ${HSMW_HIGHLIGHT_STYLES[function]:=fg=green}
+: ${HSMW_HIGHLIGHT_STYLES[function]:=fg=46}
 : ${HSMW_HIGHLIGHT_STYLES[command]:=fg=green}
 : ${HSMW_HIGHLIGHT_STYLES[precommand]:=fg=green}
 : ${HSMW_HIGHLIGHT_STYLES[commandseparator]:=none}
 : ${HSMW_HIGHLIGHT_STYLES[hashed-command]:=fg=green}
 : ${HSMW_HIGHLIGHT_STYLES[path]:=fg=magenta}
-: ${HSMW_HIGHLIGHT_STYLES[path_pathseparator]:=}
-: ${HSMW_HIGHLIGHT_STYLES[globbing]:=fg=blue,bold}
+: ${HSMW_HIGHLIGHT_STYLES[path_pathseparator]:=fg=199}
+: ${HSMW_HIGHLIGHT_STYLES[globbing]:=fg=21,bold}
 : ${HSMW_HIGHLIGHT_STYLES[history-expansion]:=fg=blue,bold}
 : ${HSMW_HIGHLIGHT_STYLES[single-hyphen-option]:=fg=cyan}
-: ${HSMW_HIGHLIGHT_STYLES[double-hyphen-option]:=fg=cyan}
-: ${HSMW_HIGHLIGHT_STYLES[back-quoted-argument]:=none}
-: ${HSMW_HIGHLIGHT_STYLES[single-quoted-argument]:=fg=yellow}
-: ${HSMW_HIGHLIGHT_STYLES[double-quoted-argument]:=fg=yellow}
-: ${HSMW_HIGHLIGHT_STYLES[dollar-quoted-argument]:=fg=yellow}
+: ${HSMW_HIGHLIGHT_STYLES[double-hyphen-option]:=fg=45}
+: ${HSMW_HIGHLIGHT_STYLES[back-quoted-argument]:=fg=44}
+: ${HSMW_HIGHLIGHT_STYLES[single-quoted-argument]:=fg=228}
+: ${HSMW_HIGHLIGHT_STYLES[double-quoted-argument]:=fg=226}
+: ${HSMW_HIGHLIGHT_STYLES[dollar-quoted-argument]:=fg=190}
 : ${HSMW_HIGHLIGHT_STYLES[back-or-dollar-double-quoted-argument]:=fg=cyan}
 : ${HSMW_HIGHLIGHT_STYLES[back-dollar-quoted-argument]:=fg=cyan}
 : ${HSMW_HIGHLIGHT_STYLES[assign]:=none}
 : ${HSMW_HIGHLIGHT_STYLES[redirection]:=none}
-: ${HSMW_HIGHLIGHT_STYLES[comment]:=fg=black,bold}
+: ${HSMW_HIGHLIGHT_STYLES[comment]:=fg=8,bold}
 : ${HSMW_HIGHLIGHT_STYLES[newline]:=fg=black,bold}  # '\n' strings
-: ${HSMW_HIGHLIGHT_STYLES[variable]:=none}
+: ${HSMW_HIGHLIGHT_STYLES[variable]:=fg=10}
 
 
 typeset -gA __HSMW_HIGHLIGHT_TOKENS_TYPES
@@ -238,7 +238,7 @@ __HSMW_HIGHLIGHT_TOKENS_TYPES=(
   # and :sudo_opt:.
   #
   # The tokens are always added with both leading and trailing colons to serve as
-  # word delimiters (an improvised array); [[ $x == *:foo:* ]] and x=${x//:foo:/} 
+  # word delimiters (an improvised array); [[ $x == *:foo:* ]] and x=${x//:foo:/}
   # will DTRT regardless of how many elements or repetitions $x has..
   #
   # Handling of redirections: upon seeing a redirection token, we must stall
@@ -430,7 +430,7 @@ __HSMW_HIGHLIGHT_TOKENS_TYPES=(
         'suffix alias') style=suffix-alias;;
         alias)
                           insane_alias=0
-                          case $arg in 
+                          case $arg in
                             # Issue #263: aliases with '=' on their LHS.
                             #
                             # There are three cases:

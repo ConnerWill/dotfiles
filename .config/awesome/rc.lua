@@ -310,7 +310,7 @@ globalkeys = gears.table.join(
 		awful.client.focus.byidx(1)
 	end, { description = "focus next client by index", group = "client" }),
 	-- Change Focus to the Previous Window by Index
-	awful.key({ modkey }, "k", function(slock awesomewm)
+	awful.key({ modkey }, "k", function()
 		awful.client.focus.byidx(-1)
 	end, { description = "focus previous client by index", group = "client" }),
 

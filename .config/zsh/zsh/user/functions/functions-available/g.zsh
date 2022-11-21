@@ -19,12 +19,14 @@ g(){
     INPUTFILE="${*}"
     RICHTHEME="dracula"
     [[ -z "$RICHTHEME" ]] && RICHTHEME="one-dark"
-     rich                                \
+     rich                                 \
         --markdown --theme "${RICHTHEME}" \
         --padding 1,5,1,5 --panel rounded \
-        --hyperlinks --line-numbers       \
-        --center --pager --text-full      \
+        --line-numbers                    \
+        --center --text-full      \
        "${INPUTFILE}"
+# --pager
+# --hyperlinks
   }
 
   _viewmarkdown_glow(){

@@ -180,7 +180,8 @@ if [[  -n "${DISTRO}" ]] {
       alias yaysearch-modified='yay -Ss --color always --sortby modified'
       alias yaysearch-votes='yay -Ss --color always --sortby votes'
       alias yayinstall='yay -S --color always --verbose'
-      alias yayi='yay -S --color always --verbose'
+      alias yayi='yay -S --color always --verbose --needed'
+      alias yayino='yay -S --color always --verbose --needed --noconfirm'
       alias yaylist='yay -Q --color always'
     fi
   ## If distro is debian,raspbian,ubuntu; load apt aliases
@@ -262,6 +263,7 @@ alias rp='realpath'
 alias rp-pwd='rp --no-symlinks $(ls --group-dirs=first --classic)'
 alias rp-all='rp-pwd .*'
 alias realpath-all='echo -e "$(rp $(ls --color=never --icon=never  *))"'
+alias rl="readlink"
 
 ### [=]==================================[=]
 ### [~]............ sudo
@@ -306,8 +308,19 @@ if [[ "${commands[git]}" ]] {
   alias git-get-url='git-open --print'
   alias git-log-pretty="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias gitc='git clone --no-checkout --verbose'
+  alias gg="git"
+  alias gp="git pull -v"
+  alias gc="git commit --edit --verbose --status"
+  alias gs="git status"
   [[ "${commands[git]}" ]] && alias git-lazy="lazygit"
 }
+
+
+
+
+
+
+
 
 ### [=]==================================[=]
 ### [~]............ Clipboard

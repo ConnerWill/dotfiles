@@ -1,7 +1,7 @@
 ###
 ### ZSHENV
 ###
-
+#
 ## XDG
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -13,3 +13,8 @@ export ZSHRC="$ZDOTDIR/.zshrc"
 
 ### LOCALE
 export LC_ALL="en_US.UTF-8"
+
+## No global files
+#setopt NOGLOBALRCS
+#setopt PROMPT_SUBST
+#setopt PROMPT

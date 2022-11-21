@@ -42,6 +42,8 @@ docs/zsdoc/data
 *.gnupg
 /.ssh/*
 /.gnupg/*
+*gnupg*
+*gpg*
 
 
 
