@@ -70,11 +70,12 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 
--- Map Ctrl+c Ctrl+c to ZZ
-keymap("n", "<C-c><C-c>", "ZZ", opts)
+-- Map 4x Ctrl+c to ZZ
+keymap("n", "<C-c><C-c><C-c><C-c>", "ZZ", opts)
 
--- Map Ctrl+c Ctrl+q to ZQ
-keymap("n", "<C-c><C-q>", "ZQ", opts)
+-- Map 4x Ctrl+c Ctrl+q to ZQ
+keymap("n", "<C-c><C-c><C-c><C-q>", "ZQ", opts)
+
 
 -- Telescope help search (Altt+h)
 keymap("n", "<A-h>", ":Telescope help_tags<CR>", opts)

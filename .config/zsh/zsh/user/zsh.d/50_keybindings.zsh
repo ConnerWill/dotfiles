@@ -1,7 +1,4 @@
-# shellcheck disable=1072,1073,1123
-
-
-
+#shellcheck disable=1072,1073,1123,2148
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
 #   the `source' or `.' commands, then reference the key parameter in bindkey commands,
@@ -20,11 +17,86 @@
 ## http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 #######################################################################################
 
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
 ### [=]===========================================================[=]
 ###	[~] ------------------- ZSH KEYBINDINGS ----------------------[~]
 ### [=]===========================================================[=]
-setopt autocd
-bindkey -e
+[[ ! -o AUTOCD ]] || setopt autocd
+#bindkey -e
+
+typeset -g -A keyboardkeys
+# Values are taken from terminfo. You don't need to change anything.
+keyboardkeys=(
+    Backspace "${terminfo[kbs]}"
+    Insert    "${terminfo[kich1]}"
+    Delete    "${terminfo[kdch1]}"
+    Home      "${terminfo[khome]}"
+    End       "${terminfo[kend]}"
+    PageUp    "${terminfo[kpp]}"
+    PageDown  "${terminfo[knp]}"
+    Up        "${terminfo[kcuu1]}"
+    Left      "${terminfo[kcub1]}"
+    Down      "${terminfo[kcud1]}"
+    Right     "${terminfo[kcuf1]}"
+)
+function bind2maps () {
+    local map sequence widget
+		local -a maps
+
+		while [[ "${1}" != "--" ]]; do maps+=( "${1}" ); shift; done
+    shift
+    sequence="${keyboardkeys[${1}]}"
+    widget="${2}"
+    [[ -z "${sequence}" ]] && return 1
+    for map in "${maps[@]}"; do bindkey -M "${map}" "${sequence}" "${widget}"; done
+}
+
+# If NumLock is off, translate keys to make them appear the same as with NumLock on.
+bindkey -s '^[OM' '^M'  # enter
+bindkey -s '^[Ok' '+'
+bindkey -s '^[Om' '-'
+bindkey -s '^[Oj' '*'
+bindkey -s '^[Oo' '/'
+bindkey -s '^[OX' '='
+
+# If someone switches our terminal to application mode (smkx), translate keys to make
+# them appear the same as in raw mode (rmkx).
+bindkey -s '^[OH' '^[[H'  # home
+bindkey -s '^[OF' '^[[F'  # end
+bindkey -s '^[OA' '^[[A'  # up
+bindkey -s '^[OB' '^[[B'  # down
+bindkey -s '^[OD' '^[[D'  # left
+bindkey -s '^[OC' '^[[C'  # right
+
+# TTY sends different key codes. Translate them to regular.
+bindkey -s '^[[1~' '^[[H'  # home
+bindkey -s '^[[4~' '^[[F'  # end
+
+bindkey '^?'      backward-delete-char          # bs         delete one char backward
+bindkey '^[[3~'   delete-char                   # delete     delete one char forward
+bindkey '^[[H'    beginning-of-line             # home       go to the beginning of line
+bindkey '^[[F'    end-of-line                   # end        go to the end of line
+bindkey '^[[1;5C' forward-word                  # ctrl+right go forward one word
+bindkey '^[[1;5D' backward-word                 # ctrl+left  go backward one word
+bindkey '^H'      backward-kill-word            # ctrl+bs    delete previous word
+bindkey '^[[3;5~' kill-word                     # ctrl+del   delete next word
+bindkey '^J'      backward-kill-line            # ctrl+j     delete everything before cursor
+bindkey '^[[D'    backward-char                 # left       move cursor one char backward
+bindkey '^[[C'    forward-char                  # right      move cursor one char forward
+bindkey '^[[A'    up-line-or-beginning-search   # up         prev command in history
+bindkey '^[[B'    down-line-or-beginning-search # down       next command in history
+
+
+
+
+
+
+
+
 
 ## Press 'CTRL-x-z' to display keybindings
 # alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
@@ -150,47 +222,42 @@ function {
 if [[ -n "${terminfo[kpp]}" ]]; then
     bindkey -M emacs "${terminfo[kpp]}" up-line-or-history
     bindkey -M viins "${terminfo[kpp]}" up-line-or-history
-    bindkey -M vicmd "${terminfo[kpp]}" up-line-or-history
+    bindkey -M vicmd "${terminfo[kpp]}" up-line
 fi
 
 # [PageDown] - Down a line of history
 if [[ -n "${terminfo[knp]}" ]]; then
     bindkey -M emacs "${terminfo[knp]}" down-line-or-history
     bindkey -M viins "${terminfo[knp]}" down-line-or-history
-    bindkey -M vicmd "${terminfo[knp]}" down-line-or-history
+    bindkey -M vicmd "${terminfo[knp]}" down-line
 fi
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
 if [[ -n "${terminfo[kcuu1]}" ]]; then
-    autoload -U up-line-or-beginning-search
-    zle -N up-line-or-beginning-search
     bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
     bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
-    bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
+    bindkey -M vicmd "${terminfo[kcuu1]}" up-line
 fi
 
 # Start typing + [Down-Arrow] - fuzzy find history backward
 if [[ -n "${terminfo[kcud1]}" ]]; then
-    autoload -U down-line-or-beginning-search
-    zle -N down-line-or-beginning-search
-
     bindkey -M emacs "${terminfo[kcud1]}" down-line-or-beginning-search
     bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
-    bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
+    bindkey -M vicmd "${terminfo[kcud1]}" down-line
 fi
 
 # [Home] - Go to beginning of line
 if [[ -n "${terminfo[khome]}" ]]; then
     bindkey -M emacs "${terminfo[khome]}" beginning-of-line
     bindkey -M viins "${terminfo[khome]}" beginning-of-line
-    bindkey -M vicmd "${terminfo[khome]}" beginning-of-line
+    bindkey -M vicmd "${terminfo[khome]}" beginning-of-line #beginning-of-buffer
 fi
 
 # [End] - Go to end of line
 if [[ -n "${terminfo[kend]}" ]]; then
     bindkey -M emacs "${terminfo[kend]}"    end-of-line
     bindkey -M viins "${terminfo[kend]}"    end-of-line
-    bindkey -M vicmd "${terminfo[kend]}"    end-of-line
+    bindkey -M vicmd "${terminfo[kend]}"    end-of-line #end-of-buffer-or-history
 fi
 
 # [Shift-Tab] - move through the completion menu backwards
@@ -214,7 +281,6 @@ else
     bindkey -M emacs "^[[3~" delete-char
     bindkey -M viins "^[[3~" delete-char
     bindkey -M vicmd "^[[3~" delete-char
-
     bindkey -M emacs "^[3;5~" delete-char
     bindkey -M viins "^[3;5~" delete-char
     bindkey -M vicmd "^[3;5~" delete-char
@@ -266,6 +332,7 @@ bindkey "^[m" copy-prev-shell-word
 bindkey -M emacs 	"^[3"	vi-pound-insert
 bindkey -M viins 	"^[3"	vi-pound-insert
 bindkey -M vicmd 	"gc" 	vi-pound-insert
+
 bindkey -M vicmd 	"gg" 	beginning-of-buffer
 bindkey -M vicmd 	"G"		end-of-buffer
 
@@ -301,35 +368,17 @@ if (rindex($a[$#a], "/") != -1) {
 }'
 
 function _up-dir {
-    if [ -z $BUFFER ]; then
-        parent="$(dirname $(pwd))"
-        cd $parent
-        zle reset-prompt
-    else
-        BUFFER=$(echo $BUFFER | perl -ne $PROG)
-    fi
-
-}
-zle -N _up-dir
-bindkey "^h" _up-dir
+  if [ -z $BUFFER ]; then
+    parent="$(dirname $(pwd))"
+    cd $parent
+    zle reset-prompt
+  else
+    BUFFER=$(echo $BUFFER | perl -ne $PROG)
+  fi
+}; zle -N _up-dir; bindkey "^h" _up-dir
 
 # Remove bindings to ctrl+r
 bindkey -r '^r'
-
-# Autoload history-search-multi-word
-zle -N history-search-multi-word
-zle -N history-search-multi-word-backwards history-search-multi-word
-zle -N history-search-multi-word-pbackwards history-search-multi-word
-zle -N history-search-multi-word-pforwards history-search-multi-word
-bindkey "^R" history-search-multi-word
-bindkey "^h" history-search-multi-word
-bindkey "^H" history-search-multi-word
-bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
-
-# zstyle ":history-search-multi-word" page-size "8"
-# zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"
-# zstyle ":plugin:history-search-multi-word" synhl "yes"
-# zstyle ":plugin:history-search-multi-word" clear-on-cancel "no
 
 
 function vicmdZZ() {
@@ -337,23 +386,26 @@ function vicmdZZ() {
 		zle clear-screen
 		zle reset-prompt
 }; zle -N vicmdZZ
-
 function vicmdZQ(){ exit; }; zle -N vicmdZQ
-
 bindkey -M vicmd 	"ZZ" vicmdZZ
 bindkey -M vicmd 	"ZQ" vicmdZQ
 bindkey -M vicmd  "^?" vi-backward-char
 
 # Fuzzy Find suggestions fix
 # start typing + [Up-Arrow] - fuzzy find history forward
-if [[ "${terminfo[kcuu1]}" != "" ]]; then
-  autoload -U up-line-or-beginning-search
-  zle -N up-line-or-beginning-search
-  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
-fi
-# start typing + [Down-Arrow] - fuzzy find history backward
-if [[ "${terminfo[kcud1]}" != "" ]]; then
-  autoload -U down-line-or-beginning-search
-  zle -N down-line-or-beginning-search
-  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
-fi
+# if [[ "${terminfo[kcuu1]}" != "" ]]; then
+#   autoload -U up-line-or-beginning-search
+#   zle -N up-line-or-beginning-search
+#   bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+# fi
+# # start typing + [Down-Arrow] - fuzzy find history backward
+# if [[ "${terminfo[kcud1]}" != "" ]]; then
+#   autoload -U down-line-or-beginning-search
+#   zle -N down-line-or-beginning-search
+#   bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+# fi
+
+
+
+bindkey -M vicmd "^[[B" down-line
+bindkey -M vicmd "^[[A" up-line
