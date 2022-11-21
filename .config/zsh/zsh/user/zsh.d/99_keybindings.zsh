@@ -65,6 +65,6 @@ bindkey -M viins "^r" history-search-multi-word ## This will bind to Ctrl-R
 bindkey -M emacs "^r" history-search-multi-word ## This will bind to Ctrl-R
 
 zstyle ":history-search-multi-word" page-size "20"
-zstyle ":history-search-multi-word" highlight-color "fg=cyan,bold"
+zstyle ":history-search-multi-word" highlight-color "fg=cyan,bold,bg=black"
 # zstyle ":plugin:history-search-multi-word" synhl "yes"
 # zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"
