@@ -36,7 +36,7 @@ zshlib_listbindings(){
 		tcols="${(r:$subtr:: :)}"
 		solidline="${(r:$COLUMNS::—:)}"
 		bind=$(zsh --onecmd -c "bindkey -R -M ${keym}" | sort )
-		[[ -n "${bind}" ]] && printf "${Zcolors[Yellow]}%s${Zcolors[Color_Off]}%s${Zcolors[Green]}%s${Zcolors[Color_Off]}%s${Zcolors[Yellow]}\n%s${Zcolors[Color_Off]}%s\n" "${solidline}" "${tcols}" "${keym}" "${tcols}" "${solidline}" "${bind}"
+		[[ -n "${bind}" ]] && printf "${Zcolors[Yellow]}%s${Zcolors[Color_Off]}%s${Zcolors[Green]}%s${Zcolors[Color_Off]}%s${Zcolors[Yellow]}%s${Zcolors[Color_Off]}%s\n" "${solidline}" "${tcols}" "${keym}" "${tcols}" "${solidline}" "${bind}"
 		sleep $SLEEPTIME
 	done
 	unset hi Xcols Xsubtr Xtcols Xnumlet Xnumletters Xsolidline
