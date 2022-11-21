@@ -15,6 +15,6 @@ export ZSHRC="$ZDOTDIR/.zshrc"
 export LC_ALL="en_US.UTF-8"
 
 ## No global files
-setopt NOGLOBALRCS
+#setopt NOGLOBALRCS
 #setopt PROMPT_SUBST
 #setopt PROMPT
