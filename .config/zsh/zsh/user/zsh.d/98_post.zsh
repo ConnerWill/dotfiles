@@ -40,7 +40,21 @@ zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-vi-mode/zsh-vi-mode.plugin.z
 unset zsh_source_plugin_tmp
 
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/history-search-multi-word/history-search-multi-word.plugin.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
+[[ -e "${zsh_source_plugin_tmp}" ]] \
+  && if source "${zsh_source_plugin_tmp}"; then
+        zstyle ":history-search-multi-word" highlight-color "fg=201,bg=16,bold"
+        # Color in which to highlight matched, searched text (default bg=17 on 256-color terminals)
+        zstyle ":history-search-multi-word" page-size "12"
+        # Number of entries to show (default is $LINES/3)
+        zstyle ":plugin:history-search-multi-word" active "fg=87,bg=233,underline"
+        # Effect on active history entry. Try: standout, bold, bg=blue (default underline)
+        zstyle ":plugin:history-search-multi-word" check-paths "no"
+        # Whether to check paths for existence and mark with magenta (default true)
+        zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"
+        # Whether pressing Ctrl-C or ESC should clear entered query
+        zstyle ":plugin:history-search-multi-word" synhl "yes"
+        # Whether to perform syntax highlighting (default true)
+  fi
 unset zsh_source_plugin_tmp
 
 function zsh_banner_load(){
