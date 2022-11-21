@@ -308,8 +308,19 @@ if [[ "${commands[git]}" ]] {
   alias git-get-url='git-open --print'
   alias git-log-pretty="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
   alias gitc='git clone --no-checkout --verbose'
+  alias gg="git"
+  alias gp="git pull -v"
+  alias gc="git commit --edit --verbose --status"
+  alias gs="git status"
   [[ "${commands[git]}" ]] && alias git-lazy="lazygit"
 }
+
+
+
+
+
+
+
 
 ### [=]==================================[=]
 ### [~]............ Clipboard
