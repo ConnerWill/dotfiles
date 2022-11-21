@@ -383,7 +383,7 @@ bindkey -r '^r'
 
 function vicmdZZ() {
 		zle kill-region -w
-		zle clear-screen
+		#zle clear-screen
 		zle reset-prompt
 }; zle -N vicmdZZ
 function vicmdZQ(){ exit; }; zle -N vicmdZQ
