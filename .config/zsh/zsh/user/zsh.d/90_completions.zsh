@@ -47,17 +47,16 @@ if (( run_compdump )){
 # ░░▒▒▓▓██
 # %F{99}%S%BZZZ%b%s%f %F{51}%B%U%d%u%b%f %F{8}[%f%F{8}Errors: %F{196}%e%f %F{8}]%f %F{99}%S%BZZZ%b%s%f
 # zstyle ':completion:*:corrections'                  format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
+# zstyle ':completion:*:warnings'                     format '%F{196}%B🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁%b%f %F{15}%B%UNo Matches Found%u%b%f %F{196}%B🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁%b%f %F{8}[%d]%f'
+
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                                                        ## Make sure the completion system is initialised
     [[ -z "${NOMENU}" ]] &&    zstyle ':completion:*'   menu select=1 || setopt no_auto_menu                            ## if there are more than N options allow selecting from a menu
     zstyle ':completion:*'                              format '%F{99}%B░▒▓█║█║│▌║▍▊█▓▒░%b%f %F{51}%B%U%d%u%b%f %F{99}%B░▒▓█║█║│▌║▍▊█▓▒░%b%f'
-    zstyle ':completion:*:corrections'                  format '%K{black}%F{196}░░▒▒▓▓██%f %F{190}%d%f %F{8}[%f%F{8}Errors:%f  %F{8}%e%f%F{8}]%f %F{196}██▓▓▒▒░░%f%k'
-    zstyle ':completion:*:descriptions'                 format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'                ## Format on completion
+    zstyle ':completion:*:corrections'                  format '%K{black}%F{196}░░▒▒▓▓██%f %F{190}%B%U%d%u%b%f %K{196}%F{8}[%f%K{196}%F{8}Errors:%f%k%K{196}  %F{8}%e%f%F{8}]%f %k%F{196}██▓▓▒▒░░%f%k'
     zstyle ':completion:*:descriptions'                 format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
-    zstyle ':completion:*:descriptions'                 format '%U%B%d%b%u'
     zstyle ':completion:*:messages'                     format ' %F{yellow}⬛⬛ %d ⬛⬛%f'
-    zstyle ':completion:*:warnings'                     format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'               ## Set format for warnings
-    zstyle ':completion:*:warnings'                     format '%F{196}%B🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁%b%f %F{15}%B%UNo Matches Found%u%b%f %F{196}%B🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁🮁%b%f %F{8}[%d]%f'
+    zstyle ':completion:*:warnings'                     format '%F{196}%B░░▒▒▓▓██████████%b%f%K{196} %F{15}%B%UNo Matches Found %u%b%f%k%F{196}%B██████████▓▓▒▒░░%b%f %F{8}[%d]%f'
     zstyle ':chpwd:*'                                   recent-dirs-max 0
     zstyle '*'                                          single-ignored show                                             ## Show ignored completions if we really want to
     zstyle ':completion:*'                              completer _complete _match _approximate

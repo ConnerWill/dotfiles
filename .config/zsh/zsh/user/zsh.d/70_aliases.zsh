@@ -180,7 +180,8 @@ if [[  -n "${DISTRO}" ]] {
       alias yaysearch-modified='yay -Ss --color always --sortby modified'
       alias yaysearch-votes='yay -Ss --color always --sortby votes'
       alias yayinstall='yay -S --color always --verbose'
-      alias yayi='yay -S --color always --verbose'
+      alias yayi='yay -S --color always --verbose --needed'
+      alias yayino='yay -S --color always --verbose --needed --noconfirm'
       alias yaylist='yay -Q --color always'
     fi
   ## If distro is debian,raspbian,ubuntu; load apt aliases
