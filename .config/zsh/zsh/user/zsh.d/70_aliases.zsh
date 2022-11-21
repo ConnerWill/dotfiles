@@ -494,7 +494,8 @@ alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 
-[[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh"
+[[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh" && alias cdp="cd ${PDOTDIR} || printf 'CANNOT MOVE TO %s' ${PDOTDIR}"
+
 
 alias cdwww="cd /var/www/connerwill.com"
 alias git-url="git config --local --get remote.origin.url"
