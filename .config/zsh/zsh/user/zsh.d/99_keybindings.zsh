@@ -1,7 +1,5 @@
 #shellcheck disable=1072,1073,1123,2148
 
-
-
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
 #   the `source' or `.' commands, then reference the key parameter in bindkey commands,
@@ -66,7 +64,7 @@ bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
 bindkey -M viins "^r" history-search-multi-word ## This will bind to Ctrl-R
 bindkey -M emacs "^r" history-search-multi-word ## This will bind to Ctrl-R
 
-# zstyle ":history-search-multi-word" page-size "8"
-# zstyle ":history-search-multi-word" highlight-color "fg=yellow,bold"
+zstyle ":history-search-multi-word" page-size "20"
+zstyle ":history-search-multi-word" highlight-color "fg=cyan,bold"
 # zstyle ":plugin:history-search-multi-word" synhl "yes"
-# zstyle ":plugin:history-search-multi-word" clear-on-cancel "no
+# zstyle ":plugin:history-search-multi-word" clear-on-cancel "no"

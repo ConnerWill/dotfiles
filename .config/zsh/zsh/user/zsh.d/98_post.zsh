@@ -1,31 +1,31 @@
-## ShellCheck Setup{{{
-# shellcheck disable=2148
-# shellcheck disable=SC2236
-# shellcheck enable=quote-safe-variables
-# shellcheck enable=check-unassigned-uppercase
-# shellcheck enable=require-variable-braces
-# shellcheck source-path=SCRIPTDIR
-# shellcheck source-path=/etc/zsh/zshenv
-# shellcheck source-path=/etc/zsh/zprofile
-# shellcheck source=../../../.zshenv
-# shellcheck source=../../../.zprofile
-# shellcheck source=../../../.zshrc
-# shellcheck source=./00_pre.zsh
-# shellcheck source=./10_variables.zsh
-# shellcheck source=./20_options.zsh
-# shellcheck source=./21_history.zsh
-# shellcheck source=./30_modules.zsh
-# shellcheck source=./40_plugins.zsh
-# shellcheck source=./50_keybindings.zsh
-# shellcheck source=./60_functions.zsh
-# shellcheck source=./70_aliases.zsh
-# shellcheck source=./80_hooks.zsh
-# shellcheck source=./81_prompts.zsh
-# shellcheck source=./82_colors.zsh
-# shellcheck source=./83_vcs_prompts.zsh
-# shellcheck source=./85_highlighting.zsh
-# shellcheck source=./90_completions.zsh
-# shellcheck source=./99_post.zsh
+###{{{ ShellCheck Setup
+#shellcheck disable=2148
+#shellcheck disable=SC2236
+#shellcheck enable=quote-safe-variables
+#shellcheck enable=check-unassigned-uppercase
+#shellcheck enable=require-variable-braces
+#shellcheck source-path=SCRIPTDIR
+#shellcheck source-path=/etc/zsh/zshenv
+#shellcheck source-path=/etc/zsh/zprofile
+#shellcheck source=../../../.zshenv
+#shellcheck source=../../../.zprofile
+#shellcheck source=../../../.zshrc
+#shellcheck source=./00_pre.zsh
+#shellcheck source=./10_variables.zsh
+#shellcheck source=./20_options.zsh
+#shellcheck source=./21_history.zsh
+#shellcheck source=./30_modules.zsh
+#shellcheck source=./40_plugins.zsh
+#shellcheck source=./50_keybindings.zsh
+#shellcheck source=./60_functions.zsh
+#shellcheck source=./70_aliases.zsh
+#shellcheck source=./80_hooks.zsh
+#shellcheck source=./81_prompts.zsh
+#shellcheck source=./82_colors.zsh
+#shellcheck source=./83_vcs_prompts.zsh
+#shellcheck source=./85_highlighting.zsh
+#shellcheck source=./90_completions.zsh
+#shellcheck source=./99_post.zsh
 ##}}}
 
 
@@ -73,5 +73,3 @@ function zsh_banner_load(){
     fi
   fi
 }; zsh_banner_load
-
-
