@@ -71,8 +71,35 @@ esac
 ### [=]==================================[=]
 ### [~]............ BROWSER
 ### [=]==================================[=]
-[[ -n "$DISPLAY" ]] && export BROWSER="/usr/bin/firefox"
-[[ -z "$DISPLAY" ]] && export BROWSER="/usr/bin/lynx"
+## If DISPLAY is set (running a WM or X11)
+if [[ -n "$DISPLAY" ]]; then
+	[[ "${commands[librewolf]}"   ]] && BROWSER="icecat"       ## Set the order of prefered browsers if when using a WM.
+	[[ "${commands[icecat]}"      ]] && BROWSER="icecat"       ## Most prefered browser should go at the bottom of this first 'if' statement.
+	[[ "${commands[tor-browser]}" ]] && BROWSER="tor-browser"  ## (Default: FireFox is prefered. then tor, then icecat ... etc)
+	[[ "${commands[firefox]}"     ]] && BROWSER="firefox"
+else
+	## Is DISTRO defined?
+	if [[ -n "${DISTRO}" ]]; then
+		## If distro is Android
+		if [[ "${DISTRO}" == "Android" || "${DISTRO}" == "android" ]]; then
+    	BROWSER="xdg-open"
+		## If distro is Termux
+		elif [[ "${DISTRO}" == "Termux" || "${DISTRO}" == "termux" ]]; then
+    	BROWSER="termux-open"
+		## Otherwise try lynxs and xdg-open
+		else
+			[[ "${commands[lynx]}"     ]] && BROWSER="lynx"
+			[[ "${commands[xdg-open]}" ]] && BROWSER="xdg-open"
+		fi
+	## Otherwise try lynxs and xdg-open
+	else
+	  [[ "${commands[lynx]}"     ]] && BROWSER="lynx"
+	  [[ "${commands[xdg-open]}" ]] && BROWSER="xdg-open"
+	fi
+fi
+## Final test
+[[ "${commands[$BROWSER]}" ]] || unset BROWSER
+
 
 ### [=]==================================[=]
 ### [~]........... MAN
@@ -143,7 +170,7 @@ export MANPAGER MANWIDTH NVIMBINPATH NVIMPAGER PAGER
 GITHUB_URL="https://github.com"
 GH_URL="https://github.com"
 GH_EDITOR="/usr/bin/nvim"
-GH_BROWSER="kitty --title GitHub /usr/bin/lynx"
+GH_BROWSER="${BROWSER}"
 GH_CONFIG_DIR="${XDG_CONFIG_HOME}/gh"
 GIT_CONFIG_DIR="${XDG_CONFIG_HOME}/git"
 GITIGNORE_DIR="${HONE}/.gitignore-boilerplates"

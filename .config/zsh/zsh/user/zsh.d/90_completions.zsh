@@ -51,7 +51,8 @@ if (( run_compdump )){
 
 function comp_setup () {
     (( ${+_comps} )) || return 1                                                                                        ## Make sure the completion system is initialised
-    [[ -z "${NOMENU}" ]] &&    zstyle ':completion:*'   menu select=1 || setopt no_auto_menu                            ## if there are more than N options allow selecting from a menu
+    [[ -z "${NOMENU}" ]] &&
+    zstyle ':completion:*'                              menu select=1 || setopt no_auto_menu                            ## if there are more than N options allow selecting from a menu
     zstyle ':completion:*'                              format '%F{99}%B░▒▓█║█║│▌║▍▊█▓▒░%b%f %F{51}%B%U%d%u%b%f %F{99}%B░▒▓█║█║│▌║▍▊█▓▒░%b%f'
     zstyle ':completion:*:corrections'                  format '%K{black}%F{196}░░▒▒▓▓██%f %F{190}%B%U%d%u%b%f %K{196}%F{8}[%f%K{196}%F{8}Errors:%f%k%K{196}  %F{8}%e%f%F{8}]%f %k%F{196}██▓▓▒▒░░%f%k'
     zstyle ':completion:*:descriptions'                 format ' %K{black}%F{blue}⬛⬛ %d ⬛⬛%f%k'
@@ -105,6 +106,8 @@ function comp_setup () {
     zstyle ':completion:*:*:*:*:processes'              list-colors '=(#b) #([0-9]#)*=0=01;31'                          ## Color completion for processes
     zstyle ':completion:*:urls'                         local 'www' '/var/www/' 'public_html'                           ## Command for process lists, the local web server details and host completion
     zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'                                           ## Ignore completion functions for commands you don't have:
+    zstyle ':mime:'                                     mailcap ~/.mailcap /usr/local/etc/mailcap /etc/mailcap
+    zstyle ':mime:'                                     mime-types ~/.mime.types /usr/local/etc/mime.types /etc/mime.types
     zstyle -a ':grml:completion:compinit'               arguments tmp
     zstyle -e ':completion:*:approximate:*'             max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
     zstyle ':completion:*:*:*:users'                    ignored-patterns                                                                        \

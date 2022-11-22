@@ -9,7 +9,7 @@
 ### Allow external applications to execute arbitrary commands within Termux.
 ### This potentially could be a security issue, so option is disabled by
 ### default. Uncomment to enable.
-allow-external-apps = true
+# allow-external-apps = true
 
 ### Default working directory that will be used when launching the app.
 # default-working-directory = /data/data/com.termux/files/home
@@ -30,7 +30,7 @@ allow-external-apps = true
 
 ### Uncomment to use volume keys for adjusting volume and not for the
 ### extra keys functionality.
-volume-keys = volume
+# volume-keys = volume
 
 ###############
 # Fullscreen mode
@@ -43,20 +43,6 @@ volume-keys = volume
 ### full screen mode.
 # use-fullscreen-workaround = true
 
-
-###############
-# Screen Margins
-###############
-
-### Terminal horizontal margin (left and right) can be adjuted with
-# terminal-margin-horizontal=3
-
-### And vertical margin (top and bottom) with
-# terminal-margin-vertical=0
-
-### Where val is an integer (representing dp units) between 0 and 100.
-### The default value is 3 for horizontal margin and 0 for vertical margin.
-
 ###############
 # Cursor
 ###############
@@ -65,7 +51,7 @@ volume-keys = volume
 # terminal-cursor-blink-rate = 0
 
 ### Cursor style: block, bar, underline.
-terminal-cursor-style = bar
+# terminal-cursor-style = block
 
 ###############
 # Extra keys
@@ -99,28 +85,31 @@ terminal-cursor-style = bar
 #   {key: KEYBOARD, popup: {macro: "CTRL d", display: exit}} \
 # ]]
 
-### Two rows with more keys
-extra-keys = [['TAB','ESC','ALT','-','UP','/','END','PGUP'], \
-              ['TAB','ESC','CTRL','LEFT','DOWN','RIGHT','HOME','PGDN']]
-
-### Configuration with additional popup keys (swipe up from an extra key)
-# extra-keys = [[                                                   \
-#   {key: TAB, popup: {macro: "CTRL f d", display: "tmux exit"}},   \
-#   {key: ESC, popup: {macro: "CTRL f BKSP", display: "tmux ←"}}, \
-#   {key: CTRL, popup: {macro: "CTRL f TAB", display: "tmux →"}}, \
-#   {key: UP, popup: {macro: "ALT a", display: A-a}},               \
-#   {key: ALT, popup: HOME},                                        \
-#   {key: HOME, popup: PGDN},                                       \
-#   {key: PGUP, popup: PGUP},                                       \
-# \
-#   {key: TAB, popup: {macro: "CTRL f d", display: "tmux exit"}},   \
-#   {key: ESC, popup: {macro: "CTRL f BKSP", display: "tmux ←"}}, \
-#   {key: LEFT, popup: {macro: "CTRL f TAB", display: "tmux →"}}, \
-#   {key: DOWN, popup: {macro: "ALT a", display: A-a}},             \
-#   {key: RIGHT, popup: HOME},                                      \
-#   {key: END, popup: PGDN},                                        \
-#   {key: PGDN, popup: PGUP},                                       \
-# ]]
+### Another configuration with advanced popup key usage designed for more
+### specific use-cases. In this case, it is designed for working with Vim-like
+### editors for faster navigation
+#extra-keys = [ \
+#  [ \
+#    { key: ESC, popup: { macro: ":q\n", display: "QuickExit" } }, \
+#    { key: '/', popup: '\\\\' }, \
+#    { key: '-', popup: '_' }, \
+#    { key: HOME, popup: { macro: "CTRL HOME", display: "Top" } }, \
+#    { key: UP, popup: { macro: "CTRL UP", display: "UP" } }, \
+#    { key: END, popup: { macro: "CTRL END", display: "End" } }, \
+#    { key: ":", popup: ";" }, \
+#    { key: "(", popup: "{" } \
+#  ], \
+#  [ \
+#    { key: TAB, popup: { macro: ":wq\n", display: "Write And Exit" } }, \
+#    { key: CTRL, popup: { macro: ":w\n", display: "Write" } }, \
+#    ALT, \
+#    { key: LEFT, popup: { macro: "CTRL LEFT", display: "Left" } }, \
+#    { key: DOWN, popup: { macro: "CTRL DOWN", display: "Bottom" } }, \
+#    { key: RIGHT, popup: { macro: "CTRL RIGHT", display: "Right" } }, \
+#    { key: "#", popup: "$" }, \
+#    { key: ")", popup: "}" } \
+#  ] \
+#]
 
 ###############
 # Colors/themes
@@ -137,20 +126,16 @@ extra-keys = [['TAB','ESC','ALT','-','UP','/','END','PGUP'], \
 # disable-hardware-keyboard-shortcuts = true
 
 ### Open a new terminal with ctrl + t (volume down + t)
-### ctrl + alt + c does this by default
-shortcut.create-session = ctrl + t
+# shortcut.create-session = ctrl + t
 
 ### Go one session down with (for example) ctrl + 2
-### ctrl + alt + n does this by default
-shortcut.next-session = ctrl + 2
+# shortcut.next-session = ctrl + 2
 
 ### Go one session up with (for example) ctrl + 1
-### ctrl + alt + p does this by default
-shortcut.previous-session = ctrl + 1
+# shortcut.previous-session = ctrl + 1
 
 ### Rename a session with (for example) ctrl + n
-### ctrl + alt + r does this by default
-shortcut.rename-session = ctrl + alt + r
+# shortcut.rename-session = ctrl + n
 
 ###############
 # Bell key
@@ -163,7 +148,7 @@ shortcut.rename-session = ctrl + alt + r
 # bell-character = beep
 
 ### Ignore bell character.
-bell-character = ignore
+# bell-character = ignore
 
 ###############
 # Back key

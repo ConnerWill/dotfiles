@@ -9,9 +9,9 @@ if [[ -n "$_ZSH_BANNER_SHOW" ]]; then
     BANNER_TEXT_FIGLET_FONT="Bloody"
     LINE_CHAR="═" # ━" # ═ █
 
-    BANNER_TEXT_CHARS_BEFORE="$(echo $BANNER_TEXT | wc --chars)"
+    BANNER_TEXT_CHARS_BEFORE="${#BANNER_TEXT}"
     BANNER_LINE_MULTIPLY=8
-    BANNER_TEXT_CHARS="$(( $BANNER_TEXT_CHARS_BEFORE * $BANNER_LINE_MULTIPLY ))"
+    BANNER_TEXT_CHARS="$(( BANNER_TEXT_CHARS_BEFORE * BANNER_LINE_MULTIPLY ))"
 
     function Draw_Line(){
       local begin=1
@@ -70,4 +70,3 @@ function _StartGPGAgent(){
 #     fi
 #   fi
 # fi
-
