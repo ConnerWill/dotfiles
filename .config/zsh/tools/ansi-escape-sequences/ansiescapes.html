@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANSI escape sequences</title>
+<link rel="stylesheet" type="text/css" href="/notes/notes.css">
+<script src='/notes/q.js'></script>
+</head>
+<body>
+<div class='screen-only'>Search notes: <input size='50' id='q' onchange='q();'></div>
+<h1>ANSI escape sequences</h1>
+
+<div class='t'>
+<i>ANSI Escape Sequences</i> are instructions for consoles to position the cursor, change and set color and fonts and perform other operations. </div>
+
+<div class='t'>
+These instructions are encoded in a series of characters whose first byte is the escape character (ASCII 27, octal <code>\033</code>, hex <code>0x1b</code>). </div>
+
+<div class='t'>
+Apparently, VT 100 influenced these instructions heavily. </div>
+<div class='h'>
+<h2>Colors</h2>
+<div class='h'>
+<h3 id='ansi-16-basic-colors'>16 basic colors</h3>
+<div class='t'>
+    There are eight colors, each of which is identified by a single digit: </div>
+<table>
+  <tr><td class='r'>     0 </td><td class='l'> black</td></tr>
+  <tr><td class='r'>     1 </td><td class='l'> red</td></tr>
+  <tr><td class='r'>     2 </td><td class='l'> green</td></tr>
+  <tr><td class='r'>     3 </td><td class='l'> yellow</td></tr>
+  <tr><td class='r'>     4 </td><td class='l'> blue</td></tr>
+  <tr><td class='r'>     5 </td><td class='l'> purple</td></tr>
+  <tr><td class='r'>     6 </td><td class='l'> cyan</td></tr>
+  <tr><td class='r'>     7 </td><td class='l'> white</td></tr>
+
+</table>
+
+<div class='g'></div>
+<div class='t'>
+    Each of these colors has a <i>high intensity</i> variant, which brings the number of <i>basic colors</i> to 16 (and correspond to the values of the     <a href='/notes/Microsoft/dot-net/index'>.NET</a> enum <a href='/notes/Microsoft/dot-net/namespaces-classes/System/ConsoleColor'><code>System.ConsoleColor</code></a>). </div>
+<div class='g'></div>
+<div class='t'>
+    In order to create a color code, the color-digit needs to be prepended with one or two other digits (the dot represents the digit for the color): </div>
+<table>
+  <tr><td class='r'>       3. </td><td class='l'> foreground / normal intensity</td></tr>
+  <tr><td class='r'>       4. </td><td class='l'> background / normal intensity</td></tr>
+  <tr><td class='r'>       9. </td><td class='l'> foreground / high intensity</td></tr>
+  <tr><td class='r'>      10. </td><td class='l'> background / high intensity</td></tr>
+
+</table>
+
+<div class='g'></div>
+<div class='t'>
+    Thus, for example a <i>high intensity</i> (=9) <i>red</i> (=1) text is escaped like so: </div><pre class='code'>\e[91m text \e[0m
+</pre>
+</div>
+<div class='h'>
+<h3>Defining the RGB values for the 16 base colors</h3>
+<div class='t'>
+    At least in <a href='/notes/Windows/dirs/Windows/System32/conhost_exe'><code>conhost.exe</code></a>, it's possible to define the RGB values for the 16 colors     with <code>\e]4;c;rgb:RR/GG/BB\x7</code>. <code>RR</code>, <code>GG</code> and <code>BB</code> are the hex values for the RGB colors. <code>c</code> is the color number which is being defined. Note the closing bracket <code>]</code>. </div>
+<div class='g'></div>
+<div class='t'>
+    The following PowerShell script modifies the color palette according to <i>solarized light</i>:      </div><pre class='code'>function define-color {
+   param (
+      [int] $colorNumber,
+      [int] $r,
+      [int] $g,
+      [int] $b
+   )
+
+   write-host ("$([char]27)]4;{0};rgb:{1:X2}/{2:X2}/{3:X2}$([char]7)" -f $colorNumber, $r, $g, $b)
+}
+
+define-color  0    0 39   49  // dark black
+define-color  1  208 27   36  // dark red
+define-color  2  114 137   5  // dark green
+define-color  3  165 119   5  // dark yellow
+define-color  4   32 117 199  // dark blue
+define-color  5  198 27  110  // dark magenta
+define-color  6   37 145 133  // dark cyan
+define-color  7  233 226 203  // dark white
+
+define-color  8    0 77  100  // bright black
+define-color  9  189 54   18  // bright red
+define-color 10   70 90   97  // bright green
+define-color 11   82 103 111  // bright yellow
+define-color 12  112 129 131  // bright blue
+define-color 13   88 86  185  // bright magenta
+define-color 14  129 144 143  // bright cyan
+define-color 15  252 244 220  // bright white
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences'>ANSI-escape-sequences</a>, path: <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences/blob/master/define-16-basic-colors.ps1'>/define-16-basic-colors.ps1</a></div>
+<div class='t'> </div>
+</div>
+<div class='h'>
+<h3>216 6-bit colors + 16 basic colors + 24 gray scale colors</h3>
+<div class='t'>
+    With <code>\e[38;5;nm</code> (foreground) and <code>\e[48;5;nm</code> (background colors), the color palette can be extended to 256 colors which are specified by <code>n</code>: </div>
+<table>
+  <tr><td class='l'>      <code>n</code> </td><td class='l'></td></tr>
+  <tr><td class='l'>      0-7 </td><td class='l'> 8 colors</td></tr>
+  <tr><td class='l'>      8-15 </td><td class='l'> 8 intense color</td></tr>
+  <tr><td class='l'>      16 + 36*r + 6+g + b </td><td class='l'> rgb value (each component having 6 values)</td></tr>
+  <tr><td class='l'>      232-255 </td><td class='l'> 24 gray scale colors, black to white</td></tr>
+
+</table>
+
+</div>
+<div class='h'>
+<h3>24-bit colors</h3>
+<div class='t'>
+    With <code>\e[38;2;r;g;bm</code> and <code>\e[48;2;r;g;bm</code>, The color palette is extended to <i>true colors</i>, <code>r</code>, <code>g</code> and <code>b</code> being values between <code>0</code> and <code>255</code>. </div>
+</div>
+</div>
+<div class='h'>
+<h2>Positioning the cursor</h2>
+<div class='t'>
+  Using <code>H</code> to position the cursor on specific coordinates. </div>
+<div class='g'></div>
+<div class='t'>
+  The first number ist the y coordinate, the second number the    x coordinate. </div>
+<div class='g'></div>
+<div class='t'>
+  </div><pre class='code'>echo -e "\e[15;8Hx=8 / y=15"
+echo -e "\e[4;22Hx=22 / y=4"
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences'>ANSI-escape-sequences</a>, path: <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences/blob/master/position-cursor'>/position-cursor</a></div>
+<div class='t'> </div>
+</div>
+<div class='h'>
+<h2>Clearing the screen</h2>
+<div class='t'>
+  </div><pre class='code'>echo -e "\e[2J"
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences'>ANSI-escape-sequences</a>, path: <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences/blob/master/clear-screen'>/clear-screen</a></div>
+<div class='t'> </div>
+</div>
+<div class='h'>
+<h2>bg-48-fg-38-5</h2>
+<div class='t'>
+  The following shell script uses the <code>38;5</code> escape function to create 216 background colors (The red, green and blue components are each in the range 0 … 5) </div>
+<div class='g'></div>
+<div class='t'>
+  </div><pre class='code'>#
+#  vim: ft=sh
+#
+ansi_color_5() {
+  local r=$1 # 0 .. 5
+  local g=$2 # 0 .. 5
+  local b=$3 # 0 .. 5
+
+  echo -e $(( 16+ $r*36 + $g*6 + $b))
+}
+
+ansi_color_bg_5 () {
+  echo -e "\e[38;5;$(ansi_color_5 $1 $2 $3)m"
+}
+ansi_color_fg_5 () {
+  echo -e "\e[48;5;$(ansi_color_5 $1 $2 $3)m"
+}
+
+ansi_reset() {
+  echo -e "\e[0m"
+}
+
+
+printf "\n"
+for r in {0..5}; do
+  for g in {0..5}; do
+    for b in {0..5}; do
+
+      printf "  "
+    
+      if [[ $r &gt; 3 || $g &gt; 3 ]]; then
+        bg_color='0 0 0'
+      else
+        bg_color='5 5 5'
+      fi
+    
+      printf "$(ansi_color_fg_5 $r $g $b)$(ansi_color_bg_5 $bg_color) %3d " $(ansi_color_5 $r $g $b)
+      
+    done
+    printf $(ansi_reset)
+    printf "\n"
+  done
+  printf "\n"
+done
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences'>ANSI-escape-sequences</a>, path: <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences/blob/master/bg-48-fg-38-5'>/bg-48-fg-38-5</a></div>
+<div class='t'> </div>
+<div class='g'></div>
+<div class='t'>
+  The output of the script is </div>
+<div class='g'></div>
+<div class='t'>
+  <img src='/notes/Linux/shell/bg-48-fg-38-5.png' /> </div>
+<div class='g'></div>
+<div class='t'>
+  Apparently, <a class='ext' href='https://github.com/segaleran/eran-dotfiles/blob/master/bin/terminalcolors.py'>python script</a> does more or less the same thing. </div>
+
+<div class='t'>
+  <a class='ext' href='https://gist.github.com/hSATAC/1095100'>This is a perl script</a> does seems to do the same. </div>
+
+<div class='t'>
+  And then, there is also the shell command <code>msgcat --color=test</code>. </div>
+</div>
+<div class='h'>
+<h2>Resetting all settings</h2>
+<div class='t'>
+  </div><pre class='code'>echo -e "\e[0m"
+#
+#   Might be followed by \e[2J (Clear screen)
+#
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences'>ANSI-escape-sequences</a>, path: <a href='https://github.com/ReneNyffenegger/ANSI-escape-sequences/blob/master/reset-all'>/reset-all</a></div>
+<div class='t'> </div>
+</div>
+<div class='h'>
+<h2>Determine sequence for specfic key on keyboard</h2>
+<div class='t'>
+  In order to determine a key's emitted sequence, one can use <code>ctrl-v</code> followed by the key. </div>
+</div>
+<div class='h'>
+<h2>PowerShell</h2>
+<div class='t'>
+  In <a href='/notes/Windows/PowerShell/index'>PowerShell</a>, the escape character can be expressed by casting <i>27</i> or its hexadecimal representation <i>0x1b</i> to a <code>char</code>: </div><pre class='code'><a href='/notes/Windows/PowerShell/command-inventory/noun/host/write/index'>write-host</a> "$([char]0x1b)[40;91m red on black $([char]27)[0m"
+</pre>
+<div class='g'></div>
+<div class='t'>
+  PowerShell 7 (6?) shortens this cast to a backtick-e which is visually easier to read: </div><pre class='code'>write-host "`e[32;103m green on intense yellow `e[0m"
+</pre>
+<div class='g'></div>
+<div class='t'>
+  See also <a href='/notes/Windows/PowerShell/host/ANSI/index'>ANSI colors in PowerShell</a>. </div>
+</div>
+<div class='h'>
+<h2>See also</h2>
+<div class='t'>
+  <a href='/notes/development/tools/scripts/personal/highlight_pl'>highlight.pl</a>: a Perl script that prints ERROR in red and WARNING in yellow. </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/development/languages/Perl/modules/Term/ANSIColor/index'>Perl module Term::ANSIColor</a> </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/Linux/shell/bash/built-in/echo#bash-echo-colors'>Coloring the output in Bash's <code>echo</code></a> </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/development/languages/sed/examples/ansi-escape'>sed example</a> to colorize a file. </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/Linux/shell/commands/tput#colors'><code>tput</code>: colors</a> </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/Windows/development/Portable-Executable/subsystem/console/index#win-virtual-terminal-sequences'>Virtual Terminal Sequences on Windows</a> </div>
+<div class='g'></div>
+<div class='t'>
+  The PowerShell module <a href='/notes/Windows/PowerShell/modules/personal/console/index'>console</a>, especially its function   <a href='/notes/Windows/PowerShell/modules/personal/console/get-ansiEscapedText'><code>get-ansiEscapedText</code></a>. </div>
+<div class='g'></div>
+<div class='t'>
+  In <a href='/notes/Linux/shell/bash/index'>bash's</a> <code><a href='/notes/Linux/shell/bash/built-in/echo'>echo</a></code> command, the <a href='/notes/Linux/shell/bash/built-in/echo#bash-echo-e'><code>-e</code></a> flag interprets <code>\e</code> as <code>&lt;ESC&gt;</code>. </div>
+</div>
+<div class='h'>
+<h2>Links</h2>
+<div class='t'>
+  <a class='ext' href='http://ascii-table.com/ansi-escape-sequences.php'>http://ascii-table.com/ansi-escape-sequences.php</a> </div>
+<div class='g'></div>
+<div class='t'>
+  <a class='ext' href='https://en.wikipedia.org/wiki/ANSI_escape_code'>Wikipedia: ANSI escape codes</a> </div>
+<div class='g'></div>
+<div class='t'>
+  Microsoft Documentation: <a class='ext' href='https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences'>Console Virtual Terminal Sequences</a> </div>
+</div>
+<div class='screen-only'>
+<hr><p><a href='/notes/index.html'>Index</a><div class='bottom'></div></div>
+</body>
+</html>

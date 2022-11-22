@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PowerShell: ANSI colors</title>
+<link rel="stylesheet" type="text/css" href="/notes/notes.css">
+<script src='/notes/q.js'></script>
+</head>
+<body>
+<div class='screen-only'>Search notes: <input size='50' id='q' onchange='q();'></div>
+<h1>PowerShell: ANSI colors</h1>
+
+<div class='h'>
+<h2>Foreground and background colors</h2>
+<div class='t'>
+  </div><pre class='code'>set-strictMode -version latest
+
+$CSI =  "$([char] 27)" + "["
+
+"normal "      +
+$CSI           +
+  "9"          + # high intensity foregroud
+  "2"          + # green
+  "m"          +
+"colored text" +
+"$CSI"         +
+"m"            + # reset
+" normal again"
+
+"normal "      +
+$CSI           +
+  "4"          + # normal intensity background
+  "2"          + # green
+  "m"          +
+"colored text" +
+"$CSI"         +
+"m"            + # reset
+" normal again"
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/about-PowerShell'>about-PowerShell</a>, path: <a href='https://github.com/ReneNyffenegger/about-PowerShell/blob/master/host/ANSI/foreground-background-16.ps1'>/host/ANSI/foreground-background-16.ps1</a></div>
+<div class='t'> </div>
+<div class='g'></div>
+<div class='t'>
+  <img src='/notes/Windows/PowerShell/host/ANSI/foreground-background-16.png' /> </div>
+</div>
+<div class='h'>
+<h2>Animated colors</h2>
+<div class='t'>
+  </div><pre class='code'>set-strictMode -version latest
+
+$CSI="$([char]27)[" # PowerShell 6 has `e for [char]27
+
+"${CSI}2J" # Clear screen
+
+
+while (1) {
+   foreach ($r_ in -255 .. 255) {
+
+      $r = [Math]::Abs($r_)
+
+      $g = 255-$r
+      "${CSI}10;15H"          + # Move to column 10, row 15
+      "${CSI}38;2;$r;$g;200m" + # Set foreground coor (38;2) to RGB($r, $g, 200)
+      "Foo, bar and baz!"       # Write some text
+
+      start-sleep -Milliseconds 10
+   }
+}
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/about-PowerShell'>about-PowerShell</a>, path: <a href='https://github.com/ReneNyffenegger/about-PowerShell/blob/master/host/ANSI/animated.ps1'>/host/ANSI/animated.ps1</a></div>
+<div class='t'> </div>
+</div>
+<div class='h'>
+<h2 id='ps-blinking-text'>Blinking text</h2>
+<div class='t'>
+  The code <code>5</code> causes text to blink, but does not work in all terminals or console such as for example <a href='/notes/Windows/dirs/Windows/System32/cmd_exe/index'><code>cmd.exe</code></a>. It does, however, work   in the <a href='/notes/Windows/Terminal/index'>Windows Terminal</a> (<code>wt.exe</code>):   </div><pre class='code'>clear-host
+
+$CSI = "$([char]27)["
+
+"
+
+    ${CSI}5;31mnormal read ${CSI}5;91mintense red${CSI}m
+
+"
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/about-PowerShell'>about-PowerShell</a>, path: <a href='https://github.com/ReneNyffenegger/about-PowerShell/blob/master/host/ANSI/blink.ps1'>/host/ANSI/blink.ps1</a></div>
+<div class='t'> </div>
+<div class='g'></div>
+<div class='t'>
+  The blink turn of code is <code>25</code>. </div>
+</div>
+<div class='h'>
+<h2>Bold and underlined text</h2>
+<div class='t'>
+  </div><pre class='code'>$CSI = "$([char]27)["
+
+"${CSI}1mbold${CSI}m and ${CSI}4munderlined${CSI}m"
+</pre><div class='ghf2'>Github respository <a href='https://github.com/ReneNyffenegger/about-PowerShell'>about-PowerShell</a>, path: <a href='https://github.com/ReneNyffenegger/about-PowerShell/blob/master/host/ANSI/bold-underlined.ps1'>/host/ANSI/bold-underlined.ps1</a></div>
+<div class='t'> </div>
+<div class='g'></div>
+<div class='t'>
+  The codes to turn of bold and underline are <code>22</code> and <code>24</code>. </div>
+</div>
+<div class='h'>
+<h2>See also</h2>
+<div class='t'>
+  <a href='/notes/Windows/PowerShell/host/ANSI/color-output'>Coloring the output</a> of a <a href='/notes/Windows/PowerShell/language/command/index'>PowerShell command</a>. </div>
+<div class='g'></div>
+<div class='t'>
+  The <a href='/notes/Microsoft/dot-net/index'>.NET</a> class <a href='/notes/Microsoft/dot-net/namespaces-classes/System/Management/Automation/VTUtility/index'><code>System.Managemenet.Automation.VTUtility</code></a> </div>
+<div class='g'></div>
+<div class='t'>
+  <a href='/notes/Linux/shell/ANSI-escape-sequences'>ANSI escape sequences</a> </div>
+</div>
+<div class='screen-only'>
+<hr><p><a href='/notes/index.html'>Index</a><div class='bottom'></div></div>
+</body>
+</html>
