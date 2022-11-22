@@ -1,3 +1,5 @@
+
+
 ###{{{ commented out
 
 #alias rp-to-clip='rp $1 | xclip'
@@ -292,8 +294,47 @@ export NVIMDIR="$XDG_CONFIG_HOME/nvim"
 export WATCH_FAST_INTERVAL=0.1
 export WATCH_INTERVAL=1
 
+function draw_entire_line(){
 
+  #############################################
+  ## Usage:
+  ##
+  ##    $ draw_entire_line 5 "\e[0;38;5;198m"
+  ##
+  ##         ^             ^          ^
+  ##    function        Linestyle  Color
+  #############################################
+  ##
+  ## Replace current prompt with a blue bar
+  ##
+  ##    $ draw_entire_line 6 "^[[1A^[[2K^[[1A^[[2K\e[0;38;5;33m"
+  ##
+  ## for i in $(seq 1 255); do draw_entire_line 4 "^[[1A^[[2K\r\e[0;38;5;${i}m"; sleep 0.1; done
+  ## for i in $(seq 1 255); do draw_entire_line 4 "\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.1; done
+  ## for i in $(seq 0 16); do draw_entire_line 6 "\e[?25l\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.05; done; printf "\e[?25h"
+  ##
+  ## printf "\e[?25h" ## Restore cursor
+  #############################################
+  ## Index of which line type to use (1-10)
+  LINECHAR="$1"
+  ## Color of the linee
+  colorline="${2}"
+  ## Default line
+  solidline="${(mr:$COLUMNS::─:)}"
 
+  [[ "${LINECHAR}" -eq 1  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 2  ]] && solidline="${(mr:$COLUMNS::═:)}"
+  [[ "${LINECHAR}" -eq 3  ]] && solidline="${(mr:$COLUMNS::═:)}"
+  [[ "${LINECHAR}" -eq 4  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 5  ]] && solidline="${(mr:$COLUMNS::▂:)}"
+  [[ "${LINECHAR}" -eq 6  ]] && solidline="${(mr:$COLUMNS::▄:)}"
+  [[ "${LINECHAR}" -eq 7  ]] && solidline="${(mr:$COLUMNS::▀:)}"
+  [[ "${LINECHAR}" -eq 8  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 9  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 10 ]] && solidline="${(mr:$COLUMNS::#:)}"
+
+  printf "${colorline}${solidline}\e[0m"
+}
 
 ### {{{ OS SPECIFIC  {{{
 ###   {{{ LINUX SPECIFIC
@@ -351,11 +392,10 @@ if command -v lsd >/dev/null 2>&1; then
 alias lsd="lsd --color always --icon always"
 alias ls="lsd --color always --icon always"
 alias ks='ls'
+alias la='ls'
 alias s='lsd'
 alias sl='lsd   --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
 alias 'cd ls'='lsd'
-alias lsa='command lsd --almost-all .*(.)'                                                                             # List Only Hidden Files
-alias la='command lsd --almost-all .*(.)'                                                                             # List Only Hidden Files
 alias ll='lsd   --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
 alias lla='lsd --all --long --total-size --sizesort --reverse'
 alias lst="lsd    --oneline --long --almost-all --recursive --timesort --human-readable $1 2>/dev/null"                   # List All On One Line Sort By Modification Time Long List Reversed
@@ -365,8 +405,11 @@ alias lss='lsd    --oneline --long --almost-all --sizesort --human-readable --re
 alias lls="printf \"\n\n\t🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m🍄🦄🐉\n\n\"; lsd --long --sort=size --color=always --total-size --almost-all --reverse --permission octal"
 alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
 alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed
-alias l='lsd  --oneline --almost-all; printf "\e[0;1;38;5;199m▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\e[0m\n"   ' # List All On One Line
+alias l='draw_entire_line 2 "\e[0;1;38;5;199m"; lsd  --oneline --almost-all; draw_entire_line 5 "\e[0;1;38;5;199m"' # List All On One Line
 alias lllll=" printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'; printf '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'; lsd --long -A --sort=size --reverse --total-size; printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n"
+
+# alias l='printf "\e[0;1;38;5;199m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\e[0m\n"; lsd  --oneline --almost-all; printf "\e[0;1;38;5;199m▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\e[0m\n"' # List All On One Line
+# alias l='printf "\e[0;1;38;5;199m▄▀ "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\e[0m\n"; lsd  --oneline --almost-all; printf "\e[0;1;38;5;199m▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\e[0m\n"' # List All On One Line
 fi
 #}}} LSD
 #{{{ EXA

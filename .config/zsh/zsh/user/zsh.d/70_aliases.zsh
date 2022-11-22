@@ -292,6 +292,10 @@ alias rl="readlink"
 ### [=]==================================[=]
 ### [~]............ sudo
 ### [=]==================================[=]
+alias suso="sudo"
+alias sudu="sudo"
+alias sydo="sudo"
+alias sudk="sudo"
 alias sudp='sudo'
 alias "sud["='sudo'
 alias suno="sudo"
