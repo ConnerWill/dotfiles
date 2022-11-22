@@ -441,6 +441,7 @@ alias watch-disk-usage="watch -c --interval 0.5 --no-title --differences dfrs --
 alias watch-disk-usage-2="watch -c --interval 0.5 --no-title --differences dfc -c always"
 alias watch="watch --precise --interval $WATCH_INTERVAL"
 alias watch-fast="watch --precise --interval $WATCH_FAST_INTERVAL"
+alias watch="watch -n 0.1 --color"
 
 alias http-server='python -m http.server'
 alias xterm='xterm -fg white -bg black -cr red -bd blue'
