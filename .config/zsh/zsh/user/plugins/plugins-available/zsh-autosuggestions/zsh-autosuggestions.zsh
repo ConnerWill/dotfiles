@@ -1,4 +1,5 @@
 # Fish-like fast/unobtrusive autosuggestions for zsh.
+typeset -A nmapaliases
 # https://github.com/zsh-users/zsh-autosuggestions
 # v0.7.0
 # Copyright (c) 2013 Thiago de Arruda

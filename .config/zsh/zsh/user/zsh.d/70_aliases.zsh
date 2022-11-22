@@ -9,6 +9,27 @@ alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 's
 alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
 alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
 
+### Suffix
+autoload -U zsh-mime-setup && zsh-mime-setup
+alias -s pl=perl
+alias -s html="${BROWSER}"
+alias -s htm="${BROWSER}"
+
+[[ "${commands[evince]}" ]] && alias -s pdf=evince
+
+if [[ "${commands[eog]}" ]]; then
+  alias -s png=eog
+  alias -s jpg=eog
+  alias -s jpeg=eog
+  alias -s gif=eog
+elif [[ "${commands[termux-open]}" ]]; then
+  alias -s png=termux-open
+  alias -s jpg=termux-open
+  alias -s jpeg=termux-open
+  alias -s gif=termux-open
+  alias -s pdf=termux-open
+fi
+
 ### [=]==================================[=]
 ### [~]............ cd
 ### [=]==================================[=]
@@ -28,9 +49,6 @@ alias cdtemp="$TEMPDIR"
 alias cdt="$TEMPDIR"
 alias cd-temp="$TEMPDIR"
 
-
-
-alias zshall="man zshall"
 
 ### [=]==================================[=]
 ### [~]............ cat
@@ -226,6 +244,12 @@ if [[ "${commands[awesome]}" ]] {
   alias cdawesome="cd ${XDG_CONFIG_HOME}/awesome || printf \"\e[0;38;5;196mCANNOT CD TO THERE\e[0m\n\""
   alias awesome-check="awesome --check"
   alias check-awesome="awesome --check"
+  alias awesomewm-xephyr-emulate="Xephyr :5 -screen 1280x720 -resizeable & sleep 1 ; DISPLAY=:5 awesome"
+
+  alias start-compositor="xcompmgr &"
+  alias list-windows='wmctrl -l -p -G -x'
+  alias list-desktops='wmctrl -d'
+  alias list-desktop-applications="ls /usr/share/applications | awk -F '.desktop' ' { print $1}' -"
 }
 
 ### [=]==================================[=]
@@ -335,23 +359,31 @@ alias wp='nitrogen --restore'
 ### [~]............ NMAP
 ### [=]==================================[=]
 if [[ -n "${commands[nmap]}" ]] ; then
-  alias nmapAutomator-scan-all="sudo nmapAutomator.sh --type All --output ${NMAPSCAN:-${PWD}} --host"
-  alias nmap-vulscan="nmap -sV -vv --script=vulscan/vulscan.nse"
-  alias nmap-check_for_firewall="sudo nmap -sA -p1-65535 -v -T4"
-  alias nmap-check_for_vulns="nmap --script=vuln"
-  alias nmap-detect_versions="sudo nmap -sV -p1-65535 -O --osscan-guess -T4 -Pn"
-  alias nmap-fast="nmap -F -T5 --version-light --top-ports 300"
-  alias nmap-slow="sudo nmap -sS -v -T1"
-  alias nmap-fin="sudo nmap -sF -v"
-  alias nmap-full="sudo nmap -sS -T4 -PE -PP -PS80,443 -PY -g 53 -A -p1-65535 -v"
-  alias nmap-full_udp="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
-  alias nmap-full_with_scripts="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all"
-  alias nmap-list_interfaces="nmap --iflist"
-  alias nmap-open_ports="nmap --open"
-  alias nmap-ping_scan="nmap -n -sP"
-  alias nmap-ping_through_firewall="nmap -PS -PA"
-  alias nmap-traceroute="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
-  alias nmap-web_safe_osscan="sudo nmap -p 80,443 -O -v --osscan-guess --fuzzy "
+typeset -A nmapaliases
+  nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"
+  nmapaliases[nmap-vulscan]="nmap -sV -vv --script=vulscan/vulscan.nse"
+  nmapaliases[nmap-vulns]="nmap --script=vuln"
+  nmapaliases[nmap-list-ifs]="nmap --iflist"
+  nmapaliases[nmap-open-ports]="nmap --open"
+  nmapaliases[nmap-ping-scan]="nmap -n -sP"
+  nmapaliases[nmap-ping-fw]="nmap -PS -PA"
+  nmapaliases[nmap-fin]="sudo nmap -sF -v"
+  nmapaliases[nmap-slow]="sudo nmap -sS -v -T1"
+  nmapaliases[nmap-check-fw]="sudo nmap -sA -p1-65535 -v -T4"
+  nmapaliases[nmap-versions]="sudo nmap -sV -p1-65535 -O --osscan-guess -T4 -Pn"
+  nmapaliases[nmap-full]="sudo nmap -sS -T4 -PE -PP -PS80,443 -PY -g 53 -A -p1-65535 -v"
+  nmapaliases[nmap-full-udp]="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
+  nmapaliases[nmap-tracrt]="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
+  nmapaliases[nmap-full-scripts]="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all"
+  nmapaliases[nmap-web_safe_osscan]="sudo nmap -p 80,443 -O -v --osscan-guess --fuzzy"
+  for nmapaliasname nmapaliasvalue in ${(kv)nmapaliases}; do
+    alias "${nmapaliasname}"="${nmapaliasvalue}"
+  done; unset nmapaliasname nmapaliasvalue
+
+# typeset -A nmapaliasesdesc
+  # nmapaliasesdesc[nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"]="fast scan of the top 300 ports with fastest speed"
+  # nmapaliasesdesc[nmapaliases[nmap-ping-scan]="nmap -n -sP"]="Nmap ping scan"
+  alias nmapAutomatorAll=" sudo nmapAutomator.sh --type All --output ${NMAPSCAN:-${PWD}} --host"
 fi
 
 ### [=]==================================[=]
@@ -414,6 +446,7 @@ alias vnc-server-start="x11vnc -nevershared -forever -usepw &"
 ### [~]............ man
 ### [=]==================================[=]
 alias m="man"
+alias zshall="man zshall"
 alias man-bat='man --pager="bat --language=sh --plain --color=never" xkeyboard-config '
 alias man-bat-global-apropos='man --pager="bat --language=sh" --global-apropos'
 alias man-search='man --all --wildcard'
@@ -443,10 +476,6 @@ alias networkmanager-tui='nmtui'
 alias networkmanager-cli='nmcli'
 alias external-ip='curl ifconfig.me ; printf "\n"'
 alias duhs='du -h --summarize'
-alias list-windows='wmctrl -l -p -G -x'
-alias list-desktops='wmctrl -d'
-alias list-desktop-applications="ls /usr/share/applications | awk -F '.desktop' ' { print $1}' -"
-
 
 
 alias chmod-exec-1="find $1 -maxdepth 1 -type $2 -exec chmod --verbose $3 {} \;"
@@ -474,8 +503,7 @@ if [[ "${commands[etckeeper]}" ]] {
 
 alias iptables-watch="sudo watch --differences --differences --color --interval 1 iptables -vnL --line-numbers"
 alias ping-graph="gping -4 --watch-interval 0.1"
-alias start-compositor="xcompmgr &"
-alias awesomewm-xephyr-emulate="Xephyr :5 -screen 1280x720 -resizeable & sleep 1 ; DISPLAY=:5 awesome"
+
 alias virsh-list="virsh list --all"
 alias virt-manager-list="virsh list --all"
 alias kill-firefox="kill \$(pidof firefox)"
