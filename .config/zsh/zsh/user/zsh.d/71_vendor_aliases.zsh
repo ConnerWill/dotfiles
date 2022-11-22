@@ -403,7 +403,7 @@ if command -v lsd >/dev/null 2>&1; then
   alias lst="lsd --oneline --long --almost-all --timesort --human-readable ${1} 2>/dev/null"                   # List All On One Long Line Sort By Modification Time
   alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y-%m-%d_%H:%M:%S:%N';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y-%m-%d_%H:%M:%S' --almost-all --dereference --reverse --permission octal 2>/dev/null"
   alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
-  alias l='draw_entire_line 2 "\e[0;1;38;5;199m"; lsd  --oneline --no-symlink --almost-all; draw_entire_line 5 "\e[0;1;38;5;199m"' # List All On One Line
+  alias l='draw_entire_line 2 "\e[0;1;38;5;0m"; lsd  --oneline --no-symlink --almost-all; draw_entire_line 5 "\e[0;1;38;5;0m"' # List All On One Line
   alias lllll='draw_entire_line 5 "\e[0;1;38;5;82m"; draw_entire_line 5 "\e[0;1;38;5;198m; lsd --long -A --sort=size --reverse --total-size; draw_entire_line 5 "\e[0;1;38;5;198m; draw_entire_line 5 "\e[0;1;38;5;198m'
 fi
 #}}} LSD
@@ -414,7 +414,7 @@ fi
 if command -v exa >/dev/null 2>&1; then
   alias exa="exa --color always --color-scale --icons --octal-permissions"
   alias l1='exa  --oneline --all --header'                        # List All On One Line
-  alias lll='exa --color-scale --long --no-time --all --header'  # List All On One Line Long List
+  alias lll='exa --long --all --header --no-time --no-user --git --sort=type --colour-scale'
   alias llllll='draw_entire_line 2 "\e[0;1;38;5;93m"; lsd --long -A sort=size --reverse --total-size; draw_entire_line 2 "\e[0;1;38;5;93m"'
   alias llsa='exa --color-scale --long --all --long --icons --group-directories-first --sort=size --no-permissions --no-time --no-user --tree --level 3'
   alias ls-l="exa --sort=type --long --all"

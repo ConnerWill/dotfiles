@@ -14,9 +14,7 @@ autoload -U zsh-mime-setup && zsh-mime-setup
 alias -s pl=perl
 alias -s html="${BROWSER}"
 alias -s htm="${BROWSER}"
-
 [[ "${commands[evince]}" ]] && alias -s pdf=evince
-
 if [[ "${commands[eog]}" ]]; then
   alias -s png=eog
   alias -s jpg=eog
@@ -30,8 +28,35 @@ elif [[ "${commands[termux-open]}" ]]; then
   alias -s pdf=termux-open
 fi
 
+
+## To use doas instead of suddo...
+## Set the environment variable 'USEDOAS' to any value (Default: false)
+#export USEDOAS=true
 ### [=]==================================[=]
-### [~]............ cd
+### [~]............ SUDO
+### [=]==================================[=]
+if [[ "${commands[suddo]}" ]] && [[ -z "${USEDOAS}" ]]; then
+  export SUDOCMD="suddo"
+  alias suso="${SUDOCMD}"
+  alias sudu="${SUDOCMD}"
+  alias sydo="${SUDOCMD}"
+  alias sudk="${SUDOCMD}"
+  alias sudp="${SUDOCMD}"
+  alias 'sud['="${SUDOCMD}"
+  alias suno="${SUDOCMD}"
+fi
+
+### [=]==================================[=]
+### [~]............ DOAS
+### [=]==================================[=]
+if [[ "${commands[doas]}" ]] && [[ -n "${USEDOAS}" ]]; then
+  export DOASCMD="doas"
+  export SUDOCMD="${DOASCMD}"
+  alias suddo="${DOASCMD}"
+fi
+
+### [=]==================================[=]
+### [~]............ CD
 ### [=]==================================[=]
 alias ....="cd ../.."   ; alias ../="cd /"
 alias ..='cd ..'        ; alias ...='cd ../..'
@@ -51,13 +76,14 @@ alias cd-temp="$TEMPDIR"
 
 
 ### [=]==================================[=]
-### [~]............ cat
+### [~]........... CAT/BAT
 ### [=]==================================[=]
 if [[ "${commands[bat]}" ]]; then
-  alias cat='bat --style=header,grid'
-  alias ca='bat' ; alias scat="cat"; alias car="cat"; alias cay="cat"
-  alias cau="cat"; alias cst="cat" ; alias cau="cat"; alias ca="bat"
-  alias catp="bat -p"; alias catf="bat --style=full"
+  alias cat='bat --style=header,grid'  ; alias bat="bat --style=header,grid"; alias catf="bat --style=full"
+  alias ca='bat'     ; alias cst="cat" ; alias scat="cat"
+  alias car="cat"    ; alias cay="cat" ; alias cau="cat"
+  alias cau="cat"    ; alias ca="bat"  ; alias catp="bat -p"
+
   alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
   function bat_preview_languages(){
     local viewfile
@@ -84,7 +110,7 @@ function ca(){
 
 
 ### [=]==================================[=]
-### [~]............ ls
+### [~]............ LS
 ### [=]==================================[=]
 alias ls='ls --color=always'
 alias l='ls -A -1'; alias ll='ls -A -l'
@@ -95,29 +121,26 @@ alias octal="stat --dereference --printf='\e[0;38;5;190m%a \e[0;38;5;87m%A \e[0;
 
 ### exa
 if [[ "${commands[exa]}" ]]; then
-  alias exa='exa --color always --icons'
-  alias l1='exa --oneline --all --header'
-  alias lll='exa --long --all --header'
-  alias ls-l="exa --sort=type --long --all"
+  alias exa='exa --color always --colour-scale --icons --numeric --git --time-style=long-iso --long'
+  alias l1='exa  --oneline --all --header'
+  alias ls-l="exa --long --all"
   alias ls-ll="exa --sort=type --tree --recurse --long --all"
 fi
 
 if [[ "${commands[lsd]}" ]]; then
   alias lsd="lsd --color always --icon always"
-  alias ks='lsd'
-  alias LS='lsd'
-  alias l='lsd --no-symlink --oneline --almost-all' # ; echo -e "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\n"   '                                                                     ## List All On One Line
-  alias la='lsd --almost-all'
   alias ll='lsd --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
-  alias lla='lsd --all --long --total-size --sizesort --reverse'
-  alias llls="printf \"\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --permission=octal --no-symlink --color=always --total-size --almost-all --reverse"
-  alias lls="printf \"\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n\"; lsd --long --sort=size --date=+'%Y-%m-%d.%H%M%S' --color=always --total-size --almost-all --reverse"
-  alias ls='lsd --icon always'
-  alias lsa='command lsd --almost-all .*(.)'                                                                                                     ## List Only Hidden Files
-  alias lsl='lsd --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lss='lsd --oneline --long --almost-all --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lst="lsd --oneline --long --almost-all --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias ls='lsd'
+  alias LS='lsd'
+  alias la='lsd --almost-all'
+  alias lla='lsd --all --long --total-size --sizesort --reverse 2>/dev/null'
+  alias lls="printf '\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' --permission=octal 2>/dev/null"
+  alias llls="printf '\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size  --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' 2>/dev/null"
+  alias lsl='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
+  alias lss='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
+  alias lst="ll --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias ks='lsd'
   alias s='lsd'
   alias 'cd ls'='lsd --almost-all --long'
 fi
@@ -128,9 +151,8 @@ alias list-open-files-repeat='lsof -r "m[~]========================[ Time: %T ]=
 alias list-open-internet-files='lsof -i -U'
 
 ### [=]==================================[=]
-### [~]............ rm
+### [~]............ RM
 ### [=]==================================[=]
-# alias rm="rm --verbose --preserve-root=all --interactive=once"
 alias rm="rm --verbose --preserve-root=all --interactive"
 alias rrm="rm"
 alias rmf='rm --force'
@@ -139,18 +161,18 @@ alias rm-license="find . -type f -name 'LICENSE' | xargs -I{} rm --interactive=o
 
 
 ### [=]==================================[=]
-### [~]............ mkdir
+### [~]............ MKDIR
 ### [=]==================================[=]
 alias mkdir='mkdir -p -v'
 
 ### [=]==================================[=]
-### [~]............ mv
+### [~]............ MV
 ### [=]==================================[=]
 alias mv="mv --verbose --interactive"
 alias mmv="mv -v"
 
 ### [=]==================================[=]
-### [~]............ cp
+### [~]............ CP
 ### [=]==================================[=]
 alias cp='cp --interactive --verbose'
 alias cpr='rsync --archive --human-readable --info=progress2'
@@ -161,7 +183,7 @@ alias cpSKIPPED='rsync --archive --human-readable --info=SKIP'
 alias cpSTAT='rsync --archive --human-readable --info=STATS'
 
 ### [=]==================================[=]
-### [~]............ clear
+### [~]............ CLEAR
 ### [=]==================================[=]
 alias cl="clear"
 alias cls='clear'
@@ -170,47 +192,65 @@ alias cleart='clear'
 alias c="clear"
 
 ### [=]==================================[=]
-### [~]............ Package Managers
+### [~]......... Package Managers
 ### [=]==================================[=]
-## If DISTRO is defined
 if [[  -n "${DISTRO}" ]] {
-  ## If distro is arch,artix,parabola,manjaro; load pacman aliases
-  if [[ ${DISTRO} == "Arch" ]] || [[ ${DISTRO} == "Parabola" ]] || [[ ${DISTRO} == "Artix" ]] || [[ ${DISTRO} == "Manjaro" ]]; then
-    ## If yay is found
-    if command -v pacman >/dev/null 2>&1; then
-      alias pacman='pacman --color always'
-      alias pacs='pacman -Ss --color=always'
-      alias pacsi='pacman -Sii --color always --verbose'
-      alias pacinstall='sudo pacman -S --color always --verbose'
-      alias paci='sudo pacman -S --color always --verbose'
-      alias paclist-installed='sudo pacman -Q --color always'
-      alias update='sudo pacman -Syuv' # Upgrade all system packages.
-    fi
-    ## If yay is found
-    if command -v yay >/dev/null 2>&1; then
-      alias yay='yay --color always'
-      alias yays='yay -Ss --color always --sortby votes'
-      alias yays-aur='yay -Ss --color always --sortby votes --aur'
-      alias yaysi='yay -S -ii --color always'
-      alias yaysearch='yay -Ss --color always'
-      alias yaysearch-popular='yay -Ss --color always --sortby popularity'
-      alias yaysearch-name='yay -Ss --color always --sortby name'
-      alias yaysearch-modified='yay -Ss --color always --sortby modified'
-      alias yaysearch-votes='yay -Ss --color always --sortby votes'
-      alias yayinstall='yay -S --color always --verbose'
-      alias yayi='yay -S --color always --verbose --needed'
-      alias yayino='yay -S --color always --verbose --needed --noconfirm'
-      alias yaylist='yay -Q --color always'
-    fi
-  ## If distro is debian,raspbian,ubuntu; load apt aliases
-  elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu" ]]; then
-    alias apts="apt search"
-    alias apti="apt install"
-    alias update="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y"
-    alias upgrade="printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\"; apt-get upgrade -y"
-    alias updgrate="printf \"\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n\"; apt-get update -y && printf \"\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n\" && apt-get full-upgrade -y"
-  ## If distro is gentoo
-  elif [[ ${DISTRO} == "Gentoo" ]]; then
+  if [[ ${DISTRO} == "Arch"     ]] \
+  || [[ ${DISTRO} == "Parabola" ]] \
+  || [[ ${DISTRO} == "Artix"    ]] \
+  || [[ ${DISTRO} == "Manjaro"  ]] \
+  && [[ "${commands[pacman]}"   ]]; then
+        alias paci="${SUDOCMD} pacman -S --color always --verbose"
+        alias pacinstall="${SUDOCMD} pacman -S --color always --verbose"
+        alias paclist-installed="${SUDOCMD} pacman -Q --color always"
+        alias pacman="pacman --color always"
+        alias pacs="pacman -Ss --color=always"
+        alias pacsi="pacman -Sii --color always --verbose"
+        alias update="${SUDOCMD} pacman -Syuv" # Upgrade all system packages.
+
+        if [[ "${commands[yay]}" ]]; then
+          alias yay='yay --color always'
+          alias yays='yay -Ss --color always --sortby votes'
+          alias yays-aur='yay -Ss --color always --sortby votes --aur'
+          alias yaysi='yay -S -ii --color always'
+          alias yaysearch='yay -Ss --color always'
+          alias yaysearch-popular='yay -Ss --color always --sortby popularity'
+          alias yaysearch-name='yay -Ss --color always --sortby name'
+          alias yaysearch-modified='yay -Ss --color always --sortby modified'
+          alias yaysearch-votes='yay -Ss --color always --sortby votes'
+          alias yayinstall='yay -S --color always --verbose'
+          alias yayi='yay -S --color always --verbose --needed'
+          alias yayino='yay -S --color always --verbose --needed --noconfirm'
+          alias yaylist='yay -Q --color always'
+        fi
+
+  elif [[ ${DISTRO} == "Debian"   ]] \
+    || [[ ${DISTRO} == "Raspbian" ]] \
+    || [[ ${DISTRO} == "Rpios"    ]] \
+    || [[ ${DISTRO} == "Ubuntu"   ]]; then
+        alias apts="apt search"
+        alias apti="apt install"
+        alias aptupdate="printf '\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n'; apt-get update -y"
+        alias aptupgrade="printf '\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n' ; apt-get upgrade -y"
+        alias update="aptupgrade"
+        alias upgrade="aptupgrade"
+        alias updgrate="aptupdate && aptupgrade"
+        alias aptupdgrate="aptupdate && aptupgrade"
+
+  elif [[ ${DISTRO} == "Android" ]] \
+    || [[ ${DISTRO} == "Termux"  ]] \
+    && [[ "${commands[pkg]}"     ]]; then
+        alias pkgi="pkg install"
+        alias pkgs="pkg search"
+        alias pkgu="pkg upgrade"
+
+        if [[ "${commands[pkgfzf]}" ]] \
+          && [[ "${commands[fzf]}"  ]]; then
+          alias pkgf="pkgfzf fzf -o"
+        fi
+
+  elif [[ ${DISTRO} == "Gentoo" ]] \
+    && [[ "${commands[emerge]}" ]]; then
     printf ""
   fi
 }
@@ -235,7 +275,7 @@ alias bash-template-here="template -x -f bash -n $1"
 alias bash-dev-env="kitty --session $XDG_CONFIG_HOME/kitty/startup-sessions/kitty-startup-bash-dev &"
 
 ### [=]==================================[=]
-### [~]............ AwesomeWM
+### [~]............ AWESOMEWM
 ### [=]==================================[=]
 if [[ "${commands[awesome]}" ]] {
   alias eawesome="$EDITOR ${XDG_CONFIG_HOME}/awesome/rc.lua"
@@ -253,7 +293,7 @@ if [[ "${commands[awesome]}" ]] {
 }
 
 ### [=]==================================[=]
-### [~]............ Vim/Neo-Vim
+### [~]............ VIM/NEOVIM
 ### [=]==================================[=]
 alias vim='nvim'            ## Replace Vim with Neo-Vim
 alias vim-split='nvim -O2'  ## Open 2 vertical windows in nvim
@@ -271,7 +311,7 @@ alias chgrpR='chgrp --verbose --recursive'
 alias check-file-permissions="stat ${*} --printf=\"\n%n\n%F\n%A\n%a\n\""
 
 ### [=]==================================[=]
-### [~]............ rclone
+### [~]............ RCLONE
 ### [=]==================================[=]
 if [[ "${commands[rclone]}" ]] {
   alias rclone-backup-scripts-to-onedrive="rclone copyto $HOME/scripts sk8:scripts --ignore-existing -v --progress --progress-terminal-title --check-first"
@@ -281,7 +321,7 @@ if [[ "${commands[rclone]}" ]] {
 }
 
 ### [=]==================================[=]
-### [~]............ pwd/realpath
+### [~]......... PWD/REALPATH
 ### [=]==================================[=]
 alias rp='realpath'
 alias rp-pwd='rp --no-symlinks $(ls --group-dirs=first --classic)'
@@ -290,18 +330,7 @@ alias realpath-all='echo -e "$(rp $(ls --color=never --icon=never  *))"'
 alias rl="readlink"
 
 ### [=]==================================[=]
-### [~]............ sudo
-### [=]==================================[=]
-alias suso="sudo"
-alias sudu="sudo"
-alias sydo="sudo"
-alias sudk="sudo"
-alias sudp='sudo'
-alias "sud["='sudo'
-alias suno="sudo"
-
-### [=]==================================[=]
-### [~]............ gpu
+### [~]............ GPU
 ### [=]==================================[=]
 ## View display/gpu events in xorg log file ##
 alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | grep -vi logitech | less'
@@ -322,13 +351,14 @@ alias fe='pcmanfm &'
 alias lynx="lynx -session=$LYNX_SESSION"
 
 ### [=]==================================[=]
-### [~]............ git
+### [~]............ GIT
 ### [=]==================================[=]
 if [[ "${commands[gh]}" ]] {
   alias ghs-shell='printf "\e[0;1;3;4;38;5;33mSearch GitHub For Shell\e[0m\n" ; gh s -l shell'
   alias ghs-view='printf "\e[0;1;3;4;38;5;33mSearch GitHub, Press <Enter> to view README\e[0m\n" ; gh repo view $(gh s) | g -'
   alias ghc='git clone --no-checkout --verbose'
 }
+
 if [[ "${commands[git]}" ]] {
   alias git-clone-nocheckout="git clone --no-checkout --verbose"
   alias git-commit-custom='git commit --gpg-sign="3AED4B68E6FD33BC" --message='
@@ -395,10 +425,11 @@ typeset -A nmapaliases
     alias "${nmapaliasname}"="${nmapaliasvalue}"
   done; unset nmapaliasname nmapaliasvalue
 
-# typeset -A nmapaliasesdesc
-  # nmapaliasesdesc[nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"]="fast scan of the top 300 ports with fastest speed"
-  # nmapaliasesdesc[nmapaliases[nmap-ping-scan]="nmap -n -sP"]="Nmap ping scan"
-  alias nmapAutomatorAll=" sudo nmapAutomator.sh --type All --output ${NMAPSCAN:-${PWD}} --host"
+  #typeset -A nmapaliasesdesc
+  #nmapaliasesdesc[nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"]="fast scan of the top 300 ports with fastest speed"
+  #nmapaliasesdesc[nmapaliases[nmap-ping-scan]="nmap -n -sP"]="Nmap ping scan"
+
+  [[ "${commands[nmapAutomator.sh]}" || "${commands[nmapAutomator]}" ]] && alias nmapAutomatorAll="sudo nmapAutomator.sh --type All --output ${NMAPSCAN:-${PWD}} --host"
 fi
 
 ### [=]==================================[=]
@@ -426,6 +457,21 @@ if [[ "${commands[docker]}" ]] {
   alias docker-run-interactive="docker run --interactive --tty"
   alias docker-lazy='lazydocker'
   alias dockers="docker search --no-trunc"
+
+  ##=========================##
+  ## aws-cli docker image    ##
+  ##                         ##
+  ##  Run aws-cli in docker  ##
+  ##                         ##===============================================================##
+  ###[Share host files, credentials, environment variables, and configuration]##              ##
+  ##                                                                                          ##
+  ##    $ docker run --rm -it -v ~/.aws:/root/.aws amazon/aws-cli command                     ##
+  ##                                                                                          ##
+  ##    $ docker run --rm -it -v ~/.aws:/root/.aws -e ENVVAR_NAME amazon/aws-cli s3 ls        ##
+  ##                                                                                          ##
+  ###[More Info](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-docker.html): ##
+  ##==========================================================================================##
+  alias aws-docker="docker run --rm -it amazon/aws-cli"
 }
 
 
@@ -436,6 +482,9 @@ alias ram-usage="free -th"
 alias disk-usage="dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on 2>/dev/null"
 alias disk-usage-2="dfc 2>/dev/null"
 
+### [=]==================================[=]
+### [~]............ WATCH
+### [=]==================================[=]
 export WATCH_INTERVAL WATCH_FAST_INTERVAL; WATCH_INTERVAL=1; WATCH_FAST_INTERVAL=0.1
 alias watch-disk-usage="watch -c --interval 0.5 --no-title --differences dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on"
 alias watch-disk-usage-2="watch -c --interval 0.5 --no-title --differences dfc -c always"
@@ -459,7 +508,7 @@ alias vncviewer-custom='vncviewer --DotWhenNoCursor --UpdateScreenshot --Passwor
 alias vnc-server-start="x11vnc -nevershared -forever -usepw &"
 
 ### [=]==================================[=]
-### [~]............ man
+### [~]............ MAN
 ### [=]==================================[=]
 alias m="man"
 alias zshall="man zshall"
@@ -469,7 +518,7 @@ alias man-search='man --all --wildcard'
 alias man-search-name='man --all --names-only --regex'
 
 ### [=]==================================[=]
-### [~]............ Crypto
+### [~]............ CRYPTO
 ### [=]==================================[=]
 ### Monero
 alias monero-cli="monero-wallet-cli"
@@ -477,10 +526,10 @@ alias monero-gui="monero-wallet-gui"
 alias psfzf="ps -ef | fzf --bind 'ctrl-r:reload(ps -ef)' --header 'Press (CTRL-R) to reload' --header-lines=1"
 
 ### [=]==================================[=]
-### [~]........... FireJail
+### [~]........... FIREJAIL
 ### [=]==================================[=]
 ## Firejail
-if [[ "${commands[docker]}" ]] {
+if [[ "${commands[firejail]}" ]] {
   alias fjfx='firejail firefox --private'
 }
 
@@ -494,6 +543,9 @@ alias external-ip='curl ifconfig.me ; printf "\n"'
 alias duhs='du -h --summarize'
 
 
+### [=]==================================[=]
+### [~]............ CHMOD
+### [=]==================================[=]
 alias chmod-exec-1="find $1 -maxdepth 1 -type $2 -exec chmod --verbose $3 {} \;"
 alias chmod-exec-x="find $1 -maxdepth $2 -type $3 -exec chmod --verbose $4 {} \;"
 alias chmod-exec="find $1 -type $2 -exec chmod --verbose $3 {} \;"
@@ -506,6 +558,9 @@ alias chmod-files-644-1="find $1 -maxdepth 1 -type f -exec chmod --verbose 644 {
 
 alias lastlogin="loginctl"
 
+### [=]==================================[=]
+### [~]............ ETCKEEPER
+### [=]==================================[=]
 if [[ "${commands[etckeeper]}" ]] {
   alias etckeeper="sudo etckeeper"
   alias etckeeper-diff="sudo etckeeper vcs status -u"
@@ -540,6 +595,9 @@ alias kernel-command-line-parameters="cat /proc/cmdline"
 alias count='find . -type f | wc -l'
 alias wget="wget --hsts-file "${WGETHSTS:-${HOME}/.cache/.wget-hsts}
 
+### [=]==================================[=]
+### [~]............ POWERSHELL
+### [=]==================================[=]
 [[ -n "${commands[pwsh]}" ]] && alias powershell="pwsh" && alias cdp="cd ${PDOTDIR} || printf 'CANNOT MOVE TO %s' ${PDOTDIR}"
 
 
