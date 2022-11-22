@@ -35,6 +35,7 @@ if [[ -n "${DISPLAY}" ]] {
 }
 
 
+_enable_ssh_gpg_agent=${_enable_ssh_gpg_agent:-1}
 ## Set '_enable_ssh_gpg_agent' to 1 to enable ssh gpg agent
 _enable_ssh_gpg_agent=${_enable_ssh_gpg_agent:-0}
 if (( _enable_ssh_gpg_agent )) {

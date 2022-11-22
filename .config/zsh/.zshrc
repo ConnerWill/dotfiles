@@ -60,6 +60,15 @@
 # \e[1A   ## Move curser up 1 line
 # \e[5A   ## Move curser up 5 lines
 # \r      ## Move cursor to beginning of line
+# \e[22;0t             ## Save title of terminal
+# \e]0;TITLE TEXT\e\\  ## Set title of terminal
+# \e[23;0t' # Restore title of terminal
+
+
+
+
+
+
 
 ###}}}
 

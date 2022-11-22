@@ -389,83 +389,38 @@ alias l="ls -1 -A"
 alias sls="ls"
 #{{{ LSD
 if command -v lsd >/dev/null 2>&1; then
-alias lsd="lsd --color always --icon always"
-alias ls="lsd --color always --icon always"
-alias ks='ls'
-alias la='ls'
-alias s='lsd'
-alias sl='lsd   --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
-alias 'cd ls'='lsd'
-alias ll='lsd   --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
-alias lla='lsd --all --long --total-size --sizesort --reverse'
-alias lst="lsd    --oneline --long --almost-all --recursive --timesort --human-readable $1 2>/dev/null"                   # List All On One Line Sort By Modification Time Long List Reversed
-
-alias lsl='lsd    --oneline --long --almost-all --sizesort --human-readable --reverse'                                    # List All On One Line Sort By Size Long List Reversed
-alias lss='lsd    --oneline --long --almost-all --sizesort --human-readable --reverse'                                    # List All On One Line Sort By Size Long List Reversed
-alias lls="printf \"\n\n\t🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m🍄🦄🐉\n\n\"; lsd --long --sort=size --color=always --total-size --almost-all --reverse --permission octal"
-alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
-alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed
-alias l='draw_entire_line 2 "\e[0;1;38;5;199m"; lsd  --oneline --almost-all; draw_entire_line 5 "\e[0;1;38;5;199m"' # List All On One Line
-alias lllll=" printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'; printf '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'; lsd --long -A --sort=size --reverse --total-size; printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'printf '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n"
-
-# alias l='printf "\e[0;1;38;5;199m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\e[0m\n"; lsd  --oneline --almost-all; printf "\e[0;1;38;5;199m▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\e[0m\n"' # List All On One Line
-# alias l='printf "\e[0;1;38;5;199m▄▀ "▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\e[0m\n"; lsd  --oneline --almost-all; printf "\e[0;1;38;5;199m▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂\e[0m\n"' # List All On One Line
+  alias lsd="lsd --color always --icon always"
+  alias ls="lsd --color always --icon always"
+  alias 'cd ls'='lsd'
+  alias ks='ls'
+  alias la='ls'
+  alias s='lsd'
+  alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
+  alias lsl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
+  alias ll='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
+  alias lla='lsd --all --long --total-size --sizesort --reverse'
+  alias lstree="lsd --almost-all --tree --total-size --human-readable ${1} 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias lst="lsd --oneline --long --almost-all --timesort --human-readable ${1} 2>/dev/null"                   # List All On One Long Line Sort By Modification Time
+  alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y-%m-%d_%H:%M:%S:%N';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y-%m-%d_%H:%M:%S' --almost-all --dereference --reverse --permission octal 2>/dev/null"
+  alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
+  alias l='draw_entire_line 2 "\e[0;1;38;5;0m"; lsd  --oneline --no-symlink --almost-all; draw_entire_line 5 "\e[0;1;38;5;0m"' # List All On One Line
+  alias lllll='draw_entire_line 5 "\e[0;1;38;5;82m"; draw_entire_line 5 "\e[0;1;38;5;198m; lsd --long -A --sort=size --reverse --total-size; draw_entire_line 5 "\e[0;1;38;5;198m; draw_entire_line 5 "\e[0;1;38;5;198m'
 fi
 #}}} LSD
+
 #{{{ EXA
 # _EXA=$(command -v exa | awk '{print $2}')
 # if [[ -f "$_EXA" ]]; then
 if command -v exa >/dev/null 2>&1; then
-  alias ls-plain='/usr/bin/ls --color --oneline'
-  alias llsa='exa --color-scale --long --octal-permissions --all --color always --long --icons --group-directories-first --sort=size --no-permissions --no-time --no-user --tree --level 3'
-  alias l1='exa --color always --icons --oneline --all --header' # List All On One Line
-  alias lll='exa --color always --color-scale --long --octal-permissions --no-time --all --header' # List All On One Line Long List
-  alias lllll=" echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; dfc -c always -d -T -s -q name ; echo -e '\n\e[0;1;38;5;82m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n' ; lsd --long -A --sort=size --reverse --total-size ; echo -e '\n\e[0;1;38;5;198m═══════════════════════════════════════════════════════════════════════════════════\e[0m\n'"
-  alias lltree='echo -e "Gathering tree ...\n\nThis may take a while     " ; echo "$(lsd --color always --icon always --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)" | bat --color=never --plain'
-  alias ls-l-etc="exa --sort=type --colour always --long --all $ /etc"
-  alias ls-l-etc="exa --sort=type --colour always --long --all /etc"
-  alias ls-l-etcback="exa --sort=type --colour always --long --all $ $etcbackup"
-  alias ls-l-etcback="exa --sort=type --colour always --long --all $etcbackup"
-  alias ls-l="exa --sort=type --colour always --long --all $"
-  alias ls-l="exa --sort=type --colour always --long --all"
-  alias ls-ll-etc="exa --sort=type --colour always --tree --recurse --long --all /etc"
-  alias ls-ll-etcback="exa --sort=type --colour always --tree --recurse --long --all $etcbackup"
-  alias ls-ll2-etc="exa --sort=type --colour always --tree --level 2 --long --all /etc"
-  alias ls-ll2-etcback="exa --sort=type --colour always --tree --level 2 --long --all $etcbackup"
-  alias ls-ll2="exa --sort=type --colour always --tree --level 2 --long --all"
-  alias ls-ll4-etc="exa --sort=type --colour always --tree --level 4 --long --all /etc"
-  alias ls-ll4-etcback="exa --sort=type --colour always --tree --level 4 --long --all $etcbackup"
-  alias ls-ll4="exa --sort=type --colour always --tree --level 4 --long --all"
-  alias ls-ll="exa --sort=type --colour always --tree --recurse --long --all"
-  alias ls-lnc-etc="exa --sort=type --colour never --long --all /etc"
-  alias ls-lnc-etcback="exa --sort=type --colour never --long --all $etcbackup"
-  alias ls-lnc="exa --sort=type --colour never --long --all"
-  alias ls-plain='/usr/bin/ls --color --oneline'
-  alias ls-l-etc="exa --sort=type --colour always --long --all $ /etc"
-  alias ls-l-etc="exa --sort=type --colour always --long --all /etc"
-  alias ls-l-etcback="exa --sort=type --colour always --long --all $ $etcbackup"
-  alias ls-l-etcback="exa --sort=type --colour always --long --all $etcbackup"
-  alias ls-l="exa --sort=type --colour always --long --all $"
-  alias ls-l="exa --sort=type --colour always --long --all"
-  alias ls-ll-etc="exa --sort=type --colour always --tree --recurse --long --all /etc"
-  alias ls-ll-etcback="exa --sort=type --colour always --tree --recurse --long --all $etcbackup"
-  alias ls-ll2-etc="exa --sort=type --colour always --tree --level 2 --long --all /etc"
-  alias ls-ll2-etcback="exa --sort=type --colour always --tree --level 2 --long --all $etcbackup"
-  alias ls-ll2="exa --sort=type --colour always --tree --level 2 --long --all"
-  alias ls-ll4-etc="exa --sort=type --colour always --tree --level 4 --long --all /etc"
-  alias ls-ll4-etcback="exa --sort=type --colour always --tree --level 4 --long --all $etcbackup"
-  alias ls-ll4="exa --sort=type --colour always --tree --level 4 --long --all"
-  alias ls-ll="exa --sort=type --colour always --tree --recurse --long --all"
-  alias ls-lnc-etc="exa --sort=type --colour never --long --all /etc"
-  alias ls-lnc-etcback="exa --sort=type --colour never --long --all $etcbackup"
-  alias ls-lnc="exa --sort=type --colour never --long --all"
+  alias exa="exa --color always --color-scale --icons --octal-permissions"
+  alias l1='exa  --oneline --all --header'                        # List All On One Line
+  alias lll='exa --long --all --header --no-time --no-user --git --sort=type --colour-scale'
+  alias llllll='draw_entire_line 2 "\e[0;1;38;5;93m"; lsd --long -A sort=size --reverse --total-size; draw_entire_line 2 "\e[0;1;38;5;93m"'
+  alias llsa='exa --color-scale --long --all --long --icons --group-directories-first --sort=size --no-permissions --no-time --no-user --tree --level 3'
+  alias ls-l="exa --sort=type --long --all"
 fi
 #}}}EXA
 ##}}}
-
-
-
-
 
 
 if command -v shellcheck >/dev/null 2>&1; then

@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+#### Tests whether script was invoked as source
+# https://fabianlee.org/2022/05/07/bash-test-whether-script-is-invoked-directly-or-sourced
+# https://stackoverflow.com/questions/2683279/how-to-detect-if-a-script-is-being-sourced
+(return 0 2>/dev/null) && sourced=1 || sourced=0
+if [ $sourced -eq 0 ]; then
+  printf "\e[0;1;38;5;196mERROR! \e[0;1;38;5;190mThis script is meant to be sourced.\e[0m  \e[0;38;5;15mTry 'source %s'\e[0m\n" "${BASH_SOURCE}"
+  exit 1
+fi
+
+# not as robust as example above
+[[ $0 != "${BASH_SOURCE[*]}" ]] && sourced=1 || sourced=0
+if [ $sourced -eq 1 ]; then
+  printf "\e[0;1;38;5;196mERROR! \e[0;1;38;5;190mThis script is meant to be run directly, not sourced!\e[0m  \e[0;38;5;15mTry 'chmod 700 %s && %s'\e[0m\n" "${0}" "${0}"
+  return 1
+fi
+
+export FOO=bar
+echo "'FOO' env var exported"

@@ -1,0 +1,84 @@
+# shellcheck disable=2148
+
+function zshlib_printline(){
+
+zshlib_printline_help='
+=============================================================================
+                               USAGE
+
+                $ draw_entire_line 5 "\e[0;38;5;198m"
+                     ^             ^          ^
+                function        Linestyle  Color
+==============================================================================
+                             EXAMPLES
+
+
+  [Example 1: Replace current prompt with a blue bar]
+
+      $ draw_entire_line 6 "^[[1A^[[2K^[[1A^[[2K\e[0;38;5;33m"
+
+
+  [Example 2: Show color changing rainbow line]
+
+       for i in $(seq 1 255); do
+         draw_entire_line 4 "^[[1A^[[2K\r\e[0;38;5;${i}m"
+         sleep 0.1
+       done
+
+
+  [Example 2: Show rainbow color changing line by looping over all 256 colors]
+
+       for i in $(seq 1 255); do
+         draw_entire_line 4 "\n^[[1A^[[2K\e[0;38;5;${i}m"
+         sleep 0.1
+       done
+
+
+  [Example 2: Color changing line looping over 16 colors and hiding the cursor]
+
+       for i in $(seq 0 16); do
+         draw_entire_line 6 "\e[?25l\n^[[1A^[[2K\e[0;38;5;${i}m"
+         sleep 0.05
+       done; printf "\e[?25h" \#restore cursor
+
+
+===============================================================================
+                         ANSI ESCAPE CODES
+
+                      Clear current line: \e[2K
+                      Move up one line:   \e[1A
+                      Move up one page:   \e[1S
+                      Hide cursor:        \e[?25l
+                      Show cursor:        \e[?25h
+                      Set FG red:         \e[38;5;196m
+                      Set BG red:         \e[48;5;196m
+                      Reset FG/BG:        \e[0m
+
+===============================================================================
+'
+  #######################################
+  #######################################
+
+  ## Index of which line type to use (1-10)
+  LINECHAR="$1"                     ## Line Char from input
+  colorline="${2}"                  ## Color of the line from input
+  [[ "${LINECHAR}" == "-h"  || "${LINECHAR}" == "--help"  ]] && printf "%s" "${zshlib_printline_help}"
+  [[ "${colorline}" == "-h" || "${colorline}" == "--help" ]] && printf "%s" "${zshlib_printline_help}"
+  # [[ "${LINECHAR}" == "-h"  || "${LINECHAR}" == "--help"  ]] && zshlib_printline 5 "\e[0;38;5;41m"  && printf "%s" "${zshlib_printline_help}"
+  # [[ "${colorline}" == "-h" || "${colorline}" == "--help" ]] && zshlib_printline 5 "\e[0;38;5;198m" && printf "%s" "${zshlib_printline_help}"
+
+  solidline="${(mr:$COLUMNS::─:)}"  ## Default line if no input
+
+  [[ "${LINECHAR}" -eq 1  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 2  ]] && solidline="${(mr:$COLUMNS::═:)}"
+  [[ "${LINECHAR}" -eq 3  ]] && solidline="${(mr:$COLUMNS::═:)}"
+  [[ "${LINECHAR}" -eq 4  ]] && solidline="${(mr:$COLUMNS::─:)}" #TODO: Need to add more line styles :(
+  [[ "${LINECHAR}" -eq 5  ]] && solidline="${(mr:$COLUMNS::▂:)}"
+  [[ "${LINECHAR}" -eq 6  ]] && solidline="${(mr:$COLUMNS::▄:)}"
+  [[ "${LINECHAR}" -eq 7  ]] && solidline="${(mr:$COLUMNS::▀:)}"
+  [[ "${LINECHAR}" -eq 8  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 9  ]] && solidline="${(mr:$COLUMNS::─:)}"
+  [[ "${LINECHAR}" -eq 10 ]] && solidline="${(mr:$COLUMNS::#:)}"
+
+  printf "${colorline}${solidline}\e[0m"
+}
