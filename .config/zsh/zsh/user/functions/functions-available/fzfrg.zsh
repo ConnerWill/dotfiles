@@ -16,7 +16,7 @@ function fzfrg() {
 	#    	     Color Config
 	# ===============================
           COLOR_BG='#0E1224'        COLOR_BGP='#181D31'
-          COLOR_FG='#323A5C'        COLOR_FGP='#00FFFF'
+          COLOR_FG='#BBBBBB'        COLOR_FGP='#00FFFF'
           # COLOR_FG='#323A5C'        COLOR_FGP='#00FFFF'
   COLOR_PREVIEW_FG='#C0CAF5' COLOR_PREVIEW_BG='#202646'
       COLOR_BORDER='#8800EE'       COLOR_INFO='#00FFFF'
@@ -53,7 +53,10 @@ function fzfrg() {
 #>/dev/null 2>&1
 
 INITIAL_QUERY="${*}"
-	RG_PREFIX="rg --hidden --line-number --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:white' --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --no-heading --color=always --with-filename --iglob '*.cache*'  --iglob '*cache*'  --iglob '.cache'  --iglob '*.bak'  --iglob '*history*' --iglob '*history' --iglob '*compdump*' --iglob '*compcache*' --regexp"   #  --engine=pcre2
+	# RG_PREFIX="rg --hidden --line-number --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:gray' --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --no-heading --color=always --with-filename --iglob '*.cache*' --iglob '*cache*' --iglob '.cache' --iglob '*.bak' --iglob '*history*' --iglob '*history' --iglob '*compdump*' --iglob '*compcache*' --engine=auto --trim --smart-case"
+	RG_PREFIX="rg --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:white' --no-line-number --no-heading --color=always --smart-case  --with-filename"
+#
+	#  --engine=pcre2
 	#RG_PREFIX="rg --column --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --line-number --no-heading --color=always --smart-case "
 	FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'"
 	# ===============================
