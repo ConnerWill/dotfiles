@@ -1,0 +1,1 @@
+../functions-available/xdg-open-clip.zsh
