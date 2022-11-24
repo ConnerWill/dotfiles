@@ -215,8 +215,8 @@ if [[ -n "${commands[lynx]}" ]] ; then
 	LYNX_LSS="${LYNXDOTDIR}/lynx.lss"                  # This variable, if set, specifies the location of the default Lynx character style sheet file.  [Currently only meaningful if Lynx was built using curses color style support.]
 	LYNX_SESSION="${XDG_CACHE_HOME}/lynx/lynx_session"          # file name where lynx will store user sessions. This setting is used only when AUTO_SESSION is true. Note: the default setting will store/resume each session in a different folder under same file name (if that is allowed by operating system) when lynx is invoked from different directories.
 	LYNX_CFG_PATH="${LYNXDOTDIR}"                     # If  set, this variable overrides the compiled-in search-list of directories used to find the configuration files, e.g., lynx.cfg and lynx.lss.  The list is delimited with ":" (or #   ;" for Windows) like the PATH environment variable.
-	LYNX_HELPFILE="${LYNX_CONFIG_DIR_GLOBAL}/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
-	WWW_HOME="${LYNX_CONFIG_DIR_GLOBAL}/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
+	# LYNX_HELPFILE="${LYNX_CONFIG_DIR_GLOBAL}/lynx_help_main.html" # If set, this variable overrides the compiled-in URL and configuration file URL for the Lynx help file.
+	# WWW_HOME="${LYNX_CONFIG_DIR_GLOBAL}/lynx-homepage.html"       # This variable, if set, will override the default startup URL specified in any of the Lynx configuration files.
 	[[ ! -d "${LYNX_SESSION:h}" ]] && mkdir -p "${LYNX_SESSION:h}"
 	export LYNXDOTDIR LYNX_CFG LYNX_LSS LYNX_SESSION LYNX_CFG_PATH LYNX_HELPFILE WWW_HOME
 fi

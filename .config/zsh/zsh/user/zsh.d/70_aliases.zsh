@@ -124,35 +124,6 @@ alias ks="ls"     ; alias sls="ls"
 alias lsls='command ls'
 alias octal="stat --dereference --printf='\e[0;38;5;190m%a \e[0;38;5;87m%A \e[0;38;5;196m%T \e[0;1;38;5;46m%n\e[0m\n'"
 
-<<<<<<< HEAD
-### exa
-if [[ "${commands[exa]}" ]]; then
-  alias exa='exa --color always --colour-scale --icons --numeric --git --time-style=long-iso --long'
-  alias l1='exa  --oneline --all --header'
-  alias ls-l="exa --long --all"
-  alias ls-ll="exa --sort=type --tree --recurse --long --all"
-fi
-
-if [[ "${commands[lsd]}" ]]; then
-  alias lsd="lsd --color always --icon always"
-  alias ll='lsd --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
-  alias ls='lsd'
-  alias LS='lsd'
-  alias la='lsd --almost-all'
-  alias lla='lsd --all --long --total-size --sizesort --reverse 2>/dev/null'
-  alias lls="printf '\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' --permission=octal 2>/dev/null"
-  alias llls="printf '\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size  --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' 2>/dev/null"
-  alias lsl='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lss='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lst="ll --timesort --human-readable " # List All On One Line Recurse Sort By Modification Time Long List Reversed
-  alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
-  alias ks='lsd'
-  alias s='lsd'
-  alias 'cd ls'='lsd --almost-all --long'
-fi
-=======
->>>>>>> cdfe84cd1a2117459fd18f4e0693215dc1283b28
-
 ## lsof
 alias list-open-files='lsof'
 alias list-open-files-repeat='lsof -r "m[~]========================[ Time: %T ]========================[~]"'
@@ -356,7 +327,7 @@ alias fe='pcmanfm &'
 ### [=]==================================[=]
 ### [~]............ Lynx
 ### [=]==================================[=]
-alias lynx="lynx -session=$LYNX_SESSION"
+# alias lynx="lynx -session=$LYNX_SESSION"
 
 ### [=]==================================[=]
 ### [~]............ GIT

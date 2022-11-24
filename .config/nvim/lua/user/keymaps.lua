@@ -89,7 +89,11 @@ keymap("n", "<A-m>", ":Telescope man_pages<CR>", opts)
 keymap("n", "<Space>", "j", opts)
 keymap("n", "<C-Space>", "k", opts)
 
+-- jump to the tag under the cursor
+--keymap("n", "<C-]>", "tag", opts)
 
+-- jump to the previous tag in tagstack
+keymap("n", "<C-[>", "tag-stack", opts)
 
 --}}}
 
