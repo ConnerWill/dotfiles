@@ -1,10 +1,10 @@
 
 colortest() {
-    [[ $COLUMNS -lt 80 ]] && printf "\n\e[0;38;5;190mCOLUMNS is less that 80. The output of this command may not look right.\n" && sleep 2
+    [[ $COLUMNS -lt 80 ]] && printf "\n\e[0;1;4;38;5;190mCOLUMNS is less that 80. The output of this command may not look right.\n" && sleep 2
     local T='gYw'   # The test text
 
-    local fg
-    local bg
+    local fg bg
+    printf "\e[0;1;4;38;5;15mColor Matrix\e[0m:\n"
     printf "%12s" ""
     for fg in {40..47}; do
 	printf "%7sm" ${fg}
@@ -19,7 +19,7 @@ colortest() {
     done
     printf "\n"
 
-    printf "Color cube: 6x6x6:\n"
+    printf "\e[0;1;4;38;5;15mColor cube: 6x6x6\e[0m:\n"
     local red
     local green
     local blue
@@ -34,14 +34,14 @@ colortest() {
         printf "\n"
     done
 
-    printf "Grayscale ramp:\n"
+    printf "\e[0;1;4;38;5;15mGrayscale ramp\e[0m:\n"
     for bg in {232..255}; do
       printf "\e[48;5;%dm  " bg
     done
     printf "\e[0m\n"
 
     # See: https://gist.github.com/XVilka/8346728
-    printf "True colors:\n"
+    printf "\e[0;1;4;38;5;15mTrue colors\e[0m:\n"
     local r g b colnum
     for colnum in {0..76}; do
         r=$((255 - colnum*255/76))

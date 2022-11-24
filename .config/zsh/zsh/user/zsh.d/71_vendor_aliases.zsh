@@ -416,7 +416,8 @@ if [[ "${commands[lsd]}" ]]; then
   alias s='lsd'
   alias LS='lsd'
   alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
-  alias lsl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
+  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
+  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
   alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
   alias lla='lsd --all --long --total-size --sizesort --reverse'
   alias lstree="lsd --almost-all --tree --total-size --human-readable ${1} 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed

@@ -286,6 +286,7 @@ else
     bindkey -M vicmd "^[3;5~" delete-char
 fi
 
+
 # [Ctrl-Delete] - delete whole forward-word
 bindkey -M emacs '^[[3;5~' kill-word
 bindkey -M viins '^[[3;5~' kill-word
@@ -375,21 +376,27 @@ function _up-dir {
   else
     BUFFER=$(echo $BUFFER | perl -ne $PROG)
   fi
-}; zle -N _up-dir; bindkey "^h" _up-dir
+}
+
+zle -N _up-dir
+bindkey "^h" _up-dir
+
+# function dotf-widget(){ d otf status; }
+function vicmdZZ(){ zle kill-region -w; reset-prompt; }
+function vi-exit(){ exit; }
+zle -N vi-exit; zle -N vicmdZZ
+
+bindkey -M vicmd 	"ZZ" vicmdZZ
+bindkey -M vicmd "ZQ" vi-exit
+
+## <BS> in vi mode does not erase
+bindkey -M vicmd  "^?" vi-backward-char
 
 # Remove bindings to ctrl+r
 bindkey -r '^r'
 
-
-function vicmdZZ() {
-		zle kill-region -w
-		#zle clear-screen
-		zle reset-prompt
-}; zle -N vicmdZZ
-function vicmdZQ(){ exit; }; zle -N vicmdZQ
-bindkey -M vicmd 	"ZZ" vicmdZZ
-bindkey -M vicmd 	"ZQ" vicmdZQ
-bindkey -M vicmd  "^?" vi-backward-char
+# <M-g> dotf status
+bindkey -M viins -s '^[g' 'dotf status\n'
 
 # Fuzzy Find suggestions fix
 # start typing + [Up-Arrow] - fuzzy find history forward
