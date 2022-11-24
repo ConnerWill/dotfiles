@@ -58,21 +58,26 @@ fi
 ### [=]==================================[=]
 ### [~]............ CD
 ### [=]==================================[=]
-alias ....="cd ../.."   ; alias ../="cd /"
-alias ..='cd ..'        ; alias ...='cd ../..'
-alias ....='cd ../../..'; alias .....='cd ../../../..'
-alias cd..='cd ..'      ; alias cd-1="cd $OLDPWD"
-alias 'c d'='cd'        ; alias 'ls cd'='cd'
-alias ccd='cd'          ; alias scd="cd"
-alias cdls='cd .. && ls'; alias cdl='cd .. && ls'
+alias '../'="cd /"
+alias '..'='cd ..'
+alias '...'='cd ../..'
+alias '....'="cd ../.."
+alias '....'='cd ../../..'
+alias '.....'='cd ../..'
+alias '......'='cd ../../..'
+alias 'cd..'='cd ..'
+alias 'c d'='cd'
+alias 'ls cd'='cd'
+alias ccd='cd'
+alias scd="cd"
+alias cdls='cd .. && ls'
+alias cdl='cd .. && ls'
 alias ..etc="cd /etc"
-alias home='cd $HOME ; ls ; pwd'
-alias cdhome='cd $HOME ; ls ; pwd'
-alias cdhometemp='cd $HOME/Temporary ; ls ; pwd'
-alias cdold="cd $OLDPWD"
-alias cdtemp="$TEMPDIR"
-alias cdt="$TEMPDIR"
-alias cd-temp="$TEMPDIR"
+alias 'cd-1'="cd ${OLDPWD}"
+alias cdold="cd ${OLDPWD}"
+alias cdtemp="${TEMPDIR}"
+alias cdt="cd ${TEMPDIR}"
+alias cd-temp="${TEMPDIR}"
 
 
 ### [=]==================================[=]
@@ -138,7 +143,7 @@ if [[ "${commands[lsd]}" ]]; then
   alias llls="printf '\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size  --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' 2>/dev/null"
   alias lsl='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
   alias lss='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-  alias lst="ll --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
+  alias lst="ll --timesort --human-readable " # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias ks='lsd'
   alias s='lsd'
