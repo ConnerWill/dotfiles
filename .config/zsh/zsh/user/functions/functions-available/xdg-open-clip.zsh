@@ -4,7 +4,7 @@ function xdg-open-clip(){
   [[ "${commands[termux-clipboard-get]}" ]] && clipboardgetter="termux-clipboard-get"
   [[ "${commands[xset]}" ]] && clipboardgetter="xset -p"
 
-  clipb="$(${clipboardgetter})
+  clipb="$(${clipboardgetter})"
 
   "${urlopener}" "${clipb}"
 }
