@@ -416,7 +416,6 @@ if [[ "${commands[lsd]}" ]]; then
   islsd22(){ [[ $lsdversion == <0->.<22->.* ]]; }
   if islsd22; then
     ## If LSD_UNSUPPORTED is unset, add these aliases
-    echo "SUPPORTED"
     alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
     alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
     alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
@@ -424,11 +423,7 @@ if [[ "${commands[lsd]}" ]]; then
     alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
   else
     printf "\e[0;3;38;5;8mSome options from the 'lsd' command are not availiable in your current version.\n\nPlease upgrade to at least v0.22.0\n\nInstall with cargo:\n\n    cargo install lsd\n\nInstall binary on Debian based systems:\n\n    curl -LO 'https:/github.com/Peltoche/lsd/releases/download/0.23.1/lsd_0.23.1_amd64.deb' \\ \n        && [sudo] dpkg -i lsd_0.23.1_amd64.deb\n"
-
-
   fi
-
-
 fi
 
 #}}} LSD
