@@ -20,7 +20,7 @@ typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2double-hyphen-option]:=fg=51}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2back-quoted-argument]:=fg=45}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2single-quoted-argument]:=fg=214}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2double-quoted-argument]:=fg=226}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2double-quoted-argument]:=fg=226,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2dollar-quoted-argument]:=fg=11}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2back-or-dollar-double-quoted-argument]:=fg=63}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2back-dollar-quoted-argument]:=fg=105}
@@ -58,6 +58,6 @@ typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2single-sq-bracket]:=fg=green}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2double-sq-bracket]:=fg=green}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2double-paren]:=fg=154}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2optarg-string]:=fg=226}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2optarg-string]:=fg=226,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2optarg-number]:=fg=182}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2recursive-base]:=none}
