@@ -60,7 +60,6 @@
 ########################
 ####   DEBUGGING    ####
 ############################################################
-###{{{ DEBUGGING
 ###: To run a diagnostics dump, run command:# For boolean options:
 ##:      zsh_diagnostic_dump
 ##:
@@ -95,13 +94,13 @@ if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
   setopt xtrace
 fi
 # #  Profiling
-# #ZSH_PROFILE_RC=1
-# if [[ -n "$ZSH_PROFILE_RC" ]]; then
-#   which zmodload >&/dev/null && zmodload zsh/zprof
-#   PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
-#   exec 3>&2 2>${ZSH_DEBUG_LOG_DIR:-/tmp}/zshstart.$$.log
-#   setopt xtrace prompt_subst
-# fi
+# ZSH_PROFILE_RC=1
+if [[ -n "$ZSH_PROFILE_RC" ]]; then
+  which zmodload >&/dev/null && zmodload zsh/zprof
+  PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
+  exec 3>&2 2>${ZSH_DEBUG_LOG_DIR:-/tmp}/zshstart.$$.log
+  setopt xtrace prompt_subst
+fi
 
 ###}}} ::::::::::::::::::: END DEBUGGING :::::::::::::::::::::: ###}}}
 
