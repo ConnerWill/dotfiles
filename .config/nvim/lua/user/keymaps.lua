@@ -85,6 +85,12 @@ keymap("n", "<A-h>", ":Telescope help_tags<CR>", opts)
 -- Telescope man search (Alt+m)
 keymap("n", "<A-m>", ":Telescope man_pages<CR>", opts)
 
+-- Space and Ctrl+Space move up and down lines.
+keymap("n", "<Space>", "j", opts)
+keymap("n", "<C-Space>", "k", opts)
+
+
+
 --}}}
 
 -- Insert --{{{
