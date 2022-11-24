@@ -1,16 +1,16 @@
 zstyle :plugin:fast-syntax-highlighting theme "dampsock2"
 typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2default]:=none}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2unknown-token]:=fg=196,bold}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2unknown-token]:=fg=196,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2reserved-word]:=fg=154}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2alias]:=fg=48}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2suffix-alias]:=fg=85}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2builtin]:=fg=46}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2function]:=fg=82,bold}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2command]:=fg=118}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2precommand]:=fg=10}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2builtin]:=fg=46,bold}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2function]:=fg=82}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2command]:=fg=118,bold}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2precommand]:=fg=190,bold,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2commandseparator]:=fg=123}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2hashed-command]:=fg=82}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2hashed-command]:=fg=82,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2path]:=fg=135}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2path_pathseparator]:=fg=129}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2globbing]:=fg=27,bold}
@@ -26,7 +26,7 @@ typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2back-dollar-quoted-argument]:=fg=105}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2assign]:=fg=220}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2redirection]:=fg=81}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2comment]:=fg=8,bold}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2comment]:=fg=8,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2variable]:=fg=190,bold,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2mathvar]:=fg=195,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2mathnum]:=fg=182}
@@ -38,11 +38,11 @@ typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2for-loop-separator]:=fg=220,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2exec-descriptor]:=fg=220,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2here-string-tri]:=fg=201}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2here-string-text]:=fg=18}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2here-string-var]:=fg=87,bg=18}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2here-string-text]:=fg=18,underline}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2here-string-var]:=fg=87,bg=18,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2secondary]:=}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2case-input]:=fg=36}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2case-parentheses]:=fg=116}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2case-parentheses]:=fg=116,bold,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2case-condition]:=bg=69}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2correct-subtle]:=fg=12}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2incorrect-subtle]:=fg=9}
@@ -53,7 +53,7 @@ typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2bracket-level-1]:=fg=87,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2bracket-level-2]:=fg=51,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2bracket-level-3]:=fg=81,bold,underline}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2global-alias]:=fg=50}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2global-alias]:=fg=50,bold,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2subcommand]:=fg=47,underline}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2single-sq-bracket]:=fg=green}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2double-sq-bracket]:=fg=green}
