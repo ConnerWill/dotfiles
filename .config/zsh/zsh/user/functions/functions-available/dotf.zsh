@@ -74,71 +74,87 @@ dotf(){
   #
   ###}}} commented out
 
-local usage_full=(
-    "${colors[Magenta]}================================================================================${colors[reset]}\n"
-    " ${colors[Blue]}NAME${colors[reset]}                                             \n"
-    "                                                                                \n"
-    "     ${colors[Cyan]}$0${colors[reset]}                                        \n"
-    "                                                                                \n"
-    " ${colors[Blue]}DESCRIPTION${colors[reset]}                                      \n"
-    "                                                                                \n"
-    " 		Shell/Bash/Zsh Function for managing .dotfiles                             \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}USAGE${colors[reset]}                                            \n"
-    "                                                                                \n"
-    "     ${colors[Cyan]}$0${colors[reset]} [[-Aahpu]][[-h][-a files...][-A][-p][-u[=][message]]][-- [git commands] \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}SUBCOMMANDS${colors[reset]}                                      \n"
-    "                                                                                \n"
-    " 		[[[-]h][[--]help]]                              : Show this help message   \n"
-    " 		[[[-]a[=]<files>][[--]add[=]<files>]]           : Add specific files       \n"
-    " 		[[[-]A][[--]all][add-all]]                      : Add all modified files   \n"
-    " 		[[[-]u[=][message]][[--]up[load][=][message]]]  : Commit and push changes  \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}EXAMPLE${colors[reset]}                                          \n"
-    "                                                                                \n"
-    " 		\$  ${colors[Cyan]}$0${colors[reset]}                                    \n"
-    "                                                                                \n"
-    " 	Runnind '${colors[Cyan]}$0${colors[reset]}' with no subcommands or argumentns will show the current status. \n"
-    " 	(Equivalent to running: '${colors[Cyan]}$0${colors[reset]} status')        \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}EXAMPLE${colors[reset]}                                          \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " 		\$  ${colors[Cyan]}$0${colors[reset]} add-all                            \n"
-    "                                                                                \n"
-    " 	This command will 'git add' all modified files.                              \n"
-    " 	It will not add new files that are not being tracked.                        \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}EXAMPLE${colors[reset]}                                          \n"
-    "                                                                                \n"
-    " 		\$  ${colors[Cyan]}$0${colors[reset]} upload 'Added help menu to function\n"
-    "                                                      # or                      \n"
-    " 		\$  ${colors[Cyan]}$0${colors[reset]} --upload='Added help menu to functinon'\n"
-    "                                                                                \n"
-    " 	These two command will do the exact same thing.                              \n"
-    " 	Just wanted to show you how the subcommands can be used.                     \n"
-    "                                                                                \n"
-    " 	This will commit and push changes to the remote                              \n"
-    " 	repository with a commit message of 'Added help menu to function'            \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    " ${colors[Blue]}EXAMPLE${colors[reset]}                                          \n"
-    "                                                                                \n"
-    " 		\$  ${colors[Cyan]}$0${colors[reset]} a && ${colors[Cyan]}$0${colors[reset]} u 'Expanded help menu'     \n"
-    "                                                                                \n"
-    " 	This command is a shorthand way of adding all modified files,                \n"
-    " 	commiting with the commit message of 'Expanded help menu',                   \n"
-    "   and then pushing to the remote.                                              \n"
-    "                                                                                \n"
-    "                                                                                \n"
-    "${colors[Magenta]}================================================================================${colors[reset]}\n"
-  )
+# local usage_full=(
+
+function _dotf_help(){
+
+
+cat <<HELPMENU
+
+    ${colors[Magenta]}================================================================================${colors[reset]}\n"
+     ${colors[Blue]}NAME${colors[reset]}
+
+         ${colors[Cyan]}$0${colors[reset]}
+
+     ${colors[Blue]}DESCRIPTION${colors[reset]}
+
+     		Shell/Bash/Zsh Function for managing .dotfiles
+
+
+     ${colors[Blue]}USAGE${colors[reset]}
+
+         ${colors[Cyan]}$0${colors[reset]} [[-Aahpu]][[-h][-a files...][-A][-p][-u
+    =][message]]][-- [git commands]
+
+
+     ${colors[Blue]}SUBCOMMANDS${colors[reset]}
+
+     		[[[-]h][[--]help]]                              : Show this help message
+     		[[[-]a[=]<files>][[--]add[=]<files>]]           : Add specific files
+     		[[[-]A][[--]all][add-all]]                      : Add all modified files
+     		[[[-]u[=][message]][[--]up[load][=][message]]]  : Commit and push changes
+
+
+     ${colors[Blue]}EXAMPLE${colors[reset]}
+
+     		\$  ${colors[Cyan]}$0${colors[reset]}
+
+     	Runnind '${colors[Cyan]}$0${colors[reset]}' with no subcommands or argumentns
+    ill show the current status.
+     	(Equivalent to running: '${colors[Cyan]}$0${colors[reset]} status')
+
+
+     ${colors[Blue]}EXAMPLE${colors[reset]}
+
+
+     		\$  ${colors[Cyan]}$0${colors[reset]} add-all
+
+     	This command will 'git add' all modified files.
+     	It will not add new files that are not being tracked.
+
+
+     ${colors[Blue]}EXAMPLE${colors[reset]}
+
+     		\$  ${colors[Cyan]}$0${colors[reset]} upload 'Added help menu to function'
+    or
+     		\$  ${colors[Cyan]}$0${colors[reset]} --upload='Added help menutofunctinon'
+
+     	These two command will do the exact same thing.
+     	Just wanted to show you how the subcommands can be used.
+
+     	This will commit and push changes to the remote
+     	repository with a commit message of 'Added help menu to function'
+
+
+     ${colors[Blue]}EXAMPLE${colors[reset]}
+
+     		\$  ${colors[Cyan]}$0${colors[reset]} a && ${colors[Cyan]}$0${colors[reset]} 'Expanded help menu'
+
+     	This command is a shorthand way of adding all modified files,
+     	commiting with the commit message of 'Expanded help menu',
+       and then pushing to the remote.
+
+
+    ${colors[Magenta]}================================================================================${colors[reset]}
+
+HELPMENU
+
+}
+
+
+  #)
+
+
 	## If subcommand or switch is help, show help
 	if [[ "${1}" == "help" ]] || [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then print -f%b "%s\n" $usage_full && return 1;
 

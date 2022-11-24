@@ -9,12 +9,12 @@ local setup = {
     registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
     spelling = {
       enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-      suggestions = 20, -- how many suggestions should be shown in the list?
+      suggestions = 30, -- how many suggestions should be shown in the list?
     },
     -- the presets plugin, adds help for a bunch of default keybindings in Neovim
     -- No actual key bindings are created
     presets = {
-      operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+      operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
       motions = true, -- adds help for motions
       text_objects = true, -- help for text objects triggered after entering an operator
       windows = true, -- default bindings on <c-w>
@@ -94,17 +94,19 @@ local mappings = {
     ["c"] = { "<cmd>Bdelete!<CR>",                                                                                                  "Close Buffer" },
     ["C"] = { "<cmd>LuaSnipListAvailable<CR>",                                                                                     "List Snippets" },
     ["d"] = { "<cmd>TroubleToggle<cr>",                                                                                                  "Trouble" },
-    ["h"] = { "<cmd>nohlsearch<CR>",                                                                                                "No Highlight" },
+    ["h"] = { "<cmd>Telescope help_tags<CR>",                                                                                         "Help Pages" },
+    ["H"] = { "<cmd>Telescope man_pages<CR>",                                                                                          "Man Pages" },
     ["r"] = { "<cmd>Telescope oldfiles<cr>",                                                                                        "Recent Files" },
     ["f"] = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",    "Find files" },
     ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>",                                                                                "Find Text" },
     ["z"] = { "<cmd>FZF<cr>",                                                                                                                "FZF" },
     ["v"] = { "<cmd>Format<cr>",                                                                                                          "Format" },
     ["T"] = { "<cmd>Telescope treesitter theme=ivy<cr>",                                                                              "TreeSitter" },
+    ["L"] = { "<cmd>nohlsearch<CR>",                                                                                                "No Highlight" },
     ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>",                                                       "Projects" },
     ["W"] = { "<cmd>WhichKey <CR>",                                                                                         "List all keybindings" },
     ["w"] = { "<cmd>w!<CR>",                                                                                                                "Save" },
-    ["q"] = { "<cmd>q<CR>",                                                                                                                "Quit" },
+    ["q"] = { "<cmd>q<CR>",                                                                                                                 "Quit" },
     p = {
       name = "Packer",
       s = { "<cmd>PackerSync<cr>",     "Sync"    },

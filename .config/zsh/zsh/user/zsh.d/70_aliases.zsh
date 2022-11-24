@@ -124,6 +124,7 @@ alias ks="ls"     ; alias sls="ls"
 alias lsls='command ls'
 alias octal="stat --dereference --printf='\e[0;38;5;190m%a \e[0;38;5;87m%A \e[0;38;5;196m%T \e[0;1;38;5;46m%n\e[0m\n'"
 
+<<<<<<< HEAD
 ### exa
 if [[ "${commands[exa]}" ]]; then
   alias exa='exa --color always --colour-scale --icons --numeric --git --time-style=long-iso --long'
@@ -149,6 +150,8 @@ if [[ "${commands[lsd]}" ]]; then
   alias s='lsd'
   alias 'cd ls'='lsd --almost-all --long'
 fi
+=======
+>>>>>>> cdfe84cd1a2117459fd18f4e0693215dc1283b28
 
 ## lsof
 alias list-open-files='lsof'

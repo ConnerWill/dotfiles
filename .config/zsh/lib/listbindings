@@ -1,33 +1,32 @@
 # shellcheck disable=2148
 
 zshlib_listbindings(){
-
 	typeset -A Zcolors
 
-	# Regular Colors          # Background
-	Zcolors[Color_Off]='[0m' # # Text Reset
-	Zcolors[Black]='[30m'    # Zcolors[On_Black]='40m' # Black
-	Zcolors[Red]='[38;5;196m'      #   Zcolors[On_Red]='41m' # Red
-	Zcolors[Green]='[38;5;46m'    # Zcolors[On_Green]='42m' # Green
-	Zcolors[Yellow]='[38;5;190m'   #Zcolors[On_Yellow]='43m' # Yellow
-	Zcolors[Orange]='[38;5;202m'   #Zcolors[On_Yellow]='43m' # Yellow
-	Zcolors[Blue]='[38;5;33m'     #  Zcolors[On_Blue]='44m' # Blue
-	Zcolors[Purple]='[38;5;93m'   #Zcolors[On_Purple]='45m' # Purple
-	Zcolors[BGPurple]='[48;5;93m'   #Zcolors[On_Purple]='45m' # Purple
-	Zcolors[Magenta]='[38;5;201m'   #Zcolors[On_Purple]='45m' # Purple
-	Zcolors[Cyan]='[38;5;87m'     #  Zcolors[On_Cyan]='46m' # Cyan
-	Zcolors[White]='[37m'    # Zcolors[On_White]='47m' # White
+	# Regular Colors
+	Zcolors[Color_Off]='[0m'
+	Zcolors[Black]='[30m'
+	Zcolors[Red]='[38;5;196m'
+	Zcolors[Green]='[38;5;46m'
+	Zcolors[Yellow]='[38;5;190m'
+	Zcolors[Orange]='[38;5;202m'
+	Zcolors[Blue]='[38;5;33m'
+	Zcolors[Purple]='[38;5;93m'
+	Zcolors[BGPurple]='[48;5;93m'
+	Zcolors[Magenta]='[38;5;201m'
+	Zcolors[Cyan]='[38;5;87m'
+	Zcolors[White]='[37m'
 
-	hi="ZSH KEYBINDINGS"
+	title="ZSH KEYBINDINGS"
 	# SLEEPTIME="${1:-0}"
 	SLEEPTIME=0
-	Xnumletters=${#${hi}}
+	Xnumletters=${#${title}}
 	Xnumlet=$(( Xnumletters / 2 ))
 	Xcols=$(( COLUMNS / 2 ))
 	Xsubtr=$(( Xcols - Xnumlet ))
 	Xtcols="${(r:$Xsubtr:: :)}"
 	Xsolidline="${(r:$COLUMNS::—:)}"
-  printf "${Zcolors[Cyan]}%s%s${Zcolors[BGPurple]}${Zcolors[Cyan]}%s${Zcolors[Color_Off]}%s\b${Zcolors[Cyan]}%s${Zcolors[Color_Off]}\n" "${Xsolidline}" "${Xtcols}" "${hi}" "${Xtcols}" "${Xsolidline}"
+  printf "${Zcolors[Cyan]}%s%s${Zcolors[BGPurple]}${Zcolors[Cyan]}%s${Zcolors[Color_Off]}%s\b${Zcolors[Cyan]}%s${Zcolors[Color_Off]}\n" "${Xsolidline}" "${Xtcols}" "${title}" "${Xtcols}" "${Xsolidline}"
 	print -f "${Zcolors[Magenta]}Current Keymap${Zcolors[Color_Off]}:\t${Zcolors[Blue]}%s${Zcolors[Color_Off]}\n" "${keym}"
 	print -f "${Zcolors[Magenta]}Keymaps${Zcolors[Color_Off]}:\t${Zcolors[Yellow]}%s${Zcolors[Color_Off]}\n" "${keymaps}"
 	for keym in "${keymaps[@]}"; do
@@ -41,8 +40,8 @@ zshlib_listbindings(){
 		[[ -n "${bind}" ]] && printf "${Zcolors[Yellow]}%s${Zcolors[Color_Off]}%s${Zcolors[Green]}%s${Zcolors[Color_Off]}%s${Zcolors[Yellow]}\n\b%s${Zcolors[Color_Off]}%s\n" "${solidline}" "${tcols}" "${keym}" "${tcols}" "${solidline}" "${bind}"
 		sleep $SLEEPTIME
 	done
-	unset hi Xcols Xsubtr Xtcols Xnumlet Xnumletters Xsolidline
-	Xnumletters=${#${hi}}
+	unset title Xcols Xsubtr Xtcols Xnumlet Xnumletters Xsolidline
+	Xnumletters=${#${title}}
 	Xnumlet=$(( Xnumletters / 2 ))
 	Xcols=$(( COLUMNS / 2 ))
 	Xsubtr=$(( Xcols - Xnumlet ))
@@ -50,3 +49,9 @@ zshlib_listbindings(){
 	Xsolidline="${(r:$COLUMNS::—:)}"
   printf "${Zcolors[Cyan]}%s${Zcolors[Color_Off]}${Zcolors[Cyan]}%s${Zcolors[Color_Off]}\n" "${Xsolidline}" "${Xsolidline}"
 }
+
+####
+## TODO: Add option to replace output key codes to more readable 'vim' key codes. (e.g.  '^[C' → '<ESC>-C' or '<M-C>')
+##
+##          $ printf '"^[C" forward-char\n"^Xm" _most_recent_file\n"^O" copybuffer' | sed -e 's/^\"\^\[/\"\<ESC\>\-/' -e 's/^\"\^/\"<C>-/'
+####
