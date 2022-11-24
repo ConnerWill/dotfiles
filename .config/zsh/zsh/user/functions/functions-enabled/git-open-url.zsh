@@ -1,0 +1,1 @@
+../functions-available/git-open-url.zsh

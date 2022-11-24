@@ -387,27 +387,13 @@ alias sl="ls"
 alias ll="ls --long -A"
 alias l="ls -1 -A"
 alias sls="ls"
+
+
+
+
 #{{{ LSD
 
-
-
 if [[ "${commands[lsd]}" ]]; then
-#   alias lsd="lsd --color always --icon always"
-#   alias ll='lsd --oneline --long --almost-all'                                                                                                   ## List All On One Line Sort By Extension
-#   alias ls='lsd'
-#   alias la='lsd --almost-all'
-#   alias lla='lsd --all --long --total-size --sizesort --reverse 2>/dev/null'
-#   alias lls="printf '\e[0;38;5;87mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' --permission=octal 2>/dev/null"
-#   alias llls="printf '\e[0;38;5;93mLoading\e[0;38;5;201m...\e[0m\n'; ll --sort=size  --total-size --reverse --date=+'%Y-%m-%d.%H%M%S' 2>/dev/null"
-#   alias lsl='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-#   alias lss='ll --sizesort --human-readable --reverse'                                                            ## List All On One Line Sort By Size Long List Reversed
-#   alias lst="ll --timesort --human-readable --reverse" # List All On One Line Recurse Sort By Modification Time Long List Reversed
-#   alias lstree="lsd --almost-all --tree --total-size --human-readable $1 2>/dev/null"                                                            ## List All On One Line Recurse Sort By Modification Time Long List Reversed
-#   alias ks='lsd'
-#   alias s='lsd'
-#   alias 'cd ls'='lsd --almost-all --long'
-# fi
-
   alias lsd="lsd --color always --icon always"
   alias ls="lsd --color always --icon always"
   alias 'cd ls'='lsd'
@@ -415,18 +401,36 @@ if [[ "${commands[lsd]}" ]]; then
   alias la='ls'
   alias s='lsd'
   alias LS='lsd'
-  alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
-  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
-  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
-  alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
+  alias lllll='draw_entire_line 5 "\e[0;1;38;5;82m"; draw_entire_line 5 "\e[0;1;38;5;198m; lsd --long -A --sort=size --reverse --total-size; draw_entire_line 5 "\e[0;1;38;5;198m; draw_entire_line 5 "\e[0;1;38;5;198m'
   alias lla='lsd --all --long --total-size --sizesort --reverse'
   alias lstree="lsd --almost-all --tree --total-size --human-readable ${1} 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lst="lsd --oneline --long --almost-all --reverse --timesort --human-readable ${1} 2>/dev/null"                   # List All On One Long Line Sort By Modification Time
-  alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
   alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
   alias l='draw_entire_line 2 "\e[0;1;38;5;0m"; lsd  --oneline --no-symlink --almost-all; draw_entire_line 5 "\e[0;1;38;5;0m"' # List All On One Line
-  alias lllll='draw_entire_line 5 "\e[0;1;38;5;82m"; draw_entire_line 5 "\e[0;1;38;5;198m; lsd --long -A --sort=size --reverse --total-size; draw_entire_line 5 "\e[0;1;38;5;198m; draw_entire_line 5 "\e[0;1;38;5;198m'
+
+  ## lsd flags in alieas set below require a newer version of lsd
+  ## Right now, debian repos do not have a version which supports some options.
+  ## REQUIRE VERSION  0.22.0 or later: https://github.com/Peltoche/lsd/releases/tag/0.22.0
+  lsdversion=
+  lsdversion="$(${commands[lsd]} --version 2>/dev/null | cut -d' ' -f2 )"
+  islsd22(){ [[ $lsdversion == <0->.<22->.* ]]; }
+  if islsd22; then
+    ## If LSD_UNSUPPORTED is unset, add these aliases
+    echo "SUPPORTED"
+    alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a quick second\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
+    alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
+    alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
+    alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
+    alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
+  else
+    printf "\e[0;3;38;5;8mSome options from the 'lsd' command are not availiable in your current version.\n\nPlease upgrade to at least v0.22.0\n\nInstall with cargo:\n\n    cargo install lsd\n\nInstall binary on Debian based systems:\n\n    curl -LO 'https:/github.com/Peltoche/lsd/releases/download/0.23.1/lsd_0.23.1_amd64.deb' \\ \n        && [sudo] dpkg -i lsd_0.23.1_amd64.deb\n"
+
+
+  fi
+
+
 fi
+
 #}}} LSD
 
 #{{{ EXA
