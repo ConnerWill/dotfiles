@@ -1,15 +1,10 @@
-## Split '$FPATH' with new lines
+## Split '$fpath' with new lines
 function fpathnewlines(){
-  echo "${fpath//:/$'\n'}"
+  print -l ${fpath}
 }
-alias fpath-echo='fpathnewlines'
-alias echo-fpath='fpathnewlines'
 
 ## Split '$FPATH' with new lines
 function pathnewlines(){
-  echo "${PATH//:/$'\n'}"
+  [[ -n "$ZSH_VERSION" ]] && print -l ${path}
+  [[ -n "$BASH_VERSION" ]] && echo "${PATH//:/$'\n'}"
 }
-alias path-echo='pathnewlines'
-alias echo-path='pathnewlines'
-
-
