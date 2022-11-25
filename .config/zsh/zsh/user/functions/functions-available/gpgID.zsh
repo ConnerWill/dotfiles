@@ -1,6 +1,6 @@
 function gpgID(){
   local DEFAULTKEYNAME KEYNAME
-  DEFAULTKEYNAME="Conner Will"
+  DEFAULTKEYNAME="ConnerWill"
 	KEYNAME="$1"
 	[[ -n "${KEYNAME}" ]] \
     || local KEYNAME="${DEFAULTKEYNAME}"
@@ -12,5 +12,3 @@ function gpgID(){
           | head -n 1 \
             | cut -d':' -f5
 }
-
-
