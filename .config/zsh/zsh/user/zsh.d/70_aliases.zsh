@@ -225,7 +225,7 @@ if [[  -n "${DISTRO}" ]] {
 
         if [[ "${commands[pkgfzf]}" ]] \
           && [[ "${commands[fzf]}"  ]]; then
-          alias pkgf="pkgfzf fzf -o"
+          alias pkgf="pkgfzf fzf"
         fi
 
   elif [[ ${DISTRO} == "Gentoo" ]] \
