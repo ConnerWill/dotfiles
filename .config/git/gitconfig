@@ -162,4 +162,10 @@
 #	updated = yellow
 
 [alias]
-	status = sta
+	s = status
+	a = add -v
+	p = pull -v
+	pull = pull -v
+	push = push -v
+	psh = push -v
+	c = commit --verbose --status -m

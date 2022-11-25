@@ -23,10 +23,10 @@ g(){
         --markdown --theme "${RICHTHEME}" \
         --padding 1,5,1,5 --panel rounded \
         --line-numbers                    \
+        --pager                           \
+        --hyperlinks                      \
         --center --text-full      \
        "${INPUTFILE}"
-# --pager
-# --hyperlinks
   }
 
   _viewmarkdown_glow(){
