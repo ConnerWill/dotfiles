@@ -406,7 +406,7 @@ if [[ "${commands[lsd]}" ]]; then
   alias lstree="lsd --almost-all --tree --total-size --human-readable ${1} 2>/dev/null"                                    # List All On One Line Recurse Sort By Modification Time Long List Reversed
   alias lst="lsd --oneline --long --almost-all --reverse --timesort --human-readable ${1} 2>/dev/null"                   # List All On One Long Line Sort By Modification Time
   alias lltree='printf "\e[0;1;38;5;46mGathering tree ...\n\n\e[0;1;38;5;33mThis may take a while\e[0;1;38;5;190m     \e[0m\n"; echo "$(lsd   --almost-all --tree --total-size -l --sort=time --human-readable --depth=10 2>/dev/null)"'
-  alias l='draw_entire_line 2 "\e[0;1;38;5;0m"; lsd  --oneline --no-symlink --almost-all; draw_entire_line 5 "\e[0;1;38;5;0m"' # List All On One Line
+  alias l='lsd  --oneline --no-symlink --almost-all' # List All On One Line
 
   ## lsd flags in alieas set below require a newer version of lsd
   ## Right now, debian repos do not have a version which supports some options.
