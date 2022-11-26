@@ -21,40 +21,95 @@
 ##│                         ENVIRONMENT VARIABLES                            │##
 ##└──────────────────────────────────────────────────────────────────────────┘##
 ##                                                                            ##
-## ZDOTDIR      Directory containing zsh files '~/.config/zsh'                                 ##
+## ZDOTDIR      Directory containing zsh files '~/.config/zsh'                ##
 ##                                                                            ##
 ## ZSHRC        Path to the '.zshrc' file '$ZDOTDIR/.zshrc'                   ##
 ##                                                                            ##
 ## ZSH_USER_DIR Path to current config profile  '$ZDOTDIR/zsh}/zsh/user'      ##
 ##                                                                            ##
-## ZSHDDIR      Directory containing configs that will be sourced in
+## ZSHDDIR      Directory containing configs that will be sourced in          ##
 ##              numeric order '$ZSH_USER_DIR/zsh.d'                           ##
 ##                                                                            ##
 ##════════════════════════════════════════════════════════════════════════════##
 ##┌──────────────────────────────────────────────────────────────────────────┐##
-##│                         ANSI ESCAPE SEQUENCES                            │##
+##│                         ansi escape sequences                            │##
 ##└──────────────────────────────────────────────────────────────────────────┘##
-##
-## CSI                   Escape '\e[' '\033[' '\x'
-##
-## \e[?25l               Hide Cursor                                          ##
-## \e[?25h               Restore Cursor                                       ##
-## \e[2K                 Clear line                                           ##
-## \e[1A                 Move curser up 1 line                                ##
-## \e[5A                 Move curser up 5 lines                               ##
-## \e[22;0t              Save title of terminal                               ##
-## \e]0;TITLE TEXT\e\\   Set title of terminal                                ##
-## \e[23;0t'             Restore title of terminal                            ##
-## \r                    Move cursor to beginning of line
-##
+##┌───┬───────────────────────────────────────────────────────────────────────┐#
+##│ESC│sequence starting with ESC ('\x1B' '\e' '\033' '\x1b')                 │#
+##│   │  Ctrl-Key: ^[                                                         │#
+##│   │  Octal: \033                                                          │#
+##│   │  Unicode: \u001b                                                      │#
+##│   │  Hexadecimal: \x1B                                                    │#
+##│   │  Decimal: 27                                                          │#
+##├───┼───────────────────────────────────────────────────────────────────────┤#
+##│CSI│Control Sequence Introducer: sequence starting with ESC [ or CSI (\x9B)│#
+##├───┼───────────────────────────────────────────────────────────────────────┤#
+##│DCS│Device Control String: sequence starting with ESC P or DCS (\x90)      │#
+##├───┼───────────────────────────────────────────────────────────────────────┤#
+##│OSC│Operating System Command: sequence starting with ESC ] or OSC (\x9D)   │#
+##└───┴───────────────────────────────────────────────────────────────────────┘#
+##┌────┬───────┬─────┬────┬────────┬────────┬────────────────────┐            ##
+##│Name│decimal│octal│hex │C-escape│Ctrl-Key│Description         │            ##
+##├────┼───────┼─────┼────┼────────┼────────┼────────────────────┤            ##
+##│BEL │  7    │ 007 │0x07│  \a    │  ^G    │Terminal bell       │            ##
+##│BS  │  8    │ 010 │0x08│  \b    │  ^H    │Backspace           │            ##
+##│HT  │  9    │ 011 │0x09│  \t    │  ^I    │Horizontal TAB      │            ##
+##│LF  │  10   │ 012 │0x0A│  \n    │  ^J    │Linefeed (newline)  │            ##
+##│VT  │  11   │ 013 │0x0B│  \v    │  ^K    │Vertical TAB        │            ##
+##│FF  │  12   │ 014 │0x0C│  \f    │  ^L    │Formfeed (NP)       │            ##
+##│CR  │  13   │ 015 │0x0D│  \r    │  ^M    │Carriage return     │            ##
+##│ESC │  27   │ 033 │0x1B│  \e    │  ^[    │Escape character    │            ##
+##│DEL │  127  │ 177 │0x7F│ <none> │ <none>	│Delete character    │            ##
+##└────┴───────┴─────┴────┴────────┴────────┴────────────────────┘            ##
+##                                                                            ##
+## ESC[?25l               Hide Cursor                                         ##
+## ESC[?25h               Restore Cursor                                      ##
+## ESC[2K                 Clear line                                          ##
+## ESC[1A                 Move curser up 1 line                               ##
+## ESC[5A                 Move curser up 5 lines                              ##
+## ESC[22;0t              Save title of terminal                              ##
+## ESC]0;TITLE TEXT\e\\   Set title of terminal                               ##
+## ESC[?25l 	            make cursor invisible                               ##
+## ESC[?25h 	            make cursor visible                                 ##
+## ESC[?47h 	            save screen                                         ##
+## ESC[?47l 	            restore screen                                      ##
+## ESC[?1049h 	          enables the alternative buffer                      ##
+## ESC[?1049l 	          disables the alternative buffer                     ##
+## ESC[23;0t              Restore title of terminal                           ##
+## ESC[2K\e[1A\e[2K\r     Clear current line and 1 line above.                ##
+## \r                     Move cursor to beginning of line                    ##
+##                                                                            ##
+## ESC[={value}h 	        Changes the screen width or                         ##
+##                         type to the mode specified by value.               ##
+## ESC[=0h                40 x 25 monochrome (text)                           ##
+## ESC[=1h                40 x 25 color (text)                                ##
+## ESC[=2h                80 x 25 monochrome (text)                           ##
+## ESC[=3h                80 x 25 color (text)                                ##
+## ESC[=4h                320 x 200 4-color (graphics)                        ##
+## ESC[=5h                320 x 200 monochrome (graphics)                     ##
+## ESC[=6h                640 x 200 monochrome (graphics)                     ##
+## ESC[=7h                Enables line wrapping                               ##
+## ESC[=13h               320 x 200 color (graphics)                          ##
+## ESC[=14h               640 x 200 color (16-color graphics)                 ##
+## ESC[=15h               640 x 350 monochrome (2-color graphics)             ##
+## ESC[=16h               640 x 350 color (16-color graphics)                 ##
+## ESC[=17h               640 x 480 monochrome (2-color graphics)             ##
+## ESC[=18h               640 x 480 color (16-color graphics)                 ##
+## ESC[=19h               320 x 200 color (256-color graphics)                ##
+## ESC[={value}l          Resets the mode by using the same values that       ##
+##                         Set Mode uses, except for 7, which disables        ##
+##                         line wrapping. The last character in this          ##
+##                         escape sequence is a lowercase L.                  ##
+##                                                                            ##
+##(https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)             ##
 ##════════════════════════════════════════════════════════════════════════════##
 ##┌──────────────────────────────────────────────────────────────────────────┐##
 ##│                         PLACEHOLDER                                      │##
 ##└──────────────────────────────────────────────────────────────────────────┘##
 ##                                                                            ##                                                                            ##
-###__________________________________________________________________________###
+##════════════════════════════════════════════════════════════════════════════##
 ################################################################################
-###}}} DOCUMENTATION                                                           ##
+###}}} DOCUMENTATION
 
 ### ::::::::::::::::::::::: DEBUGGING :::::::::::::::::::::: ###{{{
 ########################
