@@ -6,5 +6,5 @@ function cht(){
     chtoutput+=$(curl --silent "https://cht.sh"/"${i}")
     # curl --silent "https://cht.sh"/"${i}" | bat --plain --language=Manpage
   done
-  echo -e "${chtoutput}" | bat --plain --language=Manpage
+  echo -e "${chtoutput}" | "${PAGER:-less}"
 }
