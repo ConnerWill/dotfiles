@@ -416,3 +416,7 @@ bindkey -M viins -s '^[g' 'dotf status\n'
 
 bindkey -M vicmd "^[[B" down-line
 bindkey -M vicmd "^[[A" up-line
+
+
+
+bindkey -M viins '^[h' which-command
