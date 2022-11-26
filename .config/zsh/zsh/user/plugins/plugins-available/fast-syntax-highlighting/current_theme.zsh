@@ -1,19 +1,19 @@
 zstyle :plugin:fast-syntax-highlighting theme "dampsock2"
 typeset -g FAST_THEME_NAME="dampsock2"
 : ${FAST_HIGHLIGHT_STYLES[dampsock2default]:=none}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2unknown-token]:=fg=196,underline}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2unknown-token]:=fg=196}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2reserved-word]:=fg=154}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2alias]:=fg=48}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2suffix-alias]:=fg=85}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2builtin]:=fg=46,bold}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2function]:=fg=82}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2function]:=fg=82,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2command]:=fg=118,bold}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2precommand]:=fg=190,bold,underline}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2precommand]:=fg=190,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2commandseparator]:=fg=123}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2hashed-command]:=fg=82,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2path]:=fg=135}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2path_pathseparator]:=fg=129}
-: ${FAST_HIGHLIGHT_STYLES[dampsock2globbing]:=fg=27,bold}
+: ${FAST_HIGHLIGHT_STYLES[dampsock2globbing]:=fg=27}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2globbing-ext]:=fg=205}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2history-expansion]:=fg=33,bold}
 : ${FAST_HIGHLIGHT_STYLES[dampsock2single-hyphen-option]:=fg=38}

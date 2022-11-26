@@ -7,8 +7,8 @@
 -- Options
 
 local options = {
---	verbose=13,
-	--verbosefile = "2022-nvim.log",
+	--verbose=13,
+	--verbosefile = "~/.cache/nvim/nvim-verbose.log",
 	fileencoding = "utf-8", -- the encoding written to a file
 	fileformat = "unix",
 	clipboard = "unnamedplus", -- allows neovim to access the system clipboard

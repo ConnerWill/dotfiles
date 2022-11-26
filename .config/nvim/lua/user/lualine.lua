@@ -119,7 +119,7 @@ lualine.setup({
 			"help",
 			"man",
 			"info",
-			"toggleterm",
+			--"toggleterm",
 		},
 		always_divide_middle = true,
 		globalstatus = true,

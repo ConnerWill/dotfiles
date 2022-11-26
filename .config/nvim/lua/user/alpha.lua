@@ -59,10 +59,11 @@ dashboard.section.buttons.val = {
 	dashboard.button("p", "  Projects", ":Telescope projects <CR>"),
 	dashboard.button("T", "  Terminal", ":ToggleTerm <CR>"),
 	dashboard.button("C", "  Configuration", ":edit ~/.config/nvim/lua/user <CR>"),
+	dashboard.button("z", "  ZSH Configuration", ":edit ~/.config/zsh <CR>"),
 	dashboard.button("k", "  Keybindings", ":WhichKey <CR>"),
-	dashboard.button("K", "  Search Keybindings", ":Telescope keymaps <CR>"),
+	dashboard.button("K", "  Search Keybindings", ":Telescope keymaps <CR>"),
 	dashboard.button("h", "  Help", ":Telescope help_tags<CR>"),
-	dashboard.button("H", "  Man", ":Telescope man_pages <CR>"),
+	dashboard.button("H", "  Man", ":Telescope man_pages <CR>"),
 	dashboard.button("q", "  EXIT NEOVIM", ":quitall<CR>"),
 }
 	--}}}

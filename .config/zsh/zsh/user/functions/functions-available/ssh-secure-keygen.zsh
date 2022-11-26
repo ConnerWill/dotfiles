@@ -37,7 +37,7 @@ function _ssh_secure_keygen(){
     keyType="ed25519"
     keyBits=256
   fi
-  printf "\n\e[0;38;5;33mUsing \e[0;38;5;190m%s %s\e[0m\n" "${keyType}" "${keyBits}" 
+  printf "\n\e[0;38;5;33mUsing \e[0;38;5;190m%s %s\e[0m\n" "${keyType}" "${keyBits}"
 
   [[ -z "${cleanedKeyName}" ]] \
     && printf "\e[0;1;38;5;196mError: No Name For The Key!\e[0m\n" \
@@ -56,7 +56,7 @@ function _ssh_secure_keygen(){
 
   if [[ "${keyHostnameChoice}" == "y" ]]; then
     if [[ -n "${HOST}" ]]; then
-      printf "\e[0;38;5;93mPress 'y' To Use Hostame Of This Computer (\e[0;38;5;201m%s\e[0;38;5;93m) In SSH Key Name\e[0m: " "${HOST}" \
+      printf "\e[0;38;5;93mPress 'y' To Use Hostname Of This Computer (\e[0;38;5;201m%s\e[0;38;5;93m) In SSH Key Name\e[0m: " "${HOST}" \
       read -s -r -t 10 -q \
         && currentHost="${HOST}-"
       [[ -z "${currentHost}" ]] \
@@ -87,11 +87,11 @@ function _ssh_secure_keygen(){
     && return 1
 
   printf "\n"
-  printf "\t\e[0;38;5;33mName   :\t\e[0;38;5;190m%s\e[0m\n" "${KeyName}" 
-  printf "\t\e[0;38;5;33mPath   :\t\e[0;38;5;190m%s\e[0m\n" "${keyPath}" 
-  printf "\t\e[0;38;5;33mComment:\t\e[0;38;5;190m%s\e[0m\n" "${cleanedKeyName}" 
-  printf "\t\e[0;38;5;33mType   :\t\e[0;38;5;190m%s\e[0m\n" "${keyType}" 
-  printf "\t\e[0;38;5;33mBits   :\t\e[0;38;5;190m%s\e[0m\n" "${keyBits}" 
+  printf "\t\e[0;38;5;33mName   :\t\e[0;38;5;190m%s\e[0m\n" "${KeyName}"
+  printf "\t\e[0;38;5;33mPath   :\t\e[0;38;5;190m%s\e[0m\n" "${keyPath}"
+  printf "\t\e[0;38;5;33mComment:\t\e[0;38;5;190m%s\e[0m\n" "${cleanedKeyName}"
+  printf "\t\e[0;38;5;33mType   :\t\e[0;38;5;190m%s\e[0m\n" "${keyType}"
+  printf "\t\e[0;38;5;33mBits   :\t\e[0;38;5;190m%s\e[0m\n" "${keyBits}"
   printf "\n"
   printf "\e[0;38;5;93mPress 'y' To Create SSH Key\e[0m: "
   read -s -r -q \
@@ -177,5 +177,3 @@ alias ssh-secure-keygen="_ssh_secure_keygen"
 
 
   # sh-keygen -v -t rsa -b 4096 -C "$KeyName" -f "$KeyPath"'
-
-
