@@ -9,3 +9,5 @@ function thisisntvim(){
 
 }
 alias ':wq'="thisisntvim"
+alias ':q'="thisisntvim"
+alias ':q!'="thisisntvim"
