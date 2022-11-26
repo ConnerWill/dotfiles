@@ -32,4 +32,3 @@ ZSH_USER_FPATH_DIR="${ZSH_USER_DIR}/fpath"
 # automatically remove duplicates from these arrays
 #shellcheck disable=2034
 #typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH
-echo "hi"
