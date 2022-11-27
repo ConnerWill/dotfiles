@@ -11,6 +11,8 @@ SYSZ_VERSION=1.4.3
 SYSZ_HISTORY=${SYSZ_HISTORY:-${XDG_CACHE_HOME:-~/.cache}/sysz/history}
 declare -a STATES
 
+export _sysz_fzf_colortheme='hl:#FF00FF,hl+:#ff00ff,fg:#DDDDFF,fg+:#00ffff,bg:#010101,bg+:#202020,query:#FF0000,spinner:#ff00ff,border:#7700ff,preview-fg:#ffffff,preview-bg:#090909,marker:#00ff00,gutter:#202020,pointer:#FF00FF,info:#FFFF00,header:#202020'
+
 _sysz_keys() {
   cat <<EOF
 Keybindings:
@@ -375,8 +377,9 @@ _sysz_daemon_reload() {
     echo '[user] daemon-reload'
   ) |
     fzf \
-      --multi \
-      --no-info \
+      --multi                 \
+      --color="${_sysz_fzf_colortheme}" \
+      --no-info               \
       --prompt="Reload: " |
     readarray -t RELOADS || exit $?
 
@@ -401,7 +404,8 @@ _sysz_states() {
     sort -u |
     grep -v '^$' |
     fzf \
-      --multi \
+      --multi                           \
+      --color="${_sysz_fzf_colortheme}" \
       --prompt="States: " |
     readarray -t PICKED_STATES || exit $?
 
@@ -419,21 +423,26 @@ while :; do
   KEY=
 
   # prompt units
-  _sysz_list_units |
-    fzf \
-      --multi \
-      --ansi \
-      --no-sort \
-      --expect=ctrl-r,ctrl-s \
-      --history="$SYSZ_HISTORY" \
-      --prompt="Units: " \
-      --header '? for keybindings' \
-      --bind "?:preview(echo '$(_sysz_keys)')" \
+  _sysz_list_units \
+    | sed -e 's/\[/[0;38;5;7m[/' -e 's/\]/[0;38;5;7m][0m/' \
+    | fzf \
+      --multi                                                  \
+      --ansi                                                   \
+      --no-sort                                                \
+      --expect=ctrl-r,ctrl-s                                   \
+      --color="${_sysz_fzf_colortheme}"                        \
+      --history="$SYSZ_HISTORY"                                \
+      --prompt="Search units [>: "                             \
+      --preview-label="╡$(basename ${BASH_SOURCE[0]})╞"                                   \
+      --border-label="╡{sysz}╞"                                \
+      --pointer="⮞"                                            \
+      --header 'Press ? for keybindings'                       \
+      --bind "?:preview(echo '$(_sysz_keys)')"                 \
       --bind "ctrl-v:preview('${BASH_SOURCE[0]}' _fzf_cat {})" \
-      --preview="'${BASH_SOURCE[0]}' _fzf_preview {}" \
+      --preview="'${BASH_SOURCE[0]}' _fzf_preview {}"          \
       --preview-window=70% |
     readarray -t PICKS
-
+# $(basename ${0})
   KEY=${PICKS[0]}
   [[ $VERBOSE = true ]] && echo "KEY: $KEY" >&2
   UNITS=("${PICKS[@]:1}")
@@ -491,11 +500,12 @@ else
 
   # prompt commands
   fzf \
-    --multi \
-    --ansi \
-    --no-info \
-    --prompt="Commands: " \
-    --preview="$PREVIEW_CMD" \
+    --multi                            \
+    --ansi                             \
+    --no-info                          \
+    --prompt="Commands: "              \
+    --color="${_sysz_fzf_colortheme}"  \
+    --preview="$PREVIEW_CMD"           \
     --preview-window=80% < <(
       # status
       echo status "${ARGS[*]}"
