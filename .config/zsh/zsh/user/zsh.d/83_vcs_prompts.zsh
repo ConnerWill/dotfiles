@@ -310,7 +310,7 @@ distro_logos=(
  "Manjaro"    "  "
  "Gentoo"     "  "
  "Debian"     "  "
- "Raspbian"    ""
+ "Raspbian"    " "
  "Linuxmint"  "  "
  "Ubuntu"     "  "
  "Android"     ""
