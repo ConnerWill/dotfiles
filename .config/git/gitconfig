@@ -169,3 +169,4 @@
 	push = push -v
 	psh = push -v
 	c = commit --verbose --status -m
+	d = diff --ignore-all-space --color=always --color-moved-ws=ignore-all-space --minimal
