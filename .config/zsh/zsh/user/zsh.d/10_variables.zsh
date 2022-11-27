@@ -26,14 +26,6 @@ export _ZL_ROOT_MARKERS=".git,.svn,.hg,.root,package.json"
 	&& mkdir -v -p "$XDG_CACHE_HOME/zsh/z.lua" \
 	|| export _ZL_DATA="$XDG_CACHE_HOME/zsh/z.lua/zlua"
 
-
-
-
-
-
-
-
-
 export chpwd_recent_dirs="${chpwd_recent_dirs:-${XDG_CACHE_HOME}/zsg/.chpwd-recent-dirs}"
 
 ## marked for removal
@@ -50,7 +42,9 @@ export EMAIL="Conner.Will@connerwill.com"
 ### [~]............ EDITOR
 ### [=]==================================[=]
 
-[[ "${commands[nvim]}" ]] && EDITOR="${EDITOR:-nvim}" || EDITOR="${EDITOR:-vim}"
+#[[ "${commands[nvim]}" ]] && EDITOR="${EDITOR:-nvim}" || EDITOR="${EDITOR:-vim}"
+EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
+
 FCEDIT="${EDITOR}"
 export EDITOR FCEDIT
 
