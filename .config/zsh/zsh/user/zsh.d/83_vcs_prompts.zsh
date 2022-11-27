@@ -437,6 +437,12 @@ function replacehostnameinprompt(){
   ]] \
       && unset PROMPTUSERNAME #&& unset PROMPTHOSTNAME
 
+## rpi
+  [[ \
+     $(whoami) == "pi" \
+  ]] \
+      && PROMPTATSYMBOL='%F{$distro_logo_color[Raspbian]}$distro_logos[Raspbian]%f'
+
 ## connerwill.com
   [[ \
      $(uname -n) == "connerwill.com" \
