@@ -326,3 +326,4 @@ export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export TRANSMISSION_HOME="${XDG_CONFIG_HOME}/transmission"
 
 export WGETHSTS="${WGETHSTS:-${HOME}/.cache/.wget-hsts}"
+export DIALOGRC="${XDG_CONFIG_HOME}/dialog/dialogrc"
