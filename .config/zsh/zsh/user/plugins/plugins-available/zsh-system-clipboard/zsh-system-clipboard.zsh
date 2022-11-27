@@ -15,11 +15,11 @@ function _zsh_system_clipboard_command_exists() {
 }
 
 function _zsh_system_clipboard_error() {
-	echo -e "\n\n  \033[41;37m ERROR \033[0m \033[01mzsh-system-clipboard:\033[0m $@\n" >&2
+	echo -e "\n\n  \033[41;37m ERROR \033[0m \033[01mzsh-system-clipboard:\033[0m $@\n"  >/dev/null 2>&1 #>&2
 }
 
 function _zsh_system_clipboard_suggest_to_install() {
-	_zsh_system_clipboard_error "Could not find any available clipboard manager. Make sure you have \033[01m${@}\033[0m installed."
+	_zsh_system_clipboard_error "Could not find any available clipboard manager. Make sure you have \033[01m${@}\033[0m installed." >/dev/null 2>&1  #>&2
 	return 1
 }
 
