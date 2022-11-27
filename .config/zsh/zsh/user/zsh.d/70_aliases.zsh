@@ -274,7 +274,7 @@ if [[ "${commands[awesome]}" ]] {
 ### [=]==================================[=]
 ### [~]............ VIM/NEOVIM
 ### [=]==================================[=]
-alias vim='nvim'            ## Replace Vim with Neo-Vim
+# alias vim='nvim'            ## Replace Vim with Neo-Vim
 alias vim-split='nvim -O2'  ## Open 2 vertical windows in nvim
 
 ### [=]==================================[=]
