@@ -443,14 +443,6 @@ function replacehostnameinprompt(){
   ]] \
       && PROMPTATSYMBOL='%F{$distro_logo_color[Raspbian]}$distro_logos[Raspbian]%f'
 
-## connerwill.com
-  [[ \
-     $(uname -n) == "connerwill.com" \
-    && $(whoami) == "dampsock"      \
-  ]] \
-      && PROMPTHOSTNAME='%F{99}connerwill%f%F{196}.%f%F{99}com%f' \
-      && PROMPTATSYMBOL=''
-
 }; replacehostnameinprompt; unset -f replacehostnameinprompt
 ###}}} Replace hostname and username in prompt
 
