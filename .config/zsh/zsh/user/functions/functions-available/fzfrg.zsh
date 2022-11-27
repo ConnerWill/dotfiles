@@ -1,6 +1,10 @@
 #shellcheck disable=2148,2283
 #=======================================================================================
 function fzfrg() {
+  ## Check depends
+	[[ -z "${commands[rg]}"  ]] && printf "\e[0;1;38;5;196mCommand not found:\t%s\n" "rg"  >&2 && return 1
+	[[ -z "${commands[fzf]}" ]] && printf "\e[0;1;38;5;196mCommand not found:\t%s\n" "fzf" >&2 && return 1
+
 	# ===============================
 	#		KEYS
 	# -------------------------------
@@ -38,33 +42,24 @@ function fzfrg() {
 	# ===============================
 	# 	     Test Variables
 	# ===============================
-	[[ -z "$EDITOR" ]]  \
-		&& EDITOR="nvim"
 
-	[[ -z "$CATCMD" ]] \
-		&& CATCMD="cat"
+  EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
+  PAGER="${PAGER:-${commands[bat]:-${commands[less]:-cat}}}"
+  CAT="${CAT:-${commands[bat]:-${commands[cat]}}}"
+  ECHOCMD="${ECHOCMD:-echo}"
+  local EDITOR CAT PAGER ECHOCMD
 
-	[[ -z "$ECHOCMD" ]] \
-		&& ECHOCMD="echo"
+  INITIAL_QUERY="${*}"
 
-	[[ -z "$PAGER" ]] \
-		&& PAGER="less"
-
-#>/dev/null 2>&1
-
-INITIAL_QUERY="${*}"
-	# RG_PREFIX="rg --hidden --line-number --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:gray' --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --no-heading --color=always --with-filename --iglob '*.cache*' --iglob '*cache*' --iglob '.cache' --iglob '*.bak' --iglob '*history*' --iglob '*history' --iglob '*compdump*' --iglob '*compcache*' --engine=auto --trim --smart-case"
 	RG_PREFIX="rg --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:white' --no-line-number --no-heading --color=always --smart-case  --with-filename"
-#
-	#  --engine=pcre2
+
+	#RG_PREFIX="rg --hidden --line-number --colors 'path:style:bold' --colors 'path:style:intense' --colors 'path:fg:gray' --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:fg:yellow' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --no-heading --color=always --with-filename --iglob '*.cache*' --iglob '*cache*' --iglob '.cache' --iglob '*.bak' --iglob '*history*' --iglob '*history' --iglob '*compdump*' --iglob '*compcache*' --engine=auto --trim --smart-case"
 	#RG_PREFIX="rg --column --hidden --colors 'match:style:underline' --colors 'match:style:bold' --colors 'match:style:intense' --colors 'line:fg:blue' --colors 'column:fg:blue' --line-number --no-heading --color=always --smart-case "
+
 	FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'"
 	# ===============================
 	#		          Run FZF
 	# ===============================
-		# --preview-window hidden \
-		# --preview-window='right' \
-
   tput smcup
   clear
 	fzf \
@@ -94,20 +89,4 @@ INITIAL_QUERY="${*}"
 
    tput rmcup
 	}
-
 #=======================================================================================
-#
-#	fzf \
-#		--multi \
-#		--ansi \
-#		--color='bg:#090909,bg+:#202020,info:#BDBB72' \
-#		--color='hl:#EE004F,fg:#D9D9D9,header:#012345,fg+:#FFFFFF' \
-#		--color='pointer:#53FFAD,marker:#00FF00' \
-#		--color='prompt:#98BEDE,hl+:#1AFF7F' \
-#		--bind "change:reload:${RG_PREFIX} {q} || true" \
-#		--bind "ctrl-p:execute(${PAGER} {})" \
-#		--bind "ctrl-v:toggle:preview:${ECHOCMD} {}" \
-#		--bind "ctrl-e:execute(${EDITOR} {})" \
-#		--preview-window hidden \
-#		--query "${INITIAL_QUERY}"
-#}

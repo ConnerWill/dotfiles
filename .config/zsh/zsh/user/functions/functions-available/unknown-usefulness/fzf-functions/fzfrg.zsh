@@ -30,13 +30,14 @@ function fzfrg() {
 	# ===============================
 	# 	     Test Variables
 	# ===============================
-	[[ -z "$EDITOR" ]] &&
-		local EDITOR="nvim"
-	[[ -z "$CAT" ]] &&
-		local CAT="bat"
-	[[ -z "$PAGER" ]] &&
-		local PAGER="less"
-	# ===============================
+
+  EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
+  PAGER="${PAGER:-${commands[bat]:-${commands[less]:-cat}}}"
+  CAT="${CAT:-${commands[bat]:-${commands[cat]}}}"
+
+  local EDITOR CAT PAGER
+
+  # ===============================
 	# 	         Commands
 	# ===============================
 	CATCMD="$CAT"

@@ -163,7 +163,7 @@ export MANPAGER MANWIDTH NVIMBINPATH NVIMPAGER PAGER
 ### [=]==================================[=]
 GITHUB_URL="https://github.com"
 GH_URL="https://github.com"
-GH_EDITOR="/usr/bin/nvim"
+GH_EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]:-vim}}}"
 GH_BROWSER="${BROWSER}"
 GH_CONFIG_DIR="${XDG_CONFIG_HOME}/gh"
 GIT_CONFIG_DIR="${XDG_CONFIG_HOME}/git"

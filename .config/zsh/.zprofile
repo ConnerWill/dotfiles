@@ -18,14 +18,16 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 export ZDOTDIR="${ZDOTDIR:-${HOME}/.config/zsh}"
 export ZSHRC="${ZSHRC:-${ZDOTDIR}/.zshrc}"
 
-## Editor
-if   [[ "${commands[nvim]}" ]]; then prefered_editor="nvim"
-elif [[ "${commands[vim]}"  ]]; then prefered_editor="vim"
-elif [[ "${commands[nano]}" ]]; then prefered_editor="nano"
-elif [[ "${commands[vi]}"   ]]; then prefered_editor="vi"
-else                                 prefered_editor=
-fi
 
+# ## Editor
+# if   [[ "${commands[nvim]}" ]]; then prefered_editor="nvim"
+# elif [[ "${commands[vim]}"  ]]; then prefered_editor="vim"
+# elif [[ "${commands[nano]}" ]]; then prefered_editor="nano"
+# elif [[ "${commands[vi]}"   ]]; then prefered_editor="vi"
+# else                                 prefered_editor=
+# fi
+#
+EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
 export EDITOR="${EDITOR:-${prefered_editor}}"
 unset prefered_editor
 
