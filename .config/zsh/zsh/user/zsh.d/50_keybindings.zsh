@@ -437,4 +437,6 @@ bindkey -M vicmd "^[[B" down-line
 bindkey -M vicmd "^[[A" up-line
 
 
-bindkey -M viins '^[h' which-command
+bindkey -M viins '^[j' which-command
+
+[[ -n ${functions[run-help]} ]] && bindkey '^[h' run-help
