@@ -1,7 +1,7 @@
 #shellcheck disable=2148,2139,2059
 
 alias e="$EDITOR"
-alias ez="exec ${SHELL}"
+# alias ez="exec ${SHELL}"
 alias exec-zsh='. ${ZDOTDIR}/exec-zsh.zsh'
 alias ezsh="${EDITOR:-vim} ${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 
