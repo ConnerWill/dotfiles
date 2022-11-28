@@ -39,7 +39,7 @@ if [ "$1" = "--version" ]; then
     printf '0.15\n' && exit
 fi
 
-if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ -z "$1" ]; then
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 
     printf '%s\n' \
 'This utility converts ANSI codes in data passed to stdin
