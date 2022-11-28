@@ -329,11 +329,13 @@ function _loading_bar(){
 ### :::::::::::::::::: END LOADING BAR ::::::::::::::::::: ###}}}
 
 ### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ###{{{
+function _zshload_clear_line(){ printf "\e[2K\r"; }
 function _zshloadstartclear(){ [[ -z "$zsh_load_start_clear" ]] || clear; }
 function _zshloadendclear(){ [[ -z "$zsh_load_end_clear" ]] || clear; }
 ### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ###}}}
 
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
+_zshload_clear_line
 _zshloadstartclear
 #: Clear Screen Before Loading
 ### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ###}}}
