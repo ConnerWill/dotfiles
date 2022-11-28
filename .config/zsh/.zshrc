@@ -334,11 +334,11 @@ function _zshloadstartclear(){ [[ -z "$zsh_load_start_clear" ]] || clear; }
 function _zshloadendclear(){ [[ -z "$zsh_load_end_clear" ]] || clear; }
 ### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ###}}}
 
-### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
-_zshload_clear_line
+###{{{ :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###
 _zshloadstartclear
+
 #: Clear Screen Before Loading
-### :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ###}}}
+###}}} :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ###
 
 ### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ###{{{
 #Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop
@@ -360,6 +360,7 @@ fi
 
 ### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
 _zshloadendclear
+_zshload_clear_line
 #: Clear Screen After Loading
 ### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ###}}}
 
