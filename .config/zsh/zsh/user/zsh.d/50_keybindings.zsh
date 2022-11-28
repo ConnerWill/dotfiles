@@ -414,9 +414,27 @@ bindkey -M viins -s '^[g' 'dotf status\n'
 
 
 
+
+## Key binds like those used in graphic file managers may come handy.
+## The first comes back in directory history (Alt+Left),
+## the second let the user go to the parent directory (Alt+Up).
+## They also display the directory content.
+cdPreviousDir() {
+  popd; zle reset-prompt; print
+  ls;   zle reset-prompt
+}; zle -N cdPreviousDir
+
+cdParentDir() {
+  pushd ..; zle reset-prompt; print
+  ls;       zle reset-prompt
+}; zle -N cdParentDir
+
+bindkey '^[[1;3A'      cdParentDir
+bindkey '^[[1;3D'      cdPreviousDir
+
+
 bindkey -M vicmd "^[[B" down-line
 bindkey -M vicmd "^[[A" up-line
-
 
 
 bindkey -M viins '^[h' which-command
