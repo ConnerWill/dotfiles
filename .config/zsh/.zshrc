@@ -78,6 +78,7 @@
 ## ESC[23;0t              Restore title of terminal                           ##
 ## ESC[2K\e[1A\e[2K\r     Clear current line and 1 line above.                ##
 ## \r                     Move cursor to beginning of line                    ##
+## ESC]2;TEXT\a           Set terminal title
 ##                                                                            ##
 ## ESC[={value}h 	        Changes the screen width or                         ##
 ##                         type to the mode specified by value.               ##
