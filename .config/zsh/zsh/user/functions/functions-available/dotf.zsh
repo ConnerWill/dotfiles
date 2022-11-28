@@ -258,3 +258,4 @@ function _dotf-fzf-checkout(){
 alias dotfzf="_dotf-fzf-status"
 alias dotf-fzf="_dotf-fzf-status"
 alias dotf-fzf-checkout="_dotf-fzf-checkout"
+alias d="dotf"
