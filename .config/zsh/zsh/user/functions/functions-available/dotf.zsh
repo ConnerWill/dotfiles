@@ -1,9 +1,10 @@
 #shellcheck disable=2148
 
 dotf(){
-	export DOTFILES DOTFILES_WORKTREE
+  DOTFCMD="dotf"
+  DOTFVERSION="0.1.1"
+  export DOTFILES DOTFILES_WORKTREE DOTFCMD
 	local dotf_cmd printstring flag_verbose fill
-  declare -A colors
 
 	## Define GLOBAL variables
 	DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
@@ -16,14 +17,37 @@ dotf(){
   # flag_verbose=false
   # fill=myfile
 
+## Check if 'NO_COLOR' environment variable is defined
+## if 'NO_COLOR' is defined, do not define color array
+NO_COLOR=${NO_COLOR:-""}
+if [[ -n ${NO_COLOR} ]]; then
+  declare -A colors
+  colors[ColorOff]='\e[0m'
+  colors[bold]=''
+  colors[italic]=''
+  colors[underline]=''
+  colors[Black]=''
+  colors[Gray]=''
+  colors[DarkGray]=''
+  colors[White]=''
+  colors[Red]=''
+  colors[Green]=''
+  colors[Yellow]=''
+  colors[Blue]=''
+  colors[Purple]=''
+  colors[Magenta]=''
+  colors[Cyan]=''
+  colors[reset]='\e[0m'
+else
+  declare -A colors
   colors[ColorOff]='\e[0m'
   colors[bold]='\e[1m'
   colors[italic]='\e[3m'
   colors[underline]='\e[4m'
   colors[Black]='\e[30m'
-  colors[Gray]='\e[38;5;7m'
+  colors[Gray]='\e[38;5;245m'
   colors[DarkGray]='\e[38;5;8m'
-  colors[White]='\e[37m'
+  colors[White]='\e[38;5;15m'
   colors[Red]='\e[38;5;196m'
   colors[Green]='\e[38;5;46m'
   colors[Yellow]='\e[38;5;190m'
@@ -32,29 +56,10 @@ dotf(){
   colors[Magenta]='\e[38;5;201m'
   colors[Cyan]='\e[38;5;87m'
   colors[reset]='\e[0m'
+fi
+
 
   ###{{{ commented out
-  # local usage=(
-  #   "${colors[bold]}${colors[underline]}${colors[Green]}${0}${colors[reset]}:" #;38;5;15m\"<phrase to center>\" \"<1 char to fill empty space>\" \e[38;5;240m[<number of columns>] [<1 char to surround the whole result>\e[0m\n" >&2 \
-  #   " "
-  #   " ${colors[bold]}USAGE${colors[reset]}:"
-  #   " "
-  #   "   ${0} ${colors[italic]}${colors[Gray]}[-h|--help]${colors[reset]}"
-  #   "   ${0} ${colors[italic]}${colors[Gray]}[-f|--fill=<string>] [-s|--surround=<string>] ${colors[bold]}[<string>]${colors[reset]}"
-  #   "  "
-  #   " "
-  #   " ${colors[bold]}OPTIONS${colors[reset]}:"
-  #   " "
-  #   "   [-h|--help]              Show this help"
-  #   "   [-f|--fill=<string>]     Character to fill empty space (single character)"
-  #   "   [-s|--surround=<string>] Character to surround the whole result with (single character)"
-  #   " "
-  #   " "
-  #   " ${colors[bold]}EXAMPLES${colors[reset]}:"
-  #   " "
-  #   "   $ ${0} ${colors[italic]}${colors[Gray]}--fill='═' --surround='╪' ' HOWDY '${colors[reset]}"
-  # )
-  #
   # opterr() { printf >&2 "%s:${colors[reset]}${colors[Blue]}%s ${colors[yellow]}%s${colors[reset]}" "${1}" "${2}" "${3}"; printf "%s\n" $usage && return 1; }
   #
   # while (( $# )); do
@@ -74,104 +79,212 @@ dotf(){
   #
   ###}}} commented out
 
-# local usage_full=(
+ function _dotf_version(){
+    printf "%s %s\n" "${DOTFCMD}" "${DOTFVERSION}"
+ }
+
+function _dotf_help_name(){
+  printf "$(cat <<HELPMENUNAME
+
+${colors[bold]}${colors[Blue]}NAME${colors[reset]}
+
+  ${colors[Green]}${DOTFCMD}${colors[reset]}
+
+
+HELPMENUNAME
+)\n\n"
+}
 
 function _dotf_help(){
+  printf "$(cat <<HELPMENU
+
+${colors[bold]}${colors[Blue]}DESCRIPTION${colors[reset]}
+
+  ${colors[White]}Manage, backup, develop, sync your .dotfiles with ease${colors[reset]}
 
 
-cat <<HELPMENU
+${colors[bold]}${colors[Blue]}USAGE${colors[reset]}
 
-    ${colors[Magenta]}================================================================================${colors[reset]}\n"
-     ${colors[Blue]}NAME${colors[reset]}
+  ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
+       [-u|u|--up|up|--upload|upload [message]] [--fzf|fzf]
+       [-h|h] [--help|help] [-V|--version] [-- <git command>]
 
-         ${colors[Cyan]}$0${colors[reset]}
+  ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV]
 
-     ${colors[Blue]}DESCRIPTION${colors[reset]}
+  ${colors[Green]}${DOTFCMD}${colors[reset]} [-- <git command>]
 
-     		Shell/Bash/Zsh Function for managing .dotfiles
+${colors[bold]}${colors[Blue]}OPTIONS${colors[reset]}
 
+    -a, --add, a, add <files>
+          Add files to be tracked ${colors[italic]}(git add)${colors[reset]}
 
-     ${colors[Blue]}USAGE${colors[reset]}
+    -A, A, --all, add-all
+          Add all tracked files that have been modified
 
-         ${colors[Cyan]}$0${colors[reset]} [[-Aahpu]][[-h][-a files...][-A][-p][-u
-    =][message]]][-- [git commands]
+    -u, u, --up, --upload [message]
+          Commit and push changes, including an option commit message
 
+    --fzf, fzf
+          Run interactive dotf interface to manage repository with fzf
 
-     ${colors[Blue]}SUBCOMMANDS${colors[reset]}
-
-     		[[[-]h][[--]help]]                              : Show this help message
-     		[[[-]a[=]<files>][[--]add[=]<files>]]           : Add specific files
-     		[[[-]A][[--]all][add-all]]                      : Add all modified files
-     		[[[-]u[=][message]][[--]up[load][=][message]]]  : Commit and push changes
-
-
-     ${colors[Blue]}EXAMPLE${colors[reset]}
-
-     		\$  ${colors[Cyan]}$0${colors[reset]}
-
-     	Runnind '${colors[Cyan]}$0${colors[reset]}' with no subcommands or argumentns
-    ill show the current status.
-     	(Equivalent to running: '${colors[Cyan]}$0${colors[reset]} status')
+    -- <git commands>
+          Run git commands
 
 
-     ${colors[Blue]}EXAMPLE${colors[reset]}
+${colors[bold]}${colors[Blue]}META OPTIONS${colors[reset]}
 
+    -h, h
+        Show the help menu
 
-     		\$  ${colors[Cyan]}$0${colors[reset]} add-all
+    --help, help
+        Show the full ${DOTFCMD} help menu
 
-     	This command will 'git add' all modified files.
-     	It will not add new files that are not being tracked.
+    --usage, usage
+        Show ${DOTFCMD} usage
 
+    --examples, examples
+        Show ${DOTFCMD} examples
 
-     ${colors[Blue]}EXAMPLE${colors[reset]}
-
-     		\$  ${colors[Cyan]}$0${colors[reset]} upload 'Added help menu to function'
-    or
-     		\$  ${colors[Cyan]}$0${colors[reset]} --upload='Added help menutofunctinon'
-
-     	These two command will do the exact same thing.
-     	Just wanted to show you how the subcommands can be used.
-
-     	This will commit and push changes to the remote
-     	repository with a commit message of 'Added help menu to function'
-
-
-     ${colors[Blue]}EXAMPLE${colors[reset]}
-
-     		\$  ${colors[Cyan]}$0${colors[reset]} a && ${colors[Cyan]}$0${colors[reset]} 'Expanded help menu'
-
-     	This command is a shorthand way of adding all modified files,
-     	commiting with the commit message of 'Expanded help menu',
-       and then pushing to the remote.
-
-
-    ${colors[Magenta]}================================================================================${colors[reset]}
+    -V, --version
+        Show ${DOTFCMD} version
 
 HELPMENU
+)\n\n"
+}
 
+function _dotf_help_aliases(){
+  printf "$(cat <<HELPMENUALIASES
+
+${colors[bold]}${colors[Blue]}ALIASES${colors[reset]}
+
+  To add convenience when working with ${colors[Green]}${DOTFCMD}${colors[reset]},
+  several aliases exist that are assigned to specific ${colors[Green]}${DOTFCMD}${colors[reset]} commands.
+
+  Here are the aliases that are currently defined:
+
+    ${colors[Cyan]}d${colors[reset]}         ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]}'
+    ${colors[Cyan]}dotfa${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} add'
+    ${colors[Cyan]}dotfc${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} commit'
+    ${colors[Cyan]}dotfp${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} pull'
+    ${colors[Cyan]}dotfallup${colors[reset]} ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} add-all && ${colors[Green]}${DOTFCMD}${colors[reset]} up'
+
+
+HELPMENUALIASES
+)\n\n"
 }
 
 
-  #)
+function _dotf_help_examples(){
+  printf "$(cat <<HELPMENUEXAMPLES
+
+${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
+
+  Running '${colors[Green]}${DOTFCMD}${colors[reset]}' with no subcommands, options, or arguments
+  will show the current status of the repository:
+     ${colors[italic]}(Equivalent to running: '${colors[Green]}${DOTFCMD}${colors[reset]} status${colors[italic]}')${colors[reset]}
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]}
 
 
-	## If subcommand or switch is help, show help
-	if [[ "${1}" == "help" ]] || [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then print -f%b "%s\n" $usage_full && return 1;
+  Adding all modified files currently checked into dotf.
+  It will not add new files that are not being tracked.
 
-	## If subcommand is add-all, Add all changes
-	elif [[ "${1}" == "add-all" ]]; then
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} add-all
+
+
+  These next two command will do the exact same thing.
+  Showing you how the subcommands/options can be used.
+
+  These examples will commit and push changes to the remote repository
+  with a commit message of 'Added help menu to function'
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} upload 'Added help menu to function'
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} --upload='Added help menutofunctinon'
+
+
+  This little command is a shorthand way of running multiple commands
+  to add all modified files that are checked into ${DOTFCMD}, commit changes
+  with a commit message of 'Expanded help menu', and then pushing to the remote.
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} a && ${colors[Green]}${DOTFCMD}${colors[reset]} 'Expanded help menu'
+
+
+HELPMENUEXAMPLES
+)\n\n"
+}
+
+function _dotf_help_more_info(){
+  printf "$(cat <<HELPMENUMOREINFO
+
+${colors[bold]}${colors[Blue]}MORE${colors[reset]}
+
+  For more information, view the README on the ${DOTFCMD} repository
+  https://github.com/connerwill/${DOTFCMD}
+HELPMENUMOREINFO
+)\n\n"
+}
+
+function _dotf_help_full(){
+  _dotf_help_name
+  _dotf_help
+  _dotf_help_aliases
+  _dotf_help_examples
+  _dotf_help_more_info
+}
+
+  ## Full help
+	if [[ "${1}" == "--help" ]] || [[ "${1}" == "help" ]]; then
+    # print -f%b "%s\n" $usage_full && return 1;
+    _dotf_help_full
+    return
+
+  ## Short help
+	elif [[ "${1}" == "-h" ]] || [[ "${1}" == "h" ]];then
+    #print -f%b "%s\n" $usage_full && return 1;
+    _dotf_help_name
+    _dotf_help
+    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    return
+
+  ## Usage
+  elif [[ "${1}" == "--usage" ]] || [[ "${1}" == "usage" ]];then
+    _dotf_help_name
+    _dotf_help
+    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    return
+
+  ## Examples
+  elif [[ "${1}" == "--examples" ]] || [[ "${1}" == "examples" ]];then
+    _dotf_help_name
+    _dotf_help_examples
+    _dotf_help_more_info
+    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    return
+
+  ## Examples
+  elif [[ "${1}" == "-V" ]] || [[ "${1}" == "--version" ]];then
+    _dotf_version
+    return
+
+  ## Add all changes
+	elif [[ "${1}" == "add-all" ]] || [[ "${1}" == "all" ]]; then
  		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
 			diff --name-only \
 			| xargs -I{} sh -c "$(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} add -v ${HOME}/{}"
 
-	## If subcommand is upload, commit and push
+	## commit and push
 	elif [[ "${1}" == "upload" ]] || [[ "${1}" == "up" ]]; then
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
 			commit --status --branch --allow-empty-message --verbose -m "${2}" \
 		&& $(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
       push --verbose
 
-	## If subcommand does not match above, Run subcommand. If there is no subcommand, run status
+	## open fzf
+	elif [[ "${1}" == "--fzf" ]] || [[ "${1}" == "fzf" ]]; then
+    _dotf-fzf-status
+
+	## If args do not match above, Run subcommand. If there is no subcommand, run status
 	else
 		#shellcheck disable=2015
 		[[ $# -gt 0 ]] \
@@ -258,6 +371,8 @@ function _dotf-fzf-checkout(){
 alias dotfzf="_dotf-fzf-status"
 alias dotf-fzf="_dotf-fzf-status"
 alias dotf-fzf-checkout="_dotf-fzf-checkout"
-alias d="dotf"
+alias d='printf "\x1B[0;1;38;5;93m[DOTF]\x1B[0m:\x1B[0;38;5;87m\tDOTFILES MANAGER\x1B[0m\t\x1B[0;38;5;8m%s\x1B[0m\n" "$(date +%Y-%m-%d_%H:%M:%S)"; dotf'
 alias dotfallup="dotf add-all && dotf up"
+alias dotfc='printf "\x1B[0;1;48;5;46;38;5;15m[COMMIT]\x1B[0;38;5;46m\tcommiting changes...\n"; dotf commit --status --verbose -m'
+alias dotfa='printf "\x1B[0;1;48;5;46;38;5;15m[ADD]\x1B[0;38;5;46m\tadding files...\n"; dotf add --verbose'
 alias dotfp='dotf pull --all --progress --verbose --stat --dry-run || printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0;38;5;196m\tdry-run pull failed!\n" && dotf pull --all --progress --verbose --stat'
