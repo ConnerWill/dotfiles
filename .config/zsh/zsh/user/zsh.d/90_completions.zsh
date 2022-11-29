@@ -75,17 +75,24 @@ function comp_setup () {
     zstyle ':completion:*'                              verbose true                                                    ## Provide verbose completion information
     zstyle ':completion:*'                              verbose yes                                                     ## Provide verbose completion information
     zstyle ':completion:*:*:-subscript-:*'              tag-order indexes parameters                                    ## Offer indexes before parameters in subscripts
+    zstyle ':completion:*:cd:*'                         ignore-parents parent pwd                                       ## Never offer the current directory when completing 'cd ../<TAB>'
     zstyle ':completion:*:*:cd:*:directory-stack'       menu yes select                                                 ## Automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu
-    zstyle ':completion:*:*:cdr:*:*'                    menu selection
+    #zstyle ':completion:*:*:cdr:*:*'                    menu selection
+    zstyle ':completion:*:*:bat:*'                      menu yes select                                                 ## Menu selection for bat completion
+    zstyle ':completion:*:*:bat:*'                      file-sort time                                                  ## Sort Menu selection for bat by time
+    zstyle ':completion:*:*:cat:*'                      menu yes select                                                 ## Menu selection for cat completion
+    zstyle ':completion:*:*:cat:*'                      file-sort time                                                  ## Sort Menu selection for cat by time
+    zstyle ':completion:*:*:nvim:*'                     menu yes select                                                 ## Menu selection for nvim completion
+    zstyle ':completion:*:*:nvim:*'                     file-sort time                                                  ## Sort Menu selection for nvim by time
     zstyle ':completion:*:*:zcompile:*'                 ignored-patterns '(*~|*.zwc)'                                   ## Define files to ignore for zcompile
-    zstyle ':completion:*:approximate:'                 max-errors 'reply=( $((( $#PREFIX+$#SUFFIX) / 3 )) numeric )'    ## Allow one error for every N characters typed in approximate completer
+    zstyle ':completion:*:approximate:'                 max-errors 'reply=( $((( $#PREFIX+$#SUFFIX) / 3 )) numeric )'   ## Allow one error for every N characters typed in approximate completer
     zstyle ':completion:*:complete:*'                   cache-path "${ZCOMPCACHE}"
     zstyle ':completion:*:complete:-command-::commands' ignored-patterns '*\~'                                          ## Don't complete backup files (e.g. 'bin/foo~') as executables
     zstyle ':completion:*:complete:-command-::commands' ignored-patterns '(aptitude-*|*\~)'                             ## Don't complete backup files as executables
     zstyle ':completion:correct:'                       prompt '🖳 correct to: %e'
     zstyle ':completion:*:correct:*'                    insert-unambiguous true                                         ## Start menu completion only if it could find no unambiguous initial string
     zstyle ':completion:*:correct:*'                    original true
-    #zstyle ':completion:*:default'                      list-colors ${(s.:.)LS_COLORS}                                  ## Activate color-completion
+    #zstyle ':completion:*:default'                      list-colors ${(s.:.)LS_COLORS}                                 ## Activate color-completion
     zstyle ':completion:*:default'                      list-prompt '%S%M matches%s'
     zstyle ':completion:*:expand:*'                     tag-order all-expansions                                        ## Insert all expansions for expand completer
     zstyle ':completion:*:functions'                    ignored-patterns '(_*|pre(cmd|exec))'

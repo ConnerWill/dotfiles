@@ -417,16 +417,16 @@ bindkey -M viins -s '^[g' 'dotf status\n'
 ## the second let the user go to the parent directory (Alt+Up).
 ## They also display the directory content.
 cdPreviousDir() {
-  popd; zle reset-prompt; print
-  ls;   zle reset-prompt
+  popd -q; zle reset-prompt; print
+  ls; zle reset-prompt
 }; zle -N cdPreviousDir
 
 cdParentDir() {
-  pushd ..; zle reset-prompt; print
-  ls;       zle reset-prompt
+  pushd -q ..; zle reset-prompt; print
+  ls; zle reset-prompt
 }; zle -N cdParentDir
 
-# cdPreviousDir() {
+# cdNextDir() {
 #   popd; zle reset-prompt; print
 #   ls;   zle reset-prompt
 # }; zle -N cdPreviousDir
@@ -442,3 +442,14 @@ bindkey -M vicmd "^[[A" up-line
 bindkey -M viins '^[j' which-command
 
 [[ -n ${functions[run-help]} ]] && bindkey '^[h' run-help
+
+## “cd ..../dir”
+rationalise-dot() {
+ if [[ $LBUFFER = *.. ]]; then
+   LBUFFER+=/..
+ else
+   LBUFFER+=.
+ fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot

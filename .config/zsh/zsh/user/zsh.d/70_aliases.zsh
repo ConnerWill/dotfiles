@@ -295,7 +295,6 @@ alias check-file-permissions="stat ${*} --printf=\"\n%n\n%F\n%A\n%a\n\""
 if [[ "${commands[rclone]}" ]] {
   alias rclone-backup-scripts-to-onedrive="rclone copyto $HOME/scripts sk8:scripts --ignore-existing -v --progress --progress-terminal-title --check-first"
   alias rclone-sync-scripts='rclone sync "$HOME/scripts" "sk8:scripts" --dry-run  --interactive --create-empty-src-dirs --progress --color'
-  alias rclone-tree='rclone tree sk8: --color --level 5 --verbose'
   alias rclone-tree-all='rclone tree sk8: --color --verbose'
 }
 
