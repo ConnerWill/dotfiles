@@ -458,33 +458,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 </div>
 
 ---
-
-<footer>
- <nav data-content="bottom">
-  <div align="center">
-   <div id="foot">
-    <span id="bottom">
-     <p>
-     <strong>
-dotfiles
-     </strong>
-     </p>
-    </span>
-   </div>
-   <div id="foot2">
-    <span id="bottom2">
-     <p>
-     <strong>
-dotfiles
-     </strong>
-     </p>
-    </span>
-   </div>
-  </div>
- </nav>
-</footer>
  
-> *Bottom Text*
 </div>
 
 <!--
