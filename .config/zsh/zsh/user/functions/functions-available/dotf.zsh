@@ -260,3 +260,4 @@ alias dotf-fzf="_dotf-fzf-status"
 alias dotf-fzf-checkout="_dotf-fzf-checkout"
 alias d="dotf"
 alias dotfallup="dotf add-all && dotf up"
+alias dotfp='dotf pull --all --progress --verbose --stat --dry-run || printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0;38;5;196m\tdry-run pull failed!\n" && dotf pull --all --progress --verbose --stat'
