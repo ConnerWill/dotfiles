@@ -18,6 +18,10 @@
 
 
 
+color_black='\x1b[38;5;0m'
+color_white='\x1b[38;5;15m'
+color_gray='\x1b[38;5;7m'
+color_darkgray='\x1b[38;5;8m'
 color_red='\x1b[38;5;196m'
 color_yellow='\x1b[38;5;190m'
 color_blue='\x1b[38;5;33m'
@@ -34,41 +38,49 @@ PROG="$(basename $0)"
 
 function img2ascii_help(){
   printf "$(cat <<ENDHELP
-  ${color_blue}NAME:${color_reset}
+  ${color_bold}${color_underline}${color_blue}NAME:${color_reset}
 
-    ${color_green}$PROG${color_reset}
-
-
-  ${color_blue}DESCRIPTION:${color_reset}
-
-    Convert an image to ASCII characters and display it in the terminal
+    ${color_bold}${color_green}$PROG${color_reset}
 
 
-  ${color_blue}USAGE:${color_reset}
+  ${color_bold}${color_underline}${color_blue}DESCRIPTION:${color_reset}
 
-      ${color_green}$PROG${color_reset} [-format] imagefile
-
-      ${color_green}$PROG${color_reset} [-h|--help|help]
+    ${color_italic}${color_white}Convert an image to ASCII characters and display it in the terminal${color_reset}
 
 
-  ${color_blue}OPTIONS:${color_reset}
+  ${color_bold}${color_underline}${color_blue}USAGE:${color_reset}
+
+      ${color_bold}${color_green}$PROG${color_reset} ${color_gray}[-format]${color_reset} ${color_yellow}imagefile${color_reset}
+
+      ${color_bold}${color_green}$PROG${color_reset} ${color_gray}[-h|--help|help]${color_reset}
+
+
+  ${color_bold}${color_underline}${color_blue}OPTIONS:${color_reset}
+
 
     ${color_blue}FORMAT OPTIONS:${color_reset}
 
-      -colon4|-official|-dejure    Official format [default] (ESC[38:2::R:G:Bm)
-      -colon3|-wrong               Misinterpreted format (ESC[38:2:R:G:Bm)
-      -semicolon|-common|-defacto  Commonly used format (ESC[38;2;R;G;Bm)
+      ${color_gray}-colon4${color_reset}, ${color_gray}-official${color_reset}, ${color_gray}-dejure${color_reset}
+          Official format [default] (ESC[38:2::R:G:Bm)
+
+      ${color_gray}-colon3${color_reset}, ${color_gray}-wrong${color_reset}
+          Misinterpreted format (ESC[38:2:R:G:Bm)
+
+      ${color_gray}-semicolon${color_reset}, ${color_gray}-common${color_reset}, ${color_gray}-defacto${color_reset}
+          Commonly used format (ESC[38;2;R;G;Bm)
+
 
     ${color_blue}META OPTIONS:${color_reset}
 
-      -h|--help|help               Show this help menu
+      ${color_gray}-h${color_reset},${color_gray}--help${color_reset},${color_gray}help${color_reset}               Show this help menu
 
 
-  ${color_blue}EXAMPLES:${color_reset}
+  ${color_bold}${color_underline}${color_blue}EXAMPLES:${color_reset}
 
-    Display '~/pictures/image.png' in terminal
+    ${color_italic}Display ${color_yellow}'~/pictures/image.png'${color_reset}${color_italic} in the terminal${color_reset}
 
-      $ ${color_green}$PROG${color_reset} ~/pictures/image.png
+      $ ${color_bold}${color_green}$PROG${color_reset} ${color_yellow}~/pictures/image.png${color_reset}
+
 
 
 .
