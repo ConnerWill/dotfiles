@@ -13,12 +13,45 @@ function rclone-tree(){
 
 USAGE:
 
-  rclone-tree [remote name] [recursion depth]
+  rclone-tree [remote] [depth]
 
 
 OPTIONS:
 
   -h, --help       Show this help menu
+
+
+DEFAULTS:
+
+  remote           The first remote rclone finds
+  depth            3
+
+
+EXAMPLES:
+
+  Show tree of remote 'myonedrive' with a depth of 6:
+
+    $ rclone-tree myonedrive 6
+
+
+  Automatically select rclone remote and display tree with a default
+  recursion level of 3:
+
+    $ rclone-tree
+
+
+  It is NOT valid to only specify the depth;
+  you must also specify a remote:
+
+    $ rclone-tree 4
+
+
+  Show the help menu for rclone-tree:
+
+    $ rclone-tree -h
+
+    $ rclone-tree --help
+
 
 RCLONETREEHELP
 }
