@@ -350,6 +350,20 @@ fi
 # [Alt-#] -
 bindkey "^[#" push-input
 
+# Fuzzy Find suggestions fix
+# start typing + [Up-Arrow] - fuzzy find history forward
+# if [[ "${terminfo[kcuu1]}" != "" ]]; then
+#   autoload -U up-line-or-beginning-search
+#   zle -N up-line-or-beginning-search
+#   bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+# fi
+# # start typing + [Down-Arrow] - fuzzy find history backward
+# if [[ "${terminfo[kcud1]}" != "" ]]; then
+#   autoload -U down-line-or-beginning-search
+#   zle -N down-line-or-beginning-search
+#   bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+# fi
+
 ### zsh-change-case
 # I recomend you to use the following bindkeys
 #* Ctrl+K + Ctrl+U to uppercase
@@ -398,23 +412,6 @@ bindkey -r '^r'
 # <M-g> dotf status
 bindkey -M viins -s '^[g' 'dotf status\n'
 
-# Fuzzy Find suggestions fix
-# start typing + [Up-Arrow] - fuzzy find history forward
-# if [[ "${terminfo[kcuu1]}" != "" ]]; then
-#   autoload -U up-line-or-beginning-search
-#   zle -N up-line-or-beginning-search
-#   bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
-# fi
-# # start typing + [Down-Arrow] - fuzzy find history backward
-# if [[ "${terminfo[kcud1]}" != "" ]]; then
-#   autoload -U down-line-or-beginning-search
-#   zle -N down-line-or-beginning-search
-#   bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
-# fi
-
-
-
-
 ## Key binds like those used in graphic file managers may come handy.
 ## The first comes back in directory history (Alt+Left),
 ## the second let the user go to the parent directory (Alt+Up).
@@ -428,6 +425,11 @@ cdParentDir() {
   pushd ..; zle reset-prompt; print
   ls;       zle reset-prompt
 }; zle -N cdParentDir
+
+# cdPreviousDir() {
+#   popd; zle reset-prompt; print
+#   ls;   zle reset-prompt
+# }; zle -N cdPreviousDir
 
 bindkey '^[[1;3A'      cdParentDir
 bindkey '^[[1;3D'      cdPreviousDir

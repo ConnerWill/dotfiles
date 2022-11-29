@@ -1,4 +1,27 @@
+#shellcheck disable=1073,1083,1009
 
+## Set terminal title
+function title {
+  if [[ $TERM == "screen" ]]; then ## Use these two for GNU Screen:
+    print -nR $' 33k'$1$' 33'\
+    print -nR $' 33]0;'$2$''
+  elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then ## Use this one instead for XTerms:
+    print -nR $' 33]0;'$*$''
+  elif [[ $TERM == "xterm-256color" ]]; then ## Use this one instead for XTerms:
+    printf "\x1B]2;${1}\a"
+  fi
+}
+
+function precmd { title zsh "${PWD}" }
+function preexec {
+  emulate -L zsh
+  local -a cmd; cmd=(${1})
+  title ${cmd}
+
+  ## Format title to only show command and now subcommand or options
+  # local -a cmd; cmd=(${(z)1})
+  # title ${cmd[1]:t} "${cmd[2,-1]}"
+}
 
 ### REMEMBERING RECENT DIRECTORIES
 ###     cdr allows you to change the working directory to a previous
@@ -47,38 +70,6 @@
 #autoload -Uz add-zsh-hook zsh_diretory_name_generic zdn_mywrapper
 #add-zsh-hook -U zsh_directory_name zdn_mywrapper
 
-
-#   Complete example
-#       Here  is  a  full fictitious but usable autoloadable definition of the example function defined by the code above.
-#       So ~[gs:p:s] expands to /scratch/$USER/git/myscratchproject/top/srcdir (with $USER also expanded).
-#
-#              local -A zdn_top=(
-#                g   ~/git
-#                ga  ~/alternate/git
-#                gs  /scratch/$USER/git/:second2
-#                :default: /:second1
-#              )
-#
-#              local -A second1=(
-#                p   myproject
-#                s   somproject
-#                os  otherproject/subproject/:third
-#              )
-#
-#              local -A second2=(
-#                p   myscratchproject
-#                s   somescratchproject
-#              )
-#
-#              local -A third=(
-#                s   top/srcdir
-#                d   top/documentation
-#              )
-#
-#              # autoload not needed if you did this at initialisation...
-#              autoload -Uz zsh_directory_name_generic
-#              zsh_directory_name_generic "$@
-#
 #       It is also possible to use global associative arrays, suitably named, and set the style for the context of your wrapper function to refer to this.
 #       Then your set up code would contain the following:
 #
