@@ -1,27 +1,27 @@
 #shellcheck disable=1073,1083,1009
 
-## Set terminal title
-function title {
-  if [[ $TERM == "screen" ]]; then ## Use these two for GNU Screen:
-    print -nR $' 33k'$1$' 33'\
-    print -nR $' 33]0;'$2$''
-  elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then ## Use this one instead for XTerms:
-    print -nR $' 33]0;'$*$''
-  elif [[ $TERM == "xterm-256color" ]]; then ## Use this one instead for XTerms:
-    printf "\x1B]2;${1}\a"
-  fi
-}
-
-function precmd { title zsh "${PWD}" }
-function preexec {
-  emulate -L zsh
-  local -a cmd; cmd=(${1})
-  title ${cmd}
-
-  ## Format title to only show command and now subcommand or options
-  # local -a cmd; cmd=(${(z)1})
-  # title ${cmd[1]:t} "${cmd[2,-1]}"
-}
+# ## Set terminal title
+# function title {
+#   if [[ $TERM == "screen" ]]; then ## Use these two for GNU Screen:
+#     print -nR $' 33k'$1$' 33'\
+#     print -nR $' 33]0;'$2$''
+#   elif [[ $TERM == "xterm" || $TERM == "rxvt" ]]; then ## Use this one instead for XTerms:
+#     print -nR $' 33]0;'$*$''
+#   elif [[ $TERM == "xterm-256color" ]]; then ## Use this one instead for XTerms:
+#     printf "\x1B]2;${1}\a"
+#   fi
+# }
+#
+# function precmd { title zsh "${PWD}" }
+# function preexec {
+#   emulate -L zsh
+#   local -a cmd; cmd=(${1})
+#   title ${cmd}
+#
+#   ## Format title to only show command and now subcommand or options
+#   # local -a cmd; cmd=(${(z)1})
+#   # title ${cmd[1]:t} "${cmd[2,-1]}"
+# }
 
 ### REMEMBERING RECENT DIRECTORIES
 ###     cdr allows you to change the working directory to a previous
