@@ -32,6 +32,12 @@ USAGE:
   \e]8;;https://github.com/ConnerWill/dotfiles\e\\hyperlink\e]8;;\e\\ <URL> [text]
 
 
+OPTIONS:
+
+  -h, --help          Show this help menu
+  -p, --plain-text    Do not encode hyperlink, print plain text (does not accept input)
+
+
 EXAMPLE:
 
   Embed a hyperlink to connerwill.com in the text 'MY WEBSITE'
@@ -57,9 +63,17 @@ HYPERLINKHELP
 
   ## Check if help flags are passed
   if   [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
-    _hyperlink_help; return
+    _hyperlink_help
   elif [[ "${2}" == "-h" ]] || [[ "${2}" == "--help" ]]; then
-    _hyperlink_help; return
+    _hyperlink_help
+  elif [[ "${2}" == "-p" ]] || [[ "${1}" == "--plain-text" ]] || [[ "${2}" == "-p" ]] || [[ "${2}" == "--plain-text" ]]; then
+    ## Print plain text hyperlink escape sequence
+    printf "\e[0;1;3;4;38;5;15mPlain\e[0;38;5;196m:\e[0m\n"
+    print -R 'printf "\e]8;;URL\e\\TEXT\e]8;;\e\\\\\n"'
+    printf "\n\n\e[0;1;3;4;38;5;15mColored\e[0;38;5;196m:\e[0m\n"
+    print -R 'printf "\e]8;;URL\e\\\\\e[0;48;5;93;38;5;51mTEXT\e[0m\e]8;;\e\\\\\n"'
+    printf "\n\n\e[0;1;3;4;38;5;15mItalic, Underlined, Bold, and Colored\e[0;38;5;196m:\e[0m\n"
+    print -R 'printf "\e]8;;URL\e\\\\\e[0;1;3;4;48;5;87;38;5;201m TEXT \e[0m\e]8;;\e\\\\\n"'
   else
     ## Print embeded hyperlink
     printf '\e]8;;%s\e\\%s\e]8;;\e\\\n' "$1" "${2:-$1}"

@@ -88,7 +88,7 @@ function _dotf_help_name(){
 
 ${colors[bold]}${colors[Blue]}NAME${colors[reset]}
 
-  ${colors[Green]}${DOTFCMD}${colors[reset]}
+  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}
 
 
 HELPMENUNAME
@@ -105,15 +105,15 @@ ${colors[bold]}${colors[Blue]}DESCRIPTION${colors[reset]}
 
 ${colors[bold]}${colors[Blue]}USAGE${colors[reset]}
 
-  ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
+  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
        [-u|u|--up|up|--upload|upload [message]] [--fzf|fzf]
        [-h|h] [--help|help] [-V|--version] [-- <git command|git options>]]
 
-  ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV]
+  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV]
 
-  ${colors[Green]}${DOTFCMD}${colors[reset]} [options] [-- <git command|git options>]
+  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [options] [-- <git command|git options>]
 
-  ${colors[Green]}${DOTFCMD}${colors[reset]} [git subcommand]
+  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [git subcommand]
 
 
 ${colors[bold]}${colors[Blue]}OPTIONS${colors[reset]}
@@ -160,16 +160,16 @@ function _dotf_help_aliases(){
 
 ${colors[bold]}${colors[Blue]}ALIASES${colors[reset]}
 
-  To add convenience when working with ${colors[Green]}${DOTFCMD}${colors[reset]},
-  several aliases exist that are assigned to specific ${colors[Green]}${DOTFCMD}${colors[reset]} commands.
+  To add convenience when working with ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]},
+  several aliases exist that are assigned to specific ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} commands.
 
   Here are the aliases that are currently defined:
 
-    ${colors[Cyan]}d${colors[reset]}         ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]}'
-    ${colors[Cyan]}dotfa${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} add'
-    ${colors[Cyan]}dotfc${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} commit'
-    ${colors[Cyan]}dotfp${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} pull'
-    ${colors[Cyan]}dotfallup${colors[reset]} ${colors[DarkGray]}:${colors[reset]} alias for '${colors[Green]}${DOTFCMD}${colors[reset]} add-all && ${colors[Green]}${DOTFCMD}${colors[reset]} up'
+    ${colors[Cyan]}d${colors[reset]}         ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}'
+    ${colors[Cyan]}dotfa${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add${colors[reset]}'
+    ${colors[Cyan]}dotfc${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}commit${colors[reset]}'
+    ${colors[Cyan]}dotfp${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}pull${colors[reset]}'
+    ${colors[Cyan]}dotfallup${colors[reset]} ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]} && ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}up${colors[reset]}'
 
 
 HELPMENUALIASES
@@ -182,17 +182,17 @@ function _dotf_help_examples(){
 
 ${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
 
-  Running '${colors[Green]}${DOTFCMD}${colors[reset]}' with no subcommands, options, or arguments
+  Running '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}' with no subcommands, options, or arguments
   will show the current status of the repository:
-     ${colors[italic]}(Equivalent to running: '${colors[Green]}${DOTFCMD}${colors[reset]} status${colors[italic]}')${colors[reset]}
+     ${colors[italic]}(Equivalent to running: '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}status${colors[reset]}${colors[italic]}')${colors[reset]}
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]}
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}
 
 
   Adding all modified files currently checked into dotf.
   It will not add new files that are not being tracked.
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} add-all
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]}
 
 
   These next two command will do the exact same thing.
@@ -201,16 +201,16 @@ ${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
   These examples will commit and push changes to the remote repository
   with a commit message of 'Added help menu to function'
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} upload 'Added help menu to function'
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}upload${colors[reset]} 'Added help menu to function'
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} --upload='Added help menutofunctinon'
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}--upload${colors[reset]}='Added help menutofunctinon'
 
 
   This little command is a shorthand way of running multiple commands
   to add all modified files that are checked into ${DOTFCMD}, commit changes
   with a commit message of 'Expanded help menu', and then pushing to the remote.
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[Green]}${DOTFCMD}${colors[reset]} a && ${colors[Green]}${DOTFCMD}${colors[reset]} 'Expanded help menu'
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}a${colors[reset]} && ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} 'Expanded help menu'
 
 
 HELPMENUEXAMPLES
