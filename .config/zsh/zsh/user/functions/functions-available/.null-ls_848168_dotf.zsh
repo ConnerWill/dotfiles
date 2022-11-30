@@ -107,7 +107,7 @@ ${colors[bold]}${colors[Blue]}USAGE${colors[reset]}
 
   ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
        [-u|u|--up|up|--upload|upload [message]] [--fzf|fzf]
-       [-h|h] [--help|help] [-V|--version] [-- <git command|git options>]]
+       [-h|h] [--help|help] [-V|--version] [-- <git command>]
 
   ${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV]
 
@@ -130,7 +130,7 @@ ${colors[bold]}${colors[Blue]}OPTIONS${colors[reset]}
     --fzf, fzf
           Run interactive dotf interface to manage repository with fzf
 
-    -- <git commands|git options>
+    -- <git command|git options>
           Run git commands
 
 
@@ -271,7 +271,7 @@ function _dotf_help_full(){
     return
 
   ## Add all changes
-	elif [[ "${1}" == "add-all" ]] || [[ "${1}" == "all" ]] || [[ "${1}" == "--all" ]] || [[ "${1}" == "A" ]] || [[ "${1}" == "-A" ]]; then
+	elif [[ "${1}" == "add-all" ]] || [[ "${1}" == "all" ]] || [[ "${1}" == "--all" ]] || [[ "${1}" == "A" ]] || [[ "${1}" == "-A" ]]; then; then
  		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
 			diff --name-only \
 			| xargs -I{} sh -c "$(command -v git) --git-dir=${DOTFILES} --work-tree=${HOME} add -v ${HOME}/{}"
