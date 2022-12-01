@@ -76,7 +76,6 @@ alias ..etc="cd /etc"
 alias 'cd-1'="cd ${OLDPWD}"
 alias cdold="cd ${OLDPWD}"
 alias cdtemp="${TEMPDIR}"
-alias cdt="cd ${TEMPDIR}"
 alias cd-temp="${TEMPDIR}"
 
 
