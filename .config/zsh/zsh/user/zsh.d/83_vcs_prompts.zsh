@@ -441,8 +441,15 @@ function replacehostnameinprompt(){
 	  && local randcolor1=$(shuf --input-range=1-235 --head-count=1) \
 	  && local randcolor2=$(( 255 - randcolor1 )) \
 	  && PROMPTHOSTNAME="%F{$randcolor1}%M%f" \
-	  && PROMPTUSERNAME="%F{$(date +'%H')$(shuf --input-range=0-9 --head-count=1)}%n%f" 
-	  #&& PROMPTUSERNAME="%F{$randcolor2}%n%f" 
+	  && PROMPTUSERNAME="%F{$(date +'%H')$(shuf --input-range=0-9 --head-count=1)}%n%f"
+	  #&& PROMPTUSERNAME="%F{$randcolor2}%n%f"
+
+  [[ $(uname -n) == "dampsock.com" ]] \
+	  && local randcolor1=$(shuf --input-range=1-235 --head-count=1) \
+	  && local randcolor2=$(shuf --input-range=1-235 --head-count=1) \
+	  && PROMPTHOSTNAME="%F{$randcolor1}%M%f" \
+	  && PROMPTUSERNAME="%F{$randcolor2}%M%f"
+	  #&& PROMPTUSERNAME="%F{$randcolor2}%n%f"
 
 ## rpi
   [[ \
