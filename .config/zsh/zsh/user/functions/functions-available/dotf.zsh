@@ -1,21 +1,17 @@
 #shellcheck disable=2148
 
-dotf(){
-  DOTFCMD="dotf"
-  DOTFVERSION="0.1.1"
-  export DOTFILES DOTFILES_WORKTREE DOTFCMD
-	local dotf_cmd printstring flag_verbose fill
 
-	## Define GLOBAL variables
+function dotf(){
+  DOTFVERSION="0.1.1"
 	DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
 	DOTFILES_WORKTREE="${DOTFILES_WORKTREE:-${HOME}}"
-
-	## Define local varuables
+  PROG="dotf"
 	dotf_cmd="$(command -v git) --git-dir=${DOTFILES} --work-tree=${DOTFILES_WORKTREE}"
 
-  # printstring=()
-  # flag_verbose=false
-  # fill=myfile
+  export DOTFILES DOTFILES_WORKTREE PROG
+	local dotf_cmd printstring flag_verbose fill
+
+###{{{ COLORS
 
 ## Check if 'NO_COLOR' environment variable is defined
 ## if 'NO_COLOR' is defined, do not define color array
@@ -58,6 +54,7 @@ else
   colors[reset]='\e[0m'
 fi
 
+###}}} COLORS
 
   ###{{{ commented out
   # opterr() { printf >&2 "%s:${colors[reset]}${colors[Blue]}%s ${colors[yellow]}%s${colors[reset]}" "${1}" "${2}" "${3}"; printf "%s\n" $usage && return 1; }
@@ -79,24 +76,26 @@ fi
   #
   ###}}} commented out
 
- function _dotf_version(){
-    printf "%s %s\n" "${DOTFCMD}" "${DOTFVERSION}"
- }
+###{{{ DOTF HELP
 
-function _dotf_help_name(){
-  printf "$(cat <<HELPMENUNAME
+  function _dotf_version(){
+    printf "%s %s\n" "${PROG}" "${DOTFVERSION}"
+  }
+
+  function _dotf_help_name(){
+    printf "$(cat <<HELPMENUNAME
 
 ${colors[bold]}${colors[Blue]}NAME${colors[reset]}
 
-  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]}
 
 
 HELPMENUNAME
-)\n\n"
-}
+    )\n\n"
+  }
 
-function _dotf_help(){
-  printf "$(cat <<HELPMENU
+  function _dotf_help(){
+    printf "$(cat <<HELPMENU
 
 ${colors[bold]}${colors[Blue]}DESCRIPTION${colors[reset]}
 
@@ -105,15 +104,15 @@ ${colors[bold]}${colors[Blue]}DESCRIPTION${colors[reset]}
 
 ${colors[bold]}${colors[Blue]}USAGE${colors[reset]}
 
-  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} [-AapufhV] [-a|a|--add|add <files>] [-A|A|--all|all|add-all]
        [-u|u|--up|up|--upload|upload [message]] [--fzf|fzf]
        [-h|h] [--help|help] [-V|--version] [-- <git command|git options>]]
 
-  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [-AapufhV]
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} [-AapufhV]
 
-  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [options] [-- <git command|git options>]
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} [options] [-- <git command|git options>]
 
-  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} [git subcommand]
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} [git subcommand]
 
 
 ${colors[bold]}${colors[Blue]}OPTIONS${colors[reset]}
@@ -140,59 +139,59 @@ ${colors[bold]}${colors[Blue]}META OPTIONS${colors[reset]}
         Show the help menu
 
     --help, help
-        Show the full ${DOTFCMD} help menu
+        Show the full ${PROG} help menu
 
     --usage, usage
-        Show ${DOTFCMD} usage
+        Show ${PROG} usage
 
     --examples, examples
-        Show ${DOTFCMD} examples
+        Show ${PROG} examples
 
     -V, --version
-        Show ${DOTFCMD} version
+        Show ${PROG} version
 
 HELPMENU
-)\n\n"
-}
+    )\n\n"
+  }
 
-function _dotf_help_aliases(){
-  printf "$(cat <<HELPMENUALIASES
+  function _dotf_help_aliases(){
+    printf "$(cat <<HELPMENUALIASES
 
 ${colors[bold]}${colors[Blue]}ALIASES${colors[reset]}
 
-  To add convenience when working with ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]},
-  several aliases exist that are assigned to specific ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} commands.
+  To add convenience when working with ${colors[bold]}${colors[Green]}${PROG}${colors[reset]},
+  several aliases exist that are assigned to specific ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} commands.
 
   Here are the aliases that are currently defined:
 
-    ${colors[Cyan]}d${colors[reset]}         ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}'
-    ${colors[Cyan]}dotfa${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add${colors[reset]}'
-    ${colors[Cyan]}dotfc${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}commit${colors[reset]}'
-    ${colors[Cyan]}dotfp${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}pull${colors[reset]}'
-    ${colors[Cyan]}dotfallup${colors[reset]} ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]} && ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}up${colors[reset]}'
+    ${colors[Cyan]}d${colors[reset]}         ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${PROG}${colors[reset]}'
+    ${colors[Cyan]}dotfa${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}add${colors[reset]}'
+    ${colors[Cyan]}dotfc${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}commit${colors[reset]}'
+    ${colors[Cyan]}dotfp${colors[reset]}     ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}pull${colors[reset]}'
+    ${colors[Cyan]}dotfallup${colors[reset]} ${colors[DarkGray]}:${colors[reset]} alias for '${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]} && ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}up${colors[reset]}'
 
 
 HELPMENUALIASES
-)\n\n"
-}
+    )\n\n"
+  }
 
 
-function _dotf_help_examples(){
-  printf "$(cat <<HELPMENUEXAMPLES
+  function _dotf_help_examples(){
+    printf "$(cat <<HELPMENUEXAMPLES
 
 ${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
 
-  Running '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}' with no subcommands, options, or arguments
+  Running '${colors[bold]}${colors[Green]}${PROG}${colors[reset]}' with no subcommands, options, or arguments
   will show the current status of the repository:
-     ${colors[italic]}(Equivalent to running: '${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}status${colors[reset]}${colors[italic]}')${colors[reset]}
+     ${colors[italic]}(Equivalent to running: '${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}status${colors[reset]}${colors[italic]}')${colors[reset]}
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]}
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]}
 
 
   Adding all modified files currently checked into dotf.
   It will not add new files that are not being tracked.
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]}
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}add-all${colors[reset]}
 
 
   These next two command will do the exact same thing.
@@ -201,60 +200,67 @@ ${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
   These examples will commit and push changes to the remote repository
   with a commit message of 'Added help menu to function'
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}upload${colors[reset]} 'Added help menu to function'
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}upload${colors[reset]} 'Added help menu to function'
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}--upload${colors[reset]}='Added help menutofunctinon'
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}--upload${colors[reset]}='Added help menutofunctinon'
 
 
   This little command is a shorthand way of running multiple commands
-  to add all modified files that are checked into ${DOTFCMD}, commit changes
+  to add all modified files that are checked into ${PROG}, commit changes
   with a commit message of 'Expanded help menu', and then pushing to the remote.
 
-    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} ${colors[Yellow]}a${colors[reset]} && ${colors[bold]}${colors[Green]}${DOTFCMD}${colors[reset]} 'Expanded help menu'
-
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}a${colors[reset]} && ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} 'Expanded help menu'
 
 HELPMENUEXAMPLES
-)\n\n"
-}
+    )\n\n"
+  }
 
-function _dotf_help_more_info(){
-  printf "$(cat <<HELPMENUMOREINFO
+  function _dotf_help_more_info(){
+    printf "$(cat <<HELPMENUMOREINFO
 
 ${colors[bold]}${colors[Blue]}MORE${colors[reset]}
 
-  For more information, view the README on the ${DOTFCMD} repository
-  https://github.com/connerwill/${DOTFCMD}
+  For more information, view the README on the ${PROG} repository
+  https://github.com/connerwill/${PROG}
 HELPMENUMOREINFO
-)\n\n"
-}
+    )\n\n"
+  }
 
-function _dotf_help_full(){
-  _dotf_help_name
-  _dotf_help
-  _dotf_help_aliases
-  _dotf_help_examples
-  _dotf_help_more_info
-}
+  function _dotf_help_full(){
+    _dotf_help_name
+    _dotf_help
+    _dotf_help_aliases
+    _dotf_help_examples
+    _dotf_help_more_info
+  }
+#"
+###}}} DOTF HELP
+
+###{{{ MESSAGES
+
+ _dotf_msg(){ printf "\x1B[0;1;38;5;93m[%s]\x1B[0m:\t\x1B[0m\t\x1B[0;38;5;8m%s\x1B[0m\n" "${PROG}" "$(date +%Y-%m-%d_%H:%M:%S)"; }
+ _dotf_msg_commit(){ printf "\x1B[0;1;48;5;46;38;5;15m[COMMIT]\x1B[0;38;5;46m\tcommiting changes...\n"; }
+ _dotf_msg_fail(){ printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0m:\t\x1B[0;38;5;196m%s\n" "${@}" ; }
+
+###}}} MESSAGES
 
   ## Full help
 	if [[ "${1}" == "--help" ]] || [[ "${1}" == "help" ]]; then
-    # print -f%b "%s\n" $usage_full && return 1;
     _dotf_help_full
     return
 
   ## Short help
 	elif [[ "${1}" == "-h" ]] || [[ "${1}" == "h" ]];then
-    #print -f%b "%s\n" $usage_full && return 1;
     _dotf_help_name
     _dotf_help
-    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
     return
 
   ## Usage
   elif [[ "${1}" == "--usage" ]] || [[ "${1}" == "usage" ]];then
     _dotf_help_name
     _dotf_help
-    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
     return
 
   ## Examples
@@ -262,7 +268,7 @@ function _dotf_help_full(){
     _dotf_help_name
     _dotf_help_examples
     _dotf_help_more_info
-    printf "\nrun '%s --help' to see the full help menu\n" "${DOTFCMD}"
+    printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
     return
 
   ## Examples
@@ -371,11 +377,13 @@ function _dotf-fzf-checkout(){
     fi
 }
 
-alias dotfzf="_dotf-fzf-status"
-alias dotf-fzf="_dotf-fzf-status"
-alias dotf-fzf-checkout="_dotf-fzf-checkout"
-alias d='printf "\x1B[0;1;38;5;93m[DOTF]\x1B[0m:\x1B[0;38;5;87m\tDOTFILES MANAGER\x1B[0m\t\x1B[0;38;5;8m%s\x1B[0m\n" "$(date +%Y-%m-%d_%H:%M:%S)"; dotf'
-alias dotfallup="dotf add-all && dotf up"
-alias dotfc='printf "\x1B[0;1;48;5;46;38;5;15m[COMMIT]\x1B[0;38;5;46m\tcommiting changes...\n"; dotf commit --status --verbose -m'
-alias dotfa='printf "\x1B[0;1;48;5;46;38;5;15m[ADD]\x1B[0;38;5;46m\tadding files...\n"; dotf add --verbose'
-alias dotfp='dotf pull --all --progress --verbose --stat --dry-run || printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0;38;5;196m\tdry-run pull failed!\n" && dotf pull --all --progress --verbose --stat'
+function _dotf_aliases(){
+  alias dotfzf="_dotf-fzf-status"
+  alias dotf-fzf="_dotf-fzf-status"
+  alias dotf-fzf-checkout="_dotf-fzf-checkout"
+  alias d='printf "\x1B[0;1;38;5;93m[DOTF]\x1B[0m:\x1B[0;38;5;87m\tDOTFILES MANAGER\x1B[0m\t\x1B[0;38;5;8m%s\x1B[0m\n" "$(date +%Y-%m-%d_%H:%M:%S)"; dotf'
+  alias dotfallup="dotf add-all && dotf up"
+  alias dotfc='printf "\x1B[0;1;48;5;46;38;5;15m[COMMIT]\x1B[0;38;5;46m\tcommiting changes...\n"; dotf commit --status --verbose -m'
+  alias dotfa='printf "\x1B[0;1;48;5;46;38;5;15m[ADD]\x1B[0;38;5;46m\tadding files...\n"; dotf add --verbose'
+  alias dotfp='dotf pull --all --progress --verbose --stat --dry-run || printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0;38;5;196m\tdry-run pull failed!\n" && dotf pull --all --progress --verbose --stat'
+}

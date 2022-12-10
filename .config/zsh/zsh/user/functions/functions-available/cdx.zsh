@@ -96,3 +96,10 @@ if [[ -n "${KITTY_CONFIG_DIR}" ]]; then
 		alias cdk-e='${EDITOR} ${KITTY_CONFIG_DIR}/kitty.conf'
 	fi
 fi
+
+### cd to temporary folder
+TEMPORARY_DIR="${TEMPORARY_DIR:-${HOME}/temporary}"
+if [[ -d "${TEMPORARY_DIR}" ]]; then
+	export TEMPORARY_DIR
+	alias cdt='cdz ${TEMPORARY_DIR}'
+fi
