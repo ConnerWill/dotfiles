@@ -51,6 +51,7 @@ if [[ -n "${ZDOTDIR}" ]]; then
 			alias cdz-fe='cdz ${ZSH_USER_DIR}/functions/functions-enabled'
 			alias cdzfe='cdz ${ZSH_USER_DIR}/functions/functions-enabled'
 			alias cdz-p='cdz ${ZSH_USER_DIR}/plugins'
+			alias cdzp='cdz ${ZSH_USER_DIR}/plugins'
 			alias cdz-d='cdz ${ZSH_USER_DIR}/zsh.d'
 			alias cdzd='cdz ${ZSH_USER_DIR}/zsh.d'
 			alias ezsh='${EDITOR} ${ZSH_USER_DIR}/zsh.d'

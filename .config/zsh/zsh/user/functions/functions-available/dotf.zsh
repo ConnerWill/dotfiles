@@ -387,6 +387,7 @@ function _dotf_aliases(){
   alias dotf-fzf-checkout="_dotf-fzf-checkout"
   alias d='printf "\x1B[0;1;38;5;93m[DOTF]\x1B[0m:\x1B[0;38;5;87m\tDOTFILES MANAGER\x1B[0m\t\x1B[0;38;5;8m%s\x1B[0m\n" "$(date +%Y-%m-%d_%H:%M:%S)"; dotf'
   alias dotfallup="dotf add-all && dotf up"
+  alias 'dotf allup'="dotf add-all && dotf up"
   alias dotfc='printf "\x1B[0;1;48;5;46;38;5;15m[COMMIT]\x1B[0;38;5;46m\tcommiting changes...\n"; dotf commit --status --verbose -m'
   alias dotfa='printf "\x1B[0;1;48;5;46;38;5;15m[ADD]\x1B[0;38;5;46m\tadding files...\n"; dotf add --verbose'
   alias dotfp='dotf pull --all --progress --verbose --stat --dry-run || printf "\x1B[0;1;4;48;5;196;38;5;15m[FAILED]\x1B[0;38;5;196m\tdry-run pull failed!\n" && dotf pull --all --progress --verbose --stat'
