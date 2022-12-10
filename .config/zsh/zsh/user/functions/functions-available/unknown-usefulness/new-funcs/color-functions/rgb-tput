@@ -1,3 +1,0 @@
-function rgb(){
-    clear && bash /home/dampsock/scripts/bash/development/snippets/colors/List-Colors.sh | bat --file-name="COLOR_CODES_1" && echo -e "\n\nPRESS ENTER\n\n" && read -s && bash /home/dampsock/scripts/bash/development/snippets/colors/List-Colors2.sh | bat --file-name="COLOR_CODES_2" && clear && echo "DONE"
-}
