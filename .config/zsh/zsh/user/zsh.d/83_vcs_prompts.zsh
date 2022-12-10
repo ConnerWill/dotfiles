@@ -448,7 +448,7 @@ function replacehostnameinprompt(){
 	  && local randcolor1=$(shuf --input-range=1-235 --head-count=1) \
 	  && local randcolor2=$(shuf --input-range=1-235 --head-count=1) \
 	  && PROMPTHOSTNAME="%F{$randcolor1}%M%f" \
-	  && PROMPTUSERNAME="%F{$randcolor2}%M%f"
+	  && PROMPTUSERNAME="%F{$randcolor2}%n%f"
 	  #&& PROMPTUSERNAME="%F{$randcolor2}%n%f"
 
 ## rpi
