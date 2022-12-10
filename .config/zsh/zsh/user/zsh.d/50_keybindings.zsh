@@ -453,3 +453,29 @@ rationalise-dot() {
 }
 zle -N rationalise-dot
 bindkey . rationalise-dot
+
+
+wrapwhich-command-line() {
+  [[ -z $BUFFER ]] && zle up-history
+  if [[ -n "$OLDBUFFER" ]]; then
+    BUFFER="$OLDBUFFER"
+    CURSOR=$OLDCURSOR
+    unset OLDCURSOR OLDBUFFER
+    # zle -U i
+  else
+    OLDBUFFER=$BUFFER
+    OLDCURSOR=$CURSOR
+    BUFFER=" \$(which ${BUFFER})"
+    CURSOR=0
+    # zle -U i
+  fi
+  # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
+  zle redisplay
+}
+zle -N wrapwhich-command-line
+# Defined shortcut keys: [Esc|Alt] w
+bindkey -r '^[w'
+bindkey -r '\ew'
+bindkey -M vicmd '\ew' wrapwhich-command-line
+bindkey -M emacs '\ew' wrapwhich-command-line
+bindkey -M viins '\ew' wrapwhich-command-line
