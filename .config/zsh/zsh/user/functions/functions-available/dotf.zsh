@@ -1,6 +1,5 @@
 #shellcheck disable=2148
 
-
 function dotf(){
   DOTFVERSION="0.1.1"
 	DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
