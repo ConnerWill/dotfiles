@@ -433,6 +433,7 @@ fi
 ### [=]==================================[=]
 if [[ "${commands[docker]}" ]] {
   alias docker-run-interactive="docker run --interactive --tty"
+  alias docker-run-archlinux='clear;printf "\x1B[0;1;38;5;51mSTARTING ARCH LINUX IN DOCKER\x1B[0m\n"; docker run --interactive --tty archlinux'
   alias docker-lazy='lazydocker'
   alias dockers="docker search --no-trunc"
 
