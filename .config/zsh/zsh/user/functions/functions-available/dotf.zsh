@@ -286,7 +286,7 @@ HELPMENUMOREINFO
 	## commit and push
 	elif [[ "${1}" == "upload" ]] || [[ "${1}" == "up" ]] || [[ "${1}" == "--up" ]] || [[ "${1}" == "--upload" ]] || [[ "${1}" == "-u" ]] || [[ "${1}" == "u" ]]; then
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
-			commit --status --branch --allow-empty-message --verbose -m "${2}"         \
+			commit --status --branch --allow-empty-message --verbose -m "${2}"
 		$(command -v git) --git-dir="${DOTFILES}" --work-tree="${DOTFILES_WORKTREE}" \
       push --verbose
 
