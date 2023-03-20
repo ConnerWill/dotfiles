@@ -1,3 +1,5 @@
+#shellcheck disable=2148,2317
+
 g(){
 
 ###{{{ SETUP
