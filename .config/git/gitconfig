@@ -5,9 +5,9 @@
 [author]
 	email = conner.will@infinitecampus.com
 	name = Conner.Will
-[credential]
+[credential "https://isgit-inf001.infinitecampus.com"]
 	username = ConnerWill
-	helper = cache --timeout=129000
+	helper = cache --timeout=315360000
 [credential "https://github.com"]
 	username = ConnerWill
 	helper =
