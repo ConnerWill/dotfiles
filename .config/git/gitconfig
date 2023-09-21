@@ -1,19 +1,19 @@
 [user]
-	email = connerwill@connerwill.com
-	name = ConnerWill
+	email = conner.will@infinitecampus.com
+	name = conner.will
 	signingkey = 3AED4B68E6FD33BC
 [author]
-	email = connerwill@connerwill.com
-	name = ConnerWill
+	email = conner.will@infinitecampus.com
+	name = Conner.Will
 [credential]
 	username = ConnerWill
 	helper = cache --timeout=129000
 [credential "https://github.com"]
 	username = ConnerWill
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
 [credential "https://gitlab.com"]
 	username = ConnerWill
@@ -170,3 +170,5 @@
 	psh = push -v
 	c = commit --verbose --status -m
 	d = diff --ignore-all-space --color=always --color-moved-ws=ignore-all-space --minimal
+	pushall = !git push -v && git push origin2 -v
+	pshall = !git push -v && git push origin2 -v

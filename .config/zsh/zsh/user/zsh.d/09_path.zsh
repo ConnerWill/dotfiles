@@ -9,6 +9,7 @@ export PATH="${PATH}:${HOME}/.local/bin"
 export PATH="${PATH}:${HOME}/.local/lib/bat-extras/bin"
 export PATH="${PATH}:${HOME}/.local/bin/Python/3.8/bin"
 export PATH="${PATH}:${HOME}/go/bin"
+export PATH="${PATH}:${HOME}/.cargo/bin"
 export PATH="${PATH}:${XDG_DATA_HOME}/gem/ruby/3.0.0/bin"
 
 path+=( "${HOME}/.bin"                          )
