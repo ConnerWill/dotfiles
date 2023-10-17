@@ -90,11 +90,12 @@ cht zsh
 
 ## Description
 
+Print ANSI color table
 
 ## Usage
 
 ```bash
-
+colortest
 ```
 
 ---
