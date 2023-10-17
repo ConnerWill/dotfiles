@@ -112,6 +112,10 @@ Changes prompt to preset 'demo' prompt
 DEMOPROMPT
 ```
 
+```bash
+DEMOPROMPT_RESTORE
+```
+
 ---
 
 # diagnostics
