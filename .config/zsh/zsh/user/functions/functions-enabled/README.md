@@ -20,11 +20,12 @@ ansi-colors
 
 ## Description
 
+Record terminal with asciinema and save to preconfigured directory
 
 ## Usage
 
 ```bash
-
+asciinema-rec
 ```
 
 ---
@@ -33,11 +34,12 @@ ansi-colors
 
 ## Description
 
+If you try to cd to a file, this will cd you to the files directory
 
 ## Usage
 
 ```bash
-
+cd ~/.config/zsh/.zshrc
 ```
 
 ---
@@ -46,6 +48,7 @@ ansi-colors
 
 ## Description
 
+When cd to a symlink, cd to the actual link destination
 
 ## Usage
 
@@ -59,11 +62,12 @@ ansi-colors
 
 ## Description
 
+Change directory to config directories based on letter given after cd
 
 ## Usage
 
 ```bash
-
+cdz
 ```
 
 ---
@@ -72,11 +76,12 @@ ansi-colors
 
 ## Description
 
+Wrapper for `curl -L https://cht.sh`
 
 ## Usage
 
 ```bash
-
+cht zsh
 ```
 
 ---
@@ -98,11 +103,12 @@ ansi-colors
 
 ## Description
 
+Changes prompt to preset 'demo' prompt
 
 ## Usage
 
 ```bash
-
+DEMOPROMPT
 ```
 
 ---
@@ -151,6 +157,7 @@ dotf --help
 
 ## Description
 
+Downloads page from website, converts to plaintext and then speaks the contents with espeak
 
 ## Usage
 
@@ -164,7 +171,7 @@ dotf --help
 
 ## Description
 
-Reset zsh - Runs exec zsh
+Reloads zsh - Runs exec zsh
 
 ## Usage
 
@@ -192,6 +199,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Recursive sed
 
 ## Usage
 
@@ -205,11 +213,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Fuzzy finder that shows file contents
 
 ## Usage
 
 ```bash
-
+fzfcolor
 ```
 
 ---
@@ -218,11 +227,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Fuzzy finder ripgrep
 
 ## Usage
 
 ```bash
-
+fzfrg
 ```
 
 ---
@@ -231,11 +241,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Markdown viewer in terminal
 
 ## Usage
 
 ```bash
-
+g README.md
 ```
 
 ---
@@ -257,11 +268,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Acts like git, if no subcommand is passed, it will behave as if `git status` has been run
 
 ## Usage
 
 ```bash
-
+gi
 ```
 
 ---
@@ -270,11 +282,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Clones a github repo then cd into the repo directory
 
 ## Usage
 
 ```bash
-
+gitcd https://github.com/ConnerWill/dotfiles
 ```
 
 ---
@@ -296,11 +309,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Returns ID of GPG key
 
 ## Usage
 
 ```bash
-
+gpgID <NAME>
 ```
 
 ---
@@ -335,6 +349,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Formats text and URL into a clickable hyperlink
 
 ## Usage
 
@@ -374,11 +389,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Man page fuzzy finder
 
 ## Usage
 
 ```bash
-
+manfzf
 ```
 
 ---
@@ -400,11 +416,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Creates a directory and cd into that directory
 
 ## Usage
 
 ```bash
-
+mkcd ~/new
 ```
 
 ---
@@ -465,6 +482,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Replaces backslashes with forwardslashes
 
 ## Usage
 
@@ -478,11 +496,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Removed the current working directory you are in
 
 ## Usage
 
 ```bash
-
+rmcwd
 ```
 
 ---
@@ -504,11 +523,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Shows a long list of files to be removed before removing them with approval
 
 ## Usage
 
 ```bash
-
+rmls ~/Trash
 ```
 
 ---
@@ -530,11 +550,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Splits `$PATH` into multiple parts
 
 ## Usage
 
 ```bash
-
+pathnewlines
 ```
 
 ---
@@ -556,6 +577,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Function to create ssh keys
 
 ## Usage
 
@@ -595,11 +617,12 @@ fail2ban-client-status-all
 
 ## Description
 
+This function tells you that you are not in vim
 
 ## Usage
 
 ```bash
-
+:w
 ```
 
 ---
@@ -621,6 +644,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Displays a preview of all toilet/figlet fonts
 
 ## Usage
 
@@ -673,11 +697,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Downloads a website with wget
 
 ## Usage
 
 ```bash
-
+wgetmirrorwebsite "https://google.com" "$HOME/Trash"
 ```
 
 ---
@@ -699,6 +724,7 @@ fail2ban-client-status-all
 
 ## Description
 
+Shows a loading bar
 
 ## Usage
 
@@ -725,11 +751,12 @@ fail2ban-client-status-all
 
 ## Description
 
+Reloads zsh - runs `exec zsh`
 
 ## Usage
 
 ```bash
-
+zshreload
 ```
 
 ---
