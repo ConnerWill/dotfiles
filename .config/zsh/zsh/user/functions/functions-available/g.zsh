@@ -117,7 +117,7 @@ g(){
   ##     $ g glow README.md
   ##
   ##     $ g rich README.md
-  RENDERER="${RENDERER:-"rich"}"
+  RENDERER="${RENDERER:-"glow"}"
 
   if   [[ "${1}" == "rich" ]]; then RENDERER="rich"; shift
   elif [[ "${1}" == "glow" ]]; then RENDERER="glow"; shift
