@@ -117,11 +117,12 @@ DEMOPROMPT
 
 ## Description
 
+Generates zsh diagnostics dump
 
 ## Usage
 
 ```bash
-
+zsh_diagnostic_dump
 ```
 
 ---
@@ -134,7 +135,7 @@ DEMOPROMPT
 ## Usage
 
 ```bash
-
+dirselect
 ```
 
 ---
