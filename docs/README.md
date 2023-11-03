@@ -125,18 +125,16 @@ git clone https://github.com/connerwill/dotfiles   \
 
 ---
 
+<!--
+
 # Features
 
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
+- [x] Fully featured ZSH configuration
+  - [x]
 - [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
+- [ ] TODO
 
+-->
 
 
 # Contributing
