@@ -118,6 +118,8 @@ git clone https://github.com/connerwill/dotfiles   \
 
 ---
 
+<!--
+
 ## ZSH
 
 <div align="center">
@@ -140,6 +142,7 @@ git clone https://github.com/connerwill/dotfiles   \
 
 </div>
 
+-->
 
 # Contributing
 
