@@ -139,9 +139,6 @@ git clone https://github.com/connerwill/dotfiles   \
 
 # Configurations
 
-**BOLD**
-: More than standard configuration
-
 * **Xresources**
 * alacritty
 * **awesome**
@@ -166,6 +163,8 @@ git clone https://github.com/connerwill/dotfiles   \
 * **tmux**
 * **zsh**
 
+**BOLD**
+: More than standard configuration
 
 # Contributing
 
