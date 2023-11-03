@@ -8,19 +8,17 @@
 ├── tools/
 │   ├── debugging/
 │   ├── templates/
-├── .zlogin
-├── .zprofile
 ├── zsh/
 │   └── user/
-│       ├── completion
-│       ├── fpath
-│       ├── functions
+│       ├── completion/
+│       ├── fpath/
+│       ├── functions/
 │       │   ├── functions-available
 │       │   └── functions-enabled
-│       ├── plugins
+│       ├── plugins/
 │       │   ├── plugins-available
 │       │   └── plugins-enabled
-│       └── zsh.d
+│       └── zsh.d/
 │           ├── 00_pre.zsh
 │           ├── 09_path.zsh
 │           ├── 10_variables.zsh
@@ -42,4 +40,6 @@
 │           └── 99_keybindings.zsh
 ├── .zshenv
 ├── .zshrc
+├── .zlogin
+└── .zprofile
 ```
