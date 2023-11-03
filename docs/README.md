@@ -94,6 +94,7 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 </details>
 
+<br>
 
 <details>
  <summary><b>Test dotfiles in Docker</b></summary>
