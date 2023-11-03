@@ -1,13 +1,9 @@
 # ZSH
 
+These are the files/directories that are sourced on ZSH startup
+
 ```
 .
-├── docs/
-│   └── README.md
-├── lib/
-├── tools/
-│   ├── debugging/
-│   ├── templates/
 ├── zsh/
 │   └── user/
 │       ├── completion/
