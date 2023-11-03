@@ -31,7 +31,7 @@
 <details>
  <summary><b>Standard Installation</b></summary>
 
-<br><br>
+<br>
 
 > **Clone this repository to use as your dotfiles**
 
@@ -58,12 +58,12 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
  && exec zsh
 ```
 
-<br><br>
+<br>
 
 <details>
  <summary><b>Single Command</b></summary>
 
-<br><br>
+<br>
 
  <div align="center">
 
@@ -98,7 +98,7 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 <details>
  <summary><b>Test dotfiles in Docker</b></summary>
 
-<br><br>
+<br>
 
 > **Test full config in Docker**
 ```shell
@@ -120,7 +120,7 @@ git clone https://github.com/connerwill/dotfiles   \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
-<br><br>
+<br>
 
 </details>
 
