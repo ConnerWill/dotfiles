@@ -191,6 +191,7 @@ function {
 	local kcap seq seq_mac widget
 
 	# Bind Shift keys in the emacs and shift-select keymaps.
+  #shellcheck disable=1058
 	for	kcap   seq          seq_mac    widget (
 		kLFT   '^[[1;2D'    x          backward-char        # Shift + LeftArrow
 		kRIT   '^[[1;2C'    x          forward-char         # Shift + RightArrow

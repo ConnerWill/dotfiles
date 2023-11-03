@@ -1,4 +1,4 @@
-#shellcheck disable=2148,2139,2059
+#shellcheck disable=2148,2139,2059,1050,1140
 
 alias e="$EDITOR"
 # alias ez="exec ${SHELL}"

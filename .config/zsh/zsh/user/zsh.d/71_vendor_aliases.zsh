@@ -124,6 +124,7 @@ if [[ "${commands[lsd]}" ]]; then
   ## REQUIRE VERSION  0.22.0 or later: https://github.com/Peltoche/lsd/releases/tag/0.22.0
   lsdversion=
   lsdversion="$(${commands[lsd]} --version 2>/dev/null | cut -d' ' -f2 )"
+  #shellcheck disable=1072,1027,1073,1009
   islsd22(){ [[ $lsdversion == <0->.<22->.* ]]; }
   if islsd22; then
     ## LSD_UNSUPPORTED is unset, add these aliases

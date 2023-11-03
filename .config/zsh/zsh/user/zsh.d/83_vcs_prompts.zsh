@@ -391,6 +391,7 @@ if [[ "${DISTRO}" == "Android" ]]; then
 
 
     TERMUX_BATTERY_STATUS="$(termux-battery-status)"
+    #shellcheck disable=2082
     TERMUX_BATTERY_PERCENTAGE="${$(echo "${TERMUX_BATTERY_STATUS}" | grep 'percentage' | cut --delimiter=':' -f2)}"
     TERMUX_BATTERY_PERCENTAGE_short="${TERMUX_BATTERY_STATUS[2]}"
 
@@ -399,7 +400,7 @@ if [[ "${DISTRO}" == "Android" ]]; then
     BATT_ICON="${battery_charging_icon_array[${TERMUX_BATTERY_PERCENTAGE_short}]}"
     # printf "Batt: %s\n" "${BATT_ICON}"
     printf "\e[?25l"
-    for i in ${battery_icon_array[@]}; do
+    for i in "${battery_icon_array[@]}"; do
       printf "\e[2K\r%s" "${i}"; sleep 0.01
     done
     printf "\e[?25h"
@@ -467,6 +468,7 @@ function replacehostnameinprompt(){
 function backup_prompt_incase_of_failure(){
   ## Set a prompt in case of failure
   printf "\e[0;1;38;5;196mError whilst loading prompt :,(\t\e[0;1;38;5;8mUsing a default prompt instead ;)\n"
+  #shellcheck disable=2078,2057,2050
   if [[ autoload -Uz promptinit && promptinit ]] && [[ autoload -Uz colors && colors ]]; then
     return 0
   else

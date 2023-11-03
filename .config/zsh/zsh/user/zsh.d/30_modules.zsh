@@ -1,4 +1,4 @@
-
+#shellcheck disable=2148
 
 
 autoload -Uz url-quote-magic
@@ -20,7 +20,7 @@ if autoload -Uz run-help; then
                               "svk"
                               "svn"
                             )
-  for run_help_module in ${run_help_array[@]}; do
+  for run_help_module in "${run_help_array[@]}"; do
     autoload -Uz "run-help-${run_help_module}" >/dev/null 2>&1 || printf "\e[0;1;38;5;196mUnable to load run-help module:\t%s\e[0m\n" "${run_help_module}"
   done
 
