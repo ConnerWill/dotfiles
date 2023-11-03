@@ -1,7 +1,7 @@
 # Images
 #*.png
-*.jpg
-*.jpeg
+# *.jpg
+# *.jpeg
 
 # Archives / Binaries
 *.tar
