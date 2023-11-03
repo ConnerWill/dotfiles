@@ -89,9 +89,6 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 </details>
 
----
-
-
 
 <details>
  <summary><b>Test dotfiles in Docker</b></summary>
@@ -119,8 +116,7 @@ git clone https://github.com/connerwill/dotfiles   \
 
 </details>
 
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+---
 
 ## ZSH
 
