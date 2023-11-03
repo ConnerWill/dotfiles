@@ -15,12 +15,12 @@
 ```
 
 [![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
-![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)
-![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)
-![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
+[![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
+[![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
 [![GitLab](https://img.shields.io/static/v1?label=gitlab&logo=gitlab&color=E24329&message=mirrored)](https://gitlab.com/ConnerWill/dotfiles)
-![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)
-![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)
+[![GitHub](https://img.shields.io/github/license/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles/blob/main/docs/LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/ConnerWill/dotfiles?style=social)](https://github.com/ConnerWill/dotfiles/stargazers)
 
 </div>
 
