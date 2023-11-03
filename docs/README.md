@@ -28,6 +28,9 @@
 
 ## Installation
 
+<details>
+ <summary><b>Standard Installation</b></summary>
+
 > **Clone this repository to use as your dotfiles**
 
 ```shell
@@ -57,7 +60,6 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 <details>
  <summary><b>Single Command</b></summary>
 
-
  <div align="center">
 
 
@@ -85,7 +87,15 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 </details>
 
+</details>
+
 ---
+
+
+
+<details>
+ <summary><b>Test dotfiles in Docker</b></summary>
+
 
 > **Test full config in Docker**
 ```shell
@@ -97,8 +107,6 @@ git clone https://github.com/connerwill/dotfiles   \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
----
-
 > **Test ZSH with no extra packages**
 ```shell
 git clone https://github.com/connerwill/dotfiles   \
@@ -109,6 +117,7 @@ git clone https://github.com/connerwill/dotfiles   \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
+</details>
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -138,9 +147,8 @@ git clone https://github.com/connerwill/dotfiles   \
 
 # Contributing
 
-<div align="center">
-  <details>
-    <summary>Click to expand contributing section</summary>
+<details>
+  <summary>Click to expand contributing section</summary>
 
 
 ---
@@ -155,35 +163,10 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-  <p align="right">(<a href="#top">back to top</a>)</p>
+
 </details>
 
-</div>
-
 ---
-
-</div>
-
-
-<div align="center">
-
-```console
- ┍────────────────────────────────────────────────┐
- │         ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀        │
- │          █▀   ███▄██    ▀█ ██      ██          │
- │          ▀   ███ ▀███▄     ██      ██          │
- │             ███    ▀█████▄ ██████████          │
- │            ███   ▄     ▀██ ██      ██          │
- │           ███   ▄██     ██ ██      ██          │
- │         █████████▀█████▀▄████▄  ▄████▄▄        │
- ├────────────────────────────────────────────────┤
- │            ＺＳＨ ＣＯＮＦＩＧ                 │
- │ Ｍｙ Ｚ－Ｓｈｅｌｌ Ｃｏｎｆｉｇｕｒａｔｉｏｎ │
- └────────────────────────────────────────────────┘
-```
-
-</div>
-
 
 <div align="center">
 
@@ -194,7 +177,3 @@ If you have a suggestion that would make this better, please fork the repo and c
 ```
 
 </div>
-
-```ocaml
-ＺＳＨ  /  ＮＶＩＭ  /  ＴＭＵＸ  /  ＡＷＥＳＯＭＥＷＭ
-```
