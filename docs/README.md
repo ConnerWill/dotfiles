@@ -127,9 +127,17 @@ git clone https://github.com/connerwill/dotfiles   \
 
 # Features
 
-| Unchecked | Checked |
-| --------- | ------- |
-| &#9744;   | &#9745; |
+- [ ] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley
+
+
 
 # Contributing
 
@@ -186,5 +194,10 @@ If you have a suggestion that would make this better, please fork the repo and c
 ```
 
 </div>
+
+
+| Unchecked | Checked |
+| --------- | ------- |
+| &#9744;   | &#9745; |
 
 -->
