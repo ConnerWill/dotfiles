@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Zsh
-        run: docker run --rm -i -v $(pwd):/zsh-config -w /zsh-config zshusers/zsh zsh -i .config/zsh/.zshrc
+        run: docker run --rm -i -v $(pwd):/root -w /root zshusers/zsh zsh -i .config/zsh/.zshrc
 
       - name: Check for errors
         run: |
