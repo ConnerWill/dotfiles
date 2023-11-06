@@ -15,6 +15,7 @@
 ```
 
 [![shellcheck](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ConnerWill/dotfiles/actions/workflows/shellcheck.yml)
+[![Test ZSH Configuration](https://github.com/ConnerWill/dotfiles/actions/workflows/zsh-test.yml/badge.svg)](https://github.com/ConnerWill/dotfiles/actions/workflows/zsh-test.yml)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
 [![GitHub issues](https://img.shields.io/github/issues-raw/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
 [![GitHub repo size](https://img.shields.io/github/repo-size/ConnerWill/dotfiles)](https://github.com/ConnerWill/dotfiles)
