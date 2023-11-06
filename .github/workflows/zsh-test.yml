@@ -1,0 +1,28 @@
+name: Check Zsh Configuration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-zsh-configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Zsh
+        run: docker run --rm -it -v $(pwd):/zsh-config -w /zsh-config zsh:latest zsh -n .zshrc
+
+      - name: Check for errors
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Zsh configuration is valid."
+          else
+            echo "Error: Zsh configuration contains errors."
+            exit 1
+          fi
