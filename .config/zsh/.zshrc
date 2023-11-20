@@ -265,14 +265,6 @@ function _zshloadverbose(){
 }
 ### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ###}}}
 
-### :::::::::::::: OS TYPE ::::::::::::::::::::::::: ###{{{
-# ZSHLIB="${ZDOTDIR}/lib"
-# if [[ -d "${ZSHLIB}" ]]; then
-#   if [[ -f "${ZSHLIB}/ostype" ]]; then
-#     source "${ZSHLIB}/ostype"
-#     islinux && OSTYPE="linux"
-#     isandroid && OSTYPE="linux"
-#     ismacos &&
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
   if [[ -f /etc/os-release ]]; then
     DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
@@ -284,66 +276,13 @@ elif [[ "${OSTYPE}" == "linux-android" ]]; then
 else
   unset DISTRO
 fi
-### ::::::::::::::::: END OS TYPE ::::::::::::::::::::::: ###}}}
 
-### :::::::::::::: TMUX :::::::::::::::::::::::: ###{{{
-## Set NOTMUX to any value to disable automatic tmux
-NOTMUX=1
-# shellcheck disable=2148
-function _zshinittmux(){
- [[ -n "${NOTMUX}" ]] && return 0
-  # Check if tmux is installed, return if not
-  command -v tmux >/dev/null 2>&1 || return 0
-  if [[ -z $TMUX && -n $SSH_TTY ]]; then
-    if tmux has-session >/dev/null 2>&1; then
-       exec tmux -2 attach-session
-    else
-       exec tmux -2 new-session
-    fi
-  fi
-}
-# _zshinittmux
-unfunction _zshinittmux
-### :::::::::::::: END TMUX ::::::::::::::::: ###}}}
-
-### :::::::::::::: LOADING BAR ::::::::::::::::::::: ###{{{
-function _loading_bar(){
-  printf "\e[0;38;5;201mLOADING \e[0;38;5;46mZSH\e[0;38;5;201m ...\e[0m\t"
-  local bar_color sleep_time
-  bar_color='\e[0;48;5;46m'
-  sleep_time=0.04
-  for ((k = 0; k <= 10 ; k++)); do
-    printf "" ## Start character
-    for ((i = 0 ; i <= k; i++)); do
-      printf "${bar_color}   \e[0m"
-    done
-    for ((j = i ; j <= 10 ; j++)); do
-      printf "   "
-    done
-    v=$((k * 10))
-    printf " " ## End character
-    echo -n "$v %" $'\r'
-    sleep $sleep_time
-  done
-}
-### :::::::::::::::::: END LOADING BAR ::::::::::::::::::: ###}}}
-
-### :::::::::::::: ZSHRC CLEAR SCREEN FUNCTIONS ::::::::::: ###{{{
 function _zshload_clear_line(){ printf "\e[2K\r"; }
 function _zshloadstartclear(){ [[ -z "$zsh_load_start_clear" ]] || clear; }
 function _zshloadendclear(){ [[ -z "$zsh_load_end_clear" ]] || clear; }
-### :::::::::::::: END ZSHRC CLEAR SCREEN FUNCTIONS ::::::: ###}}}
 
-###{{{ :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###
 _zshloadstartclear
 
-#: Clear Screen Before Loading
-###}}} :::::::::::::: END ZSHRC PRE-RUN CLEAR SCREEN ::::::::: ###
-
-### :::::::::::::: ZSHRC SOURCE ZSHDDIR ::::::::::::::::::: ###{{{
-#Something I've found to be successful is to have a $ZDOTDIR/zsh.d folder and drop
-#plugins from other plugin managers (e.g. oh-my-zsh, prezto) there.
-#You can then easily source the files in your .zshrc file with something like
 
 # shellcheck disable=SC1009
 if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
@@ -356,32 +295,6 @@ if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
 else
   _zshrc_VERBOSE_ERROR "Directory does not exist" "${ZSH_USER_LOAD_DIR}" "196" "124"
 fi
-### :::::::::::::: END ZSHRC SOURCE ZSHDDIR ::::::::::::::: ###}}}
 
-### :::::::::::::: ZSHRC PRE-RUN CLEAR SCREEN ::::::::::::: ###{{{
 _zshloadendclear
 _zshload_clear_line
-#: Clear Screen After Loading
-### :::::::::::::: END ZSHRC POST-RUN CLEAR SCREEN :::::::: ###}}}
-
-### ::::::::::::::::::: DEBUGGING STOP :::::::::::::::::::: ###{{{
-
-if [[ -n "$ZSH_PROFILE_RC" ]]; then
-  unsetopt xtrace
-  exec 2>&3 3>&-
-  #zprof # >! ~/zshrc.zprof
-  #exit
-fi
-
-### ::::::::::::::::::: END DEBUGGING STOP :::::::::::::::: ###}}}
-
-
-### :::::::::::::: ZSHRC EXIT TRAPS ::::::::::::: ###{{{
- # TRAPEXIT() {
-    # commands to run here, e.g. if you
-    # always want to run .zlogout: if [[ ! -o login ]]; then
-      # don't do this in a login shell because it happens anyway
-      #source "${ZDOTDIR}/.zlogout"
-    #fi
-  #}
-### ::::::::::: END ZSHRC EXIT TRAPS ::::::::::::: ###}}}

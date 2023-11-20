@@ -1,5 +1,4 @@
 #shellcheck disable=2148
-
 EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
 
 # Set our umask (Defualt: 022)
