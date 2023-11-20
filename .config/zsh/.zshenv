@@ -1,20 +1,16 @@
-###
-### ZSHENV
-###
-#
+#shellcheck disable=2148
+
 ## XDG
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CACHE_HOME="$HOME/.cache"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 
-### ZSH
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export ZSHRC="$ZDOTDIR/.zshrc"
+## ZSH
+ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-${HOME}/.config}/zsh}"
+ZSHRC="${ZSHRC:-${ZDOTDIR:-${XDG_CONFIG_HOME:-${HOME}/.config}/zsh}/.zshrc}"
+export ZDOTDIR ZSHRC
 
-### LOCALE
-export LC_ALL="en_US.UTF-8"
-
-## No global files
-#setopt NOGLOBALRCS
-#setopt PROMPT_SUBST
-#setopt PROMPT
+## LOCALE
+LC_ALL="${LC_ALL:-en_US.UTF-8}"
+export LC_ALL
