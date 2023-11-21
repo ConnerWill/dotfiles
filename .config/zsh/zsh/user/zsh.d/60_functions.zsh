@@ -22,29 +22,19 @@
 #shellcheck source=./functions/zshfunctions.zsh
 #shellcheck source=./completions/zshcompletions.zsh
 ##}}}
-
-
-
 ### [=============================]
 ### [------- ZSH FUNCTIONS -------]
-### [=============================]---------------------------]
-### [ Example:                                                ]
-### [  $ source "$ZSH_CUSTOM_FUNCTIONS/path-to/zsh-plugin.zsh"]
-### [=============================]---------------------------]
-export ZSH_FUNCTIONS_AVAILABLE ZSH_FUNCTIONS_ENABLED ZSH_FUNCTIONS_CONFIG_DIR
-ZSH_FUNCTIONS_DIR="${ZSH_USER_DIR}/functions"
+### [=============================]
+      ZSH_FUNCTIONS_DIR="${ZSH_USER_DIR}/functions"
 ZSH_FUNCTIONS_AVAILABLE="${ZSH_FUNCTIONS_DIR}/functions-available"
-ZSH_FUNCTIONS_ENABLED="${ZSH_FUNCTIONS_DIR}/functions-enabled"
+  ZSH_FUNCTIONS_ENABLED="${ZSH_FUNCTIONS_DIR}/functions-enabled"
+export ZSH_FUNCTIONS_AVAILABLE ZSH_FUNCTIONS_ENABLED ZSH_FUNCTIONS_CONFIG_DIR
 
 ## Load functions
 if [[ -d "${ZSH_FUNCTIONS_ENABLED}" ]]; then
   for ZSH_FILE in "${ZSH_FUNCTIONS_ENABLED}"/*.zsh(N); do
-      _zshrc_VERBOSE_MESSEGE "  Function" "$(basename ${ZSH_FUNCTIONS_ENABLED})/$(basename ${ZSH_FILE})" "93" "46"
-      source "${ZSH_FILE}" \
-        || _zshrc_VERBOSE_ERROR "Function Failed To Load" "[${ZSH_FILE}]" "196" "190"
-    done
-  else
-    _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_FUNCTIONS_ENABLED}]" "196" "124"
+    source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Failed to source function file: ${ZSH_FILE}"
+  done
+else
+  _zshrc_VERBOSE_ERROR "Function directory does not exist: ${ZSH_FUNCTIONS_ENABLED}"
 fi
-
-

@@ -1,103 +1,108 @@
 # shellcheck disable=2148
 
 
-export NVIMDIR="$XDG_CONFIG_HOME/nvim"
-export WATCH_FAST_INTERVAL=0.1
-export WATCH_INTERVAL=1
-
-function draw_entire_line(){
-
-  #############################################
-  ## Usage:
-  ##
-  ##    $ draw_entire_line 5 "\e[0;38;5;198m"
-  ##
-  ##         ^             ^          ^
-  ##    function        Linestyle  Color
-  #############################################
-  ##
-  ## Replace current prompt with a blue bar
-  ##
-  ##    $ draw_entire_line 6 "^[[1A^[[2K^[[1A^[[2K\e[0;38;5;33m"
-  ##
-  ## for i in $(seq 1 255); do draw_entire_line 4 "^[[1A^[[2K\r\e[0;38;5;${i}m"; sleep 0.1; done
-  ## for i in $(seq 1 255); do draw_entire_line 4 "\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.1; done
-  ## for i in $(seq 0 16); do draw_entire_line 6 "\e[?25l\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.05; done; printf "\e[?25h"
-  ##
-  ## printf "\e[?25h" ## Restore cursor
-  #############################################
-  ## Index of which line type to use (1-10)
-  LINECHAR="$1"
-  ## Color of the linee
-  colorline="${2}"
-  ## Default line
-  solidline="${(mr:$COLUMNS::─:)}"
-
-  [[ "${LINECHAR}" -eq 1  ]] && solidline="${(mr:$COLUMNS::─:)}"
-  [[ "${LINECHAR}" -eq 2  ]] && solidline="${(mr:$COLUMNS::═:)}"
-  [[ "${LINECHAR}" -eq 3  ]] && solidline="${(mr:$COLUMNS::═:)}"
-  [[ "${LINECHAR}" -eq 4  ]] && solidline="${(mr:$COLUMNS::─:)}"
-  [[ "${LINECHAR}" -eq 5  ]] && solidline="${(mr:$COLUMNS::▂:)}"
-  [[ "${LINECHAR}" -eq 6  ]] && solidline="${(mr:$COLUMNS::▄:)}"
-  [[ "${LINECHAR}" -eq 7  ]] && solidline="${(mr:$COLUMNS::▀:)}"
-  [[ "${LINECHAR}" -eq 8  ]] && solidline="${(mr:$COLUMNS::─:)}"
-  [[ "${LINECHAR}" -eq 9  ]] && solidline="${(mr:$COLUMNS::─:)}"
-  [[ "${LINECHAR}" -eq 10 ]] && solidline="${(mr:$COLUMNS::#:)}"
-
-  printf "${colorline}${solidline}\e[0m"
-}
-
-### {{{ OS SPECIFIC  {{{
-###   {{{ LINUX SPECIFIC
-###     {{{ ARCHLINUX  SPECIFIC
-
-SYSARCH_OSTYPE_UNIX_LINUX_ARCHLINUX="true" ## TODO:
-if [[ -n "${SYSARCH_OSTYPE_UNIX_LINUX_ARCHLINUX}" ]]; then
-  if command -v yay >/dev/null 2>&1; then
-    alias yay='yay --color always'
-    alias yayi='yay -S --color always --verbose'
-    alias yayinstall='yay -S --color always --verbose'
-    alias yaylist='yay -Q --color always'
-    alias yays-aur='yay -Ss --color always --sortby votes --aur'
-    alias yays='yay -Ss --color always --sortby votes'
-    alias yaysearch-modified='yay -Ss --color always --sortby modified'
-    alias yaysearch-name='yay -Ss --color always --sortby name'
-    alias yaysearch-popular='yay -Ss --color always --sortby popularity'
-    alias yaysearch-votes='yay -Ss --color always --sortby votes'
-    alias yaysearch='yay -Ss --color always'
-    alias yaysi='yay -S -ii --color always'
-  fi
-fi ; unset SYSARCH_OSTYPE_UNIX_LINUX_ARCHLINUX
-###     }}} OARCHLINUX  SPECIFIC
-###   }}} LINUX SPECIFIC
-### }}} OS SPECIFIC  }}}
-
-
-if command -v shellcheck >/dev/null 2>&1; then
-  function bat_preview_languages(){
-      local viewfile="$1"
-      [[ -z "$viewfile" ]] && local viewfile="$HOME/*"
-      local batlangsdirt=$(bat --list-languages | sort --reverse)
-      local batlangs=$(echo "$batlangsdirt" | awk -F ":" '{print $2}' | awk -F "," '{print $1}' | awk '{print $1}')
-      echo "$batlangs" | fzf --preview-window=right,80% --preview="bat --language={} --color=always $viewfile"
-  } ; alias bat-preview-languages="bat_preview_languages"
+### Suffix
+autoload -U zsh-mime-setup && zsh-mime-setup
+alias -s pl=perl
+alias -s html="${BROWSER}"
+alias -s htm="${BROWSER}"
+if [[ "${commands[evince]}" ]]; then
+  alias -s pdf=evince
 fi
-function c(){
-    local catthis
-       catthis="$1"
-       [[ -z "${catthis}" ]] && return 1
-       [[ -z "${PAGER}"   ]] && PAGER="less"
-       [[ -f "${catthis}" ]] && "${PAGER}" "${catthis}" && return 0
-    if [[ -d "${catthis}" ]]; then
-      cd "${catthis}" || printf "failed to cd" || return 1
-    fi
-  }
+if [[ "${commands[eog]}" ]]; then
+  alias -s png=eog
+  alias -s jpg=eog
+  alias -s jpeg=eog
+  alias -s gif=eog
+elif [[ "${commands[termux-open]}" ]]; then
+  alias -s png=termux-open
+  alias -s jpg=termux-open
+  alias -s jpeg=termux-open
+  alias -s gif=termux-open
+  alias -s pdf=termux-open
+fi
 
-#{{{ LS ALIASES
-alias sl="ls"
-alias ll="ls --long -A"
-alias l="ls -1 -A"
-alias sls="ls"
+### [=]==================================[=]
+### [~]............ RSYNC
+### [=]==================================[=]
+if [[ "${commands[rsync]}" ]]; then
+  alias cpr='rsync --archive --human-readable --info=progress2'
+  alias cprvvv='rsync --archive --human-readable --info=ALL'
+  alias cpMISC='rsync --archive --human-readable --info=MISC'
+  alias cpREMOVED='rsync --archive --human-readable --info=REMOVE'
+  alias cpSKIPPED='rsync --archive --human-readable --info=SKIP'
+  alias cpSTAT='rsync --archive --human-readable --info=STATS'
+fi
+
+### [=]==================================[=]
+### [~]............ RCLONE
+### [=]==================================[=]
+if [[ "${commands[rclone]}" ]]; then
+  alias rclone-tree-all='rclone tree sk8: --color --verbose'
+fi
+
+### [=]==================================[=]
+### [~]......... Package Managers
+### [=]==================================[=]
+if [[  -n "${DISTRO}" ]]; then
+  if [[ ${DISTRO} == "Arch" ]] || [[ ${DISTRO} == "Parabola" ]] || [[ ${DISTRO} == "Artix" ]] || [[ ${DISTRO} == "Manjaro" ]] && [[ "${commands[pacman]}" ]]; then
+        alias paci="${SUDOCMD} pacman -S --color always --verbose"
+        alias pacinstall="${SUDOCMD} pacman -S --color always --verbose"
+        alias paclist-installed="${SUDOCMD} pacman -Q --color always"
+        alias pacman="pacman --color always"
+        alias pacs="pacman -Ss --color=always"
+        alias pacsi="pacman -Sii --color always --verbose"
+        alias update="${SUDOCMD} pacman -Syuv" # Upgrade all system packages.
+        if [[ "${commands[yay]}" ]]; then
+          alias yay='yay --color always'
+          alias yays='yay -Ss --color always --sortby votes'
+          alias yays-aur='yay -Ss --color always --sortby votes --aur'
+          alias yaysi='yay -S -ii --color always'
+          alias yaysearch='yay -Ss --color always'
+          alias yaysearch-popular='yay -Ss --color always --sortby popularity'
+          alias yaysearch-name='yay -Ss --color always --sortby name'
+          alias yaysearch-modified='yay -Ss --color always --sortby modified'
+          alias yaysearch-votes='yay -Ss --color always --sortby votes'
+          alias yayinstall='yay -S --color always --verbose'
+          alias yayi='yay -S --color always --verbose --needed'
+          alias yayino='yay -S --color always --verbose --needed --noconfirm'
+          alias yaylist='yay -Q --color always'
+        fi
+  elif [[ ${DISTRO} == "Debian"   ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios"    ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
+        alias apts="apt search"
+        alias apti="apt install"
+        alias aptupdate="printf '\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n'; apt-get update -y"
+        alias aptupgrade="printf '\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n' ; apt-get upgrade -y"
+        alias update="aptupgrade"
+        alias upgrade="aptupgrade"
+        alias updgrate="aptupdate && aptupgrade"
+        alias aptupdgrate="aptupdate && aptupgrade"
+  elif [[ ${DISTRO} == "Android" ]] || [[ ${DISTRO} == "Termux"  ]] && [[ "${commands[pkg]}" ]]; then
+        alias pkgi="pkg install"
+        alias pkgs="pkg search"
+        alias pkgu="pkg upgrade"
+        if [[ "${commands[pkgfzf]}" ]] && [[ "${commands[fzf]}"  ]]; then
+          alias pkgf="pkgfzf fzf"
+        fi
+  elif [[ ${DISTRO} == "Gentoo" ]] \
+    && [[ "${commands[emerge]}" ]]; then
+    printf ""
+  fi
+fi
+
+
+### [=]==================================[=]
+### [~]............ AWESOMEWM
+### [=]==================================[=]
+if [[ "${commands[awesome]}" ]]; then
+  alias eawesome="$EDITOR ${XDG_CONFIG_HOME}/awesome/rc.lua"
+  alias awesome-quit="awesome-client 'awesome.quit()'"
+  alias awesome-restart="awesome-client 'awesome.restart()'"
+  alias cdawesome="cd ${XDG_CONFIG_HOME}/awesome || printf \"\e[0;38;5;196mCANNOT CD TO THERE\e[0m\n\""
+  alias awesome-check="awesome --check"
+  alias check-awesome="awesome --check"
+  alias list-desktop-applications="ls /usr/share/applications | awk -F '.desktop' ' { print $1}' -"
+fi
 
 
 
@@ -159,28 +164,363 @@ if [[ "${commands[exa]}" ]]; then
 fi
 
 
-
 #}}}EXA
-##}}}
 
 
-if command -v shellcheck >/dev/null 2>&1; then
+if [[ "${commands[shellcheck]}" ]]; then
   alias shellcheck-all="shellcheck --check-sourced --enable=all --list-optional --color=always --external-sources --format=tty --wiki-link-count=20"
-  function shellcheck-harden(){
-    local line="────────────────────────────────────────────────────────────────────────────────"
-    echo "$line"
-    shellharden --suggest --syntax-suggest $1
-    echo "$line"
-    shellcheck --check-sourced --enable=all --color=always --external-sources --format=tty --wiki-link-count=20 $1
-    echo "$line"
-    shellcheck --check-sourced --enable=all --list-optional --color=always --external-sources --format=tty --wiki-link-count=20 $1
-    echo "$line"
-  }
+  if [[ "${commands[shellharden]}" ]]; then
+    function shellcheck-harden(){
+      draw_entire_line
+      shellharden --suggest --syntax-suggest "${@}"
+      draw_entire_line
+      shellcheck --check-sourced --enable=all --color=always --external-sources --format=tty --wiki-link-count=20 "${@}"
+      draw_entire_line
+      shellcheck --check-sourced --enable=all --list-optional --color=always --external-sources --format=tty --wiki-link-count=20 "${@}"
+      draw_entire_line
+    }
+  fi
 fi
 
 
-alias duviz="duviz --color --no-progress --max-depth=50"
-alias watch="watch --color --interval 0.25 --no-title --no-wrap"
-alias watch-ls="watch --color --interval 0.1 --no-title --no-wrap lsd --color always --almost-all --long --header  --date=+%Y-%m-%d_%H:%M:%S --blocks date,size,name --sort time 2>/dev/null"
-alias watch-lls="watch --color --interval 0.25 --no-title --no-wrap lsd --color always --almost-all --long --header  --date=+%Y-%m-%d_%H:%M:%S --blocks date,size,name --sort size --total-size 2>/dev/null"
-alias watch-duviz="watch --color --interval 0.1 --no-title --no-wrap duviz --color --no-progress --max-depth=50 2>/dev/null"
+### [=]==================================[=]
+### [~]........... CAT/BAT
+### [=]==================================[=]
+if [[ "${commands[bat]}" ]]; then
+  alias cat='bat --style=header,grid'  ; alias bat="bat --style=header,grid"; alias catf="bat --style=full"
+  alias ca='bat'     ; alias cst="cat" ; alias scat="cat"
+  alias car="cat"    ; alias cay="cat" ; alias cau="cat"
+  alias cau="cat"    ; alias ca="bat"  ; alias catp="bat -p"
+  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
+  function bat_preview_languages(){
+    local viewfile
+    viewfile="${1}"
+    [[ -z "${viewfile}" ]] && viewfile="${HOME}/*"
+    bat --list-languages        \
+      | sort --reverse          \
+      | awk -F ":" '{print $2}' \
+      | awk -F "," '{print $1}' \
+      | awk '{print $1}'        \
+      | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
+  }; alias bat-preview-languages="bat_preview_languages"
+  alias man-bat='man --pager="bat --language=sh --plain --color=never" xkeyboard-config '
+  alias man-bat-global-apropos='man --pager="bat --language=sh" --global-apropos'
+fi
+
+function c(){
+  local catthis
+  catthis="${1}"
+  if   [[ -z "${catthis}" ]]; then clear && return 0 || return 1; fi
+  if   [[ -d "${catthis}" ]]; then cd  "${catthis}"  || printf "\e[0;38;5;196mFailed to cd to %s\e[0m\n]]" "${catthis}" || return 1 && return 0
+  elif [[ -f "${catthis}" ]]; then cat "${catthis}"  || return 1 && return 0
+  else return 0
+  fi
+}
+
+
+if [[ "${commands[duviz]}" ]]; then
+  alias duviz="duviz --color --no-progress --max-depth=50"
+fi
+
+### [=]==================================[=]
+### [~]............ POWERSHELL
+### [=]==================================[=]
+if [[ "${commands[pwsh]}" ]]; then
+  alias powershell="pwsh"
+  alias cdp="cd ${PDOTDIR} || printf 'CANNOT MOVE TO %s' ${PDOTDIR}"
+fi
+
+
+if [[ "${commands[gping]}" ]]; then
+  alias ping-graph="gping -4 --watch-interval 0.1"
+fi
+
+
+if [[ "${commands[virsh]}" ]]; then
+  alias virsh-list="virsh list --all"
+  alias virt-manager-list="virsh list --all"
+fi
+
+#alias tcpdump-OpenWRT-termshark="sudo --prompt='Enter password for tcpdump: ' clear && ssh root@192.168.69.1 tcpdump -i any -U -s0 -w - 'not port 22' | sudo termshark -i -"
+#alias tcpdump-OpenWRT-tshark="sudo --prompt='Enter password for tcpdump: ' clear && ssh root@192.168.69.1 tcpdump -i any -U -s0 -w - 'not port 22' | sudo tshark --color -i -"
+
+
+### [=]==================================[=]
+### [~]............ ETCKEEPER
+### [=]==================================[=]
+if [[ "${commands[etckeeper]}" ]]; then
+  alias etckeeper="sudo etckeeper"
+  alias etckeeper-diff="sudo etckeeper vcs status -u"
+  alias etckeeper-diff="etckeeper vcs log --unified --color-words | diff-so-fancy --colors | less --tabs=2 -RFX"
+  alias etckeeper-modified="etckeeper vcs ls-files --modified"
+  alias etckeeper-add="etckeeper vcs add /etc/* --verbose"
+  alias etckeeper-add-interactive="etckeeper vcs add /etc/* --verbose --interactive"
+  alias etckeeper-commit="echo -e \"\e[38;5;201metckeeper:\e[38;5;27m\tCommiting Changes ...\e[0m\" && etckeeper commit ${COMMITMSG}"
+fi
+
+### [=]==================================[=]
+### [~]............ Neofetch
+### [=]==================================[=]
+if [[ "${commands[neofetch]}" ]]; then
+  alias nf='neofetch'
+fi
+
+### [=]==================================[=]
+### [~]............ File Explorers
+### [=]==================================[=]
+if [[ "${commands[pcmanfm]}" ]]; then
+  alias fe='pcmanfm &'
+fi
+
+### [=]==================================[=]
+### [~]............ GIT
+### [=]==================================[=]
+if [[ "${commands[gh]}" ]]; then
+  alias ghs-shell='printf "\e[0;1;3;4;38;5;33mSearch GitHub For Shell\e[0m\n" ; gh s -l shell'
+  alias ghs-view='printf "\e[0;1;3;4;38;5;33mSearch GitHub, Press <Enter> to view README\e[0m\n" ; gh repo view $(gh s) | g -'
+  alias ghc='git clone --no-checkout --verbose'
+  alias gh-list-my-repos="gh s -E -u @me"
+fi
+
+if [[ "${commands[git]}" ]]; then
+  alias got="git"
+  alias gpt="git"
+  alias gut="git"
+  alias git-clone-nocheckout="git clone --no-checkout --verbose"
+  alias git-commit-custom='git commit --gpg-sign="3AED4B68E6FD33BC" --message='
+  alias git-config-options='git config --list'
+  alias git-get-url='git-open --print'
+  alias git-log-pretty="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+  alias gitc='git clone --no-checkout --verbose'
+  alias gg="git"
+  alias gp="git pull -v"
+  alias gc="git commit --edit --verbose --status"
+  alias gs="git status"
+  alias git-url="git config --local --get remote.origin.url"
+  if [[ "${commands[lazygit]}" ]]; then
+    alias git-lazy="lazygit"
+  fi
+fi
+
+### [=]==================================[=]
+### [~]............ DISPLAY
+### [=]==================================[=]
+if [[ -n "${DISPLAY}" ]]; then
+  if [[ "${commands[xclip]}" ]]; then
+    alias clip='xclip -selection clipboard -rmlastnl'
+    alias copy='xclip -selection clipboard -rmlastnl'
+    alias xcopy='xclip -selection clipboard -rmlastnl'
+    alias pwd-to-clip='pwd | xclip -selection clipboard'
+    alias pwd2clip='pwd | xclip -selection clipboard'
+    if [[ "${commands[xdotool]}" ]]; then
+      alias type-clipboard="xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file -"
+    fi
+  fi
+  if [[ "${commands[setxkbmap]}" ]]; then
+    alias capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 200 30      ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
+    alias swap-capslock-escape-keyboard="setxkbmap -layout us -variant ,qwerty -option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape' ; xset r rate 175 30 ; printf 'Increased typing speed!\nCapsLock should now be the escape key\t\e[0;1;38;5;201m :) \e[0m\n'"
+  fi
+  if [[ "${commands[nitrogen]}" ]]; then
+    alias window-spy='xprop'
+  fi
+
+  if [[ "${commands[nitrogen]}" ]]; then
+    alias wp='nitrogen --restore'
+  fi
+
+  if [[ "${commands[gpick]}" ]]; then
+    alias colorpicker='gpick'
+  fi
+
+  ### [=]==================================[=]
+  ### [~]............ Raspberry Pi
+  ### [=]==================================[=]
+  if [[ "${commands[rpi-imager]}" ]]; then
+    alias rpi-imager='sudo rpi-imager &'
+    alias raspberrypi-imager='sudo rpi-imager &'
+    alias raspberry-imager='sudo rpi-imager &'
+  fi
+
+  ### [=]==================================[=]
+  ### [~]............ CAD / 3D Printing
+  ### [=]==================================[=]
+  if [[ "${commands[prusa-slicer]}" ]]; then
+    alias slic3r='prusa-slicer &'
+  fi
+
+  ### [=]==================================[=]
+  ### [~]............ VNC
+  ### [=]==================================[=]
+  if [[ "${commands[vncviewer]}" ]]; then
+    alias vncviewer-custom='vncviewer --DotWhenNoCursor --UpdateScreenshot --PasswordStoreOffer --AutoReconnect --FullScreen --SecurityNotificationTimeout=0 --ToolbarIconSize=16 --SessionRecordAllowUserControl -FullScreen -AutoReconnect --KeepAliveResponseTimeout=30 --KeepAliveInterval=30 --NotificationPos=2 &'
+  fi
+  if [[ "${commands[x11vnc]}" ]]; then
+    alias vnc-server-start="x11vnc -nevershared -forever -usepw &"
+  fi
+
+  if [[ "${commands[monero-wallet-gui]}" ]]; then
+    alias monero-gui="monero-wallet-gui"
+  fi
+
+  ### [=]==================================[=]
+  ### [~]........... FIREJAIL
+  ### [=]==================================[=]
+  ## Firejail
+  if [[ "${commands[firejail]}" ]]; then
+    alias fjfx='firejail firefox --private'
+  fi
+
+  ### [=]==================================[=]
+  ### [~]............ GPU
+  ### [=]==================================[=]
+  ## View display/gpu events in xorg log file ##
+  if [[ -f "/var/log/Xorg.0.log" ]]; then
+    alias xorglog='cat /var/log/Xorg.0.log | grep -vi input | grep -vi keyboard | grep -vi logitech | less'
+  fi
+
+  if [[ "${commands[xterm]}" ]]; then
+    alias xterm='xterm -fg white -bg black -cr red -bd blue'
+  fi
+
+  if [[ "${commands[xcompmgr]}" ]]; then
+    alias start-compositor="xcompmgr &"
+  fi
+
+  if [[ "${commands[wmctl]}" ]]; then
+    alias list-windows='wmctrl -l -p -G -x'
+    alias list-desktops='wmctrl -d'
+  fi
+
+  if [[ "${commands[Xephyr]}" ]] && [[ "${commands[awesome]}" ]]; then
+    alias awesomewm-xephyr-emulate="Xephyr :5 -screen 1280x720 -resizeable & sleep 1 ; DISPLAY=:5 awesome"
+  fi
+
+## END DISPLAY if statement
+fi
+
+### [=]==================================[=]
+### [~]............ Screen Capturing
+### [=]==================================[=]
+
+if [[ "${commands[rgb-tui]}" ]]; then
+  alias colorpicker-tui='rgb-tui'
+fi
+
+if [[ "${commands[vtop]}" ]]; then
+  alias colortop='vtop'
+fi
+
+
+### [=]==================================[=]
+### [~]............ NMAP
+### [=]==================================[=]
+#shellcheck disable=1009
+if [[ "${commands[nmap]}" ]]; then
+typeset -A nmapaliases
+  nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"
+  nmapaliases[nmap-vulscan]="nmap -sV -vv --script=vulscan/vulscan.nse"
+  nmapaliases[nmap-vulns]="nmap --script=vuln"
+  nmapaliases[nmap-list-ifs]="nmap --iflist"
+  nmapaliases[nmap-open-ports]="nmap --open"
+  nmapaliases[nmap-ping-scan]="nmap -n -sP"
+  nmapaliases[nmap-ping-fw]="nmap -PS -PA"
+  nmapaliases[nmap-fin]="sudo nmap -sF -v"
+  nmapaliases[nmap-slow]="sudo nmap -sS -v -T1"
+  nmapaliases[nmap-check-fw]="sudo nmap -sA -p1-65535 -v -T4"
+  nmapaliases[nmap-versions]="sudo nmap -sV -p1-65535 -O --osscan-guess -T4 -Pn"
+  nmapaliases[nmap-full]="sudo nmap -sS -T4 -PE -PP -PS80,443 -PY -g 53 -A -p1-65535 -v"
+  nmapaliases[nmap-full-udp]="sudo nmap -sS -sU -T4 -A -v -PE -PS22,25,80 -PA21,23,80,443,3389 "
+  nmapaliases[nmap-tracrt]="sudo nmap -sP -PE -PS22,25,80 -PA21,23,80,3389 -PU -PO --traceroute "
+  nmapaliases[nmap-full-scripts]="sudo nmap -sS -sU -T4 -A -v -PE -PP -PS21,22,23,25,80,113,31339 -PA80,113,443,10042 -PO --script all"
+  nmapaliases[nmap-web_safe_osscan]="sudo nmap -p 80,443 -O -v --osscan-guess --fuzzy"
+  #shellcheck disable=1072,1058,1073
+  for nmapaliasname nmapaliasvalue in ${(kv)nmapaliases}; do
+    alias "${nmapaliasname}"="${nmapaliasvalue}"
+  done; unset nmapaliasname nmapaliasvalue
+  #typeset -A nmapaliasesdesc
+  #nmapaliasesdesc[nmapaliases[nmap-fast]="nmap -F -T5 --version-light --top-ports 300"]="fast scan of the top 300 ports with fastest speed"
+  #nmapaliasesdesc[nmapaliases[nmap-ping-scan]="nmap -n -sP"]="Nmap ping scan"
+  if [[ "${commands[nmapAutomator.sh]}" || "${commands[nmapAutomator]}" ]]; then
+    alias nmapAutomatorAll="sudo nmapAutomator.sh --type All --output ${NMAPSCAN:-${PWD}} --host"
+  fi
+fi
+
+### [=]==================================[=]
+### [~]............ MetaSploit
+### [=]==================================[=]
+if [[ "${commands[rsf]}" ]]; then
+  alias -s routersploit='rsf'
+fi
+
+if [[ "${commands[metasploit]}" ]]; then
+  alias msf="${SUDOCMD} msfconsole"
+fi
+
+
+### [=]==================================[=]
+### [~]............. DOCKER
+### [=]==================================[=]
+if [[ "${commands[docker]}" ]]; then
+  alias docker-run-interactive="docker run --interactive --tty"
+  alias docker-run-archlinux='clear; printf "\x1B[0;1;38;5;51mSTARTING ARCH LINUX IN DOCKER\x1B[0m\n"; docker run --interactive --tty archlinux'
+  alias dockers="docker search --no-trunc"
+  alias aws-docker="docker run --rm -it amazon/aws-cli"
+  if [[ "${commands[lazydocker]}" ]]; then
+    alias docker-lazy='lazydocker'
+  fi
+fi
+
+
+if [[ "${commands[dfrs]}" ]]; then
+  alias disk-usage="dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on 2>/dev/null"
+  alias watch-disk-usage="watch -c --interval 0.5 --no-title --differences dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on"
+fi
+
+if [[ "${commands[dfc]}" ]]; then
+  alias disk-usage-2="dfc 2>/dev/null"
+  alias watch-disk-usage-2="watch -c --interval 0.5 --no-title --differences dfc -c always"
+fi
+
+
+if [[ "${commands[python]}" ]]; then
+  alias http-server='python -m http.server'
+fi
+
+if [[ "${commands[tmux]}" ]]; then
+  alias tmux-ssh="tmux new-session ssh"
+fi
+
+### [=]==================================[=]
+### [~]............ CRYPTO
+### [=]==================================[=]
+### Monero
+if [[ "${commands[monero-wallet-cli]}" ]]; then
+  alias monero-cli="monero-wallet-cli"
+fi
+
+### [=]==================================[=]
+### [~]............ FZF
+### [=]==================================[=]
+if [[ "${commands[fzf]}" ]]; then
+  alias psfzf="ps -ef | fzf --bind 'ctrl-r:reload(ps -ef)' --header 'Press (CTRL-R) to reload' --header-lines=1"
+fi
+
+
+### [=]==================================[=]
+### [~]............ Networking
+### [=]==================================[=]
+if [[ "${commands[lnstat]}" ]]; then
+  alias get-arp-cache-table='lnstat --subject 2 --json'
+fi
+
+if [[ "${commands[nmtui]}" ]]; then
+  alias networkmanager-tui='nmtui'
+fi
+
+if [[ "${commands[nmcli]}" ]]; then
+  alias networkmanager-cli='nmcli'
+fi
+
+if [[ "${commands[curl]}" ]]; then
+  alias external-ip='curl ifconfig.me ; printf "\n"'
+fi

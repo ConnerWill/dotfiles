@@ -1,6 +1,4 @@
-
 ## ShellCheck Setup{{{
-
 # shellcheck disable=2148
 # shellcheck disable=SC2236
 # shellcheck enable=quote-safe-variables
@@ -27,45 +25,36 @@
 ### [=============================]
 ### [-------- ZSH PLUGINS --------]
 ### [=============================]
-### {{{ Help
-### [=============================]--------------------------]
-### [ Example:                                               ]
-### [  $ source "$ZSH_CUSTOM_PLUGINS/path-to/zsh-plugin.zsh" ]
-### [=============================]--------------------------]
-### }}}
-
 
 ### Define Plugin Directory
-export                    \
-  ZSH_PLUGINS_AVAILABLE   \
-  ZSH_PLUGINS_ENABLED     \
-  ZSH_PLUGINS_CONFIG_DIR
-
 [[ -z "${ZSH_USER_DIR}" ]] && export ZSH_USER_DIR="${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}"
       ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
 ZSH_PLUGINS_AVAILABLE="${ZSH_PLUGINS_DIR}/plugins-available"
   ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
+export ZSH_PLUGINS_AVAILABLE ZSH_PLUGINS_ENABLED ZSH_PLUGINS_CONFIG_DIR
 
 ## Load plugins
-# shellcheck disable=SC1009
+#shellcheck disable=1009,1072,1058,1036,1073
 if [[ -d "${ZSH_PLUGINS_ENABLED}" ]]; then
-  # shellcheck disable=SC1072,SC1058,SC1036,SC1073
   for ZSH_FILE in "${ZSH_PLUGINS_ENABLED}"/*.zsh(N); do
-      _zshrc_VERBOSE_MESSEGE "  Plugin  " "$(basename ${ZSH_PLUGINS_ENABLED})/$(basename ${ZSH_FILE})" "201" "57"
-      source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Plugin Failed" "[${ZSH_FILE}]" "196" "190"
+    source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Unable to source plugin file: ${ZSH_FILE}"
   done
 else
-  _zshrc_VERBOSE_ERROR "Directory does not exist" "[${ZSH_PLUGINS_ENABLED}]" "196" "124"
+  _zshrc_VERBOSE_ERROR "Plugin directory does not exist: ${ZSH_PLUGINS_ENABLED}"
 fi
 
 
+## Custom sourcing plugins. Source plugins like this that require sourcing a specific file
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-autosuggestions/zsh-autosuggestions.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"; unset zsh_source_plugin_tmp
-
+if [[ -e "${zsh_source_plugin_tmp}" ]]; then
+  source "${zsh_source_plugin_tmp}" || _zshrc_VERBOSE_ERROR "Unable to source plugin file: ${ZSH_FILE}"
+fi
+unset zsh_source_plugin_tmp
 
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-[[ -e "${zsh_source_plugin_tmp}" ]] \
-  && if source "${zsh_source_plugin_tmp}"; then
-       fast-theme dampsock2 >/dev/null 2>&1
-  fi
+if [[ -e "${zsh_source_plugin_tmp}" ]]; then
+  source "${zsh_source_plugin_tmp}" \
+    && fast-theme dampsock2 >/dev/null 2>&1 \
+    || _zshrc_VERBOSE_ERROR "Unable to source plugin file: ${ZSH_FILE}"
+fi
 unset zsh_source_plugin_tmp

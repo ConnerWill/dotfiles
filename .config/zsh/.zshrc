@@ -1,156 +1,25 @@
 #vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
-################################################################################
-##╔══════════════════════════════════════════════════════════════════════════╗##
-##║            ┌────────────────────────────────────────────────┐            ║##
-##║            │         ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀        │            ║##
-##║            │          █▀   ███▄██    ▀█ ██      ██          │            ║##
-##║            │          ▀   ███ ▀███▄     ██      ██          │            ║##
-##║            │             ███    ▀█████▄ ██████████          │            ║##
-##║            │            ███   ▄     ▀██ ██      ██          │            ║##
-##║            │           ███   ▄██     ██ ██      ██          │            ║##
-##║            │         █████████▀█████▀▄████▄  ▄████▄▄        │            ║##
-##║            ├────────────────────────────────────────────────┤            ║##
-##║            │            ＺＳＨ ＣＯＮＦＩＧ                 │            ║##
-##║            │ Ｍｙ Ｚ－Ｓｈｅｌｌ Ｃｏｎｆｉｇｕｒａｔｉｏｎ │            ║##
-##║            └────────────────────────────────────────────────┘            ║##
-##╚══════════════════════════════════════════════════════════════════════════╝##
-################################################################################
-###{{{ DOCUMENTATION :::::::::::::::::::::::::::::::::::::::::::::::::::::::::##
-##════════════════════════════════════════════════════════════════════════════##
-##┌──────────────────────────────────────────────────────────────────────────┐##
-##│                         ENVIRONMENT VARIABLES                            │##
-##└──────────────────────────────────────────────────────────────────────────┘##
-##                                                                            ##
-## ZDOTDIR      Directory containing zsh files '~/.config/zsh'                ##
-##                                                                            ##
-## ZSHRC        Path to the '.zshrc' file '$ZDOTDIR/.zshrc'                   ##
-##                                                                            ##
-## ZSH_USER_DIR Path to current config profile  '$ZDOTDIR/zsh}/zsh/user'      ##
-##                                                                            ##
-## ZSHDDIR      Directory containing configs that will be sourced in          ##
-##              numeric order '$ZSH_USER_DIR/zsh.d'                           ##
-##                                                                            ##
-##════════════════════════════════════════════════════════════════════════════##
-##┌──────────────────────────────────────────────────────────────────────────┐##
-##│                         ansi escape sequences                            │##
-##└──────────────────────────────────────────────────────────────────────────┘##
-##┌───┬───────────────────────────────────────────────────────────────────────┐#
-##│ESC│sequence starting with ESC ('\x1B' '\e' '\033' '\x1b')                 │#
-##│   │  Ctrl-Key: ^[                                                         │#
-##│   │  Octal: \033                                                          │#
-##│   │  Unicode: \u001b                                                      │#
-##│   │  Hexadecimal: \x1B                                                    │#
-##│   │  Decimal: 27                                                          │#
-##├───┼───────────────────────────────────────────────────────────────────────┤#
-##│CSI│Control Sequence Introducer: sequence starting with ESC [ or CSI (\x9B)│#
-##├───┼───────────────────────────────────────────────────────────────────────┤#
-##│DCS│Device Control String: sequence starting with ESC P or DCS (\x90)      │#
-##├───┼───────────────────────────────────────────────────────────────────────┤#
-##│OSC│Operating System Command: sequence starting with ESC ] or OSC (\x9D)   │#
-##└───┴───────────────────────────────────────────────────────────────────────┘#
-##┌────┬───────┬─────┬────┬────────┬────────┬────────────────────┐            ##
-##│Name│decimal│octal│hex │C-escape│Ctrl-Key│Description         │            ##
-##├────┼───────┼─────┼────┼────────┼────────┼────────────────────┤            ##
-##│BEL │  7    │ 007 │0x07│  \a    │  ^G    │Terminal bell       │            ##
-##│BS  │  8    │ 010 │0x08│  \b    │  ^H    │Backspace           │            ##
-##│HT  │  9    │ 011 │0x09│  \t    │  ^I    │Horizontal TAB      │            ##
-##│LF  │  10   │ 012 │0x0A│  \n    │  ^J    │Linefeed (newline)  │            ##
-##│VT  │  11   │ 013 │0x0B│  \v    │  ^K    │Vertical TAB        │            ##
-##│FF  │  12   │ 014 │0x0C│  \f    │  ^L    │Formfeed (NP)       │            ##
-##│CR  │  13   │ 015 │0x0D│  \r    │  ^M    │Carriage return     │            ##
-##│ESC │  27   │ 033 │0x1B│  \e    │  ^[    │Escape character    │            ##
-##│DEL │  127  │ 177 │0x7F│ <none> │ <none>	│Delete character    │            ##
-##└────┴───────┴─────┴────┴────────┴────────┴────────────────────┘            ##
-##                                                                            ##
-## ESC[?25l               Hide Cursor                                         ##
-## ESC[?25h               Restore Cursor                                      ##
-## ESC[2K                 Clear line                                          ##
-## ESC[1A                 Move curser up 1 line                               ##
-## ESC[5A                 Move curser up 5 lines                              ##
-## ESC[22;0t              Save title of terminal                              ##
-## ESC]0;TITLE TEXT\e\\   Set title of terminal                               ##
-## ESC[?25l 	            make cursor invisible                               ##
-## ESC[?25h 	            make cursor visible                                 ##
-## ESC[?47h 	            save screen                                         ##
-## ESC[?47l 	            restore screen                                      ##
-## ESC[?1049h 	          enables the alternative buffer                      ##
-## ESC[?1049l 	          disables the alternative buffer                     ##
-## ESC[23;0t              Restore title of terminal                           ##
-## ESC[2K\e[1A\e[2K\r     Clear current line and 1 line above.                ##
-## \r                     Move cursor to beginning of line                    ##
-## ESC]2;TEXT\a           Set terminal title
-##                                                                            ##
-## ESC[={value}h 	        Changes the screen width or                         ##
-##                         type to the mode specified by value.               ##
-## ESC[=0h                40 x 25 monochrome (text)                           ##
-## ESC[=1h                40 x 25 color (text)                                ##
-## ESC[=2h                80 x 25 monochrome (text)                           ##
-## ESC[=3h                80 x 25 color (text)                                ##
-## ESC[=4h                320 x 200 4-color (graphics)                        ##
-## ESC[=5h                320 x 200 monochrome (graphics)                     ##
-## ESC[=6h                640 x 200 monochrome (graphics)                     ##
-## ESC[=7h                Enables line wrapping                               ##
-## ESC[=13h               320 x 200 color (graphics)                          ##
-## ESC[=14h               640 x 200 color (16-color graphics)                 ##
-## ESC[=15h               640 x 350 monochrome (2-color graphics)             ##
-## ESC[=16h               640 x 350 color (16-color graphics)                 ##
-## ESC[=17h               640 x 480 monochrome (2-color graphics)             ##
-## ESC[=18h               640 x 480 color (16-color graphics)                 ##
-## ESC[=19h               320 x 200 color (256-color graphics)                ##
-## ESC[={value}l          Resets the mode by using the same values that       ##
-##                         Set Mode uses, except for 7, which disables        ##
-##                         line wrapping. The last character in this          ##
-##                         escape sequence is a lowercase L.                  ##
-##                                                                            ##
-##(https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)             ##
-##════════════════════════════════════════════════════════════════════════════##
-##┌──────────────────────────────────────────────────────────────────────────┐##
-##│                         PLACEHOLDER                                      │##
-##└──────────────────────────────────────────────────────────────────────────┘##
-##                                                                            ##                                                                            ##
-##════════════════════════════════════════════════════════════════════════════##
-################################################################################
-###}}} DOCUMENTATION
-
-### ::::::::::::::::::::::: DEBUGGING :::::::::::::::::::::: ###{{{
-########################
-####   DEBUGGING    ####
-############################################################
-###: To run a diagnostics dump, run command:# For boolean options:
-##:      zsh_diagnostic_dump
-##:
-##:  If you're getting weird behavior and can't find the culprit,
-##:  run the following command to enable debug mode:
-##:
-##:      zsh -xv 2> >(tee ./omz-debug.log &>/dev/null)
-##:
-##:  Afterwards, reproduce the behavior (i.e. if it's a particular command, run it),
-##:  and when you're done, run exit to stop the debugging session.
-##:  This will create a omz-debug.log file on your home directory,
-##:  with a trace of every command executed and its output.
-##:  You can then upload this file when creating an issue.
-##:
-##:  If you only need to debug the session initialization, you can do so with the command:
-##:
-##:      zsh -xvic exit &> ./omz-debug.log
-##:
-##:  To list all keybindings, run this command
-##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '\e[0;1;38;5;46m======================\e[0m\n\t{}\t\t\n\e[0;1;38;5;46m======================\e[0m\n' && bindkey -R -M '{}'" | less --RAW-CONTROL-CHARS
-##:
-##:  Or:
-##:
-##:      bindkey -l | xargs -I{} zsh --onecmd -c "printf '======================\n\t{}\t\t\n======================\n' && bindkey -R -M '{}'" | bat -l zsh
-##:
-###########################################################
-[ -n "$INHERIT_ENV" ] && return 0
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║            ┌────────────────────────────────────────────────┐            ║
+# ║            │         ███▀▀▀███▄█▀▀▀█▄█████▀  ▀████▀▀        │            ║
+# ║            │          █▀   ███▄██    ▀█ ██      ██          │            ║
+# ║            │          ▀   ███ ▀███▄     ██      ██          │            ║
+# ║            │             ███    ▀█████▄ ██████████          │            ║
+# ║            │            ███   ▄     ▀██ ██      ██          │            ║
+# ║            │           ███   ▄██     ██ ██      ██          │            ║
+# ║            │         █████████▀█████▀▄████▄  ▄████▄▄        │            ║
+# ║            ├────────────────────────────────────────────────┤            ║
+# ║            │            ＺＳＨ ＣＯＮＦＩＧ                 │            ║
+# ║            │ Ｍｙ Ｚ－Ｓｈｅｌｌ Ｃｏｎｆｉｇｕｒａｔｉｏｎ │            ║
+# ║            └────────────────────────────────────────────────┘            ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+## Do not load the rest of this file if 'INHERIT_ENV' is true (default: false)
+[[ -n "${INHERIT_ENV}" ]] && return 0
 
 #_ZSH_LOAD_VERBOSE_VERBOSE="True"
-#: VERY Verbose loading zshrc
-if [[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]]; then
-  setopt xtrace
-fi
-# #  Profiling
-# ZSH_PROFILE_RC=1
+[[ -n "${_ZSH_LOAD_VERBOSE_VERBOSE}" ]] && setopt xtrace
+
+#ZSH_PROFILE_RC=1
 if [[ -n "$ZSH_PROFILE_RC" ]]; then
   which zmodload >&/dev/null && zmodload zsh/zprof
   PS4=$'\\\011%D{%s%6.}\011%x\011%I\011%N\011%e\011'
@@ -158,143 +27,50 @@ if [[ -n "$ZSH_PROFILE_RC" ]]; then
   setopt xtrace prompt_subst
 fi
 
-###}}} ::::::::::::::::::: END DEBUGGING :::::::::::::::::::::: ###}}}
+unset  _ZSH_LOAD_VERBOSE _ZSH_SHOW_ERRORS
+export _ZSH_LOAD_VERBOSE _ZSH_SHOW_ERRORS \
+       ZSH_USER_DIR_NAME ZSH_USER_DIR ZSH_USER_LOAD_DIR
 
-### :::::::::::::: ZSHRC EXPORT VARIABLES ::::::::::::::::: ###{{{
-export LC_ALL="en_US.UTF-8"
-unset                 \
-  _ZSH_LOAD_VERBOSE   \
-  _ZSH_SHOW_ERRORS    \
-  _ZSH_BANNER_SHOW    \
-  _ZSH_BANNER_START
-export                \
-  _ZSH_LOAD_VERBOSE   \
-  _ZSH_SHOW_ERRORS    \
-  _ZSH_BANNER_SHOW    \
-  _ZSH_BANNER_START   \
-  ZSH_USER_DIR_NAME   \
-  ZSH_USER_DIR        \
-  ZSH_USER_LOAD_DIR   \
-  LC_ALL
-### :::::::::::::: END ZSHRC EXPORT VARIABLES ::::::::::::: ###}}}
+## Name of the User-Folder for the 'profile' to use. This makes it easy to work
+## on multiple zsh config profiles on the same machine/user
+ZSH_USER_DIR_NAME="${ZSH_USER_DIR_NAME:-user}"
 
-### :::::::::::::: ZSHRC USER CONFIG :::::::::::::::::::::: ###{{{
-########################
-#┌─ Config options ####
-#├─┐ For boolean options:
-#│ ├─── To enable options, set the value to anything (e.g. TRUE).
-#│ └─── To disable options, comment out the option or leave it unset.
-#└─┐ For string options:
-#  ├──── See the description next to the value to find what values cam be used,
-#  └──── To disable options, comment out the option or leave it unset.
-##########################################################################
-### :::::::::::::: BEGIN ZSHRC USER CONFIG :::::::::::::::: ###
+## Define the path of sub-profiles
+ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"
 
+## Define the name of the folder that will be looped looking for file with and
+## extension of '.zsh'. All files with an extension of '.zsh' will be sourced durring startup.
+ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d"
 
+## Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
+_ZSH_SHOW_ERRORS="TRUE"
 
-[[ -z "${ZSH_USER_DIR_NAME}" ]] \
-  && ZSH_USER_DIR_NAME="user"        #┌ Name of the User-Folder for the 'profile' to use.
-                                     #└─ This makes it easy to work on multiple zsh configs on the same machine/user
+## Directory that ZSH logs will be written to.
+ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"
 
-ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}" #: Define the path of sub-profiles
-ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d" #┌ Define the name of the folder that will be looped
-                                          #├─ through looking for file with and extension of '.zsh'.
-                                          #├─ All files with an extension of '.zsh' will
-                                          #└─ be sourced durring startup.
+## If this option is set, a debug log will be written to '$ZSH_DEBUG_LOG_DIR'
+_ZSH_DEBUGGING_ENABLED="TRUE"
 
-# _ZSH_LOAD_VERBOSE="TRUE"             #: Show what is being loaded verbosely
-
-_ZSH_SHOW_ERRORS="TRUE"              #: Show error messeges. This is unrelated to '_ZSH_LOAD_VERBOSE'
-
-ZSH_DEBUG_LOG_DIR="${ZDOTDIR}/logs"  #: Directory that ZSH logs will be written to.
-_ZSH_DEBUGGING_ENABLED="TRUE" #───────┲ If this option is set, a debug log will
-                                     #┗ be written to '$ZSH_DEBUG_LOG_DIR'
-
-# _ZSH_BANNER_SHOW="TRUE"              #: Show banner art
-# _ZSH_BANNER_START="TRUE"             #┌ Show banner art before loading other files.
-                                     #├─ If this option is enabled (default), banner art will
-                                     #├─  be shown before other files are loaded.
-                                     #├─ If this option is disabled, banner art will
-                                     #├─  be shown after all files are loaded.
-                                     #└┐
-                                     # ├──── NOTE: Banner art will only be shown if
-                                     # └─────────── also '_ZSH_BANNER_SHOW' is enabled.
-
-
-
-### :::::::::::::: END ZSHRC USER CONFIG :::::::::::::::::: ###}}}
-
-### :::::::::::::: ZSHRC VERBOSE MESSEGES ::::::::::::::::: ###{{{
-### VERBOSE / ERROR Displaying
 function _zshrc_VERBOSE_MESSEGE(){
-  if [[ -n "${_ZSH_LOAD_VERBOSE}" ]]; then
-    local zsh_verbose_messege_verb zsh_verbose_messege
-    zsh_verbose_messege_verb="$1"
-    zsh_verbose_messege="$2"
-    zsh_verbose_messege_type_color="$3"
-    zsh_verbose_messege_color="$4"
-    [[ -z "$zsh_verbose_messege_verb" ]] \
-      && zsh_verbose_messege_verb=""
-    printf "\e[0;1;38;5;190;48;5;21m VERBOSE \e[0m \e[0;38;5;%sm%s \e[0;38;5;%sm%s\e[0m\n" "$zsh_verbose_messege_type_color" "$zsh_verbose_messege_verb" "$zsh_verbose_messege_color" "$zsh_verbose_messege"
-    return 0
-  else
-    return 0
-  fi
+  printf "\x1B[0;1;48;5;12;38;5;255m[VERBOSE]\x1B[0m:\t\x1B[0;38;5;255m%s\x1B[0m\n" "${1}"
 }
+
 function _zshrc_VERBOSE_ERROR(){
-  if [[ -n "${_ZSH_SHOW_ERRORS}" ]]; then
-    local zsh_verbose_error_verb zsh_verbose_error
-    zsh_verbose_error_verb="$1"
-    zsh_verbose_error="$2"
-    zsh_verbose_error_type_color="$3"
-    zsh_verbose_error_color="$4"
-    [[ -z "$zsh_verbose_error_verb" ]] \
-      && zsh_verbose_error_verb=""
-    printf "\e[0;1;38;5;255;48;5;9m  ERROR  \e[0m \e[0;38;5;%sm%s \e[0;38;5;%sm%s\e[0m\n" "$zsh_verbose_error_type_color" "$zsh_verbose_error_verb" "$zsh_verbose_error_color" "$zsh_verbose_error"
-    return 1
-  else
-    return 1
-  fi
+  printf "\x1B[0;1;48;5;196;38;5;255m[ERROR]\x1B[0m:\t\x1B[0;38;5;196m%s\x1B[0m\n" "${1}" >&2
+  return 1
 }
-function _zshloadverbose(){
-    [[ -z "$zsh_load_verbose_clear" ]] || clear
-    [[ -z "$zsh_load_section" ]] || printf "Loading %s ..." "$zsh_load_section"
-    [[ -z "$zsh_load_sleep" ]] || sleep "$zsh_load_sleep"
-    unset zsh_load_section
-    unset zsh_load_section_error
+
+function _zshload_clear_line(){
+  printf "\x1B[2K\r"
 }
-### :::::::::::::: END ZSHRC VERBOSE MESSEGING :::::::::::: ###}}}
 
-if [[ "${OSTYPE}" == "linux-gnu" ]]; then
-  if [[ -f /etc/os-release ]]; then
-    DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
-    export DISTRO
-  fi
-elif [[ "${OSTYPE}" == "linux-android" ]]; then
-  DISTRO="Android"
-  export DISTRO
-else
-  unset DISTRO
-fi
+## MAIN
 
-function _zshload_clear_line(){ printf "\e[2K\r"; }
-function _zshloadstartclear(){ [[ -z "$zsh_load_start_clear" ]] || clear; }
-function _zshloadendclear(){ [[ -z "$zsh_load_end_clear" ]] || clear; }
-
-_zshloadstartclear
-
-
-# shellcheck disable=SC1009
+# shellcheck disable=1009,1072,1058,1036,1073
 if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
-  # shellcheck disable=SC1072,SC1058,SC1036,SC1073
   for ZSH_FILE in "${ZSH_USER_LOAD_DIR}"/*.zsh(N); do
-    _zshrc_VERBOSE_MESSEGE "Source  " "$(basename ${ZSH_USER_LOAD_DIR})/$(basename ${ZSH_FILE})" "87" "226"
-    source "${ZSH_FILE}" \
-      || _zshrc_VERBOSE_ERROR "Sourcing Failed" "${ZSH_FILE}" "196" "190"
+    source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Unable to source file: ${ZSH_FILE}"
   done
 else
-  _zshrc_VERBOSE_ERROR "Directory does not exist" "${ZSH_USER_LOAD_DIR}" "196" "124"
+  _zshrc_VERBOSE_ERROR "Directory does not exist: ${ZSH_USER_LOAD_DIR}"
 fi
-
-_zshloadendclear
-_zshload_clear_line
