@@ -17,12 +17,3 @@ jobs:
 
       - name: Set up Zsh
         run: docker run --rm -i -v $(pwd):/root -w /root zshusers/zsh zsh -i .config/zsh/.zshrc
-
-      - name: Check for errors
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "Zsh configuration is valid."
-          else
-            echo "Error: Zsh configuration contains errors."
-            exit 1
-          fi
