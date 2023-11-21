@@ -15,5 +15,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Set up Zsh
+      - name: Set up ZSH docker container
         run: docker run --rm -i -v $(pwd):/root -w /root zshusers/zsh zsh -i .config/zsh/.zshrc
+
+      - name: Check for errors
+        run: echo $SHELL
