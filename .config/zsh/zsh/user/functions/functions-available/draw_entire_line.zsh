@@ -1,10 +1,8 @@
 #shellcheck disable=2148,2296,2059
 
 function draw_entire_line(){
-  while [[ $# -gt 0 ]]; do
-      case "$1" in
-          -h|--help)
-              cat << EOF
+  if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
+    cat << EOF
 USAGE:
 
   $ draw_entire_line 5 "\e[0;38;5;198m"
@@ -14,29 +12,27 @@ USAGE:
 
 EXAMPLES:
 
-  Replace current prompt with a blue bar
+  Draw a double line
 
-   $ draw_entire_line 6 "^[[1A^[[2K^[[1A^[[2K\e[0;38;5;33m"
-
-   $ for i in $(seq 1 255); do draw_entire_line 4 "^[[1A^[[2K\r\e[0;38;5;${i}m"; sleep 0.1; done
-
-   $ for i in $(seq 1 255); do draw_entire_line 4 "\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.1; done
-
-   $ for i in $(seq 0 16); do draw_entire_line 6 "\e[?25l\n^[[1A^[[2K\e[0;38;5;${i}m"; sleep 0.05; done; printf "\e[?25h"
-
-   $ printf "\e[?25h" ## Restore cursor
+   $  draw_entire_line 2
 
 
 LINES:
 
-  Default: ─
+  Default : ─
+  1       : ─
+  2       : ═
+  3       : ═
+  4       : ─
+  5       : ▂
+  6       : ▄
+  7       : ▀
+  8       : ─
+  9       : ─
+  10      : #
 
 EOF
-              return 0
-              ;;
-      esac
-      shift
-  done
+  fi
 
   ## Index of which line type to use (1-10)
   LINECHAR="${1}"

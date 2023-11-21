@@ -28,8 +28,6 @@
 #shellcheck source=./99_post.zsh
 ##}}}
 
-
-
 ## Load final plugins
 [[ -z "${ZSH_USER_DIR}" ]] && export ZSH_USER_DIR="${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}"
 ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
@@ -56,34 +54,3 @@ zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/history-search-multi-word/histor
         # Whether to perform syntax highlighting (default true)
   fi
 unset zsh_source_plugin_tmp
-
-function zsh_banner_load(){
-  ## ZSH Banner To Show After Loading ZSHRC
-  if [[ -n "${ZSH_BANNER_SHOW}" ]]; then
-    if [[ -z "${ZSH_BANNER_START}" ]]; then
-      ## ZSH Banner To Show Before Loading ZSHRC
-      BANNER_TEXT=" $(whoami)"
-      BANNER_TEXT_FIGLET_FONT="Bloody"
-      LINE_CHAR="═" # ━" # ═ █
-      BANNER_TEXT_CHARS_BEFORE="$(echo "${BANNER_TEXT}"| wc --chars)"
-      BANNER_LINE_MULTIPLY=8
-      BANNER_TEXT_CHARS="(( ${BANNER_TEXT_CHARS_BEFORE} * ${BANNER_LINE_MULTIPLY} ))"
-      function Draw_Line(){
-        local begin end
-        begin=1; end="${BANNER_TEXT_CHARS}"
-        for (( i = begin; i < end; i++ )); do
-          echo -n "${LINE_CHAR}"
-        done
-      }
-      function Show_Banner(){
-        figlet -f "${BANNER_TEXT_FIGLET_FONT}" "${BANNER_TEXT}" | lolcat
-      }
-      function Empty_Line(){
-        printf "\n"
-      }
-      Draw_Line && Empty_Line && Show_Banner && Draw_Line && Empty_Line
-    else
-      Draw_Line && Empty_Line
-    fi
-  fi
-}; zsh_banner_load
