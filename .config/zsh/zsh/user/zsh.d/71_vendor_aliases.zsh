@@ -191,18 +191,30 @@ if [[ "${commands[bat]}" ]]; then
   alias ca='bat'     ; alias cst="cat" ; alias scat="cat"
   alias car="cat"    ; alias cay="cat" ; alias cau="cat"
   alias cau="cat"    ; alias ca="bat"  ; alias catp="bat -p"
-  alias bat-preview-themes='bat --list-themes | fzf --preview="bat --theme={} --language=sh --color=always $HOME/*"'
-  function bat_preview_languages(){
-    local viewfile
-    viewfile="${1}"
-    [[ -z "${viewfile}" ]] && viewfile="${HOME}/*"
-    bat --list-languages        \
-      | sort --reverse          \
-      | awk -F ":" '{print $2}' \
-      | awk -F "," '{print $1}' \
-      | awk '{print $1}'        \
-      | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
-  }; alias bat-preview-languages="bat_preview_languages"
+
+  if [[ "${commands[fzf]}" ]]; then
+    function bat_preview_themes(){
+      local viewfile
+      viewfile="${1:-${ZSHRC:-${ZDOTDIR}/.zshrc}}"
+      [[ -f "${viewfile}" ]] || printf "Cannot find file to preview:\t%s\n" "${viewfile}" >&2 || return 1
+      bat --list-themes \
+        | sort --reverse   \
+          | fzf --preview-window=right,80% --preview="bat --theme={} --language=zsh --color=always ${viewfile}"
+    }; alias bat-preview-themes="bat_preview_themes"
+
+    function bat_preview_languages(){
+      local viewfile
+      viewfile="${1:-${ZSHRC:-${ZDOTDIR}/.zshrc}}"
+      [[ -f "${viewfile}" ]] || printf "Cannot find file to preview:\t%s\n" "${viewfile}" >&2 || return 1
+      bat --list-languages        \
+        | sort --reverse          \
+        | awk -F ":" '{print $2}' \
+        | awk -F "," '{print $1}' \
+        | awk '{print $1}'        \
+          | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
+    }; alias bat-preview-languages="bat_preview_languages"
+  fi
+
   alias man-bat='man --pager="bat --language=sh --plain --color=never" xkeyboard-config '
   alias man-bat-global-apropos='man --pager="bat --language=sh" --global-apropos'
 fi
