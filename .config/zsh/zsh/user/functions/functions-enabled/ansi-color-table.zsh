@@ -1,1 +1,0 @@
-../functions-available/ansi-color-table.zsh

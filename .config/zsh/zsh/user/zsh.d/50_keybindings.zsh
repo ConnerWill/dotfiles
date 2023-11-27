@@ -91,13 +91,6 @@ bindkey '^[[A'    up-line-or-beginning-search   # up         prev command in his
 bindkey '^[[B'    down-line-or-beginning-search # down       next command in history
 
 
-
-
-
-
-
-
-
 ## Press 'CTRL-x-z' to display keybindings
 # alias show-keybindings="echo Press  CTRL-x-z  to display keybindings."
 
