@@ -200,7 +200,7 @@ if [[ "${commands[bat]}" ]]; then
       bat --list-themes \
         | sort --reverse   \
           | fzf --preview-window=right,80% --preview="bat --theme={} --language=zsh --color=always ${viewfile}"
-    }; alias bat-preview-themes="bat_preview_themes"
+    } #; alias bat-preview-themes="bat_preview_themes"
 
     function bat_preview_languages(){
       local viewfile
@@ -212,7 +212,7 @@ if [[ "${commands[bat]}" ]]; then
         | awk -F "," '{print $1}' \
         | awk '{print $1}'        \
           | fzf --preview-window=right,80% --preview="bat --language={} --color=always ${viewfile}"
-    }; alias bat-preview-languages="bat_preview_languages"
+    } #; alias bat-preview-languages="bat_preview_languages"
   fi
 
   alias man-bat='man --pager="bat --language=sh --plain --color=never" xkeyboard-config '
