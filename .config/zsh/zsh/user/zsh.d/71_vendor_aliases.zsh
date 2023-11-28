@@ -1,14 +1,19 @@
 # shellcheck disable=2148
 
 
-### Suffix
+### Suffix Aliases
 autoload -U zsh-mime-setup && zsh-mime-setup
-alias -s pl=perl
 alias -s html="${BROWSER}"
 alias -s htm="${BROWSER}"
+
+
 if [[ "${commands[evince]}" ]]; then
   alias -s pdf=evince
+elif [[ "${commands[termux-open]}" ]]; then
+  alias -s pdf=termux-open
 fi
+
+## Images
 if [[ "${commands[eog]}" ]]; then
   alias -s png=eog
   alias -s jpg=eog
@@ -21,6 +26,23 @@ elif [[ "${commands[termux-open]}" ]]; then
   alias -s gif=termux-open
   alias -s pdf=termux-open
 fi
+
+## Videos
+if [[ "${commands[mpv]}" ]]; then
+  alias -s mp4=mpv
+  alias -s avi=mpv
+  alias -s mkv=mpv
+  alias -s wmv=mpv
+  alias -s mov=mpv
+elif [[ "${commands[termux-open]}" ]]; then
+  alias -s mp4=termux-open
+  alias -s avi=termux-open
+  alias -s mkv=termux-open
+  alias -s wmv=termux-open
+  alias -s mov=termux-open
+fi
+
+
 
 ### [=]==================================[=]
 ### [~]............ RSYNC
@@ -68,7 +90,7 @@ if [[  -n "${DISTRO}" ]]; then
           alias yayino='yay -S --color always --verbose --needed --noconfirm'
           alias yaylist='yay -Q --color always'
         fi
-  elif [[ ${DISTRO} == "Debian"   ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios"    ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
+  elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
         alias apts="apt search"
         alias apti="apt install"
         alias aptupdate="printf '\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n'; apt-get update -y"
@@ -84,12 +106,10 @@ if [[  -n "${DISTRO}" ]]; then
         if [[ "${commands[pkgfzf]}" ]] && [[ "${commands[fzf]}"  ]]; then
           alias pkgf="pkgfzf fzf"
         fi
-  elif [[ ${DISTRO} == "Gentoo" ]] \
-    && [[ "${commands[emerge]}" ]]; then
-    printf ""
+  elif [[ ${DISTRO} == "Gentoo" ]] && [[ "${commands[emerge]}" ]]; then
+    printf "PLEASE ADD emerge aliases to %s\n" "${0}"
   fi
 fi
-
 
 ### [=]==================================[=]
 ### [~]............ AWESOMEWM
@@ -104,11 +124,9 @@ if [[ "${commands[awesome]}" ]]; then
   alias list-desktop-applications="ls /usr/share/applications | awk -F '.desktop' ' { print $1}' -"
 fi
 
-
-
-
-#{{{ LSD
-
+### [=]==================================[=]
+### [~]............ LSD
+### [=]==================================[=]
 if [[ "${commands[lsd]}" ]]; then
   alias lsd="lsd --color always --icon always"
   alias ls="lsd --color always --icon always"
@@ -125,27 +143,16 @@ if [[ "${commands[lsd]}" ]]; then
   alias l='lsd  --oneline --no-symlink --almost-all' # List All On One Line
 
   ## lsd flags in alieas set below require a newer version of lsd
-  ## Right now, debian repos do not have a version which supports some options.
-  ## REQUIRE VERSION  0.22.0 or later: https://github.com/Peltoche/lsd/releases/tag/0.22.0
-  lsdversion=
-  lsdversion="$(${commands[lsd]} --version 2>/dev/null | cut -d' ' -f2 )"
-  #shellcheck disable=1072,1027,1073,1009
-  islsd22(){ [[ $lsdversion == <0->.<22->.* ]]; }
-  if islsd22; then
-    ## LSD_UNSUPPORTED is unset, add these aliases
-    alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a hot sec...\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S';  lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d%H%M%S' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
-    alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
-    alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
-    alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
-    alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
-  else
-    printf "\e[0;3;38;5;8mSome options from the 'lsd' command are not availiable in your current version.\n\nPlease upgrade to at least v0.22.0\n\nInstall with cargo:\n\n    cargo install lsd\n\nInstall binary on Debian based systems:\n\n    curl -LO 'https:/github.com/Peltoche/lsd/releases/download/0.23.1/lsd_0.23.1_amd64.deb' \\ \n        && [sudo] dpkg -i lsd_0.23.1_amd64.deb\n"
-  fi
+  alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a hot sec...\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S'; lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d%H%M%S' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
+  alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
+  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
+  alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
+  alias sl='lsd --oneline --long --almost-all --permission octal' # List All On One Line Sort By Extension
 fi
 
-#}}} LSD
-
-#{{{ EXA
+### [=]==================================[=]
+### [~]............ EXA
+### [=]==================================[=]
 # _EXA=$(command -v exa | awk '{print $2}')
 # if [[ -f "$_EXA" ]]; then
 # ### exa
@@ -154,7 +161,6 @@ if [[ "${commands[exa]}" ]]; then
 #   alias l1='exa  --oneline --all --header'
 #   alias ls-l="exa --long --all"
 #   alias ls-ll="exa --sort=type --tree --recurse --long --all"
-  alias lst="exa --sort time --colour-scale --long --all --time-style=long-iso --no-user --no-permissions --header --no-icons  --accessed --modified"
   alias exa="exa --color always --color-scale --icons --all"
   alias l1='exa  --oneline --all --header'                        # List All On One Line
   alias lll='exa --long --octal-permissions --all --header --no-time --no-user --sort=type --colour-scale'
@@ -163,25 +169,15 @@ if [[ "${commands[exa]}" ]]; then
   alias ls-l="exa --sort=type --long --all"
 fi
 
-
-#}}}EXA
-
-
+### [=]==================================[=]
+### [~]............ SHELLCHECK
+### [=]==================================[=]
 if [[ "${commands[shellcheck]}" ]]; then
   alias shellcheck-all="shellcheck --check-sourced --enable=all --list-optional --color=always --external-sources --format=tty --wiki-link-count=20"
   if [[ "${commands[shellharden]}" ]]; then
-    function shellcheck-harden(){
-      draw_entire_line
-      shellharden --suggest --syntax-suggest "${@}"
-      draw_entire_line
-      shellcheck --check-sourced --enable=all --color=always --external-sources --format=tty --wiki-link-count=20 "${@}"
-      draw_entire_line
-      shellcheck --check-sourced --enable=all --list-optional --color=always --external-sources --format=tty --wiki-link-count=20 "${@}"
-      draw_entire_line
-    }
+    [[ -f "${ZSH_FUNCTIONS_MANUAL}/shellcheck-harden.zsh" ]] && source "${ZSH_FUNCTIONS_MANUAL}/shellcheck-harden.zsh"
   fi
 fi
-
 
 ### [=]==================================[=]
 ### [~]........... CAT/BAT
@@ -230,9 +226,6 @@ function c(){
 }
 
 
-if [[ "${commands[duviz]}" ]]; then
-  alias duviz="duviz --color --no-progress --max-depth=50"
-fi
 
 ### [=]==================================[=]
 ### [~]............ POWERSHELL
@@ -243,11 +236,17 @@ if [[ "${commands[pwsh]}" ]]; then
 fi
 
 
+### [=]==================================[=]
+### [~]............ GPING
+### [=]==================================[=]
 if [[ "${commands[gping]}" ]]; then
   alias ping-graph="gping -4 --watch-interval 0.1"
 fi
 
 
+### [=]==================================[=]
+### [~]............ VIRSH
+### [=]==================================[=]
 if [[ "${commands[virsh]}" ]]; then
   alias virsh-list="virsh list --all"
   alias virt-manager-list="virsh list --all"
@@ -425,7 +424,7 @@ fi
 
 ### [=]==================================[=]
 ### [~]............ NMAP
-### [=]==================================[=]
+### [=]=======VIRSH=================[=]
 #shellcheck disable=1009
 if [[ "${commands[nmap]}" ]]; then
 typeset -A nmapaliases
@@ -482,6 +481,12 @@ if [[ "${commands[docker]}" ]]; then
   fi
 fi
 
+### [=]==================================[=]
+### [~]....... DU ALTERNATIVES
+### [=]==================================[=]
+if [[ "${commands[duviz]}" ]]; then
+  alias duviz="duviz --color --no-progress --max-depth=50"
+fi
 
 if [[ "${commands[dfrs]}" ]]; then
   alias disk-usage="dfrs --human-readable --total --color=always --columns=filesystem,bar,used_percentage,used,available_percentage,available,capacity,type,mounted_on 2>/dev/null"
@@ -494,10 +499,16 @@ if [[ "${commands[dfc]}" ]]; then
 fi
 
 
+### [=]==================================[=]
+### [~]........... PYTHON
+### [=]==================================[=]
 if [[ "${commands[python]}" ]]; then
   alias http-server='python -m http.server'
 fi
 
+### [=]==================================[=]
+### [~]........... TMUX
+### [=]==================================[=]
 if [[ "${commands[tmux]}" ]]; then
   alias tmux-ssh="tmux new-session ssh"
 fi
@@ -505,7 +516,6 @@ fi
 ### [=]==================================[=]
 ### [~]............ CRYPTO
 ### [=]==================================[=]
-### Monero
 if [[ "${commands[monero-wallet-cli]}" ]]; then
   alias monero-cli="monero-wallet-cli"
 fi
@@ -516,7 +526,6 @@ fi
 if [[ "${commands[fzf]}" ]]; then
   alias psfzf="ps -ef | fzf --bind 'ctrl-r:reload(ps -ef)' --header 'Press (CTRL-R) to reload' --header-lines=1"
 fi
-
 
 ### [=]==================================[=]
 ### [~]............ Networking

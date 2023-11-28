@@ -1,5 +1,24 @@
 #shellcheck disable=2148
 
+
+## Path to parent directory of function directories
+ZSH_FUNCTIONS_DIR="${ZSH_USER_DIR}/functions"
+
+## Path to functions available directory. Functions are not loaded from this directory
+ZSH_FUNCTIONS_AVAILABLE="${ZSH_FUNCTIONS_DIR}/functions-available"
+
+## Path to functions enabled directory. Functions are automatically loaded from
+## this directory if they have the file extension '.zsh'
+ZSH_FUNCTIONS_ENABLED="${ZSH_FUNCTIONS_DIR}/functions-enabled"
+
+## Path to the functions manual directory. Functions are not automatically loaded from this directory.
+## Source functions manually in this directory (Put functions in this directory that rely on non coreutils programs)
+## No need to source functions that contain commands you do not have installed ;)
+ZSH_FUNCTIONS_MANUAL="${ZSH_FUNCTIONS_DIR}/functions-enabled"
+
+export ZSH_FUNCTIONS_AVAILABLE ZSH_FUNCTIONS_ENABLED ZSH_FUNCTIONS_CONFIG_DIR
+
+
 ### [=]==================================[=]
 ### [~]............ ZLUA
 ### [=]==================================[=]

@@ -1,3 +1,4 @@
+#vim:filetype=zsh:shiftwidth=2:softtabstop=2:expandtab:foldmethod=marker:foldmarker=###{{{,###}}}
 #shellcheck disable=1072,1073,1123,2148
 #######################################################################################
 #   You may read this file into your .zshrc or another startup file with
@@ -166,14 +167,15 @@ bindkey -M vicmd tm transpose-words-match
 # If the selection region is not active, set the mark at the cursor position,
 # switch to the shift-select keymap, and call $WIDGET without 'shift-select::'
 # prefix. This function must be used only for shift-select::<widget> widgets.
-function shift-select::select-and-invoke() {
-	if (( !REGION_ACTIVE )); then
-		zle set-mark-command -w
+function shift-select::select-and-invoke(){
+  if (( !REGION_ACTIVE )); then
+zle set-mark-command -w
 		zle -K shift-select
 	fi
 	zle ${WIDGET#shift-select::} -w
 }
 
+#shellcheck disable=1083
 function {
 	emulate -L zsh
 	# Create a new keymap for the shift-selection mode.

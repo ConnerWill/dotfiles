@@ -25,10 +25,6 @@
 ### [=============================]
 ### [------- ZSH FUNCTIONS -------]
 ### [=============================]
-      ZSH_FUNCTIONS_DIR="${ZSH_USER_DIR}/functions"
-ZSH_FUNCTIONS_AVAILABLE="${ZSH_FUNCTIONS_DIR}/functions-available"
-  ZSH_FUNCTIONS_ENABLED="${ZSH_FUNCTIONS_DIR}/functions-enabled"
-export ZSH_FUNCTIONS_AVAILABLE ZSH_FUNCTIONS_ENABLED ZSH_FUNCTIONS_CONFIG_DIR
 
 ## Load functions
 if [[ -d "${ZSH_FUNCTIONS_ENABLED}" ]]; then
