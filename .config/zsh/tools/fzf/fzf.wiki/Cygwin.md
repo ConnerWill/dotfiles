@@ -1,5 +1,0 @@
-On Cygwin, `install` script will download the prebuilt fzf binary for Windows platform. It does not run on mintty, the default terminal emulator shipped with Cygwin, but it works fine on [ConEmu](https://conemu.github.io/) or the default Command Prompt (`cmd.exe`).
-
-The Vim plugin of fzf also works with the Windows binary. It will start an extra `cmd.exe` window on mintty to circumvent the aforementioned limitation.
-
-If you really have to use fzf with mintty, consider checking out the legacy version written in Ruby, which is currently maintained in [me-and/fzf](/me-and/fzf). Another solution to use the new version of `fzf` and `Cygwin+mintty, MSYS2` is to use `winpty`. Compile `winpty` as instructed by https://github.com/rprichard/winpty and then use the script written by @knutze - https://github.com/junegunn/fzf/issues/2798#issuecomment-1229376159 
