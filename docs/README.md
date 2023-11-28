@@ -141,31 +141,20 @@ git clone https://github.com/connerwill/dotfiles   \
 # Configurations
 
 * **Xresources**
-* alacritty
 * **awesome**
-* bash
-* bat
-* btop
+* **bat**
 * fish
 * **git**
-* htop
 * **kitty**
-* lazydocker
-* lazygit
-* luacheck
 * **lynx**
 * **nano**
-* neofetch
 * **nvim**
 * powershell
-* sx
-* terminator
+* **sx**
 * **termux**
 * **tmux**
 * **zsh**
 
-**BOLD**
-: More than standard configuration
 
 # Contributing
 
