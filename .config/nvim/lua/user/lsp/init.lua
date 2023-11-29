@@ -7,13 +7,37 @@ require "user.lsp.lsp-installer"
 require("user.lsp.handlers").setup()
 require "user.lsp.null-ls"
 
--- Terraform LSP setup (need to move this to correct location)
+
+-- TERRAFORM
 --require'lspconfig'.terraformls.setup{}
 require'lspconfig'.terraform_lsp.setup{}
-
--- tflint LSP setup (need to move this to correct location)
 require'lspconfig'.tflint.setup{}
 
 
--- Ansible LSP setup (need to move this to correct location)
+-- ANSIBLE
 require'lspconfig'.ansiblels.setup{}
+
+-- PYTHON
+require'lspconfig'.jedi_language_server.setup{}
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.pylsp.setup{
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = {'W391'},
+          maxLineLength = 100
+        }
+      }
+    }
+  }
+}
+
+-- DOCKER
+require'lspconfig'.dockerls.setup{}
+
+-- GOLANG
+require'lspconfig'.golangci_lint_ls.setup{}
+
+-- HTML
+require'lspconfig'.htmx.setup{}
