@@ -13,3 +13,7 @@ require'lspconfig'.terraform_lsp.setup{}
 
 -- tflint LSP setup (need to move this to correct location)
 require'lspconfig'.tflint.setup{}
+
+
+-- Ansible LSP setup (need to move this to correct location)
+require'lspconfig'.ansiblels.setup{}
