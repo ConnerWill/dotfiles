@@ -41,6 +41,7 @@ git clone \
  --bare                                                    \
  --config status.showUntrackedFiles=no                     \
  --config core.excludesfile="${HOME}/.dotfiles/.gitignore" \
+ --recurse-submodules                                      \
  --verbose --progress                                      \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
@@ -85,6 +86,7 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
     --config status.showUntrackedFiles=no                     \
     --config core.excludesfile="${DOTFILES}/.gitignore"       \
     --verbose --progress                                      \
+    --recurse-submodules                                      \
     https://github.com/ConnerWill/dotfiles.git "${DOTFILES}"  \
  && git --work-tree="${HOME}" --git-dir="${DOTFILES}" checkout --force main \
  && exec zsh
@@ -102,21 +104,21 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 > **Test full config in Docker**
 ```shell
-git clone https://github.com/connerwill/dotfiles   \
-  && docker run                                    \
-    -v $PWD/dotfiles:/root                         \
-    -it                                            \
-    archlinux                                      \
+git clone --recurse-submodules https://github.com/connerwill/dotfiles \
+  && docker run                                                       \
+    -v $PWD/dotfiles:/root                                            \
+    -it                                                               \
+    archlinux                                                         \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
 > **Test ZSH with no extra packages**
 ```shell
-git clone https://github.com/connerwill/dotfiles   \
-  && docker run                                    \
-    -v $PWD/dotfiles:/root                         \
-    -it                                            \
-    archlinux                                      \
+git clone --recurse-submodules https://github.com/connerwill/dotfiles \
+  && docker run                                                       \
+    -v $PWD/dotfiles:/root                                            \
+    -it                                                               \
+    archlinux                                                         \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
 
