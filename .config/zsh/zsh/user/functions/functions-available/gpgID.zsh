@@ -1,6 +1,6 @@
 function gpgID(){
   local DEFAULTKEYNAME KEYNAME
-  DEFAULTKEYNAME="ConnerWill"
+  DEFAULTKEYNAME="$(whoami)"
 	KEYNAME="$1"
 	[[ -n "${KEYNAME}" ]] \
     || local KEYNAME="${DEFAULTKEYNAME}"
