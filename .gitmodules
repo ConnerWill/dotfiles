@@ -1,0 +1,3 @@
+[submodule ".config/zsh/zsh/user/functions/functions-manual/dotf"]
+	path = .config/zsh/zsh/user/functions/functions-manual/dotf
+	url = https://github.com/connerwill/dotf

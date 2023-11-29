@@ -1,5 +1,13 @@
 # shellcheck disable=1091,2296,2086,2016,1072,1058,1036,1073
 
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME}/zsh}"
+export ZCOMPCACHE="${ZCOMPCACHE:-${ZSH_CACHE_DIR}/zcompcache}"
+export ZCOMPDUMP=${ZCOMPDUMP:-${ZSH_CACHE_DIR}/zcompdump}
+
+# shellcheck disable=2298
+# We can use a cache in order to speed things up
+[[ ! -d "${ZSH_CACHE_DIR}" ]] && mkdir -pv "${ZSH_CACHE_DIR}"
+
 ## Load Completions System
 ## Autoload zsh modules when they are referenced
 zmodload -i zsh/complist
@@ -12,14 +20,6 @@ zmodload -ap zsh/mapfile mapfile
 ## Shellcheck disable=2034
 ## Automatically remove duplicates from these arrays
 typeset -U path PATH cdpath CDPATH fpath FPATH manpath MANPATH; typeset -a tmp
-
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME}/zsh}"
-export ZCOMPCACHE="${ZCOMPCACHE:-${ZSH_CACHE_DIR}/zcompcache}"
-export ZCOMPDUMP=${ZCOMPDUMP:-${ZSH_CACHE_DIR}/zcompdump}
-
-# shellcheck disable=2298
-# We can use a cache in order to speed things up
-[[ ! -d "${ZSH_CACHE_DIR}" ]] && mkdir -pv "${ZSH_CACHE_DIR}"
 
 # glob qualifiers description:
 #   N    turn on NULL_GLOB for this expansion
@@ -38,7 +38,6 @@ if (( run_compdump )){
 } else {
     compinit -C -d "${ZCOMPDUMP}" "${tmp[@]}" # -C flag disables some checks performed by compinit - they are not needed because we already have a fresh compdump
 }; unset tmp run_compdump
-
 
 
 ## %K{black}%F{blue}━━━ %d ━━━%f%k'
@@ -203,22 +202,19 @@ function comp_setup () {
 comp_setup
 unfunction comp_setup
 
+# We pass a couple of options that make the code
+# less likely to break:
+# -U suppresses alias expansion
+# -z marks the function for zsh-style autoloading == `unsetopt KSH_AUTOLOAD`
+autoload -Uz dotf
 
-
-
-
-
-
-
-
-
-        # if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-        #     _last_try="$HISTNO$BUFFER$CURSOR"
-        #     reply=(_complete _match _ignored _prefix _files)
-        # else
-        #     if [[ $words[1] == (rm|mv) ]] ; then
-        #         reply=(_complete _files)
-        #     else
-        #         reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-        #     fi
-        # fi'
+# if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+#     _last_try="$HISTNO$BUFFER$CURSOR"
+#     reply=(_complete _match _ignored _prefix _files)
+# else
+#     if [[ $words[1] == (rm|mv) ]] ; then
+#         reply=(_complete _files)
+#     else
+#         reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
+#     fi
+# fi'
