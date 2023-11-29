@@ -39,5 +39,5 @@ fi
 if [[ -f "${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf" ]]; then
   source "${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf" || _zshrc_VERBOSE_ERROR "Failed to source dotf: ${ZSH_FILE}"
 else
-  _zshrc_VERBOSE_ERROR "Cannot locate file dotf: ${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf   Did you forget to clone my dotfiles without '--recurse-submodules' ?  dotf can also be found here: https://github.com/ConnerWill/dotf"
+  _zshrc_VERBOSE_ERROR "Cannot locate file dotf: ${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf   [|] Did you forget to clone my dotfiles without '--recurse-submodules' ? [|] If you have already cloned the dotfiles, you can run the following commands to install dotf submodule: git --work-tree="${HOME}" --git-dir="${DOTFILES}" submodule init && git --work-tree="${HOME}" --git-dir="${DOTFILES}" submodule update  [|] dotf can also be found here: https://github.com/ConnerWill/dotf"
 fi
