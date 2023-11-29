@@ -26,11 +26,18 @@
 ### [------- ZSH FUNCTIONS -------]
 ### [=============================]
 
-## Load functions
+## Load automatic functions
 if [[ -d "${ZSH_FUNCTIONS_ENABLED}" ]]; then
   for ZSH_FILE in "${ZSH_FUNCTIONS_ENABLED}"/*.zsh(N); do
     source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Failed to source function file: ${ZSH_FILE}"
   done
 else
   _zshrc_VERBOSE_ERROR "Function directory does not exist: ${ZSH_FUNCTIONS_ENABLED}"
+fi
+
+## Load manual functions
+if [[ -f "${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf" ]]; then
+  source "${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf" || _zshrc_VERBOSE_ERROR "Failed to source dotf: ${ZSH_FILE}"
+else
+  _zshrc_VERBOSE_ERROR "Cannot locate file dotf: ${ZSH_FUNCTIONS_MANUAL}/dotf/bin/dotf   Did you forget to clone my dotfiles without '--recurse-submodules' ?  dotf can also be found here: https://github.com/ConnerWill/dotf"
 fi
