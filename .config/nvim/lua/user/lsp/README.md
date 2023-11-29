@@ -18,10 +18,10 @@ Here is a list of LSP servers to install (arch linux)
 * tidy
 * jedi-language-server
 * lua-language-server
-
+* marksman
 
 ```bash
-yay -S ansible-language-server shellcheck terraform-ls terraform-lsp tflint pyright python-lsp-server dockerfile-language-server tidy jedi-language-server lua-language-server
+yay -S ansible-language-server shellcheck terraform-ls terraform-lsp tflint pyright python-lsp-server dockerfile-language-server tidy jedi-language-server lua-language-server marksman
 ```
 
 ```bash

@@ -33,15 +33,6 @@ require'lspconfig'.pylsp.setup{
   }
 }
 
--- DOCKER
-require'lspconfig'.dockerls.setup{}
-
--- GOLANG
-require'lspconfig'.golangci_lint_ls.setup{}
-
--- HTML
-require'lspconfig'.htmx.setup{}
-
 -- LUA
 -- If you primarily use lua-language-server for Neovim, and want to provide completions, analysis,
 -- and location handling for plugins on runtime path, you can use the following settings.
@@ -77,3 +68,15 @@ require'lspconfig'.lua_ls.setup {
 }
 -- Otherwise you can use:
 --[[ require'lspconfig'.lua_ls.setup{} ]]
+
+-- DOCKER
+require'lspconfig'.dockerls.setup{}
+
+-- GOLANG
+require'lspconfig'.golangci_lint_ls.setup{}
+
+-- HTML
+require'lspconfig'.htmx.setup{}
+
+-- MARKDOWN
+require'lspconfig'.marksman.setup{}
