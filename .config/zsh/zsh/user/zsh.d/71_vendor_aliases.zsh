@@ -255,6 +255,12 @@ fi
 #alias tcpdump-OpenWRT-termshark="sudo --prompt='Enter password for tcpdump: ' clear && ssh root@192.168.69.1 tcpdump -i any -U -s0 -w - 'not port 22' | sudo termshark -i -"
 #alias tcpdump-OpenWRT-tshark="sudo --prompt='Enter password for tcpdump: ' clear && ssh root@192.168.69.1 tcpdump -i any -U -s0 -w - 'not port 22' | sudo tshark --color -i -"
 
+### [=]==================================[=]
+### [~]............ ATTRACTORR
+### [=]==================================[=]
+if [[ "${commands[attractorr]}" ]]; then
+  alias attractorr="attractorr --sort seeders"
+fi
 
 ### [=]==================================[=]
 ### [~]............ ETCKEEPER
