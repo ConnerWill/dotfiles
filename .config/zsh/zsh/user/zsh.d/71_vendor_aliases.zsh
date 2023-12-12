@@ -300,6 +300,8 @@ if [[ "${commands[gh]}" ]]; then
 fi
 
 if [[ "${commands[git]}" ]]; then
+  # alias cd-git-top="cd $(git rev-parse --show-toplevel)"
+  alias giot="git"
   alias got="git"
   alias gpt="git"
   alias gut="git"
