@@ -1,5 +1,4 @@
-
-
+#shellcheck disable=2148
 
 # $HISTFILE belongs in the data home, not with the configs
 HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zsh-history/history"
@@ -23,10 +22,8 @@ setopt HIST_SAVE_NO_DUPS       # don't write a duplicate event to the history fi
 setopt HIST_VERIFY             # don't execute immediately upon history expansion
 setopt INC_APPEND_HISTORY      # write to the history file immediately, not when the shell exits
 setopt NO_HIST_BEEP            # don't beep when attempting to access a missing history entry
-# setopt NO_SHARE_HISTORY        # don't share history between all sessions
+#setopt NO_SHARE_HISTORY        # don't share history between all sessions
 setopt SHARE_HISTORY           # Share history between all sessions
 
 # make the history command more useful
 alias history="fc -li"
-
-

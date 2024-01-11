@@ -1,11 +1,21 @@
 #shellcheck disable=2148
 
-if [[ "${OSTYPE}" == "linux-gnu" ]]; then
-  [[ -f /etc/os-release ]] && export DISTRO=$(cat /etc/os-release | grep --extended-regexp --regexp='^NAME=' | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
-elif [[ "${OSTYPE}" == "linux-android" ]]; then
-  export DISTRO="Android"
-elif [[ "${OSTYPE}" == "darwin"* ]]; then
-  export DISTRO="Darwin"
-else
-  unset DISTRO
-fi
+case "${OSTYPE}" in
+  "linux-gnu")
+    if [[ -f /etc/os-release ]]; then
+      DISTRO=$(grep --extended-regexp --regexp='^NAME=' /etc/os-release | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
+      export DISTRO
+    fi
+    ;;
+  "linux-android")
+    DISTRO="Android"
+    export DISTRO
+    ;;
+  "darwin"*)
+    DISTRO="Darwin"
+    export DISTRO
+    ;;
+  *)
+    unset DISTRO
+    ;;
+esac

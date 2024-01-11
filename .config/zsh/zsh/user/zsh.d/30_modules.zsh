@@ -1,11 +1,9 @@
 #shellcheck disable=2148
 
-
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 autoload -Uz ztodo
 autoload -Uz vcs_info
-
 
 if autoload -Uz run-help; then
   (( ${+aliases[run-help]} )) && unalias run-help
