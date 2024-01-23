@@ -7,22 +7,22 @@ function wgetmirrorwebsite(){
         && printf "\n\t\e[0;1;38;5;82mUsage:\n\t\t\e[0;38;5;11m%s \e[0;3;38;5;201m<URL> \e[0;3;38;5;93m<OUTPUT_DIR>\n\n\t\e[0;1;38;5;82mExample:\n\t\t\e[0;38;5;11m%s \e[0;3;38;5;201m\"https://google.com\" \e[0;3;38;5;93m\"%s/Trash\"\n\n\e[0m" "$0" "$0" "$HOME" \
             && return 1
 
-    
+
     [[ -z "${OUTPUTDIR}" ]] \
         &&  printf "\e[0;1;38;5;196mNo directory to output to \t\e[0;1;38;5;93m>:(\e[0m\n" \
         && printf "\n\t\e[0;1;38;5;82mUsage:\n\t\t\e[0;38;5;11m%s \e[0;3;38;5;201m<URL> \e[0;3;38;5;93m<OUTPUT_DIR>\n\n\t\e[0;1;38;5;82mExample:\n\t\t\e[0;38;5;11m%s \e[0;3;38;5;201m\"http://nsa.gov\" \e[0;1;38;5;93m\"/root\"\n\n\e[0m" "$0" "$0" \
             && return 1
-    
+
     [[ ! -d "${OUTPUTDIR}" ]] \
         &&  printf "\e[0;1;38;5;196mNot a directory\t\e[0;1;38;5;93m>:(\e[0m\n" \
             && return 1
-    
+
     cd "$OUTPUTDIR" || return 1
 
     mkdir -v -p "$OUTPUTDIR" \
         && cd "$OUTPUTDIR" \
-        || return 1 
-    
+        || return 1
+
     # wget --verbose \
     #     --debug \
     #     --progress=bar:force:noscroll \
@@ -49,16 +49,16 @@ function wgetmirrorwebsite(){
 
 
 
-RAN1="$(echo "$RANDOM" | cut --characters 2-5)"
-RAN2="$(echo "$RANDOM" | cut --characters -3)"
-RAN3="$(echo "$RANDOM" | cut --characters -5)"
+RAN1="$(echo "$RANDOM" | cut -c 2-5)"
+RAN2="$(echo "$RANDOM" | cut -c -3)"
+RAN3="$(echo "$RANDOM" | cut -c -5)"
 alias wget-mirror-website="wgetmirrorwebsite"
 
 [[ -n "$1" ]] && [[ -n "$2" ]] \
     && wgetmirrorwebsite "$1" "$2"\
-    
+
 [[ -n "$1" ]] && [[ -z "$2" ]] \
-    && echo -e "\n\t\e[0;1;38;5;$(echo "$RANDOM" | cut --characters -2)mUsage:\n\t\t\e[0;38;5;${RAN1}mwget-mirror-website \e[0;3;38;5;${RAN2}m<URL> \e[0;3;38;5;${RAN3}m<OUTPUT_DIR>\n\n\t\e[0;1;38;5;$(echo "$RANDOM" | cut --characters -2)mExample:\n\t\t\e[0;38;5;${RAN1}mwget-mirror-website \e[0;3;38;5;${RAN2}m\"https://google.com\" \e[0;3;38;5;${RAN3}m\"$HOME/Trash\"\n\n\e[0m"
+    && echo -e "\n\t\e[0;1;38;5;$(echo "$RANDOM" | cut -c -2)mUsage:\n\t\t\e[0;38;5;${RAN1}mwget-mirror-website \e[0;3;38;5;${RAN2}m<URL> \e[0;3;38;5;${RAN3}m<OUTPUT_DIR>\n\n\t\e[0;1;38;5;$(echo "$RANDOM" | cut -c -2)mExample:\n\t\t\e[0;38;5;${RAN1}mwget-mirror-website \e[0;3;38;5;${RAN2}m\"https://google.com\" \e[0;3;38;5;${RAN3}m\"$HOME/Trash\"\n\n\e[0m"
 unset RAN1 RAN2 RAN3
     # wget \
     #     --page-requisites \

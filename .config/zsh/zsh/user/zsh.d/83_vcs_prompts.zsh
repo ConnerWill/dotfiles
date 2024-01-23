@@ -374,7 +374,7 @@ distro_logos=(
 #shellcheck disable=2190,2034
 distro_logo_color=(
  "Alma"       226
- "Alpine"     33
+ "Alpine"     25
  "Android"    10
  "Arch"       39
  "Artix"      39
