@@ -102,6 +102,32 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 <br>
 
+> **Test ZSH configuration in Docker**
+
+```bash
+# Clone dotfiles as a normal repository
+git clone --recurse-submodules https://github.com/connerwill/dotfiles.git ./connerwill-dotfiles
+
+# Move into cloned repository
+cd ./connerwill-dotfiles
+
+# Move to ZSH configuration directory
+cd "$(git rev-parse --show-toplevel)/.config/zsh"
+
+# Build Dockerfile
+docker build --tag connerwill-dotfiles-zsh:latest .
+
+# Run the Docker container
+docker run        \
+    --rm          \
+    --interactive \
+    --tty         \
+    connerwill-dotfiles-zsh:latest
+```
+
+<details>
+ <summary><b>Test dotfiles in Docker - OLD METHOD</b></summary>
+
 > **Test full config in Docker**
 ```shell
 git clone --recurse-submodules https://github.com/connerwill/dotfiles \
@@ -121,6 +147,10 @@ git clone --recurse-submodules https://github.com/connerwill/dotfiles \
     archlinux                                                         \
     sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
 ```
+
+<br>
+
+</details>
 
 <br>
 
