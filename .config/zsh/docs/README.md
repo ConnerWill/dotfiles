@@ -39,3 +39,23 @@ These are the files/directories that are sourced on ZSH startup
 ├── .zlogin
 └── .zprofile
 ```
+
+# Docker
+
+You can test out my ZSH configuration in Docker
+
+> Build the Docker container
+
+```bash
+docker build --tag connerwill-dotfiles-zsh:latest .
+```
+
+> Run the Docker container
+
+```bash
+docker run        \
+    --rm          \
+    --interactive \
+    --tty         \
+    connerwill-dotfiles-zsh:latest
+```
