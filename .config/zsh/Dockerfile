@@ -8,6 +8,7 @@ COPY . ${ZSH_CONFIG_DIR}
 RUN apk --no-cache add \
 	shadow               \
 	zsh                  \
+	zsh-vcs              \
 	lua                  \
 	&& chsh -s /bin/zsh || true
 
