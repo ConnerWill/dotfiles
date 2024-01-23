@@ -330,36 +330,88 @@ typeset -A distro_logos
 typeset -A distro_logo_color
 #shellcheck disable=2190,2034
 distro_logos=(
+ "Alma"       "  "
+ "Alpine"     "  "
+ "Android"    "  "
  "Arch"       "  "
- "Manjaro"    "  "
- "Gentoo"     "  "
- "Debian"     "  "
- "Raspbian"   "  "
- "Linuxmint"  "  "
- "Ubuntu"     "  "
- "Android"     ""
- "wsl"        "  "
- "Freebsd"    "  "
- "Openbsd"    " 🐡 "
+ "Artix"      "  "
+ "CentOS"     "  "
  "Darwin"     "  "
+ "Debian"     "  "
+ "Deepin"     "  "
+ "Elementary" "  "
+ "Endeavour"  "  "
+ "Fedora"     "  "
+ "Freebsd"    "  "
+ "Garuda"     "  "
+ "Gentoo"     "  "
+ "Kali"       "  "
+ "Kubuntu"    "  "
+ "Linuxmint"  "  "
+ "Manjaro"    "  "
+ "NixOS"      "  "
+ "Ocotoprint" "  "
+ "Openbsd"    "  "    #🐡
+ "Opensuse"   "  "
+ "Parabola"   "  "
+ "Parrot"     "  "
+ "PopOS"      "  "
+ "Puppy"      "  "
+ "Raspbian"   "  "
+ "Redhat"     "  "
+ "Rocky"      "  "
+ "Slackware"  "  "
+ "Solus"      "  "
+ "Tails"      "  "
+ "Ubuntu"     "  "
+ "Void"       "  "
+ "Xero"       "  "
+ "Zorin"      "  "
  "other"       "@"
+ "wsl"        "  "
 )
 
 #shellcheck disable=2190,2034
 distro_logo_color=(
- "Arch"       39
- "Manjaro"    10
- "Gentoo"     141
- "Debian"     196
- "Raspbian"   196
- "Linuxmint"  85
- "Ubuntu"     208
+ "Alma"       226
+ "Alpine"     33
  "Android"    10
- "wsl"        255
- "Freebsd"    196
- "Openbsd"    190
+ "Arch"       39
+ "Artix"      39
+ "CentOS"     53
  "Darwin"     255
+ "Debian"     196
+ "Deepin"     39
+ "Elementary" 32
+ "Endeavour"  54
+ "Fedora"     26
+ "Freebsd"    196
+ "Garuda"     32
+ "Gentoo"     141
+ "Kali"       232
+ "Kubuntu"    26
+ "Linuxmint"  85
+ "Manjaro"    10
+ "NixOS"      68
+ "Ocotoprint" 46
+ "Openbsd"    190
+ "Opensuse"   113
+ "Parabola"   61
+ "Parrot"     51
+ "PopOS"      81
+ "Puppy"      242
+ "Raspbian"   196
+ "Redhat"     124
+ "Rocky"      35
+ "Slackware"  21
+ "Solus"      8
+ "Tails"      93
+ "Ubuntu"     208
+ "Void"       35
+ "Xero"       105
+ "Zorin"      33
  "other"      201
+ "wsl"        255
 )
 
 [[ -z "${DISTRO}" ]] && DISTRO="other"

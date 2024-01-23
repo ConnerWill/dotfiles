@@ -9,7 +9,7 @@ case "${OSTYPE}" in
     ;;
   "linux-musl")
       if [[ -f /etc/os-release ]]; then
-        DISTRO=$(grep --extended-regexp --regexp='^NAME=' /etc/os-release | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
+        DISTRO=$(grep -E '^NAME=' /etc/os-release | cut -d'=' -f2 | cut -d' ' -f1 | cut -d'"' -f2)
         export DISTRO
       fi
     ;;
