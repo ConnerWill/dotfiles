@@ -2,6 +2,14 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
+-- Autocommand to set filetype for Jenkinsfile to groovy
+-- TODO: Change this to use lua instead of vimscript
+vim.api.nvim_command([[
+augroup filetypedetect
+    autocmd BufRead,BufNewFile *.Jenkinsfile set filetype=groovy
+augroup END
+]])
+
 --[[ DEFAULTS
 
 -- This file is automatically loaded by lazyvim.config.init.
