@@ -82,28 +82,28 @@ return {
           -- end,
           single_file_support = false,
           settings = {
-            typescript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "literal",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = false,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              },
-            },
-            javascript = {
-              inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              },
-            },
+            -- typescript = {
+            --   inlayHints = {
+            --     includeInlayParameterNameHints = "literal",
+            --     includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            --     includeInlayFunctionParameterTypeHints = true,
+            --     includeInlayVariableTypeHints = false,
+            --     includeInlayPropertyDeclarationTypeHints = true,
+            --     includeInlayFunctionLikeReturnTypeHints = true,
+            --     includeInlayEnumMemberValueHints = true,
+            --   },
+            -- },
+            -- javascript = {
+            --   inlayHints = {
+            --     includeInlayParameterNameHints = "all",
+            --     includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            --     includeInlayFunctionParameterTypeHints = true,
+            --     includeInlayVariableTypeHints = true,
+            --     includeInlayPropertyDeclarationTypeHints = true,
+            --     includeInlayFunctionLikeReturnTypeHints = true,
+            --     includeInlayEnumMemberValueHints = true,
+            --   },
+            -- },
           },
         },
         -- svelte = {},
@@ -235,6 +235,157 @@ return {
         },
       },
     },
+  },
+
+    -- change null-ls config
+  {
+    "nvimtools/none-ls.nvim",
+    opts = function(_, opts)
+      local null_ls = require("null-ls")
+
+  -- CODE ACTIONS
+
+      -- add shellcheck as code_action
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.code_actions.shellcheck })
+
+
+  -- COMPLETION
+
+      -- add luasnip as completion
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.completion.luasnip })
+
+      -- add spell as completion
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.completion.spell })
+
+
+  -- DIAGNOSTICS
+
+
+      -- add actionlint as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.actionlint })
+
+      -- add ansible-lint as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ansiblelint })
+
+      -- add dotenv_linter as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.dotenv_linter })
+
+      -- add luacheck as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.luacheck })
+
+      -- add markdownlint as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.markdownlint })
+
+      -- add misspell as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.misspell })
+
+      -- add mypy as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.mypy })
+
+      -- add ruff as diagnostics
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ruff })
+
+      -- add selene as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.selene })
+
+      -- add shellcheck as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.shellcheck })
+
+      -- add terraform_validate as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.terraform_validate })
+
+      -- add tfsec as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.tfsec })
+
+      -- add trailspace as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.trail_space })
+
+      -- add trivy as diagnostics (terraform)
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.trivy })
+
+      -- add yamllint as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.yamllint })
+
+      -- add zsh as diagnostics
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.zsh })
+
+
+    -- FORMATTING
+
+      -- add black as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.black })
+
+      -- add beautysh as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.beautysh })
+
+      -- add gofmt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.gofmt })
+
+      -- add gofumpt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.gofumpt })
+
+      -- add hclfmt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.hclfmt })
+
+      -- add isort as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.isort })
+
+      -- add lua_format as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.lua_format })
+
+      -- add markdown_toc as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.markdown_toc })
+
+      -- add nginx_beautifier as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.nginx_beautifier })
+
+      -- add packer as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.packer })
+
+      -- add reorder_python_imports as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.reorder_python_imports })
+
+      -- add shellharden as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.shellharden })
+
+      -- add shfmt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.shfmt })
+
+      -- add stylua as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.stylua })
+
+      -- add terrafmt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terrafmt })
+
+      -- add terraform_fmt as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terraform_fmt })
+
+      -- add trim_newlines as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_newlines })
+
+      -- add trim_whitespace as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_whitespace })
+
+      -- add yamlfix as formatting
+      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.yamlfix })
+
+
+    -- HOVER
+
+      -- add dictionary as hover
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.dictionary })
+
+      -- add printenv as hover
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.printenv })
+
+
+    -- REMOVE
+
+      -- remove flake8 from opts.sources
+      -- opts.sources = vim.tbl_filter(function(source)
+      --   return source.name ~= "flake8"
+      -- end, opts.sources)
+    end,
   },
 
 }
