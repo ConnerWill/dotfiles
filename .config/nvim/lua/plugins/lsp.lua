@@ -46,20 +46,15 @@ return {
         "yq",
       })
     end,
-  },
-
-  -- lsp servers
+  }, -- lsp servers
   {
     "neovim/nvim-lspconfig",
     opts = {
-      -- Disable autoformat
-      autoformat = false,
+      -- autoformat = false, -- Disable autoformat -- nvim-lspconfig.opts.autoformat` is deprecated. Please use `vim.g.autoformat` instead
       inlay_hints = { enabled = true },
       capabilities = {
         workspace = {
-          didChangeWatchedFiles = {
-            dynamicRegistration = false,
-          },
+          didChangeWatchedFiles = { dynamicRegistration = false },
         },
       },
       ---@type lspconfig.options
@@ -125,22 +120,14 @@ return {
         --   },
         -- },
         -- },
-        yamlls = {
-          settings = {
-            yaml = {
-              keyOrdering = false,
-            },
-          },
-        },
+        yamlls = { settings = { yaml = { keyOrdering = false } } },
         lua_ls = {
           -- enabled = false,
           -- cmd = { "/home/folke/projects/lua-language-server/bin/lua-language-server" },
           single_file_support = true,
           settings = {
             Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
+              workspace = { checkThirdParty = false },
               completion = {
                 workspaceWord = true,
                 callSnippet = "Both",
@@ -159,12 +146,8 @@ return {
                 semicolon = "Disable",
                 arrayIndex = "Disable",
               },
-              doc = {
-                privateName = { "^_" },
-              },
-              type = {
-                castNumberToInteger = true,
-              },
+              doc = { privateName = { "^_" } },
+              type = { castNumberToInteger = true },
               diagnostics = {
                 disable = {
                   "incomplete-signature-doc",
@@ -211,11 +194,15 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      diagnostics = { virtual_text = { prefix = "icons" } },
+      diagnostics = {
+        virtual_text = {
+          prefix = "icons",
+        },
+      },
     },
   },
 
-  { 
+  {
     "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
@@ -236,48 +223,82 @@ return {
       },
     },
   },
+  {
+    "nvimtools/none-ls.nvim",
+    config = function()
+      local nullls = require("null-ls")
+      nullls.register(require("none-ls-shellcheck.diagnostics"))
+      nullls.register(require("none-ls-shellcheck.code_actions"))
+      nullls.register(require("none-ls-luacheck.diagnostics.luacheck"))
+      nullls.register(require("none-ls.formatting.beautysh"))
+      nullls.register(require("none-ls.formatting.jq"))
+      nullls.register(require("none-ls.formatting.beautysh"))
 
-    -- change null-ls config
+      nullls.register(require("null-ls.builtins.diagnostics.selene"))
+      nullls.register(require("null-ls.builtins.diagnostics.zsh"))
+      nullls.register(require("null-ls.builtins.diagnostics.tfsec"))
+      nullls.register(require("null-ls.builtins.diagnostics.yamllint"))
+      nullls.register(require("null-ls.builtins.diagnostics.markdownlint"))
+      nullls.register(require("null-ls.builtins.formatting.black"))
+      nullls.register(require("null-ls.builtins.formatting.shfmt"))
+      nullls.register(require("null-ls.builtins.formatting.tidy"))
+      nullls.register(require("null-ls.builtins.formatting.packer"))
+      nullls.register(require("null-ls.builtins.formatting.hclfmt"))
+      nullls.register(require("null-ls.builtins.formatting.stylua"))
+      nullls.register(require("null-ls.builtins.formatting.gofumpt"))
+      nullls.register(require("null-ls.builtins.formatting.prettier"))
+      nullls.register(require("null-ls.builtins.formatting.isort"))
+    end,
+    dependencies = {
+      "nvimtools/none-ls-extras.nvim",
+      "gbprod/none-ls-shellcheck.nvim",
+      "gbprod/none-ls-luacheck.nvim",
+    },
+  }, -- null-ls config
   {
     "nvimtools/none-ls.nvim",
     opts = function(_, opts)
       local null_ls = require("null-ls")
 
-  -- CODE ACTIONS
+      -- CODE ACTIONS
 
       -- add shellcheck as code_action
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.code_actions.shellcheck })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.code_actions.shellcheck })
 
-
-  -- COMPLETION
+      -- COMPLETION
 
       -- add luasnip as completion
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.completion.luasnip })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.completion.luasnip,
+      })
 
-      -- add spell as completion
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.completion.spell })
-
-
-  -- DIAGNOSTICS
-
+      -- DIAGNOSTICS
 
       -- add actionlint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.actionlint })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.actionlint,
+      })
 
       -- add ansible-lint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ansiblelint })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.ansiblelint,
+      })
 
       -- add dotenv_linter as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.dotenv_linter })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.dotenv_linter,
+      })
 
       -- add luacheck as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.luacheck })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.luacheck })
 
       -- add markdownlint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.markdownlint })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.markdownlint,
+      })
 
       -- add misspell as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.misspell })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.misspell })
 
       -- add mypy as diagnostics
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.mypy })
@@ -286,43 +307,52 @@ return {
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ruff })
 
       -- add selene as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.selene })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.selene,
+      })
 
       -- add shellcheck as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.shellcheck })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.shellcheck })
 
       -- add terraform_validate as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.terraform_validate })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.terraform_validate,
+      })
 
       -- add tfsec as diagnostics
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.tfsec })
 
       -- add trailspace as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.trail_space })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.trail_space,
+      })
 
       -- add trivy as diagnostics (terraform)
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.trivy })
 
       -- add yamllint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.yamllint })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.diagnostics.yamllint,
+      })
 
       -- add zsh as diagnostics
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.zsh })
 
-
-    -- FORMATTING
+      -- FORMATTING
 
       -- add black as formatting
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.black })
 
       -- add beautysh as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.beautysh })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.beautysh })
 
       -- add gofmt as formatting
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.gofmt })
 
       -- add gofumpt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.gofumpt })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.formatting.gofumpt,
+      })
 
       -- add hclfmt as formatting
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.hclfmt })
@@ -331,22 +361,26 @@ return {
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.isort })
 
       -- add lua_format as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.lua_format })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.lua_format })
 
       -- add markdown_toc as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.markdown_toc })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.markdown_toc })
 
       -- add nginx_beautifier as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.nginx_beautifier })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.formatting.nginx_beautifier,
+      })
 
       -- add packer as formatting
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.packer })
 
       -- add reorder_python_imports as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.reorder_python_imports })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.reorder_python_imports })
 
       -- add shellharden as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.shellharden })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.formatting.shellharden,
+      })
 
       -- add shfmt as formatting
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.shfmt })
@@ -355,22 +389,25 @@ return {
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.stylua })
 
       -- add terrafmt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terrafmt })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terrafmt })
 
       -- add terraform_fmt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terraform_fmt })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.formatting.terraform_fmt,
+      })
 
       -- add trim_newlines as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_newlines })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_newlines })
 
       -- add trim_whitespace as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_whitespace })
+      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_whitespace })
 
       -- add yamlfix as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.yamlfix })
+      opts.sources = vim.list_extend(opts.sources, {
+        null_ls.builtins.formatting.yamlfix,
+      })
 
-
-    -- HOVER
+      -- HOVER
 
       -- add dictionary as hover
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.dictionary })
@@ -378,14 +415,16 @@ return {
       -- add printenv as hover
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.printenv })
 
-
-    -- REMOVE
+      -- REMOVE
 
       -- remove flake8 from opts.sources
       -- opts.sources = vim.tbl_filter(function(source)
       --   return source.name ~= "flake8"
       -- end, opts.sources)
     end,
-  },
 
+    dependencies = { "gbprod/none-ls-shellcheck.nvim" },
+  },
 }
+
+-- nvim-lspconfig.opts.autoformat` is deprecated. Please use `vim.g.autoformat` instead

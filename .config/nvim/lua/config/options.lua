@@ -5,6 +5,8 @@ local opt = vim.opt
 
 vim.g.mapleader = "\\"
 
+vim.g.autoformat = true -- Enable LazyVim auto format
+
 opt.cursorcolumn = true -- Enable highlighting of the current column
 
 --[[ DEFAULTS
