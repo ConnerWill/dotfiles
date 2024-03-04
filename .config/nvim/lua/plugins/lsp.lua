@@ -154,6 +154,9 @@ return {
                   -- "trailing-space"
                 },
                 -- enable = false,
+                globals = {
+                  "vim",
+                },
                 groupSeverity = {
                   strong = "Warning",
                   strict = "Warning",
@@ -181,6 +184,9 @@ return {
                   indent_size = "2",
                   continuation_indent_size = "2",
                 },
+              },
+              telemetry = {
+                enable = false,
               },
             },
           },
