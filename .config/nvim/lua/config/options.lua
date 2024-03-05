@@ -3,15 +3,14 @@
 -- Add any additional options here
 local opt = vim.opt
 
-vim.g.mapleader = "\\"
-
 vim.g.autoformat = true -- Enable LazyVim auto format
+vim.g.mapleader = "\\" -- Define leader key
 
+opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.cursorcolumn = true -- Enable highlighting of the current column
-
 opt.mouse = "nv"
 
---[[ DEFAULTS
+--[[ DEFAULT
 
 -- This file is automatically loaded by plugins.core
 vim.g.mapleader = " "
@@ -76,9 +75,9 @@ opt.fillchars = {
   foldopen = "",
   foldclose = "",
   -- fold = "⸱",
-  fold = " ",
+  fold = " ",-- {{{}}}
   foldsep = " ",
   diff = "╱",
   eob = " ",
 }
---]]
+--}}}]]
