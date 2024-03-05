@@ -13,23 +13,23 @@ alias e="${EDITOR}"
 ### [~]............ SUDO
 ### [=]==================================[=]
 if [[ "${commands[sudo]}" ]] && [[ -z "${USEDOAS}" ]]; then
-  export SUDOCMD="sudo"
-  alias suso="${SUDOCMD}"
-  alias sudu="${SUDOCMD}"
-  alias sydo="${SUDOCMD}"
-  alias sudk="${SUDOCMD}"
-  alias sudp="${SUDOCMD}"
-  alias 'sud['="${SUDOCMD}"
-  alias suno="${SUDOCMD}"
+    export SUDOCMD="sudo"
+    alias suso="${SUDOCMD}"
+    alias sudu="${SUDOCMD}"
+    alias sydo="${SUDOCMD}"
+    alias sudk="${SUDOCMD}"
+    alias sudp="${SUDOCMD}"
+    alias 'sud['="${SUDOCMD}"
+    alias suno="${SUDOCMD}"
 fi
 
 ### [=]==================================[=]
 ### [~]............ DOAS
 ### [=]==================================[=]
 if [[ "${commands[doas]}" ]] && [[ -n "${USEDOAS}" ]]; then
-  export DOASCMD="doas"
-  export SUDOCMD="${DOASCMD}"
-  alias sudo="${DOASCMD}"
+    export DOASCMD="doas"
+    export SUDOCMD="${DOASCMD}"
+    alias sudo="${DOASCMD}"
 fi
 
 ### [=]==================================[=]
@@ -50,8 +50,8 @@ alias scd="cd"
 alias cdls='cd .. && ls'
 alias cdl='cd .. && ls'
 alias ..etc="cd /etc"
-alias 'cd-1'="cd ${OLDPWD}"
-alias cdold="cd ${OLDPWD}"
+# alias 'cd-1'="cd ${OLDPWD}"
+# alias cdold="cd ${OLDPWD}"
 alias cdtemp="${TEMPDIR}"
 alias cd-temp="${TEMPDIR}"
 
@@ -165,11 +165,11 @@ alias man-search-name='man --all --names-only --regex'
 alias lastlogin="loginctl"
 
 if [[ "${commands[iptables]}" ]]; then
-  alias iptables-watch="${SUDOCMD} watch --differences --color --interval 1 iptables -vnL --line-numbers"
+    alias iptables-watch="${SUDOCMD} watch --differences --color --interval 1 iptables -vnL --line-numbers"
 fi
 
 if [[ "${commands[ip]}" ]]; then
-  alias ip='ip -color=auto'
+    alias ip='ip -color=auto'
 fi
 
 
