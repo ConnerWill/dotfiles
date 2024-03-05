@@ -2,16 +2,22 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
+-- Define locals
+local create_augroup = vim.api.nvim_create_augroup
+local create_autocmd = vim.api.nvim_create_autocmd
+local create_nvim_command = vim.api.nvim_command
+create_augroup("file_types", { clear = true })
+
 -- Autocommand to set filetype for Jenkinsfile to groovy
--- TODO: Change this to use lua instead of vimscript
-vim.api.nvim_command([[
-augroup filetypedetect
-    autocmd BufRead,BufNewFile *.Jenkinsfile set filetype=groovy
-augroup END
-]])
+create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
+  desc = "Recognize Jenkins files as groovy",
+  group = "file_types",
+  pattern = { "*.Jenkinsfile", "*.jenkinsfile", "Jenkinsfile", "jenkinsfile" },
+  command = [[ set filetype=groovy ]],
+})
 
 -- show cursor line only in active window
-vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
+create_autocmd({ "InsertLeave", "WinEnter" }, {
   callback = function()
     local ok, cl = pcall(vim.api.nvim_win_get_var, 0, "auto-cursorline")
     if ok and cl then
@@ -20,7 +26,7 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
     end
   end,
 })
-vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
+create_autocmd({ "InsertEnter", "WinLeave" }, {
   callback = function()
     local cl = vim.wo.cursorline
     if cl then
@@ -31,7 +37,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
 })
 
 -- create directories when needed, when saving a file
-vim.api.nvim_create_autocmd("BufWritePre", {
+create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("better_backup", { clear = true }),
   callback = function(event)
     local file = vim.loop.fs_realpath(event.match) or event.match
@@ -39,6 +45,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     backup = backup:gsub("[/\\]", "%%")
     vim.go.backupext = backup
   end,
+})
+
+-- Go straight to INSERT mode in commit message
+create_autocmd({ "VimEnter" }, {
+  desc = "Go straight to INSERT mode in commit message",
+  group = "file_types",
+  pattern = { "COMMIT_EDITMSG" },
+  command = [[ exec 'norm gg' | startinsert! ]],
 })
 
 -- Auto Save
@@ -51,11 +65,11 @@ local function save()
   end)
 end
 
-vim.api.nvim_create_augroup("AutoSave", {
+create_augroup("AutoSave", {
   clear = true,
 })
 
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+create_autocmd({ "InsertLeave", "TextChanged" }, {
   callback = function()
     save()
   end,
