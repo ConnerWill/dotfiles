@@ -9,6 +9,8 @@ vim.g.mapleader = "\\" -- Define leader key
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.cursorcolumn = true -- Enable highlighting of the current column
 opt.mouse = "nv"
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 --[[ DEFAULT
 
