@@ -9,6 +9,8 @@ vim.g.autoformat = true -- Enable LazyVim auto format
 
 opt.cursorcolumn = true -- Enable highlighting of the current column
 
+opt.mouse = "nv"
+
 --[[ DEFAULTS
 
 -- This file is automatically loaded by plugins.core
