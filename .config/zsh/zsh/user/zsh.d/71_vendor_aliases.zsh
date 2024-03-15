@@ -67,7 +67,9 @@ fi
 ### [~]............ TERRAFORM
 ### [=]==================================[=]
 if [[ "${commands[terraform]}" ]]; then
-    alias t='terraform'
+  if [[ ! "${commands[tf]}" ]]; then
+    alias tf='terraform'
+  fi
 fi
 
 ### [=]==================================[=]
