@@ -233,27 +233,31 @@ return {
     "nvimtools/none-ls.nvim",
     config = function()
       local nullls = require("null-ls")
-      nullls.register(require("none-ls-shellcheck.diagnostics"))
-      nullls.register(require("none-ls-shellcheck.code_actions"))
       nullls.register(require("none-ls-luacheck.diagnostics.luacheck"))
+      nullls.register(require("none-ls-shellcheck.code_actions"))
+      nullls.register(require("none-ls-shellcheck.diagnostics"))
+
+      nullls.register(require("none-ls.formatting.beautysh"))
       nullls.register(require("none-ls.formatting.beautysh"))
       nullls.register(require("none-ls.formatting.jq"))
-      nullls.register(require("none-ls.formatting.beautysh"))
 
+      nullls.register(require("null-ls.builtins.diagnostics.cppcheck"))
+      nullls.register(require("null-ls.builtins.diagnostics.markdownlint"))
       nullls.register(require("null-ls.builtins.diagnostics.selene"))
-      nullls.register(require("null-ls.builtins.diagnostics.zsh"))
       nullls.register(require("null-ls.builtins.diagnostics.tfsec"))
       nullls.register(require("null-ls.builtins.diagnostics.yamllint"))
-      nullls.register(require("null-ls.builtins.diagnostics.markdownlint"))
+      nullls.register(require("null-ls.builtins.diagnostics.zsh"))
+
+      nullls.register(require("null-ls.builtins.formatting.astyle"))
       nullls.register(require("null-ls.builtins.formatting.black"))
-      nullls.register(require("null-ls.builtins.formatting.shfmt"))
-      nullls.register(require("null-ls.builtins.formatting.tidy"))
-      nullls.register(require("null-ls.builtins.formatting.packer"))
-      nullls.register(require("null-ls.builtins.formatting.hclfmt"))
-      nullls.register(require("null-ls.builtins.formatting.stylua"))
       nullls.register(require("null-ls.builtins.formatting.gofumpt"))
-      nullls.register(require("null-ls.builtins.formatting.prettier"))
+      nullls.register(require("null-ls.builtins.formatting.hclfmt"))
       nullls.register(require("null-ls.builtins.formatting.isort"))
+      nullls.register(require("null-ls.builtins.formatting.packer"))
+      nullls.register(require("null-ls.builtins.formatting.prettier"))
+      nullls.register(require("null-ls.builtins.formatting.shfmt"))
+      nullls.register(require("null-ls.builtins.formatting.stylua"))
+      nullls.register(require("null-ls.builtins.formatting.tidy"))
     end,
     dependencies = {
       "nvimtools/none-ls-extras.nvim",
