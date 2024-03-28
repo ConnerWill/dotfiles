@@ -44,6 +44,4 @@ fi
 
 if [[ -f "${ZSH_FUNCTIONS_MANUAL}/toiletpreview.zsh" ]] && [[ "${commands[toilet]}" ]]; then
   source "${ZSH_FUNCTIONS_MANUAL}/toiletpreview.zsh" || _zshrc_VERBOSE_ERROR "Failed to source : ${ZSH_FILE}"
-else
-  _zshrc_VERBOSE_ERROR "Either cannot [|] locate file: ${ZSH_FUNCTIONS_MANUAL}/toiletpreview.zsh [|] find command 'toilet'"
 fi
