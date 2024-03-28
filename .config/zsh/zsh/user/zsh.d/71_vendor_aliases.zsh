@@ -102,12 +102,7 @@ if [[  -n "${DISTRO}" ]]; then
     elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
         alias apts="apt search"
         alias apti="apt install"
-        alias aptupdate="printf '\n\n\e[0;38;5;46mUPDATING PACKAGE CACHE\e[0m\n\n'; apt-get update -y"
-        alias aptupgrade="printf '\n\n\e[0;38;5;46mUPGRADING PACKAGES\e[0m\n\n' ; apt-get upgrade -y"
-        alias update="aptupgrade"
-        alias upgrade="aptupgrade"
-        alias updgrate="aptupdate && aptupgrade"
-        alias aptupdgrate="aptupdate && aptupgrade"
+        alias apt-upgrade="sudo -s <<< 'apt --yes update && apt --yes upgrade && apt --yes autoremove && apt --yes autoclean'"
     elif [[ ${DISTRO} == "Android" ]] || [[ ${DISTRO} == "Termux"  ]] && [[ "${commands[pkg]}" ]]; then
         alias pkgi="pkg install"
         alias pkgs="pkg search"

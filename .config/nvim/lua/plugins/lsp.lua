@@ -7,10 +7,12 @@ return {
       vim.list_extend(opts.ensure_installed, {
         "ansible-language-server",
         "ansible-lint",
+        "arduino-language-server",
         "bash-debug-adapter",
         "bash-language-server",
         "beautysh",
         "black",
+        "clangd",
         "dockerfile-language-server",
         "flake8",
         "flake8",
