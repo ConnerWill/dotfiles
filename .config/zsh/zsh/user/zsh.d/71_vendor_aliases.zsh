@@ -325,9 +325,6 @@ if [[ "${commands[git]}" ]]; then
     if [[ "${commands[lazygit]}" ]]; then
         alias git-lazy="lazygit"
     fi
-    function git-blame-percentages(){
-      git ls-files | xargs -I{} git blame --line-porcelain {} 2>/dev/null | grep "^author " 2>/dev/null | sed 's/author //' | sort | uniq -c | awk '{ arr[$2 " " $3]+=$1 } END { for (i in arr) { total += arr[i]; } for (i in arr) { printf "%s: %.2f%%\n", i, (arr[i] / total) * 100; } }'
-    }
 fi
 
 ### [=]==================================[=]
