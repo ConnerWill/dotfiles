@@ -67,6 +67,7 @@ return {
         -- denols = {},
         cssls = {},
         dockerls = {},
+        -- groovyls = {},
         -- ruff_lsp = {},
         -- tailwindcss = {
         --   root_dir = function(...)
@@ -107,8 +108,11 @@ return {
         html = {},
         -- gopls = {},
         marksman = {},
-        -- pyright = {
-        --   enabled = false,
+        pyright = {
+          enabled = true,
+        },
+        -- basedpyright = {
+        --   enabled = lsp == "basedpyright",
         -- },
         -- rust_analyzer = {
         -- settings = {

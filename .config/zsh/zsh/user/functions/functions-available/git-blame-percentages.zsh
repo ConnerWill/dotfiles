@@ -11,11 +11,15 @@ function git-blame-percentages(){
   ## Get repository name
   local repo_name=$(basename $(git rev-parse --show-toplevel))
 
+  ## Get repository branch name
+  local repo_branch=$(git rev-parse --abbrev-ref HEAD)
+
   ## Get current date
   local current_date=$(date +"%Y-%m-%d")
 
   ## Print repository information
   printf "Repository:  %s\n" "${repo_name}"
+  printf "Branch:      %s\n" "${repo_branch}"
   printf "Date:        %s\n" "${current_date}"
   printf "\n"
   

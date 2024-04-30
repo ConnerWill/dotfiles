@@ -12,6 +12,8 @@ opt.mouse = "nv"
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 
+vim.g.lazyvim_python_lsp = "pyright"
+
 --[[ DEFAULT
 
 -- This file is automatically loaded by plugins.core
