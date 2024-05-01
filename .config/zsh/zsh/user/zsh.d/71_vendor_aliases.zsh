@@ -98,6 +98,7 @@ if [[  -n "${DISTRO}" ]]; then
             alias yayi='yay -S --color always --verbose --needed'
             alias yayino='yay -S --color always --verbose --needed --noconfirm'
             alias yaylist='yay -Q --color always'
+            alias yayclean="yay -Scv --noconfirm && \rm -rfv ${XDG_CACHE_HOME}/yay/*"
         fi
     elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
         alias apts="apt search"
