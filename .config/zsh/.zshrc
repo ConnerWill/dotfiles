@@ -53,8 +53,12 @@ ZSH_USER_DIR_NAME="${ZSH_USER_DIR_NAME:-user}"
 ZSH_USER_DIR="${ZDOTDIR:-$HOME/.config/zsh}"/zsh/"${ZSH_USER_DIR_NAME}"
 
 ## Path to the folder that will be looped looking for file with and
-## extension of '.zsh'. All files with an extension of '.zsh' will be sourced durring startup. (default: zsh.d) (type: string)
+## extension of '.zsh'. All files with an extension of '.zsh' will be sourced during startup. (default: zsh.d) (type: string)
 ZSH_USER_LOAD_DIR="${ZSH_USER_DIR}/zsh.d"
+
+## Path to the folder that will be looped looking for file with and
+## extension of '.zsh'. All files with an extension of '.zsh' will be sourced during startup. (default: .private) (type: string)
+ZSH_USER_PRIVATE_DIR="${ZSH_USER_DIR}/.private"
 
 ## Run zprof zsh module to debug zsh startup (default: false) (type: bool)
 #ZSH_PROFILE_RC=
@@ -78,7 +82,9 @@ function _zshrc_VERBOSE_ERROR(){
 }
 
 
-## MAIN
+### MAIN
+
+## Load files in zsh.d directory
 # shellcheck disable=1009,1072,1058,1036,1073
 if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
   for ZSH_FILE in "${ZSH_USER_LOAD_DIR}"/*.zsh(N); do
@@ -86,4 +92,14 @@ if [[ -d "${ZSH_USER_LOAD_DIR}" ]]; then
   done
 else
   _zshrc_VERBOSE_ERROR "Directory does not exist: ${ZSH_USER_LOAD_DIR}"
+fi
+
+## Load files in private directory
+# shellcheck disable=1009,1072,1058,1036,1073
+if [[ -d "${ZSH_USER_PRIVATE_DIR}" ]]; then
+  for ZSH_FILE in "${ZSH_USER_PRIVATE_DIR}"/*.zsh(N); do
+    source "${ZSH_FILE}" || _zshrc_VERBOSE_ERROR "Unable to source file: ${ZSH_FILE}"
+  done
+else
+  _zshrc_VERBOSE_ERROR "Directory does not exist: ${ZSH_USER_PRIVATE_DIR}"
 fi

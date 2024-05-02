@@ -129,3 +129,6 @@ dkms.conf
 
 
 *session
+
+.private/*
+.private/*.zsh
