@@ -132,3 +132,4 @@ dkms.conf
 
 .private/*
 .private/*.zsh
+*.private.zsh

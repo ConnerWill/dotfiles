@@ -11,7 +11,7 @@ local create_autocmd = vim.api.nvim_create_autocmd
 -- Function to setup keymaps for Groovy files
 local function set_groovy_keymaps()
     local opts = { noremap = true, silent = true }
-    set_keymap("n", "<leader><leader>j", "<cmd>lua require('jenkinsfile_linter').validate()<CR>", opts)
+    set_keymap("n", "<leader><leader>j", "<cmd>w<CR><cmd>lua require('jenkinsfile_linter').validate()<CR>", opts)
 end
 
 -- Create an autocmd that triggers the setting of keymaps when filetype is 'groovy'
