@@ -16,6 +16,14 @@ create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
   command = [[ set filetype=groovy ]],
 })
 
+-- Autocommand to set filetype for Ansible files to yaml.ansible
+create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
+  desc = "Recognize yaml as yaml.ansible",
+  group = "file_types",
+  pattern = { "*.yaml", "*.yml" },
+  command = [[ set filetype=yaml.ansible ]],
+})
+
 -- show cursor line only in active window
 create_autocmd({ "InsertLeave", "WinEnter" }, {
   callback = function()

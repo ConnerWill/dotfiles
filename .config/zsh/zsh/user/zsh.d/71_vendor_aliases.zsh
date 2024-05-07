@@ -508,6 +508,7 @@ fi
 ### [=]==================================[=]
 if [[ "${commands[duviz]}" ]]; then
     alias duviz="duviz --color --no-progress --max-depth=50"
+    alias duviz-pwd="sudo --validate --prompt='Enter sudo password to run duviz: ' && clear; sudo duviz --color --max-depth 50 --one-file-system --no-progress --dereference 2&>/dev/null"
 fi
 
 if [[ "${commands[dfrs]}" ]]; then
