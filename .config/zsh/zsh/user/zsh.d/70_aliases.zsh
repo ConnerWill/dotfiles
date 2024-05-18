@@ -28,6 +28,7 @@ fi
 ### [=]==================================[=]
 if [[ "${commands[sudoedit]}" ]] && [[ -z "${USEDOAS}" ]]; then
     alias sudoe="sudoedit"
+    alias esudo="sudoedit"
 fi
 
 ### [=]==================================[=]
