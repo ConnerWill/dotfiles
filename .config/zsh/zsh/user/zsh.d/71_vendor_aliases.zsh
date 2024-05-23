@@ -100,10 +100,11 @@ if [[  -n "${DISTRO}" ]]; then
             alias yaylist='yay -Q --color always'
             alias yayclean="yay -Scv --noconfirm && \rm -rfv ${XDG_CACHE_HOME}/yay/*"
         fi
-    elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu"   ]]; then
+    elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu" ]]; then
         alias apts="apt search"
         alias apti="apt install"
         alias apt-upgrade="sudo -s <<< 'apt --yes update && apt --yes upgrade && apt --yes autoremove && apt --yes autoclean'"
+        alias apt-upgrade-full="subcmds=(update full-upgrade autoremove autoclean); for subcmd in \"\${subcmds}\"; do sudo -s <<< 'apt -y \"\${subcmd}\"'; done; unset subcmds subcmd >/dev/null 2>&1"
     elif [[ ${DISTRO} == "Android" ]] || [[ ${DISTRO} == "Termux"  ]] && [[ "${commands[pkg]}" ]]; then
         alias pkgi="pkg install"
         alias pkgs="pkg search"
@@ -188,10 +189,12 @@ fi
 ### [~]........... CAT/BAT
 ### [=]==================================[=]
 if [[ "${commands[bat]}" ]]; then
-    alias cat='bat --style=header,grid'  ; alias bat="bat --style=header,grid"; alias catf="bat --style=full"
-    alias ca='bat'     ; alias cst="cat" ; alias scat="cat"
-    alias car="cat"    ; alias cay="cat" ; alias cau="cat"
-    alias cau="cat"    ; alias ca="bat"  ; alias catp="bat -p"
+    alias  cat='bat --style=header,grid'
+    alias  bat="bat --style=header,grid"
+    alias catf="bat --style=full"
+    alias   ca='bat' ; alias cst="cat" ; alias scat="cat"
+    alias  car="cat" ; alias cay="cat" ; alias  cau="cat"
+    alias  cau="cat" ; alias  ca="bat" ; alias catp="bat -p"
 
     if [[ "${commands[fzf]}" ]]; then
         function bat_preview_themes(){
@@ -220,6 +223,12 @@ if [[ "${commands[bat]}" ]]; then
     alias man-bat-global-apropos='man --pager="bat --language=sh" --global-apropos'
 fi
 
+## bat is 'batcat' when installed via apt
+if [[ "${commands[batcat]}" ]]; then
+  alias bat="batcat --style=header,grid"
+  alias cat="bat"
+fi
+
 function c(){
     local catthis
     catthis="${1}"
@@ -237,7 +246,7 @@ function c(){
 ### [=]==================================[=]
 if [[ "${commands[pwsh]}" ]]; then
     alias powershell="pwsh"
-    alias cdp="cd ${PDOTDIR} || printf 'CANNOT MOVE TO %s' ${PDOTDIR}"
+    # alias cdp="cd ${PDOTDIR} || printf 'CANNOT MOVE TO %s' ${PDOTDIR}"
 fi
 
 
@@ -245,7 +254,7 @@ fi
 ### [~]............ GPING
 ### [=]==================================[=]
 if [[ "${commands[gping]}" ]]; then
-    alias ping-graph="gping -4 --watch-interval 0.1"
+    alias gping="gping -4 --watch-interval 0.1"
 fi
 
 
