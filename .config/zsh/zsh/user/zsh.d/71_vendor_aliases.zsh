@@ -104,7 +104,7 @@ if [[  -n "${DISTRO}" ]]; then
         alias apts="apt search"
         alias apti="apt install"
         alias apt-upgrade="sudo -s <<< 'apt --yes update && apt --yes upgrade && apt --yes autoremove && apt --yes autoclean'"
-        alias apt-upgrade-full="sudo -s <<< 'subcmds=(update full-upgrade autoremove autoclean); for subcmd in \"\${subcmds}\"; do apt -y \"\${subcmd}\"; done; unset subcmds subcmd >/dev/null 2>&1; done'"
+        alias apt-upgrade-full="sudo -s <<< 'subcmds=(update full-upgrade autoremove autoclean); for subcmd in \"\${subcmds}\"; do apt -y \"\${subcmd}\"; done; unset subcmds subcmd >/dev/null 2>&1'"
     elif [[ ${DISTRO} == "Android" ]] || [[ ${DISTRO} == "Termux"  ]] && [[ "${commands[pkg]}" ]]; then
         alias pkgi="pkg install"
         alias pkgs="pkg search"
