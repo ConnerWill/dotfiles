@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 
 #TODO: Figure out how to check how to see if this is already loaded
-autoload -Uz compinit
-compinit
+# autoload -Uz compinit
+# compinit
 
 # Check if yt-dlp is installed
 if ! command -v yt-dlp &> /dev/null; then
-    printf "yt-dlp is not installed. Please install it to use the yt-dlp_download function.\n"
-    return
+    # printf "yt-dlp is not installed. Please install it to use the yt-dlp_download function.\n"
+    return 0
 fi
 
 # Function: yt-dlp_download
@@ -24,7 +24,7 @@ yt-dlp_download() {
       local calling_function="${1}"
         cat << EOF
 Name:
-  
+ 
   ${calling_function}
 
 
@@ -96,41 +96,41 @@ EOF
            "${url}"
 }
 
-# Completion function for yt-dlp_download
-_yt-dlp_download_completions() {
-    local cur prev opts
-    cur="${words[CURRENT]}"
-    prev="${words[CURRENT-1]}"
-
-    # Options completion
-    opts="-u --url -o --output-dir -f --file-name -h --help"
-    if [[ ${cur} == -* ]]; then
-        compadd ${opts}
-        return 0
-    fi
-
-    # URL completion (optional: provide your own logic for URL completion)
-    if [[ ${prev} == "-u" || ${prev} == "--url" ]]; then
-        opts=""  # Add URL completion logic here if desired
-        compadd ${opts}
-        return 0
-    fi
-
-    # Output directory completion
-    if [[ ${prev} == "-o" || ${prev} == "--output-dir" ]]; then
-        _files -/
-        return 0
-    fi
-
-    # File name completion
-    if [[ ${prev} == "-f" || ${prev} == "--file-name" ]]; then
-        _files
-        return 0
-    fi
-}
-
-# Register the completion function
-compdef _yt-dlp_download_completions yt-dlp_download
+# # Completion function for yt-dlp_download
+# _yt-dlp_download_completions() {
+#     local cur prev opts
+#     cur="${words[CURRENT]}"
+#     prev="${words[CURRENT-1]}"
+#
+#     # Options completion
+#     opts="-u --url -o --output-dir -f --file-name -h --help"
+#     if [[ ${cur} == -* ]]; then
+#         compadd ${opts}
+#         return 0
+#     fi
+#
+#     # URL completion (optional: provide your own logic for URL completion)
+#     if [[ ${prev} == "-u" || ${prev} == "--url" ]]; then
+#         opts=""  # Add URL completion logic here if desired
+#         compadd ${opts}
+#         return 0
+#     fi
+#
+#     # Output directory completion
+#     if [[ ${prev} == "-o" || ${prev} == "--output-dir" ]]; then
+#         _files -/
+#         return 0
+#     fi
+#
+#     # File name completion
+#     if [[ ${prev} == "-f" || ${prev} == "--file-name" ]]; then
+#         _files
+#         return 0
+#     fi
+# }
+#
+# # Register the completion function
+# compdef _yt-dlp_download_completions yt-dlp_download
 
 # Aliases for the function
 alias youtube-download-video="yt-dlp_download"
