@@ -60,27 +60,27 @@ if [[ -n "${DISPLAY}" ]]; then
 	### [=]==================================[=]
 	if [[ "${commands[gimp]}" ]]; then
 		export GIMP2_DIRECTORY="${XDG_CONFIG_HOME}/GIMP/2.10"
-		export GIMPHOMECONFIGPATH='/home/dampsock/.config/GIMP/2.10'
-		export GIMPHOMECACHEPATH='/home/dampsock/.cache/gimp/2.10'
+		export GIMPHOMECONFIGPATH="${XDG_CONFIG_HOME}/GIMP/2.10"
+		export GIMPHOMECACHEPATH="${XDG_CACHE_HOME}/gimp/2.10"
 	fi
 
 	### [=]==================================[=]
 	### [~]............ ICONS
 	### [=]==================================[=]
-	export ICONSDIRGLOBAL="/usr/share/icons"
-	export ICONSDIR="${HOME}/pictures/icons"
-	export ICONSTINYDIR="${HOME}/pictures/icons/SuperTinyIcons/images"
+	[[ -d "/usr/share/icons"                  ]] && export ICONSDIRGLOBAL="/usr/share/icons"
+	[[ -d "${HOME}/pictures/icons"            ]] && export ICONSDIR="${HOME}/pictures/icons"
+	[[ -d "${ICONSDIR}/SuperTinyIcons/images" ]] && export ICONSDINYDIR="${ICONSDIR}/SuperTinyIcons/images"
 
 	### [=]==================================[=]
 	### [~]............ FONTS
 	### [=]==================================[=]
-	export FONTSDIRGLOBAL="/usr/share/fonts"
-	export FONTSDIR="${HOME}/.local/share/fonts"
+	[[ -d "/usr/share/fonts"           ]] && export FONTSDIRGLOBAL="/usr/share/fonts"
+	[[ -d "${HOME}/.local/share/fonts" ]] && export FONTSDIR="${HOME}/.local/share/fonts"
 
 	### [=]==================================[=]
 	### [~]............ THEMES
 	### [=]==================================[=]
-	export THEMEDIRGLOBAL="/usr/share/themes"
+	[[ -d "/usr/share/themes" ]] && export THEMEDIRGLOBAL="/usr/share/themes"
 
 	### [=]==================================[=]
 	### [~]............ CAD / 3D
@@ -102,8 +102,8 @@ if [[ -n "${DISPLAY}" ]]; then
 	### [=]==================================[=]
 	### [~]............ QT
 	### [=]==================================[=]
-	export QtProject_Config="/home/dampsock/.config/QtProject"
-	export QT_QPA_PLATFORMTHEME="/home/dampsock/.config/qt5ct"
+ 	[[ -d "${XDG_CONFIG_HOME}/QtProject" ]] && export QtProject_Config="${XDG_CONFIG_HOME}/QtProject"
+	[[ -d "${XDG_CONFIG_HOME}/qt5ct" ]] && export QT_QPA_PLATFORMTHEME="${XDG_CONFIG_HOME}/qt5ct"
 
 	### [=]==================================[=]
 	### [~]............ KITTY
@@ -219,14 +219,14 @@ export GNUPGHOME GPG_TTY GPG_TUI_CONFIG
 ### [=]==================================[=]
 if [[ "${commands[awesome]}" ]]; then
 	AWESOMEWM_CONFIG_DIR="${XDG_CONFIG_HOME}/awesome"
-	[[ -d "${AWESOMEWM_CONFIG_DIR}" ]] && export AWESOMEWM_CONFIG_DIR
+	[[ -d "${XDG_CONFIG_HOME}/awesome" ]] && export AWESOMEWM_CONFIG_DIR="${XDG_CONFIG_HOME}/awesome"
 fi
 
 ### [=]==================================[=]
 ### [~]............ SCRIPTS
 ### [=]==================================[=]
-export MYPROJECTS="${HOME}/MYPROJECTS"
-export SCRIPTS="${HOME}/scripts"
+[[ -d "${HOME}/MYPROJECTS" ]] && export MYPROJECTS="${HOME}/MYPROJECTS"
+[[ -d "${HOME}/scripts"    ]] && export SCRIPTS="${HOME}/scripts"
 
 ### [=]==================================[=]
 ### [~]............. ASCIINEMA ..........
@@ -245,7 +245,6 @@ if [[ "${commands[nmap]}" ]]; then
 	export NMAPDIR="/usr/share/nmap"
 	export NMAPSCRIPTSDIR="/usr/share/nmap"
 	export NMAPSCANOUTPUTDIR="${HOME}/security/nmap-scans"
-	export nmapAutomatorPATH="/scripts/pentest/nmapAutomator"
 	export NMAPAUTOSCANOUTPUTDIR="${NMAPSCANOUTPUTDIR}/local-subnet/nmap-auto"
 fi
 
@@ -263,7 +262,7 @@ fi
 if [[ "${commands[python]}" ]]; then
 export GENCOMPL_PY="python"
 export PYTHONPATH="${HOME}/.local/bin:${PATH}"
-export IPYTHONDIR="${HOME}/.config/ipython"
+export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
 export IPYTHON_CONFIG="${IPYTHONDIR}/profile_default/ipython_config.py"
 export PYENV_ROOT="${HOME}/.pyenv"
 fi
@@ -276,7 +275,7 @@ fi
 ### [=]==================================[=]
 ### [~]............ BACKUPS
 ### [=]==================================[=]
-[[ -d "/backups" ]] && export BACKUPDIR="/backups"
+[[ -d "/backups"       ]] && export BACKUPDIR="/backups"
 [[ -d "${HOME}/backup" ]] && export BACKUPDIR_LOCAL="${HOME}/backup"
 
 ### [=]==================================[=]
@@ -302,6 +301,13 @@ fi
 ### [=]==================================[=]
 if [[ "${commands[ansible]}" ]]; then
 	export ANSIBLE_CONFIG="${XDG_CONFIG_HOME}/ansible/ansible.cfg"
+fi
+
+### [=]==================================[=]
+### [~]............ PACKER
+### [=]==================================[=]
+if [[ "${commands[packer]}" ]]; then
+	export CHECKPOINT_DISABLE=1
 fi
 
 ### [=]==================================[=]
