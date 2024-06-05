@@ -1,10 +1,12 @@
 [user]
-	email = conner.will@infinitecampus.com
-	name = conner.will
+	email = conner.will@outlook.com
+	name = ConnerWill
 	signingkey = 3AED4B68E6FD33BC
 [author]
-	email = conner.will@infinitecampus.com
-	name = Conner.Will
+	email = conner.will@outlook.com
+	name = ConnerWill
+[includeIf "gitdir:~/repos/"]
+  path = ~/.config/git/gitconfig_infinitecampus
 [credential "https://isgit-inf001.infinitecampus.com"]
 	username = ConnerWill
 	helper = cache --timeout=315360000
