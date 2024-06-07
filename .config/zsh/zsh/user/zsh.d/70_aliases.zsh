@@ -156,7 +156,7 @@ alias watch="watch -n 0.1 --color"
 ### [=]==================================[=]
 ### [~]............ SSH
 ### [=]==================================[=]
-alias ssh-showpublickey="${PAGER} ${SSH_DIR:-~/.ssh}/*.pub"
+alias ssh-showpublickey="${PAGER:-cat} ${SSH_DIR:-${HOME}/.ssh}/*.pub"
 
 ### [=]==================================[=]
 ### [~]............ MAN
