@@ -507,6 +507,7 @@ if [[ "${commands[docker]}" ]]; then
     alias docker-run-archlinux='clear; printf "\x1B[0;1;38;5;51mSTARTING ARCH LINUX IN DOCKER\x1B[0m\n"; docker run --interactive --tty archlinux'
     alias dockers="docker search --no-trunc"
     alias aws-docker="docker run --rm -it amazon/aws-cli"
+    alias docker-cleanup="docker rm -f $(docker ps -aq) && docker rmi -f $(docker images -aq)"
     if [[ "${commands[lazydocker]}" ]]; then
         alias docker-lazy='lazydocker'
     fi
