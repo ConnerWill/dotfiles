@@ -1,6 +1,8 @@
 #shellcheck disable=2148,2154
 
-function _zsh_256color_debug(){ [[ -n "${ZSH_256COLOR_DEBUG}" ]] && echo "zsh-256color: ${*}" >&2; }
+function _zsh_256color_debug(){ 
+	[[ -n "${ZSH_256COLOR_DEBUG}" ]] && echo "zsh-256color: ${*}" >&2
+}
 
 function _zsh_terminal_set_256color(){
 	[[ "${TERM}" =~ "-256color$" ]] && _zsh_256color_debug "256 color terminal already set." && return
