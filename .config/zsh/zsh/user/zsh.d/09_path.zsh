@@ -17,16 +17,6 @@ path+=( "${HOME}/.local/lib/bat-extras/bin"   )
 path+=( "${HOME}/go/bin"                      )
 path+=( "${XDG_DATA_HOME}/gem/ruby/3.0.0/bin" )
 
-### [=]==================================[=]
-### [~]............ SOURCE FPATH
-### [=]==================================[=]
-fpath+=( "${ZSH_USER_DIR}/completion"                                 )
-fpath+=( "${ZSH_USER_DIR}/fpath"                                      )
-fpath+=( "${ZSH_USER_DIR}/functions/functions-available"              )
-fpath+=( "${ZSH_USER_DIR}/functions/functions-manual/dotf/bin"        )
-fpath+=( "${ZSH_USER_DIR}/functions/functions-manual/dotf/completion" )
-fpath+=( "${ZSH_USER_DIR}/functions/functions-maunal"                 )
-
 ## Alternativly set PATH like this
 # export PATH="${PATH}:${HOME}/.bin"
 
