@@ -186,6 +186,27 @@ if [[ "${commands[shellcheck]}" ]]; then
 fi
 
 ### [=]==================================[=]
+### [~]........... FD / FDFIND
+### [=]==================================[=]
+if [[ "${commands[fdfind]}"  ]]; then 
+    alias fd='fdfind'
+    fd_cmd="fdfind"
+else
+    if [[ "${commands[fd-find]}" ]]; then
+        alias fd='fd-find'
+        fd_cmd="fd-find"
+    else
+        fd_cmd="fd"
+    fi
+fi
+if [[ "${commands[fd]}" || "${commands[fdfind]}" || "${commands[fd-find]}" ]]; then
+    alias fd="$fd_cmd --hidden --follow --no-ignore --color always"
+    unset fd_cmd
+else
+    unset fd_cmd
+fi
+
+### [=]==================================[=]
 ### [~]........... CAT/BAT
 ### [=]==================================[=]
 if [[ "${commands[bat]}" ]]; then
