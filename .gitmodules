@@ -1,0 +1,3 @@
+[submodule "/home/dampsock/.config/zsh/zsh/user/functions/functions-manual/dotf"]
+	path = /home/dampsock/.config/zsh/zsh/user/functions/functions-manual/dotf
+	url = https://github.com/connerwill/dotf
