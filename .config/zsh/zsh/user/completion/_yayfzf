@@ -1,0 +1,15 @@
+#compdef yayfzf
+
+# zsh completions for 'yayfzf'
+# automatically generated with http://github.com/RobSis/zsh-completion-generator
+local arguments
+
+arguments=(
+  '-h[show the help menu]'
+  '--help[show the extended help menu of yayfzf]'
+  {-k,--keybindings}'[list keybindings for yayfzf]'
+  {-V,--version}'[show version of yayfzf]'
+  '*:filename:_files'
+)
+
+_arguments -s $arguments

@@ -260,11 +260,12 @@ fi
 ### [~]............ PYTHON
 ### [=]==================================[=]
 if [[ "${commands[python]}" ]]; then
-export GENCOMPL_PY="python"
-export PYTHONPATH="${HOME}/.local/bin:${PATH}"
-export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
-export IPYTHON_CONFIG="${IPYTHONDIR}/profile_default/ipython_config.py"
-export PYENV_ROOT="${HOME}/.pyenv"
+  GENCOMPL_PY="python"
+  PYTHONPATH="${PATH}:${HOME}/.local/bin"
+  IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
+  IPYTHON_CONFIG="${IPYTHONDIR:-${XDG_CONFIG_HOME}/ipython}/profile_default/ipython_config.py"
+  PYENV_ROOT="${HOME}/.pyenv"
+  export GENCOMPL_PY PYTHONPATH IPYTHONDIR IPYTHON_CONFIG PYENV_ROOT
 fi
 
 ### [=]==================================[=]
@@ -308,7 +309,9 @@ fi
 ### [~]............ PACKER
 ### [=]==================================[=]
 if [[ "${commands[packer]}" ]]; then
-	export CHECKPOINT_DISABLE=1
+  PACKER_CONFIG_DIR="${PACKER_CONFIG_DIR:-${XDG_CONFIG_HOME}/packer}"
+	CHECKPOINT_DISABLE=1
+  export PACKER_CONFIG_DIR CHECKPOINT_DISABLE
 fi
 
 ### [=]==================================[=]
