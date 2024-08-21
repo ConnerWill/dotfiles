@@ -176,6 +176,8 @@
 # Syntax mappings: map a certain filename pattern to a language.
 #   Example 1: use the C++ syntax for Arduino .ino files
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
+--map-syntax ".shellfishrc:Bourne Again Shell (bash)"
+--map-syntax ".*rc:Bourne Again Shell (bash)"
 --map-syntax "*.ino:C++"
 --map-syntax ".ignore:Git Ignore"
 #

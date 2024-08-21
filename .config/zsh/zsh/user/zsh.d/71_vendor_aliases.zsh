@@ -186,6 +186,27 @@ if [[ "${commands[shellcheck]}" ]]; then
 fi
 
 ### [=]==================================[=]
+### [~]........... FD / FDFIND
+### [=]==================================[=]
+if [[ "${commands[fdfind]}"  ]]; then 
+    alias fd='fdfind'
+    fd_cmd="fdfind"
+else
+    if [[ "${commands[fd-find]}" ]]; then
+        alias fd='fd-find'
+        fd_cmd="fd-find"
+    else
+        fd_cmd="fd"
+    fi
+fi
+if [[ "${commands[fd]}" || "${commands[fdfind]}" || "${commands[fd-find]}" ]]; then
+    alias fd="$fd_cmd --hidden --follow --no-ignore --color always"
+    unset fd_cmd
+else
+    unset fd_cmd
+fi
+
+### [=]==================================[=]
 ### [~]........... CAT/BAT
 ### [=]==================================[=]
 if [[ "${commands[bat]}" ]]; then
@@ -332,8 +353,15 @@ if [[ "${commands[git]}" ]]; then
     alias gc="git commit --edit --verbose --status"
     alias gs="git status"
     alias git-url="git config --local --get remote.origin.url"
+
+    if which dotf >/dev/null 2>&1; then
+      alias dotf_cmd_a='git --git-dir="${DOTFILES}" --work-tree="${DOTFILES}"'
+			alias dtf=dotf_cmd_a
+			alias dtfa='dotf_cmd_a add-all'
+    fi
+
     if [[ "${commands[lazygit]}" ]]; then
-        alias git-lazy="lazygit"
+      alias git-lazy="lazygit"
     fi
 fi
 
@@ -586,3 +614,5 @@ if [[ "${commands[dog]}" ]]; then
         alias dig='dog'
     fi
 fi
+
+
