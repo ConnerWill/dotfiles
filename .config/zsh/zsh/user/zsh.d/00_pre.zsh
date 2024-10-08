@@ -15,3 +15,8 @@
 #     fi
 #   fi
 # fi
+
+## Check if SSH dir and files exist, otherwise this will show a warning for zcomp
+[[ -d "${HOME}/.ssh" ]]             || mkdir "${HOME}/.ssh"
+[[ -f "${HOME}/.ssh/known_hosts" ]] || touch "${HOME}/.ssh/known_hosts"
+[[ -f "${HOME}/.ssh/config" ]]      || touch "${HOME}/.ssh/config"
