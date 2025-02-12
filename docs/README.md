@@ -102,7 +102,7 @@ echo 'IyEvdXNyL2Jpbi9lbnYgYmFzaAoKc2V0IC1lCgojIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS
 Installation Script Online
 
 ```bash
-curl --silent -L ""
+curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash
 ```
 
 </details>
