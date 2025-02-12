@@ -174,3 +174,4 @@
 	d = diff --ignore-all-space --color=always --color-moved-ws=ignore-all-space --minimal
 	pushall = !git push -v && git push origin2 -v
 	pshall = !git push -v && git push origin2 -v
+	all = add --all
