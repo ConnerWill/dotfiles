@@ -104,6 +104,7 @@ EOC
   cat <<EOA
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOA
+  printf "\x1B[0m"
 }
 
 # -----------------------------------------------------------------------------
@@ -253,11 +254,23 @@ function clone_dotf(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: change_shell
+# Description: Changes default shell
+# -----------------------------------------------------------------------------
+function change_shell(){
+  is_installed "chsh"
+  chsh --shell="$(command -v zsh)" "$(whoami)"
+}
+
+# -----------------------------------------------------------------------------
 # Main Execution
 # -----------------------------------------------------------------------------
 
 # Display ASCII art banner
 show_ascii_hello
+
+# Ensure critical commands are installed
+is_installed "sudo"
 
 # Install required dependencies based on OS detection
 install_dependencies
@@ -266,9 +279,12 @@ install_dependencies
 is_installed "git"
 is_installed "zsh"
 
-# Uncomment these lines if you want to clone the repositories automatically:
+# Clone repos
 clone_dotfiles
 clone_dotf
+
+# Set shell
+change_shell
 
 # Display ASCII art banner 2
 show_ascii_goodbye
