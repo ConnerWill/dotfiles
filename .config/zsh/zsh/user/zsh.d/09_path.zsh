@@ -14,6 +14,7 @@ path+=( "${HOME}/.cargo/bin"                  )
 path+=( "${HOME}/.local/bin"                  )
 path+=( "${HOME}/.local/bin/Python/3.8/bin"   )
 path+=( "${HOME}/.local/lib/bat-extras/bin"   )
+path+=( "${HOME}/.platformio/penv/bin" )
 path+=( "${HOME}/go/bin"                      )
 path+=( "${XDG_DATA_HOME}/gem/ruby/3.0.0/bin" )
 
