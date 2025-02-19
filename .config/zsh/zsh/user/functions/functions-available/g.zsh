@@ -57,7 +57,7 @@ g(){
     WARNTXT="${g_colors[BG_Yellow]}${g_colors[Black]}${g_colors[Bold]} WARNING ${g_colors[reset]}: "
 
     [[ -z "$ERRORNUM"   ]] && OUTPUTMSG="${ERRORTXT}${g_colors[Red]}UNKNOWN ERROR running script${g_colors[reset]}"
-    [[ "$ERRORNUM" == 1 ]] && OUTPUTMSG="${ERRORTXT}${g_colors[Red]}'rich' is not installed or in PATH\n\tInstall rich using pipx install rich${g_colors[reset]}"
+    [[ "$ERRORNUM" == 1 ]] && OUTPUTMSG="${ERRORTXT}${g_colors[Red]}'rich' or 'glow' is not installed or in PATH\n\t    Install rich using pipx install rich${g_colors[reset]}"
     [[ "$ERRORNUM" == 2 ]] && OUTPUTMSG="${WARNTXT}${g_colors[Yellow]}No file provided${g_colors[reset]}:"
     [[ "$ERRORNUM" == 3 ]] && OUTPUTMSG="${ERRORTXT}${g_colors[Red]}Cannot find file${g_colors[reset]}:"
     [[ "$ERRORNUM" == 4 ]] && OUTPUTMSG="${WARNTXT}${g_colors[Blue]}Error code: 4${g_colors[reset]}:"
@@ -118,9 +118,12 @@ g(){
   ##
   ##     $ g rich README.md
   RENDERER="${RENDERER:-"glow"}"
-
-  if   [[ "${1}" == "rich" ]]; then RENDERER="rich"; shift
-  elif [[ "${1}" == "glow" ]]; then RENDERER="glow"; shift
+  if   [[ "${1}" == "rich" ]]; then
+    RENDERER="rich"
+    shift
+  elif [[ "${1}" == "glow" ]]; then
+    RENDERER="glow"
+    shift
   fi
 
   INPUTFILE="${*}"
