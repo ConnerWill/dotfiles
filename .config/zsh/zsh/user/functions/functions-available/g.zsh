@@ -132,6 +132,11 @@ g(){
   if [[ -z "${INPUTFILE}" ]]; then
     INPUTFILE="${PWD}/README.md"
     _G_ERRORMSG 2 "Using ${INPUTFILE}"
+    if [[ ! -e "${INPUTFILE}" ]]; then
+      _G_ERRORMSG 3 "${INPUTFILE}"
+      INPUTFILE="${PWD}/docs/README.md"
+      _G_ERRORMSG 2 "Using ${INPUTFILE}"
+    fi
   fi
 
   if [[ ! -e "${INPUTFILE}" ]]; then
