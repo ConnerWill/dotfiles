@@ -149,7 +149,7 @@ if [[ "${commands[lsd]}" ]]; then
     alias l='lsd  --oneline --no-symlink --almost-all' # List All On One Line
 
     ## lsd flags in alieas set below require a newer version of lsd
-    alias lls="printf '\e[0;1;38;5;93m🍆💦🍑\e[0;1;3;4;38;5;199mThis could take a hot sec...\e[0m\e[0;1;38;5;93m🍄🦄🐉\e[0m\t'; date +'%Y%m%d_%H%M%S'; lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d%H%M%S' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
+    alias lls="printf '\e[0;1;38;5;93m🌚🌚\e[0;1;3;4;38;5;199mThis could take a white...\e[0m\e[0;1;38;5;93m🌚🌚\e[0m\t'; date +'%Y%m%d_%H%M%S'; lsd --long --sort=size --header --color=always --total-size --date=+'%Y%m%d%H%M%S' --almost-all --dereference --blocks 'size,date,name' --reverse --permission octal 2>/dev/null"
     alias ll='lsd --oneline --long --almost-all --permission octal --date=+%Y%m%d-%H%M%S'
     alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S'
     alias lsl='lsd --oneline --long --almost-all --date=+%Y%m%d-%H%M%S --sort extension'
