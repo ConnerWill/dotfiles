@@ -43,10 +43,6 @@ _book
 *.bak
 *.orig
 *.new
-*.1
-*.2
-*.3
-*.4
 
 # History
 *history*
