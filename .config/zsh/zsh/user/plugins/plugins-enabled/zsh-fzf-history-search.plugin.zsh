@@ -1,0 +1,1 @@
+../plugins-available/zsh-fzf-history-search/zsh-fzf-history-search.plugin.zsh
