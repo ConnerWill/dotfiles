@@ -50,16 +50,16 @@ bindkey -M menuselect 'gg' backward-word
 bindkey -M menuselect 'G' forward-word
 
 # Remove bindings to ctrl+r
-bindkey -r '^r'
+# bindkey -r '^r'
 
 # Autoload history-search-multi-word
 zle -N history-search-multi-word
 zle -N history-search-multi-word-backwards history-search-multi-word
 zle -N history-search-multi-word-pbackwards history-search-multi-word
 zle -N history-search-multi-word-pforwards history-search-multi-word
-bindkey "^R" history-search-multi-word
+# bindkey "^R" history-search-multi-word
 bindkey "^h" history-search-multi-word
 bindkey "^H" history-search-multi-word
-bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
-bindkey -M viins "^r" history-search-multi-word ## This will bind to Ctrl-R
-bindkey -M emacs "^r" history-search-multi-word ## This will bind to Ctrl-R
+# bindkey "^r" history-search-multi-word ## This will bind to Ctrl-R
+# bindkey -M viins "^r" history-search-multi-word ## This will bind to Ctrl-R
+# bindkey -M emacs "^r" history-search-multi-word ## This will bind to Ctrl-R

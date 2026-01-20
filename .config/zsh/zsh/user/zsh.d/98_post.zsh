@@ -32,6 +32,7 @@
 [[ -z "${ZSH_USER_DIR}" ]] && export ZSH_USER_DIR="${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}"
 ZSH_PLUGINS_DIR="${ZSH_USER_DIR}/plugins"
 ZSH_PLUGINS_AVAILABLE="${ZSH_PLUGINS_DIR}/plugins-available"
+ZSH_PLUGINS_ENABLED="${ZSH_PLUGINS_DIR}/plugins-enabled"
 
 zsh_source_plugin_tmp="${ZSH_PLUGINS_AVAILABLE}/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 [[ -e "${zsh_source_plugin_tmp}" ]] && source "${zsh_source_plugin_tmp}"
