@@ -536,6 +536,8 @@ if [[ "${commands[docker]}" ]]; then
     alias dockers="docker search --no-trunc"
     alias aws-docker="docker run --rm -it amazon/aws-cli"
     alias docker-cleanup='docker rm -f $(docker ps -aq) 2>/dev/null ; docker rmi -f $(docker images -aq) 2>/dev/null'
+    alias docker-cleanup-all='docker rm -f $(docker ps -aq) 2>/dev/null ; docker rmi -f $(docker images -aq) 2>/dev/null ; docker builder prune --all --force'
+    alias docker-prune='docker builder prune --all --force'
     if [[ "${commands[lazydocker]}" ]]; then
         alias docker-lazy='lazydocker'
     fi
