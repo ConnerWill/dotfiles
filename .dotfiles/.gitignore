@@ -45,7 +45,7 @@ docs/zsdoc/data
 *gnupg*
 *gpg*
 
-
+*rclone.conf
 
 # MichaelAquilina/zsh-autoswitch-virtualenv plugin's files
 # (for Zsh plugins using Python)
@@ -126,6 +126,9 @@ dkms.conf
 *.zip
 *.7z
 *.gz
+**/*rclone.conf
+/.config/nvim/lazyvim.json
+*lazyvim.json
 
 
 *session
@@ -133,3 +136,5 @@ dkms.conf
 .private/*
 .private/*.zsh
 *.private.zsh
+
+
