@@ -617,4 +617,12 @@ if [[ "${commands[dog]}" ]]; then
     fi
 fi
 
+## Weatherspect
+if [[ "${commands[weatherspect]}" ]]; then
+  if [[ -f "${XDG_CONFIG_HOME}/weatherspect/weatherspect.conf" ]]; then
+    alias weatherspect="weatherspect -c ${XDG_CONFIG_HOME}/weatherspect/weatherspect.conf"
+  elif [[ -f "${HOME}/.weatherspect" ]]; then
+    alias weatherspect="weatherspect -c ${HOME}/.weatherspect"
+  fi
+fi
 

@@ -180,7 +180,6 @@ if [[ "${commands[ip]}" ]]; then
     alias ip='ip -color=auto'
 fi
 
-
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias difff="diff --color=always --minimal --suppress-common-lines --side-by-side --ignore-all-space"
