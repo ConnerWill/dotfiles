@@ -97,7 +97,9 @@ if [[  -n "${DISTRO}" ]]; then
             alias yayinstall='yay -S --color always --verbose'
             alias yayi='yay -S --color always --verbose --needed'
             alias yayino='yay -S --color always --verbose --needed --noconfirm'
-            alias yaylist='yay -Q --color always'
+            alias yayr='yay -Rnsuv --color always --verbose'
+            alias yayrno='yay -Rnsuv --color always --verbose --noconfirm'
+            alias yaylist='yay -Q --color never'
             alias yayclean="yay -Scv --noconfirm && \rm -rfv ${XDG_CACHE_HOME}/yay/*"
         fi
     elif [[ ${DISTRO} == "Debian" ]] || [[ ${DISTRO} == "Raspbian" ]] || [[ ${DISTRO} == "Rpios" ]] || [[ ${DISTRO} == "Ubuntu" ]]; then

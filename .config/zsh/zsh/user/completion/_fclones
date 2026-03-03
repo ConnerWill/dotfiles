@@ -1,0 +1,378 @@
+#compdef fclones
+
+autoload -U is-at-least
+
+_fclones() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : \
+'--progress=[Override progress reporting, by default (=auto) only report when stderr is a terminal. Possible values\: true, false, auto]:VAL:(auto true false)' \
+'-q[]' \
+'--quiet[]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'-V[Print version]' \
+'--version[Print version]' \
+":: :_fclones_commands" \
+"*::: :->fclones" \
+&& ret=0
+    case $state in
+    (fclones)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:fclones-command-$line[1]:"
+        case $line[1] in
+            (group)
+_arguments "${_arguments_options[@]}" : \
+'-o+[Write the report to a file instead of the standard output]:PATH:_files' \
+'--output=[Write the report to a file instead of the standard output]:PATH:_files' \
+'-f+[Set output file format]:FORMAT:(default fdupes csv json)' \
+'--format=[Set output file format]:FORMAT:(default fdupes csv json)' \
+'-d+[Limit the recursion depth]:NUMBER:_default' \
+'--depth=[Limit the recursion depth]:NUMBER:_default' \
+'--transform=[Transform each file by the specified program before matching]:COMMAND:_default' \
+'(--rf-under)-n+[Search for over-replicated files with replication factor above the specified value]:COUNT:_default' \
+'(--rf-under)--rf-over=[Search for over-replicated files with replication factor above the specified value]:COUNT:_default' \
+'(-n --rf-over)--rf-under=[Search for under-replicated files with replication factor below the specified value]:COUNT:_default' \
+'-s+[Minimum file size in bytes (inclusive)]:BYTES:_default' \
+'--min=[Minimum file size in bytes (inclusive)]:BYTES:_default' \
+'--max=[Maximum file size in bytes (inclusive)]:BYTES:_default' \
+'--max-prefix-size=[Maximum prefix size to check in bytes]:BYTES:_default' \
+'--max-suffix-size=[Maximum suffix size to check in bytes]:BYTES:_default' \
+'*--name=[Include only file names matched fully by any of the given patterns]:PATTERN:_default' \
+'*--path=[Include only paths matched fully by any of the given patterns]:PATTERN:_default' \
+'*--exclude=[Ignore paths matched fully by any of the given patterns]:PATTERN:_default' \
+'--hash-fn=[A hash function to use for computing file digests]:NAME:(metro xxhash blake3 sha256 sha512 sha3-256 sha3-512)' \
+'*-t+[Set the sizes of thread-pools]:SPEC:_default' \
+'*--threads=[Set the sizes of thread-pools]:SPEC:_default' \
+'--base-dir=[Base directory to use when resolving relative input paths]:PATH:_default' \
+'--stdin[Read the list of input paths from the standard input instead of the arguments]' \
+'-.[Include hidden files]' \
+'--hidden[Include hidden files]' \
+'-A[Do not ignore files matching patterns listed in \`.gitignore\` and \`.fdignore\`]' \
+'--no-ignore[Do not ignore files matching patterns listed in \`.gitignore\` and \`.fdignore\`]' \
+'-L[Follow symbolic links]' \
+'--follow-links[Follow symbolic links]' \
+'-H[Treat files reachable from multiple paths through links as duplicates]' \
+'--match-links[Treat files reachable from multiple paths through links as duplicates]' \
+'-S[Don'\''t ignore symbolic links to files]' \
+'--symbolic-links[Don'\''t ignore symbolic links to files]' \
+'(-L --follow-links)-I[Don'\''t count matching files found within the same directory argument as duplicates]' \
+'(-L --follow-links)--isolate[Don'\''t count matching files found within the same directory argument as duplicates]' \
+'-1[Don'\''t match files on different filesystems or devices]' \
+'--one-fs[Don'\''t match files on different filesystems or devices]' \
+'--in-place[Read the transform output from the same path as the transform input file]' \
+'--no-copy[Don'\''t copy the file to a temporary location before transforming, when \`\$IN\` parameter is specified in the \`--transform\` command]' \
+'(-n --rf-over --rf-under)--unique[Instead of searching for duplicates, search for unique files]' \
+'-i[Make pattern matching case-insensitive]' \
+'--ignore-case[Make pattern matching case-insensitive]' \
+'-x[Expect patterns as Perl compatible regular expressions instead of Unix globs]' \
+'--regex[Expect patterns as Perl compatible regular expressions instead of Unix globs]' \
+'--skip-content-hash[Skip the full contents hash step entirely]' \
+'--cache[Enable caching of file hashes]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+'*::paths -- A list of input paths:_default' \
+&& ret=0
+;;
+(link)
+_arguments "${_arguments_options[@]}" : \
+'-o+[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'--output=[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'-m+[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'--modified-before=[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'-n+[Keep at least n replicas untouched]:COUNT:_default' \
+'--rf-over=[Keep at least n replicas untouched]:COUNT:_default' \
+'*--name=[Restrict the set of files that can be removed or replaced by links to files with the name matching any given patterns]:PATTERN:_default' \
+'*--path=[Restrict the set of files that can be removed or replaced by links to files with the path matching any given patterns]:PATTERN:_default' \
+'*--priority=[Set the priority for files to be removed or replaced by links]:PRIORITY:((top\:"Give higher priority to the files listed higher in the input file"
+bottom\:"Give higher priority to the files listed lower in the input file"
+newest\:"Give higher priority to the files with the most recent creation time"
+oldest\:"Give higher priority to the files with the least recent creation time"
+most-recently-modified\:"Give higher priority to the files with the most recent modification time"
+least-recently-modified\:"Give higher priority to the files with the least recent modification time"
+most-recently-accessed\:"Give higher priority to the files with the most recent access time"
+least-recently-accessed\:"Give higher priority to the files with the least recent access time"
+most-recent-status-change\:"Give higher priority to the files with the most recent status change"
+least-recent-status-change\:"Give higher priority to the files with the least recent status change"
+most-nested\:"Give higher priority to the files nested deeper in the directory tree"
+least-nested\:"Give higher priority to the files nested shallower in the directory tree"))' \
+'*--keep-name=[Keep files with names matching any given patterns untouched]:PATTERN:_default' \
+'*--keep-path=[Keep files with paths matching any given patterns untouched]:PATTERN:_default' \
+'*--isolate=[Specify a list of path prefixes. If non-empty, all duplicates having the same path prefix (root) are treated as one. This also means that the files sharing the same root can be either all dropped or all retained]:PATH:_default' \
+'--dry-run[Don'\''t perform any changes on the file-system, but writes a log of file operations to the standard output]' \
+'-H[Treat files reachable from multiple paths through links as duplicates]' \
+'--match-links[Treat files reachable from multiple paths through links as duplicates]' \
+'--no-lock[Don'\''t lock files before performing an action on them]' \
+'--no-check-size[Allow the size of a file to be different than the size recorded during grouping]' \
+'-s[Create soft (symbolic) links]' \
+'--soft[Create soft (symbolic) links]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(dedupe)
+_arguments "${_arguments_options[@]}" : \
+'-o+[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'--output=[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'-m+[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'--modified-before=[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'-n+[Keep at least n replicas untouched]:COUNT:_default' \
+'--rf-over=[Keep at least n replicas untouched]:COUNT:_default' \
+'*--name=[Restrict the set of files that can be removed or replaced by links to files with the name matching any given patterns]:PATTERN:_default' \
+'*--path=[Restrict the set of files that can be removed or replaced by links to files with the path matching any given patterns]:PATTERN:_default' \
+'*--priority=[Set the priority for files to be removed or replaced by links]:PRIORITY:((top\:"Give higher priority to the files listed higher in the input file"
+bottom\:"Give higher priority to the files listed lower in the input file"
+newest\:"Give higher priority to the files with the most recent creation time"
+oldest\:"Give higher priority to the files with the least recent creation time"
+most-recently-modified\:"Give higher priority to the files with the most recent modification time"
+least-recently-modified\:"Give higher priority to the files with the least recent modification time"
+most-recently-accessed\:"Give higher priority to the files with the most recent access time"
+least-recently-accessed\:"Give higher priority to the files with the least recent access time"
+most-recent-status-change\:"Give higher priority to the files with the most recent status change"
+least-recent-status-change\:"Give higher priority to the files with the least recent status change"
+most-nested\:"Give higher priority to the files nested deeper in the directory tree"
+least-nested\:"Give higher priority to the files nested shallower in the directory tree"))' \
+'*--keep-name=[Keep files with names matching any given patterns untouched]:PATTERN:_default' \
+'*--keep-path=[Keep files with paths matching any given patterns untouched]:PATTERN:_default' \
+'*--isolate=[Specify a list of path prefixes. If non-empty, all duplicates having the same path prefix (root) are treated as one. This also means that the files sharing the same root can be either all dropped or all retained]:PATH:_default' \
+'--dry-run[Don'\''t perform any changes on the file-system, but writes a log of file operations to the standard output]' \
+'-H[Treat files reachable from multiple paths through links as duplicates]' \
+'--match-links[Treat files reachable from multiple paths through links as duplicates]' \
+'--no-lock[Don'\''t lock files before performing an action on them]' \
+'--no-check-size[Allow the size of a file to be different than the size recorded during grouping]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(remove)
+_arguments "${_arguments_options[@]}" : \
+'-o+[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'--output=[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'-m+[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'--modified-before=[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'-n+[Keep at least n replicas untouched]:COUNT:_default' \
+'--rf-over=[Keep at least n replicas untouched]:COUNT:_default' \
+'*--name=[Restrict the set of files that can be removed or replaced by links to files with the name matching any given patterns]:PATTERN:_default' \
+'*--path=[Restrict the set of files that can be removed or replaced by links to files with the path matching any given patterns]:PATTERN:_default' \
+'*--priority=[Set the priority for files to be removed or replaced by links]:PRIORITY:((top\:"Give higher priority to the files listed higher in the input file"
+bottom\:"Give higher priority to the files listed lower in the input file"
+newest\:"Give higher priority to the files with the most recent creation time"
+oldest\:"Give higher priority to the files with the least recent creation time"
+most-recently-modified\:"Give higher priority to the files with the most recent modification time"
+least-recently-modified\:"Give higher priority to the files with the least recent modification time"
+most-recently-accessed\:"Give higher priority to the files with the most recent access time"
+least-recently-accessed\:"Give higher priority to the files with the least recent access time"
+most-recent-status-change\:"Give higher priority to the files with the most recent status change"
+least-recent-status-change\:"Give higher priority to the files with the least recent status change"
+most-nested\:"Give higher priority to the files nested deeper in the directory tree"
+least-nested\:"Give higher priority to the files nested shallower in the directory tree"))' \
+'*--keep-name=[Keep files with names matching any given patterns untouched]:PATTERN:_default' \
+'*--keep-path=[Keep files with paths matching any given patterns untouched]:PATTERN:_default' \
+'*--isolate=[Specify a list of path prefixes. If non-empty, all duplicates having the same path prefix (root) are treated as one. This also means that the files sharing the same root can be either all dropped or all retained]:PATH:_default' \
+'--dry-run[Don'\''t perform any changes on the file-system, but writes a log of file operations to the standard output]' \
+'-H[Treat files reachable from multiple paths through links as duplicates]' \
+'--match-links[Treat files reachable from multiple paths through links as duplicates]' \
+'--no-lock[Don'\''t lock files before performing an action on them]' \
+'--no-check-size[Allow the size of a file to be different than the size recorded during grouping]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+&& ret=0
+;;
+(move)
+_arguments "${_arguments_options[@]}" : \
+'-o+[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'--output=[Write the \`dry_run\` report to a file instead of the standard output]:path:_files' \
+'-m+[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'--modified-before=[Deduplicate only the files that were modified before the given time]:timestamp:_default' \
+'-n+[Keep at least n replicas untouched]:COUNT:_default' \
+'--rf-over=[Keep at least n replicas untouched]:COUNT:_default' \
+'*--name=[Restrict the set of files that can be removed or replaced by links to files with the name matching any given patterns]:PATTERN:_default' \
+'*--path=[Restrict the set of files that can be removed or replaced by links to files with the path matching any given patterns]:PATTERN:_default' \
+'*--priority=[Set the priority for files to be removed or replaced by links]:PRIORITY:((top\:"Give higher priority to the files listed higher in the input file"
+bottom\:"Give higher priority to the files listed lower in the input file"
+newest\:"Give higher priority to the files with the most recent creation time"
+oldest\:"Give higher priority to the files with the least recent creation time"
+most-recently-modified\:"Give higher priority to the files with the most recent modification time"
+least-recently-modified\:"Give higher priority to the files with the least recent modification time"
+most-recently-accessed\:"Give higher priority to the files with the most recent access time"
+least-recently-accessed\:"Give higher priority to the files with the least recent access time"
+most-recent-status-change\:"Give higher priority to the files with the most recent status change"
+least-recent-status-change\:"Give higher priority to the files with the least recent status change"
+most-nested\:"Give higher priority to the files nested deeper in the directory tree"
+least-nested\:"Give higher priority to the files nested shallower in the directory tree"))' \
+'*--keep-name=[Keep files with names matching any given patterns untouched]:PATTERN:_default' \
+'*--keep-path=[Keep files with paths matching any given patterns untouched]:PATTERN:_default' \
+'*--isolate=[Specify a list of path prefixes. If non-empty, all duplicates having the same path prefix (root) are treated as one. This also means that the files sharing the same root can be either all dropped or all retained]:PATH:_default' \
+'--dry-run[Don'\''t perform any changes on the file-system, but writes a log of file operations to the standard output]' \
+'-H[Treat files reachable from multiple paths through links as duplicates]' \
+'--match-links[Treat files reachable from multiple paths through links as duplicates]' \
+'--no-lock[Don'\''t lock files before performing an action on them]' \
+'--no-check-size[Allow the size of a file to be different than the size recorded during grouping]' \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+':target -- Target directory where the redundant files should be moved to:_files' \
+&& ret=0
+;;
+(complete)
+_arguments "${_arguments_options[@]}" : \
+'-h[Print help]' \
+'--help[Print help]' \
+':shell -- Shell for which the completion script is generated:(bash elvish fish powershell zsh)' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_fclones__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:fclones-help-command-$line[1]:"
+        case $line[1] in
+            (group)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(link)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(dedupe)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(remove)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(move)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(complete)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_fclones_commands] )) ||
+_fclones_commands() {
+    local commands; commands=(
+'group:Produce a list of groups of identical files' \
+'link:Replace redundant files with links' \
+'dedupe:Deduplicate file data using native filesystem deduplication capabilities' \
+'remove:Remove redundant files' \
+'move:Move redundant files to the given directory' \
+'complete:Print shell completion script to stdout' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'fclones commands' commands "$@"
+}
+(( $+functions[_fclones__complete_commands] )) ||
+_fclones__complete_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones complete commands' commands "$@"
+}
+(( $+functions[_fclones__dedupe_commands] )) ||
+_fclones__dedupe_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones dedupe commands' commands "$@"
+}
+(( $+functions[_fclones__group_commands] )) ||
+_fclones__group_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones group commands' commands "$@"
+}
+(( $+functions[_fclones__help_commands] )) ||
+_fclones__help_commands() {
+    local commands; commands=(
+'group:Produce a list of groups of identical files' \
+'link:Replace redundant files with links' \
+'dedupe:Deduplicate file data using native filesystem deduplication capabilities' \
+'remove:Remove redundant files' \
+'move:Move redundant files to the given directory' \
+'complete:Print shell completion script to stdout' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'fclones help commands' commands "$@"
+}
+(( $+functions[_fclones__help__complete_commands] )) ||
+_fclones__help__complete_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help complete commands' commands "$@"
+}
+(( $+functions[_fclones__help__dedupe_commands] )) ||
+_fclones__help__dedupe_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help dedupe commands' commands "$@"
+}
+(( $+functions[_fclones__help__group_commands] )) ||
+_fclones__help__group_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help group commands' commands "$@"
+}
+(( $+functions[_fclones__help__help_commands] )) ||
+_fclones__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help help commands' commands "$@"
+}
+(( $+functions[_fclones__help__link_commands] )) ||
+_fclones__help__link_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help link commands' commands "$@"
+}
+(( $+functions[_fclones__help__move_commands] )) ||
+_fclones__help__move_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help move commands' commands "$@"
+}
+(( $+functions[_fclones__help__remove_commands] )) ||
+_fclones__help__remove_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones help remove commands' commands "$@"
+}
+(( $+functions[_fclones__link_commands] )) ||
+_fclones__link_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones link commands' commands "$@"
+}
+(( $+functions[_fclones__move_commands] )) ||
+_fclones__move_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones move commands' commands "$@"
+}
+(( $+functions[_fclones__remove_commands] )) ||
+_fclones__remove_commands() {
+    local commands; commands=()
+    _describe -t commands 'fclones remove commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_fclones" ]; then
+    _fclones "$@"
+else
+    compdef _fclones fclones
+fi
