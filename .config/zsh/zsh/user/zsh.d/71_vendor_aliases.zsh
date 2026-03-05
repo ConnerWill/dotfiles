@@ -344,6 +344,7 @@ if [[ "${commands[git]}" ]]; then
     alias got="git"
     alias gpt="git"
     alias gut="git"
+    alias gt="git"
     alias git-clone-nocheckout="git clone --no-checkout --verbose"
     alias git-commit-custom='git commit --gpg-sign="3AED4B68E6FD33BC" --message='
     alias git-config-options='git config --list'
