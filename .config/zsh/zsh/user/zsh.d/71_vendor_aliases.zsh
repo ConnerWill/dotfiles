@@ -620,6 +620,17 @@ if [[ "${commands[dog]}" ]]; then
     fi
 fi
 
+
+
+### [=]==================================[=]
+### [~]............ YT-DLP
+### [=]==================================[=]
+if [[ "${commands[yt-dlp]}" ]]; then
+    alias ytdlp="yt-dlp"
+    alias ytd="yt-dlp"
+fi
+
+
 ## Weatherspect
 if [[ "${commands[weatherspect]}" ]]; then
   if [[ -f "${XDG_CONFIG_HOME}/weatherspect/weatherspect.conf" ]]; then
