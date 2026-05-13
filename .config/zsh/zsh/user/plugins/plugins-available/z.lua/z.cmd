@@ -1,10 +1,8 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-set "HomeDir=%~dp0"
-set "PathSave=%PATH%"
 set "LuaExe=lua"
-set "LuaScript=%HomeDir%z.lua"
+set "LuaScript=%~dp0z.lua"
 set "MatchType=-n"
 set "StrictSub=-n"
 set "RunMode=-n"
@@ -91,7 +89,9 @@ if /i "%1"=="--purge" (
 :check
 
 if /i "%1"=="" (
-	set "RunMode=-l"
+	if /i "%InterMode%"=="" (
+		set "RunMode=-l"
+	)
 )
 
 for /f "delims=" %%i in ('cd') do set "PWD=%%i"

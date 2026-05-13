@@ -4,7 +4,7 @@
 -- z.lua - a cd command that learns, by skywind 2018-2022
 -- Licensed under MIT license.
 --
--- Version 1.8.14, Last Modified: 2022/01/30 21:53
+-- Version 1.8.25, Last Modified: 2026/03/09 21:15:46
 --
 -- * 10x faster than fasd and autojump, 3x faster than z.sh
 -- * available for posix shells: bash, zsh, sh, ash, dash, busybox
@@ -12,17 +12,18 @@
 -- * compatible with lua 5.1, 5.2 and 5.3+
 --
 -- USE:
---     * z foo      # cd to most frecent dir matching foo
---     * z foo bar  # cd to most frecent dir matching foo and bar
---     * z -r foo   # cd to highest ranked dir matching foo
---     * z -t foo   # cd to most recently accessed dir matching foo
---     * z -l foo   # list matches instead of cd
---     * z -c foo   # restrict matches to subdirs of $PWD
---     * z -e foo   # echo the best match, don't cd
---     * z -x path  # remove path from history
---     * z -i foo   # cd with interactive selection
---     * z -I foo   # cd with interactive selection using fzf
---     * z -b foo   # cd to the parent directory starting with foo
+--     * z foo        # cd to most frecent dir matching foo
+--     * z foo bar    # cd to most frecent dir matching foo and bar
+--     * z -r foo     # cd to highest ranked dir matching foo
+--     * z -t foo     # cd to most recently accessed dir matching foo
+--     * z -l foo     # list matches instead of cd
+--     * z -c foo     # restrict matches to subdirs of $PWD
+--     * z -e foo     # echo the best match, don't cd
+--     * z -x path    # remove path from history
+--     * z -i foo     # cd with interactive selection
+--     * z -I foo     # cd with interactive selection using fzf
+--     * z -b foo     # cd to the parent directory starting with foo
+--     * z -b foo bar # replace foo with bar in cwd and cd there
 --
 -- Bash Install:
 --     * put something like this in your .bashrc:
@@ -46,11 +47,11 @@
 --
 -- Fish Shell Install:
 --     * put something like this in your config file:
---         source (lua /path/to/z.lua --init fish | psub)
+--         lua /path/to/z.lua --init fish | source
 --
 -- Power Shell Install:
 --     * put something like this in your config file:
---         Invoke-Expression (& { 
+--         Invoke-Expression (& {
 --           (lua /path/to/z.lua --init powershell) -join "`n" })
 --
 -- Windows Install (with Clink):
@@ -126,7 +127,8 @@ Z_CMD = 'z'
 Z_MATCHMODE = 0
 Z_MATCHNAME = false
 Z_SKIPPWD = false
-Z_HYPHEN = false
+Z_HYPHEN = "auto"
+Z_DATA_SEPARATOR = "|"
 
 os.LOG_NAME = os.getenv('_ZL_LOG_NAME')
 
@@ -233,7 +235,8 @@ end
 function dump(o)
 	if type(o) == 'table' then
 		local s = '{ '
-		for k,v in pairs(o) do
+		for key, v in pairs(o) do
+			local k = key
 			if type(k) ~= 'number' then k = '"'..k..'"' end
 			s = s .. '['..k..'] = ' .. dump(v) .. ','
 		end
@@ -405,7 +408,7 @@ if os.native.status then
 			return hr ~= nil and ffi.string(buffer) or nil
 		end
 	end
-	function os.native.tickcount() 
+	function os.native.tickcount()
 		if windows then
 			return os.native.GetTickCount()
 		else
@@ -527,13 +530,16 @@ function os.path.abspath(path)
 				return test
 			end
 		end
-		for _, python in pairs({'python', 'python2', 'python3'}) do
+		for _, python in pairs({'python3', 'python2', 'python'}) do
 			local s = 'sys.stdout.write(os.path.abspath(sys.argv[1]))'
 			local s = '-c "import os, sys;' .. s .. '" \'' .. path .. '\''
 			local s = python .. ' ' .. s
 			local test = os.path.which(python)
 			if test ~= nil and test ~= '' then
-				return os.call(s)
+				test = os.call(s)
+				if test ~= nil and test ~= '' then
+					return test
+				end
 			end
 		end
 	end
@@ -878,6 +884,7 @@ function os.interpreter()
 	local lua = os.argv[-1]
 	if lua == nil then
 		io.stderr:write("cannot get executable name, recompiled your lua\n")
+		return nil
 	end
 	if os.path.single(lua) then
 		local path = os.path.which(lua)
@@ -928,8 +935,8 @@ function os.environ(name, default)
 		end
 	elseif type(default) == 'number' then
 		value = tonumber(value)
-		if value == nil then 
-			return default 
+		if value == nil then
+			return default
 		else
 			return value
 		end
@@ -1058,6 +1065,26 @@ end
 
 
 -----------------------------------------------------------------------
+-- Read a line of the database and return a list of the 3 fields in it
+-----------------------------------------------------------------------
+function read_data_line(line)
+    local part = string.split(line, Z_DATA_SEPARATOR)
+    if #part <= 3 then
+        return part
+    end
+    -- If the part is made of more than 3 elements, it's probably because the
+    -- path element contains '|' that have been split. Thus, we want to
+    -- reconstruct it and keep the 2 last elements of part intact as the end
+    -- of the returned part.
+    local path = part[1]
+    for i=2,#part-2 do
+        path = path .. Z_DATA_SEPARATOR .. part[i]
+    end
+    return {path, part[#part-1], part[#part]}
+end
+ 
+
+-----------------------------------------------------------------------
 -- load and split data
 -----------------------------------------------------------------------
 function data_load(filename)
@@ -1069,10 +1096,11 @@ function data_load(filename)
 		return {}
 	end
 	for line in fp:lines() do
-		local part = string.split(line, '|')
+		local part = read_data_line(line)
 		local item = {}
 		if part and part[1] and part[2] and part[3] then
 			local key = insensitive and part[1]:lower() or part[1]
+			part[2] = part[2]:gsub(",", ".")
 			item.name = part[1]
 			item.rank = tonumber(part[2])
 			item.time = tonumber(part[3]) + 0
@@ -1130,7 +1158,7 @@ function data_save(filename, M)
 	end
 	for i = 1, #M do
 		local item = M[i]
-		local text = item.name .. '|' .. item.rank .. '|' .. item.time
+		local text = item.name .. Z_DATA_SEPARATOR .. item.rank .. Z_DATA_SEPARATOR .. item.time
 		fp:write(text .. '\n')
 	end
 	fp:close()
@@ -1287,13 +1315,16 @@ end
 -----------------------------------------------------------------------
 -- select matched pathnames
 -----------------------------------------------------------------------
-function data_select(M, patterns, matchlast)
+-- z_hyphen must be `true`, `false``, or `"auto"`.
+function data_select(M, patterns, matchlast, z_hyphen)
 	local N = {}
 	local i = 1
 	local pats = {}
+	local hyphens = false
 	for i = 1, #patterns do
 		local p = patterns[i]
-		if Z_HYPHEN then
+		hyphens = hyphens or string.match(p, "%-")
+		if z_hyphen == true then
 			p = p:gsub('-', '%%-')
 		end
 		table.insert(pats, case_insensitive_pattern(p))
@@ -1303,6 +1334,9 @@ function data_select(M, patterns, matchlast)
 		if path_match(item.name, pats, matchlast) then
 			table.insert(N, item)
 		end
+	end
+	if (hyphens and z_hyphen == "auto" and #N == 0) then
+		N = data_select(M, patterns, matchlast, true)
 	end
 	return N
 end
@@ -1453,10 +1487,10 @@ function z_match(patterns, method, subdir)
 	method = method ~= nil and method or 'frecent'
 	subdir = subdir ~= nil and subdir or false
 	local M = data_load(DATA_FILE)
-	M = data_select(M, patterns, false)
+	M = data_select(M, patterns, false, Z_HYPHEN)
 	M = data_filter(M)
 	if Z_MATCHNAME then
-		local N = data_select(M, patterns, true)
+		local N = data_select(M, patterns, true, Z_HYPHEN)
 		N = data_filter(N)
 		if #N > 0 then
 			M = N
@@ -1579,21 +1613,23 @@ function z_cd(patterns)
 	if patterns == nil then
 		return nil
 	end
-	if #patterns == 0 then
-		return nil
-	end
-	local last = patterns[#patterns]
-	if last == '~' or last == '~/' then
-		return os.path.expand('~')
-	elseif windows and last == '~\\' then
-		return os.path.expand('~')
-	end
-	if os.path.isabs(last) and os.path.isdir(last) then
-		local size = #patterns
-		if size <= 1 then
-			return os.path.norm(last)
-		elseif last ~= '/' and last ~= '\\' then
-			return os.path.norm(last)
+	if Z_INTERACTIVE == 0 then
+		if #patterns == 0 then
+			return nil
+		end
+		local last = patterns[#patterns]
+		if last == '~' or last == '~/' then
+			return os.path.expand('~')
+		elseif windows and last == '~\\' then
+			return os.path.expand('~')
+		end
+		if os.path.isabs(last) and os.path.isdir(last) then
+			local size = #patterns
+			if size <= 1 then
+				return os.path.norm(last)
+			elseif last ~= '/' and last ~= '\\' then
+				return os.path.norm(last)
+			end
 		end
 	end
 	local M = z_match(patterns, Z_METHOD, Z_SUBDIR)
@@ -1631,19 +1667,19 @@ function z_cd(patterns)
 	elseif Z_INTERACTIVE == 2 then
 		local fzf = os.environ('_ZL_FZF', 'fzf')
 		local tmpname = '/tmp/zlua.txt'
-		local cmd = '--nth 2.. --reverse --inline-info --tac '
+		local cmd = '--nth 2.. --reverse --info=inline --tac '
 		local flag = os.environ('_ZL_FZF_FLAG', '')
 		flag = (flag == '' or flag == nil) and '+s -e' or flag
 		cmd = ((fzf == '') and 'fzf' or fzf)  .. ' ' .. cmd .. ' ' .. flag
+		local height = os.environ('_ZL_FZF_HEIGHT', '35%')
+		if height ~= nil and height ~= '' and height ~= '0' then
+			cmd = cmd .. ' --height ' .. height
+		end
 		if not windows then
 			tmpname = os.tmpname()
-			local height = os.environ('_ZL_FZF_HEIGHT', '35%')
-			if height ~= nil and height ~= '' and height ~= '0' then
-				cmd = cmd .. ' --height ' .. height
-			end
 			cmd = cmd .. ' < "' .. tmpname .. '"'
 		else
-			tmpname = os.tmpname():gsub('\\', ''):gsub('%.', '')
+			tmpname = os.tmpname():gsub('[\\:]', ''):gsub('%.', '')
 			tmpname = os.environ('TMP', '') .. '\\zlua_' .. tmpname .. '.txt'
 			cmd = 'type "' .. tmpname .. '" | ' .. cmd
 		end
@@ -1715,47 +1751,45 @@ function cd_backward(args, options, pwd)
 	local pwd = (pwd ~= nil) and pwd or os.pwd()
 	if nargs == 0 then
 		return find_vcs_root(pwd)
-	elseif nargs == 1 then
-		if args[1]:sub(1, 2) == '..' then
-			local size = args[1]:len() - 1
-			if args[1]:match('^%.%.+$') then
-				size = args[1]:len() - 1
-			elseif args[1]:match('^%.%.%d+$') then
-				size = tonumber(args[1]:sub(3))
-			else
-				return nil
-			end
-			local path = pwd
-			for index = 1, size do
-				path = os.path.join(path, '..')
-			end
-			return os.path.normpath(path)
+	elseif nargs == 1 and args[1]:sub(1, 2) == '..' then
+		local size = args[1]:len() - 1
+		if args[1]:match('^%.%.+$') then
+			size = args[1]:len() - 1
+		elseif args[1]:match('^%.%.%d+$') then
+			size = tonumber(args[1]:sub(3))
 		else
-			pwd = os.path.split(pwd)
-			local test = windows and pwd:gsub('\\', '/') or pwd
-			local key = windows and args[1]:lower() or args[1]
-			if not key:match('%u') then
-				test = test:lower()
-			end
-			local pos, ends = test:rfind('/' .. key)
-			if pos then
-				ends = test:find('/', pos + key:len() + 1, true)
-				ends = ends and ends or test:len()
-				return os.path.normpath(pwd:sub(1, ends))
-			elseif windows and test:startswith(key) then
-				ends = test:find('/', key:len(), true)
-				ends = ends and ends or test:len()
-				return os.path.normpath(pwd:sub(1, ends))
-			end
-			pos = test:rfind(key)
-			if pos then
-				ends = test:find('/', pos + key:len(), true)
-				ends = ends and ends or test:len()
-				return os.path.normpath(pwd:sub(1, ends))
-			end
 			return nil
 		end
-	else
+		local path = pwd
+		for index = 1, size do
+			path = os.path.join(path, '..')
+		end
+		return os.path.normpath(path)
+	elseif nargs == 1 then
+		pwd = os.path.split(pwd)
+		local test = windows and pwd:gsub('\\', '/') or pwd
+		local key = windows and args[1]:lower() or args[1]
+		if not key:match('%u') then
+			test = test:lower()
+		end
+		local pos, ends = test:rfind('/' .. key)
+		if pos then
+			ends = test:find('/', pos + key:len() + 1, true)
+			ends = ends and ends or test:len()
+			return os.path.normpath(pwd:sub(1, ends))
+		elseif windows and test:startswith(key) then
+			ends = test:find('/', key:len(), true)
+			ends = ends and ends or test:len()
+			return os.path.normpath(pwd:sub(1, ends))
+		end
+		pos = test:rfind(key)
+		if pos then
+			ends = test:find('/', pos + key:len(), true)
+			ends = ends and ends or test:len()
+			return os.path.normpath(pwd:sub(1, ends))
+		end
+		return nil
+	elseif nargs == 2 then
 		local test = windows and pwd:gsub('\\', '/') or pwd
 		local src = args[1]
 		local dst = args[2]
@@ -1766,10 +1800,25 @@ function cd_backward(args, options, pwd)
 		if not start then
 			return pwd
 		end
+
 		local lhs = pwd:sub(1, start - 1)
 		local rhs = pwd:sub(ends + 1)
-		return lhs .. dst .. rhs
+		local newpath = lhs .. dst .. rhs
+		if os.path.isdir(newpath) then
+			return newpath
+		end
+
+		-- Get rid of the entire path component that matched `src`.
+		lhs = lhs:gsub("[^/]*$", "")
+		rhs = rhs:gsub("^[^/]*", "")
+		return z_cd({lhs, dst, rhs})
+		-- In the future, it would make sense to have `z -b -c from to to2`
+		-- to z_cd({lhs, dst[1], dst[2]}). Without `-c`, we probably still
+		-- want to support only 2 argumets.
 	end
+
+	io.stderr:write("Error: " .. Z_CMD .. " -b takes at most 2 arguments.\n")
+	return nil
 end
 
 
@@ -1827,7 +1876,7 @@ function cd_breadcrumbs(pwd, interactive)
 		if not windows then
 			tmpname = os.tmpname()
 		else
-			tmpname = os.tmpname():gsub('\\', ''):gsub('%.', '')
+			tmpname = os.tmpname():gsub('[\\:]', ''):gsub('%.', '')
 			tmpname = os.environ('TMP', '') .. '\\zlua_' .. tmpname .. '.txt'
 		end
 		fp = io.open(tmpname, 'w')
@@ -1852,7 +1901,7 @@ function cd_breadcrumbs(pwd, interactive)
 		retval = io.read('*l')
 	elseif interactive == 2 then
 		local fzf = os.environ('_ZL_FZF', 'fzf')
-		local cmd = '--reverse --inline-info --tac '
+		local cmd = '--reverse --info=inline --tac '
 		local flag = os.environ('_ZL_FZF_FLAG', '')
 		flag = (flag == '' or flag == nil) and '+s -e' or flag
 		cmd = ((fzf == '') and 'fzf' or fzf) .. ' ' .. cmd .. ' ' .. flag
@@ -1918,20 +1967,20 @@ function main(argv)
 	if options['--cd'] or options['-e'] then
 		local path = ''
 		if options['-b'] then
-			if Z_INTERACTIVE == 0 then
+			if #args > 0 or Z_INTERACTIVE == 0 then
 				path = cd_backward(args, options)
 			else
 				path = cd_breadcrumbs('', Z_INTERACTIVE)
 			end
 		elseif options['-'] then
 			path = cd_minus(args, options)
-		elseif #args == 0 then
+		elseif #args == 0 and Z_INTERACTIVE == 0 then
 			path = nil
 		else
 			path = z_cd(args)
 			if path == nil and Z_MATCHMODE ~= 0 then
 				local last = args[#args]
-				if os.path.isdir(last) then
+				if last and os.path.isdir(last) then
 					path = os.path.abspath(last)
 					path = os.path.norm(path)
 				end
@@ -1955,12 +2004,14 @@ function main(argv)
 		for _, key in ipairs(args) do
 			opts[key] = 1
 		end
-		if windows then
+		if opts.nushell then
+			z_nushell_init(opts)
+		elseif windows then
 			z_windows_init(opts)
 		elseif opts.fish then
 			z_fish_init(opts)
 		elseif opts.powershell then
-		       z_windows_init(opts)
+			z_windows_init(opts)
 		else
 			z_shell_init(opts)
 		end
@@ -1972,9 +2023,14 @@ function main(argv)
 			z_print(M, true, false)
 		end
 	elseif options['--complete'] then
-		local line = args[1] and args[1] or ''
-		local head = line:sub(Z_CMD:len()+1):gsub('^%s+', '')
-		local M = z_match({head}, Z_METHOD, Z_SUBDIR)
+		local M = {}
+		if options['-m1'] then
+			M = z_match(args and args or {}, Z_METHOD, Z_SUBDIR)
+		else
+			local line = args[1] and args[1] or ''
+			local head = line:sub(Z_CMD:len()+1):gsub('^%s+', '')
+			M = z_match({head}, Z_METHOD, Z_SUBDIR)
+		end
 		for _, item in pairs(M) do
 			print(item.name)
 		end
@@ -2049,10 +2105,13 @@ function z_init()
 			Z_SKIPPWD = true
 		end
 	end
+    assert(Z_HYPHEN == "auto", "Z_HYPHEN initialized to an unexpected value")
 	if _zl_hyphen ~= nil then
 		local m = string.lower(_zl_hyphen)
 		if (m == '1' or m == 'yes' or m == 'true' or m == 't') then
 			Z_HYPHEN = true
+		elseif (m == '0' or m == 'no' or m == 'false' or m == 'f') then
+			Z_HYPHEN = false
 		end
 	end
 end
@@ -2083,10 +2142,28 @@ function z_clink_init()
 		end
 		return {}
 	end
+	local dirmatchfunc = function (word)
+		clink.matches_are_files(1)
+		return clink.match_files(word..'*', true, clink.find_dirs)
+	end
+	local dirmatchparser = clink.arg.new_parser():set_arguments({ dirmatchfunc })
 	local z_parser = clink.arg.new_parser()
 	z_parser:set_arguments({ z_match_completion })
-	z_parser:set_flags("-c", "-r", "-i", "--cd", "-e", "-b", "--add", "-x", "--purge", 
-		"--init", "-l", "-s", "--complete", "--help", "-h")
+	z_parser:set_flags("-r", "-i", "-I", "-t", "-l", "-c", "-e", "-b", "-x"..dirmatchparser, "-h")
+	if z_parser.adddescriptions then
+		z_parser:adddescriptions({
+			['-r'] = "cd to highest ranked dir matching",
+			['-i'] = "cd with interactive selection",
+			['-I'] = "cd with interactive selection using fzf",
+			['-t'] = "cd to most recently accessed dir matching",
+			['-l'] = "list matches instead of cd",
+			['-c'] = "restrict matches to subdirs of cwd (or %PWD% if set)",
+			['-e'] = "echo the best match, don't cd",
+			['-b'] = "jump backwards to given dir or to project root",
+			['-x'] = { " dir", "remove path from history" },
+			['-h'] = "show help",
+		})
+	end
 	clink.arg.register_parser("z", z_parser)
 end
 
@@ -2121,7 +2198,8 @@ _zlua() {
 			-s) local arg_strip="-s" ;;
 			-i) local arg_inter="-i" ;;
 			-I) local arg_inter="-I" ;;
-			-h|--help) local arg_mode="-h" ;;
+			-h) local arg_mode="-h" ;;
+			--help) local arg_mode="-h" ;;
 			--purge) local arg_mode="--purge" ;;
 			*) break ;;
 		esac
@@ -2244,6 +2322,31 @@ _zlua_zsh_tab_completion() {
 }
 if [ "${+functions[compdef]}" -ne 0 ]; then
 	compdef _zlua_zsh_tab_completion _zlua 2> /dev/null
+	compdef ${_ZL_CMD:-z}=_zlua
+fi
+]]
+
+local script_fzf_complete_zsh = [[
+if command -v fzf >/dev/null 2>&1; then
+	# To redraw line after fzf closes (printf '\e[5n')
+	bindkey '\e[0n' kill-whole-line
+	_zlua_zsh_fzf_complete() {
+		local list=$(_zlua -l ${words[2,-1]})
+
+		if [ -n "$list" ]; then
+			local selected=$(print $list | ${=zlua_fzf} | sed 's/^[0-9,.]* *//')
+
+			if [ -n "$selected" ]; then
+				cd ${selected}
+				printf '\e[5n'
+			fi
+		fi
+	}
+
+	if [ "${+functions[compdef]}" -ne 0 ]; then
+		compdef _zlua_zsh_fzf_complete _zlua > /dev/null 2>&1
+		compdef ${_ZL_CMD:-z}=_zlua
+	fi
 fi
 ]]
 
@@ -2284,7 +2387,7 @@ function z_shell_init(opts)
 		end
 		print(script_complete_bash)
 		if opts.fzf ~= nil then
-			fzf_cmd = "fzf --nth 2.. --reverse --inline-info --tac "
+			local fzf_cmd = "fzf --nth 2.. --reverse --info=inline --tac "
 			local height = os.environ('_ZL_FZF_HEIGHT', '35%')
 			if height ~= nil and height ~= '' and height ~= '0' then
 				fzf_cmd = fzf_cmd .. ' --height ' .. height .. ' '
@@ -2300,6 +2403,18 @@ function z_shell_init(opts)
 			print(once and script_init_zsh_once or script_init_zsh)
 		end
 		print(script_complete_zsh)
+		if opts.fzf ~= nil then
+			local fzf_cmd = "fzf --nth 2.. --reverse --info=inline --tac "
+			local height = os.environ('_ZL_FZF_HEIGHT', '35%')
+			if height ~= nil and height ~= '' and height ~= '0' then
+				fzf_cmd = fzf_cmd .. ' --height ' .. height .. ' '
+			end
+			local flag = os.environ('_ZL_FZF_FLAG', '')
+			flag = (flag == '' or flag == nil) and '+s -e' or flag
+			fzf_cmd = fzf_cmd .. ' ' .. flag .. ' '
+			print('zlua_fzf="' .. fzf_cmd .. '"')
+			print(script_fzf_complete_zsh)
+		end
 	elseif opts.posix ~= nil then
 		if prompt_hook then
 			local script = script_init_posix
@@ -2404,7 +2519,9 @@ function _zlua
 end
 
 if test -z "$_ZL_CMD"; set -x _ZL_CMD z; end
-alias "$_ZL_CMD"=_zlua
+function $_ZL_CMD -w _zlua -d "alias $_ZL_CMD=_zlua"
+	_zlua $argv
+end
 ]]
 
 script_init_fish = [[
@@ -2693,21 +2810,145 @@ end
 
 
 -----------------------------------------------------------------------
+-- nushell
+-----------------------------------------------------------------------
+local script_zlua_nushell = [[
+export def _zlua --env --wrapped [...args: string] {
+    if ($args | length) != 0 and $args.0 == "--add" {
+        with-env { _ZL_RANDOM: (random int) } { ^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT --add ...($args | skip 1) }
+    } else if ($args | length) != 0 and $args.0 == "--complete" {
+        ^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT --complete ...($args | skip 1)
+    } else {
+        mut arg_mode = ''
+        mut arg_type = ''
+        mut arg_subdir = ''
+        mut arg_inter = ''
+        mut arg_strip = ''
+        mut count = 0
+        for arg in $args {
+            match $arg {
+                '-l' => { $arg_mode = '-l' },
+                '-e' => { $arg_mode = '-e' },
+                '-x' => { $arg_mode = '-x' },
+                '-t' => { $arg_type = '-t' },
+                '-r' => { $arg_type = '-r' },
+                '-c' => { $arg_subdir = '-c' },
+                '-s' => { $arg_strip = '-s' },
+                '-i' => { $arg_inter = '-i' },
+                '-I' => { $arg_inter = '-I' },
+                '-h' => { $arg_mode = '-h' },
+                '--help' => { $arg_mode = '-h' },
+                '--purge' => { $arg_mode = '--purge' },
+                _ => break
+            }
+            $count += 1
+        }
+        let args = $args | skip $count
+        if $arg_mode == '-h' or $arg_mode == '--purge' {
+            ^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT $arg_mode
+        } else if $arg_mode == '-l' or ($args | length) == 0 {
+            ^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT -l $arg_subdir $arg_type $arg_strip ...$args
+        } else if $arg_mode != '' {
+            ^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT $arg_mode $arg_subdir $arg_type $arg_inter ...$args
+        } else {
+            let zdest = (^$env.ZLUA_LUAEXE $env.ZLUA_SCRIPT --cd $arg_type $arg_subdir $arg_inter ...$args)
+            if $zdest != '' and ($zdest | path exists) {
+                cd $zdest
+                if _ZL_ECHO in $env and $env._ZL_ECHO != '' {
+                    pwd
+                }
+            }
+        }
+    }
+}
+]]
+
+local script_init_nushell = [[
+$env.config = ($env | default {} config).config
+$env.config = ($env.config | default {} hooks)
+$env.config = ($env.config | update hooks ($env.config.hooks | default {} env_change))
+$env.config = ($env.config | update hooks.env_change ($env.config.hooks.env_change | default [] PWD))
+$env.config = ($env.config | update hooks.env_change.PWD ($env.config.hooks.env_change.PWD | append {|_, dir| _zlua --add $dir }))
+]]
+
+local script_complete_nushell = [[
+let zlua_completer = {|spans| $spans | skip 1 | _zlua --complete -m1 ...$in | lines | where {|x| $x != $env.PWD}}
+
+$env.config = ($env.config | default {} completions)
+$env.config = ($env.config | update completions ($env.config.completions | default {} external))
+$env.config = ($env.config | update completions.external ($env.config.completions.external | default true enable))
+if completer in $env.config.completions.external {
+    let orig_completer = $env.config.completions.external.completer
+    $env.config = ($env.config | update completions.external.completer {
+        {|spans|
+            match $spans.0 {
+                z => $zlua_completer,
+                _zlua => $zlua_completer,
+                _ => $orig_completer
+            } | do $in $spans
+        }
+    })
+} else {
+    $env.config = ($env.config | update completions.external.completer {
+        {|spans|
+            match $spans.0 {
+                z => $zlua_completer,
+                _zlua => $zlua_completer,
+            } | do $in $spans
+        }
+    })
+}
+
+export alias z = _zlua
+
+]]
+
+-----------------------------------------------------------------------
+-- initialize nushell
+-----------------------------------------------------------------------
+function z_nushell_init(opts)
+	print('$env.ZLUA_LUAEXE = \'' .. os.interpreter() .. '\'')
+	print('$env.ZLUA_SCRIPT = \'' .. os.scriptname() .. '\'')
+	local prompt_hook = (not os.environ("_ZL_NO_PROMPT_COMMAND", false))
+	if opts.clean ~= nil then
+		prompt_hook = false
+	end
+	print(script_zlua_nushell)
+	if prompt_hook then
+		print(script_init_nushell)
+	end
+	print(script_complete_nushell)
+	if opts.enhanced ~= nil then
+		print('$env._ZL_MATCH_MODE = 1')
+	end
+	if opts.once ~= nil then
+		print('$env._ZL_ADD_ONCE = 1')
+	end
+	if opts.echo ~= nil then
+		print('$env._ZL_ECHO = 1')
+	end
+	if opts.nc ~= nil then
+		print('$env._ZL_NO_CHECK = 1')
+	end
+end
+
+-----------------------------------------------------------------------
 -- help
 -----------------------------------------------------------------------
 function z_help()
 	local cmd = Z_CMD .. ' '
-	print(cmd .. 'foo       # cd to most frecent dir matching foo')
-	print(cmd .. 'foo bar   # cd to most frecent dir matching foo and bar')
-	print(cmd .. '-r foo    # cd to highest ranked dir matching foo')
-	print(cmd .. '-t foo    # cd to most recently accessed dir matching foo')
-	print(cmd .. '-l foo    # list matches instead of cd')
-	print(cmd .. '-c foo    # restrict matches to subdirs of $PWD')
-	print(cmd .. '-e foo    # echo the best match, don\'t cd')
-	print(cmd .. '-x path   # remove path from history')
-	print(cmd .. '-i foo    # cd with interactive selection')
-	print(cmd .. '-I foo    # cd with interactive selection using fzf')
-	print(cmd .. '-b foo    # cd to the parent directory starting with foo')
+	print(cmd .. 'foo        # cd to most frecent dir matching foo')
+	print(cmd .. 'foo bar    # cd to most frecent dir matching foo and bar')
+	print(cmd .. '-r foo     # cd to highest ranked dir matching foo')
+	print(cmd .. '-t foo     # cd to most recently accessed dir matching foo')
+	print(cmd .. '-l foo     # list matches instead of cd')
+	print(cmd .. '-c foo     # restrict matches to subdirs of $PWD')
+	print(cmd .. '-e foo     # echo the best match, don\'t cd')
+	print(cmd .. '-x path    # remove path from history')
+	print(cmd .. '-i foo     # cd with interactive selection')
+	print(cmd .. '-I foo     # cd with interactive selection using fzf')
+	print(cmd .. '-b foo     # cd to the parent directory starting with foo')
+	print(cmd .. '-b foo bar # replace foo with bar in cwd and cd there')
 end
 
 
@@ -2728,7 +2969,7 @@ if os.lfs.enable ~= nil then
 			end
 			os.path.isdir = function (name)
 				local mode = lfs.attributes(name)
-				if not mode then 
+				if not mode then
 					return false
 				end
 				return (mode.mode == 'directory') and true or false
