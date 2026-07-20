@@ -620,8 +620,6 @@ if [[ "${commands[dog]}" ]]; then
     fi
 fi
 
-
-
 ### [=]==================================[=]
 ### [~]............ YT-DLP
 ### [=]==================================[=]
@@ -629,7 +627,6 @@ if [[ "${commands[yt-dlp]}" ]]; then
     alias ytdlp="yt-dlp"
     alias ytd="yt-dlp"
 fi
-
 
 ## Weatherspect
 if [[ "${commands[weatherspect]}" ]]; then
@@ -640,3 +637,9 @@ if [[ "${commands[weatherspect]}" ]]; then
   fi
 fi
 
+### [=]==================================[=]
+### [~]............ AI
+### [=]==================================[=]
+if [[ "${commands[kiro-cli]}" ]]; then
+    alias kiro="kiro-cli"
+fi
