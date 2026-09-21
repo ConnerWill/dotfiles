@@ -51,7 +51,7 @@ return {
     },
   },
 
-  { "shaunsingh/oxocarbon.nvim" },
+  { "shaunsingh/oxocarbon.nvim", build = false },
   { "ellisonleao/gruvbox.nvim" },
   { "rose-pine/neovim", name = "rose-pine" },
   {
