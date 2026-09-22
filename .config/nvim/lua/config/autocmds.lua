@@ -96,7 +96,7 @@ create_autocmd({ "InsertEnter", "WinLeave" }, {
 create_autocmd("BufWritePre", {
   group = vim.api.nvim_create_augroup("better_backup", { clear = true }),
   callback = function(event)
-    local file = vim.loop.fs_realpath(event.match) or event.match
+    local file = vim.uv.fs_realpath(event.match) or event.match
     local backup = vim.fn.fnamemodify(file, ":p:~:h")
     backup = backup:gsub("[/\\]", "%%")
     vim.go.backupext = backup
@@ -110,4 +110,3 @@ create_autocmd({ "VimEnter" }, {
   pattern = { "COMMIT_EDITMSG" },
   command = [[ exec 'norm gg' | startinsert! ]],
 })
-

@@ -340,15 +340,9 @@ return {
     dependencies = { "gbprod/none-ls-shellcheck.nvim" },
   },
 
-
   -- Jenkinsfile linter
   {
     "ckipp01/nvim-jenkinsfile-linter",
     dependencies = { "nvim-lua/plenary.nvim" },
   },
-
 }
-
-
-
--- nvim-lspconfig.opts.autoformat` is deprecated. Please use `vim.g.autoformat` instead
