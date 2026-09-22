@@ -16,12 +16,60 @@ create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
   command = [[ set filetype=groovy ]],
 })
 
--- Autocommand to set filetype for Ansible files to yaml.ansible
-create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
-  desc = "Recognize yaml as yaml.ansible",
-  group = "file_types",
-  pattern = { "*.yaml", "*.yml" },
-  command = [[ set filetype=yaml.ansible ]],
+-- Scoped YAML filetype detection.
+--
+-- Previously an autocmd tagged EVERY *.yaml/*.yml file as yaml.ansible, which
+-- caused ansible-lint and the Ansible YAML schema to run against non-Ansible
+-- YAML (docker-compose, k8s manifests, CI configs, etc.) and produce false
+-- positives. Instead we scope detection to well-known conventions:
+--
+--   * Docker Compose files  -> yaml.docker-compose
+--   * Ansible files         -> yaml.ansible
+--
+-- yamlls natively understands the "yaml.docker-compose" filetype and, together
+-- with SchemaStore.nvim (enabled via the LazyVim yaml extra), applies the
+-- Compose schema for completion + validation automatically.
+--
+-- Priorities are set explicitly because Lua table key order is not
+-- deterministic: the specific Compose/Ansible rules must outrank the generic
+-- ".*%.ya?ml" Ansible content fallback.
+vim.filetype.add({
+  pattern = {
+    -- Docker Compose: match common compose filenames anywhere in the tree.
+    [".*/docker%-compose[^/]*%.ya?ml"] = { "yaml.docker-compose", { priority = 100 } },
+    [".*/compose[^/]*%.ya?ml"] = { "yaml.docker-compose", { priority = 100 } },
+    ["docker%-compose[^/]*%.ya?ml"] = { "yaml.docker-compose", { priority = 100 } },
+    ["compose[^/]*%.ya?ml"] = { "yaml.docker-compose", { priority = 100 } },
+
+    -- Standard Ansible layout: playbooks, roles, and *_vars directories.
+    [".*/playbooks/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    [".*/roles/.*/tasks/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    [".*/roles/.*/handlers/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    [".*/roles/.*/meta/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    [".*/group_vars/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    [".*/host_vars/.*%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    -- Common top-level playbook/inventory names.
+    ["site%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+    ["playbook%.ya?ml"] = { "yaml.ansible", { priority = 100 } },
+
+    -- Content-based fallback for Ansible files outside the standard layout.
+    -- Lower priority so the specific rules above win. Also bails out if the
+    -- file looks like Compose so it is never mislabeled as Ansible.
+    [".*%.ya?ml"] = function(path, bufnr)
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, 40, false)
+      for _, line in ipairs(lines) do
+        -- Compose marker: leave it as plain yaml (yamlls + SchemaStore handle
+        -- Compose by filename, so no yaml.docker-compose tag needed here).
+        if line:match("^services:%s*$") then
+          return
+        end
+        if line:match("^%s*%-?%s*hosts:%s") or line:match("^%s*tasks:%s*$") or line:match("^%s*ansible%.builtin%.") then
+          return "yaml.ansible"
+        end
+      end
+      -- Return nil to fall through to Neovim's default yaml detection.
+    end,
+  },
 })
 
 -- show cursor line only in active window
@@ -63,137 +111,3 @@ create_autocmd({ "VimEnter" }, {
   command = [[ exec 'norm gg' | startinsert! ]],
 })
 
--- Auto Save
---[[
-local function save()
-  local buf = vim.api.nvim_get_current_buf()
-
-  vim.api.nvim_buf_call(buf, function()
-    vim.cmd("silent! write")
-  end)
-end
-
-create_augroup("AutoSave", {
-  clear = true,
-})
-
-create_autocmd({ "InsertLeave", "TextChanged" }, {
-  callback = function()
-    save()
-  end,
-  pattern = "*",
-  group = "AutoSave",
-})
---]]
-
---[[ DEFAULTS
-
--- This file is automatically loaded by lazyvim.config.init.
-
-local function augroup(name)
-  return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
-end
-
--- Check if we need to reload the file when it changed
-vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-  group = augroup("checktime"),
-  callback = function()
-    if vim.o.buftype ~= 'nofile' then
-      vim.cmd('checktime')
-    end
-  end
-})
-
--- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = augroup("highlight_yank"),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
-
--- resize splits if window got resized
-vim.api.nvim_create_autocmd({ "VimResized" }, {
-  group = augroup("resize_splits"),
-  callback = function()
-    local current_tab = vim.fn.tabpagenr()
-    vim.cmd("tabdo wincmd =")
-    vim.cmd("tabnext " .. current_tab)
-  end,
-})
-
--- go to last loc when opening a buffer
-vim.api.nvim_create_autocmd("BufReadPost", {
-  group = augroup("last_loc"),
-  callback = function(event)
-    local exclude = { "gitcommit" }
-    local buf = event.buf
-    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
-      return
-    end
-    vim.b[buf].lazyvim_last_loc = true
-    local mark = vim.api.nvim_buf_get_mark(buf, '"')
-    local lcount = vim.api.nvim_buf_line_count(buf)
-    if mark[1] > 0 and mark[1] <= lcount then
-      pcall(vim.api.nvim_win_set_cursor, 0, mark)
-    end
-  end,
-})
-
--- close some filetypes with <q>
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup("close_with_q"),
-  pattern = {
-    "PlenaryTestPopup",
-    "help",
-    "lspinfo",
-    "man",
-    "notify",
-    "qf",
-    "query",
-    "spectre_panel",
-    "startuptime",
-    "tsplayground",
-    "neotest-output",
-    "checkhealth",
-    "neotest-summary",
-    "neotest-output-panel",
-  },
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end,
-})
-
--- wrap and check for spell in text filetypes
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup("wrap_spell"),
-  pattern = { "gitcommit", "markdown" },
-  callback = function()
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = true
-  end,
-})
-
--- Fix conceallevel for json files
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  group = augroup("json_conceal"),
-  pattern = { "json", "jsonc", "json5" },
-  callback = function()
-    vim.opt_local.conceallevel = 0
-  end,
-})
-
--- Auto create dir when saving a file, in case some intermediate directory does not exist
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  group = augroup("auto_create_dir"),
-  callback = function(event)
-    if event.match:match("^%w%w+://") then
-      return
-    end
-    local file = vim.loop.fs_realpath(event.match) or event.match
-    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
-  end,
-})
-
---]]
