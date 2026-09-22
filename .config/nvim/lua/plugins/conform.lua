@@ -11,7 +11,10 @@ return {
       json = { "prettier" },
       markdown = { "prettier" },
       lua = { "stylua" },
-      python = { "isort", "black" },
+      -- Python: ruff handles both import sorting (isort) and formatting (black),
+      -- consolidated to a single tool. ruff_organize_imports sorts imports,
+      -- ruff_format applies the formatter.
+      python = { "ruff_organize_imports", "ruff_format" },
       ruby = { "rubocop" },
       terraform = { "terraform_fmt" },
       tf = { "terraform_fmt" },

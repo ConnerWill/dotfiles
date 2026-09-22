@@ -10,12 +10,9 @@ return {
         "arduino-language-server",
         "bash-debug-adapter",
         "bash-language-server",
-        "beautysh",
-        "black",
         "clangd",
         "commitlint",
         "dockerfile-language-server",
-        "flake8",
         "gofumpt",
         "goimports",
         "gomodifytags",
@@ -27,13 +24,13 @@ return {
         "json-lsp",
         "lua-language-server",
         "luacheck",
-        "luaformatter",
         "markdownlint",
         "marksman",
         "nginx-language-server",
         "powershell-editor-services",
-        "pylint",
-        "python-lsp-server",
+        -- Python: consolidated on basedpyright (types) + ruff (lint/format).
+        -- Removed python-lsp-server, flake8, and pylint (all superseded by ruff).
+        "basedpyright",
         "ruff", -- was "ruff-lsp" (deprecated); ruff now ships the LSP directly
         "shellcheck",
         "shellharden",
@@ -41,7 +38,7 @@ return {
         "stylua",
         "terraform-ls",
         "tflint",
-        "tfsec",
+        "trivy", -- terraform security scanning (replaces deprecated tfsec)
         "write-good",
         "yaml-language-server",
         "yamlfix",
@@ -56,13 +53,14 @@ return {
     opts = {
       -- autoformat = false, -- Disable autoformat -- nvim-lspconfig.opts.autoformat` is deprecated. Please use `vim.g.autoformat` instead
       inlay_hints = { enabled = true },
-      capabilities = {
-        workspace = {
-          didChangeWatchedFiles = { dynamicRegistration = false },
-        },
-      },
-      ---@type lspconfig.options
       servers = {
+        ["*"] = {
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = { dynamicRegistration = false },
+            },
+          },
+        },
         ansiblels = {},
         bashls = {},
         -- clangd = {},
@@ -110,12 +108,15 @@ return {
         html = {},
         -- gopls = {},
         marksman = {},
-        pyright = {
+        -- Type checking: basedpyright (community fork of pyright with stricter
+        -- defaults and extra rules). Matches [tool.basedpyright] used in the
+        -- ansible-piauto project. Plain pyright is disabled so only one type
+        -- checker runs in-editor.
+        pyright = { enabled = false },
+        pylsp = { enabled = false }, -- python-lsp-server: superseded by basedpyright+ruff, keep disabled
+        basedpyright = {
           enabled = true,
         },
-        -- basedpyright = {
-        --   enabled = lsp == "basedpyright",
-        -- },
         -- rust_analyzer = {
         -- settings = {
         --   ["rust-analyzer"] = {
@@ -279,8 +280,9 @@ return {
       -- add misspell as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.misspell })
 
-      -- add mypy as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.mypy })
+      -- type checking is handled by basedpyright (see LSP servers above).
+      -- mypy is intentionally NOT registered here to avoid a redundant second
+      -- type checker producing potentially conflicting diagnostics.
 
       -- add ruff as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ruff })
@@ -296,8 +298,9 @@ return {
         null_ls.builtins.diagnostics.terraform_validate,
       })
 
-      -- add tfsec as diagnostics
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.tfsec })
+      -- terraform security scanning is handled by trivy below.
+      -- tfsec was merged into trivy upstream, so it is intentionally NOT
+      -- registered here to avoid duplicate Terraform diagnostics.
 
       -- add trailspace as diagnostics
       opts.sources = vim.list_extend(opts.sources, {
