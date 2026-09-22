@@ -20,7 +20,7 @@ setopt HIST_NO_STORE           # don't store history commands
 setopt HIST_REDUCE_BLANKS      # remove superfluous blanks from each command line being added to the history list
 setopt HIST_SAVE_NO_DUPS       # don't write a duplicate event to the history file
 setopt HIST_VERIFY             # don't execute immediately upon history expansion
-setopt INC_APPEND_HISTORY      # write to the history file immediately, not when the shell exits
+#setopt INC_APPEND_HISTORY      # redundant: SHARE_HISTORY (below) already implies incremental append
 setopt NO_HIST_BEEP            # don't beep when attempting to access a missing history entry
 #setopt NO_SHARE_HISTORY        # don't share history between all sessions
 setopt SHARE_HISTORY           # Share history between all sessions

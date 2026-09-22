@@ -63,16 +63,12 @@ function comp_setup () {
     zstyle ':completion:*'                              expand yes                                                      ##
     zstyle ':completion:*'                              squeeze-slashes yes                                             ## Expand /u/s/l/D/fs to /usr/share/linux/Documentation/fs
     zstyle ':completion:*'                              group-name ''
-    zstyle ':completion:*'                              list-colors ''
     zstyle ':completion:*'                              list-colors ${(s.:.)LS_COLORS}                                  ## Color completion
-    zstyle ':completion:*'                              list-colors "$LS_COLORS"                                        ## Color completion
     zstyle ':completion:*'                              matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
     zstyle ':completion:*'                              menu select                                                     ## Show completion menu
     zstyle ':completion:*'                              rehash true                                                     ## Allow completing new commands
     zstyle ':completion:*'                              use-cache true
-    zstyle ':completion:*'                              use-cache yes
     zstyle ':completion:*'                              verbose true                                                    ## Provide verbose completion information
-    zstyle ':completion:*'                              verbose yes                                                     ## Provide verbose completion information
     zstyle ':completion:*:*:-subscript-:*'              tag-order indexes parameters                                    ## Offer indexes before parameters in subscripts
     zstyle ':completion:*:cd:*'                         ignore-parents parent pwd                                       ## Never offer the current directory when completing 'cd ../<TAB>'
     zstyle ':completion:*:*:cd:*:directory-stack'       menu yes select                                                 ## Automatically complete 'cd -<tab>' and 'cd -<ctrl-d>' with menu

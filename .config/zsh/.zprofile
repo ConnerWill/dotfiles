@@ -1,11 +1,10 @@
 #shellcheck disable=2148
-EDITOR="${EDITOR:-${commands[nvim]:-${commands[vim]}}}"
+# EDITOR/FCEDIT are set in .zshenv (sourced for all shells); no need to redefine here.
 
-# Set our umask (Defualt: 022)
+# Set our umask (Default: 022)
 umask 0077
 
 if [[ -n "${DISPLAY}" ]]; then
-  $KEY
   setxkbmap     \
     -layout us  \
     -variant ,qwerty-option 'shift:both_capslock_cancel,altwin:menu_win,caps:escape'
