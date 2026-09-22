@@ -1,10 +1,11 @@
 return {
 
-  -- tokyonight
+  -- Select the active colorscheme.
   {
-    "folke/tokyonight.nvim",
-    lazy = true,
-    opts = { style = "night" },
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "tokyonight",
+    },
   },
 
   -- catppuccin

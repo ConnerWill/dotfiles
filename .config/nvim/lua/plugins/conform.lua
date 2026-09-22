@@ -13,9 +13,15 @@ return {
       lua = { "stylua" },
       python = { "isort", "black" },
       ruby = { "rubocop" },
-      terraform = { "terraform_fmt" };
+      terraform = { "terraform_fmt" },
+      tf = { "terraform_fmt" },
       typescript = { "prettier" },
       yaml = { "prettier" },
+      -- Moved here from none-ls so all formatting lives in one place (conform).
+      go = { "gofumpt" },
+      hcl = { "hclfmt" },
+      sh = { "shfmt", "shellharden" },
+      bash = { "shfmt", "shellharden" },
     },
   }
 }

@@ -16,7 +16,6 @@ return {
         "commitlint",
         "dockerfile-language-server",
         "flake8",
-        "flake8",
         "gofumpt",
         "goimports",
         "gomodifytags",
@@ -35,7 +34,7 @@ return {
         "powershell-editor-services",
         "pylint",
         "python-lsp-server",
-        "ruff-lsp",
+        "ruff", -- was "ruff-lsp" (deprecated); ruff now ships the LSP directly
         "shellcheck",
         "shellharden",
         "shfmt",
@@ -77,7 +76,7 @@ return {
         --     return require("lspconfig.util").root_pattern(".git")(...)
         --   end,
         -- },
-        tsserver = {
+        ts_ls = {
           -- root_dir = function(...)
           --   return require("lspconfig.util").root_pattern(".git")(...)
           -- end,
@@ -240,42 +239,6 @@ return {
   },
   {
     "nvimtools/none-ls.nvim",
-    config = function()
-      local nullls = require("null-ls")
-      nullls.register(require("none-ls-luacheck.diagnostics.luacheck"))
-      nullls.register(require("none-ls-shellcheck.code_actions"))
-      nullls.register(require("none-ls-shellcheck.diagnostics"))
-
-      nullls.register(require("none-ls.formatting.beautysh"))
-      nullls.register(require("none-ls.formatting.beautysh"))
-      nullls.register(require("none-ls.formatting.jq"))
-
-      nullls.register(require("null-ls.builtins.diagnostics.cppcheck"))
-      nullls.register(require("null-ls.builtins.diagnostics.markdownlint"))
-      nullls.register(require("null-ls.builtins.diagnostics.selene"))
-      nullls.register(require("null-ls.builtins.diagnostics.tfsec"))
-      nullls.register(require("null-ls.builtins.diagnostics.yamllint"))
-      nullls.register(require("null-ls.builtins.diagnostics.zsh"))
-
-      nullls.register(require("null-ls.builtins.formatting.astyle"))
-      nullls.register(require("null-ls.builtins.formatting.black"))
-      nullls.register(require("null-ls.builtins.formatting.gofumpt"))
-      nullls.register(require("null-ls.builtins.formatting.hclfmt"))
-      nullls.register(require("null-ls.builtins.formatting.isort"))
-      nullls.register(require("null-ls.builtins.formatting.packer"))
-      nullls.register(require("null-ls.builtins.formatting.prettier"))
-      nullls.register(require("null-ls.builtins.formatting.shfmt"))
-      nullls.register(require("null-ls.builtins.formatting.stylua"))
-      nullls.register(require("null-ls.builtins.formatting.tidy"))
-    end,
-    dependencies = {
-      "nvimtools/none-ls-extras.nvim",
-      "gbprod/none-ls-shellcheck.nvim",
-      "gbprod/none-ls-luacheck.nvim",
-    },
-  }, -- null-ls config
-  {
-    "nvimtools/none-ls.nvim",
     opts = function(_, opts)
       local null_ls = require("null-ls")
 
@@ -311,10 +274,7 @@ return {
       -- add luacheck as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.luacheck })
 
-      -- add markdownlint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.diagnostics.markdownlint,
-      })
+      -- markdownlint is handled by nvim-lint above (not registered here).
 
       -- add misspell as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.misspell })
@@ -325,10 +285,8 @@ return {
       -- add ruff as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.ruff })
 
-      -- add selene as diagnostics
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.diagnostics.selene,
-      })
+      -- selene/luacheck (Lua) and markdownlint are handled by nvim-lint above,
+      -- so they are intentionally NOT registered here to avoid duplicate diagnostics.
 
       -- add shellcheck as diagnostics
       -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.shellcheck })
@@ -357,74 +315,8 @@ return {
       -- add zsh as diagnostics
       opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.diagnostics.zsh })
 
-      -- FORMATTING
-
-      -- add black as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.black })
-
-      -- add beautysh as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.beautysh })
-
-      -- add gofmt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.gofmt })
-
-      -- add gofumpt as formatting
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.formatting.gofumpt,
-      })
-
-      -- add hclfmt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.hclfmt })
-
-      -- add isort as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.isort })
-
-      -- add lua_format as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.lua_format })
-
-      -- add markdown_toc as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.markdown_toc })
-
-      -- add nginx_beautifier as formatting
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.formatting.nginx_beautifier,
-      })
-
-      -- add packer as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.packer })
-
-      -- add reorder_python_imports as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.reorder_python_imports })
-
-      -- add shellharden as formatting
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.formatting.shellharden,
-      })
-
-      -- add shfmt as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.shfmt })
-
-      -- add stylua as formatting
-      opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.stylua })
-
-      -- add terrafmt as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.terrafmt })
-
-      -- add terraform_fmt as formatting
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.formatting.terraform_fmt,
-      })
-
-      -- add trim_newlines as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_newlines })
-
-      -- add trim_whitespace as formatting
-      -- opts.sources = vim.list_extend(opts.sources, { null_ls.builtins.formatting.trim_whitespace })
-
-      -- add yamlfix as formatting
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.formatting.yamlfix,
-      })
+      -- FORMATTING is handled by conform.nvim (see conform.lua), not none-ls,
+      -- to avoid competing format-on-save providers.
 
       -- HOVER
 
