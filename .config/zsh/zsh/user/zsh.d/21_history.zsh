@@ -4,8 +4,8 @@
 HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zsh-history/history"
 [[ ! -f "$HISTFILE" ]] && mkdir -p "$HISTFILE:h" && touch "$HISTFILE"
 
-SAVEHIST=20000
-HISTSIZE=100000
+SAVEHIST=1000000   # entries kept in the history file on disk
+HISTSIZE=1200000   # entries kept in memory; keep >= SAVEHIST so nothing is trimmed before save
 export SAVEHIST HISTSIZE
 
 # history.zsh - http://zsh.sourceforge.net/Doc/Release/Options.html#History
@@ -20,6 +20,7 @@ setopt HIST_NO_STORE           # don't store history commands
 setopt HIST_REDUCE_BLANKS      # remove superfluous blanks from each command line being added to the history list
 setopt HIST_SAVE_NO_DUPS       # don't write a duplicate event to the history file
 setopt HIST_VERIFY             # don't execute immediately upon history expansion
+setopt HIST_FCNTL_LOCK         # use fcntl file locking to prevent concurrent-write corruption
 #setopt INC_APPEND_HISTORY      # redundant: SHARE_HISTORY (below) already implies incremental append
 setopt NO_HIST_BEEP            # don't beep when attempting to access a missing history entry
 #setopt NO_SHARE_HISTORY        # don't share history between all sessions
