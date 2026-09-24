@@ -236,6 +236,71 @@ function enable_alpine_community_repo(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: setup_locale
+# Description: Ensures the en_US.UTF-8 locale exists so that programs do not emit
+#              "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)" warnings.
+#              The dotfiles set LC_ALL=en_US.UTF-8 (see .zshenv), but minimal
+#              container images (e.g. archlinux, debian) ship without that locale
+#              generated. This generates it using whatever mechanism the distro
+#              provides. It is a no-op on systems where the locale already exists
+#              (e.g. most desktops, macOS).
+# -----------------------------------------------------------------------------
+function setup_locale(){
+  local target_locale="en_US.UTF-8"
+
+  # Already available? Nothing to do.
+  if command -v locale >/dev/null 2>&1; then
+    if locale -a 2>/dev/null | grep -qiE '^(en_US\.utf-?8|en_US\.UTF-8)$'; then
+      write_verbose "Locale ${target_locale} already available."
+      return 0
+    fi
+  fi
+
+  write_verbose "Generating locale: ${target_locale}"
+
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    # macOS ships UTF-8 locales; nothing to generate.
+    return 0
+  fi
+
+  # Debian/Ubuntu: package 'locales' provides the locale, then locale-gen.
+  if command -v apt-get >/dev/null 2>&1; then
+    run_privileged apt-get install -y locales >/dev/null 2>&1 || true
+  fi
+
+  # Alpine (musl): install a UTF-8 capable locale package if available.
+  if command -v apk >/dev/null 2>&1; then
+    run_privileged apk add --no-cache musl-locales musl-locales-lang >/dev/null 2>&1 || true
+  fi
+
+  # Ensure the entry is present/uncommented in /etc/locale.gen (glibc distros:
+  # Arch, Debian, Fedora, etc.).
+  if [[ -f /etc/locale.gen ]]; then
+    if grep -qE "^#\s*${target_locale}[[:space:]]+UTF-8" /etc/locale.gen; then
+      run_privileged sed -i -E "s/^#\s*(${target_locale}[[:space:]]+UTF-8)/\1/" /etc/locale.gen
+    elif ! grep -qE "^${target_locale}[[:space:]]+UTF-8" /etc/locale.gen; then
+      printf '%s UTF-8\n' "${target_locale}" | run_privileged tee -a /etc/locale.gen >/dev/null
+    fi
+  fi
+
+  # Generate the locale.
+  if command -v locale-gen >/dev/null 2>&1; then
+    # Debian's locale-gen takes no args; Arch's accepts them. Plain call works for both.
+    run_privileged locale-gen >/dev/null 2>&1 || run_privileged locale-gen "${target_locale}" >/dev/null 2>&1 || true
+  elif command -v localedef >/dev/null 2>&1; then
+    # Fedora/RHEL and generic glibc fallback.
+    run_privileged localedef -i en_US -f UTF-8 "${target_locale}" >/dev/null 2>&1 || true
+  fi
+
+  if command -v locale >/dev/null 2>&1 && \
+     locale -a 2>/dev/null | grep -qiE '^(en_US\.utf-?8|en_US\.UTF-8)$'; then
+    write_verbose "Locale ${target_locale} generated."
+  else
+    write_error "Could not generate locale ${target_locale}. The 'setlocale' warning is harmless and can be ignored."
+  fi
+}
+
+# -----------------------------------------------------------------------------
 # Function: install_dependencies
 # Description: Detects the OS and package manager, then installs required dependencies.
 # -----------------------------------------------------------------------------
@@ -417,11 +482,74 @@ function change_shell(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: confirm_install
+# Description: Prints a summary of the changes this script will make to the
+#              user's system, then pauses so they can cancel (Ctrl+C) before
+#              anything is modified. The countdown is interruptible: pressing
+#              Enter proceeds immediately, Ctrl+C aborts. When there is no
+#              interactive terminal on stdin (e.g. 'curl ... | bash'), it falls
+#              back to a plain timed countdown so the pipeline still works while
+#              still giving a window to cancel. Set DOTFILES_ASSUME_YES=1 to
+#              skip the pause entirely (useful for automated/CI installs).
+# -----------------------------------------------------------------------------
+function confirm_install(){
+  local delay="${DOTFILES_CONFIRM_DELAY:-10}"
+
+  printf "\x1B[0;1;38;5;208m%s\x1B[0m\n" "This installer will make the following changes to your system:"
+  printf "\x1B[0;38;5;208m"
+  cat <<EOS
+  1. Install dependencies via your system package manager (may require sudo):
+       git, zsh, curl, bat, lsd, lua, neovim, gcc (package names vary by OS).
+  2. Generate the en_US.UTF-8 locale if it is missing.
+  3. Clone the dotfiles repo as a BARE repository into:
+       ${DOTFILES_DIR}
+  4. Check the dotfiles out into your HOME directory: '${HOME}'
+     !!! This OVERWRITES existing files in your home directory
+      (e.g. .zshrc, .config/*) with versions from the repo. Back up anything important. !!!
+  5. Initialize git submodules (installs 'dotf' into your config).
+  6. Change your default login shell to zsh (via chsh).
+
+  Source repo: ${DOTFILES_REPO}
+EOS
+  printf "\x1B[0m"
+
+  # Allow non-interactive/automated installs to skip the prompt.
+  if [[ "${DOTFILES_ASSUME_YES:-0}" == "1" ]]; then
+    write_verbose "DOTFILES_ASSUME_YES=1 set; skipping confirmation pause."
+    return 0
+  fi
+
+  # Interactive terminal available: let the user confirm or cancel.
+  if [[ -t 0 ]]; then
+    printf "\x1B[0;1;38;5;226m%s\x1B[0m" \
+      "Press ENTER to continue, or Ctrl+C to cancel (auto-continues in ${delay}s)... "
+    # read returns non-zero on timeout; that is fine, we proceed either way.
+    read -r -t "${delay}" _ || true
+    printf "\n"
+    return 0
+  fi
+
+  # No TTY (piped install): plain countdown so the user can still Ctrl+C.
+  printf "\x1B[0;1;38;5;226mStarting in %ss... press Ctrl+C to cancel.\x1B[0m\n" "${delay}"
+  local i
+  for (( i = delay; i > 0; i-- )); do
+    printf "\r\x1B[0;38;5;226m  %2ss \x1B[0m" "${i}"
+    sleep 1
+  done
+  printf "\r\x1B[0;38;5;46m  Continuing...            \x1B[0m\n"
+  return 0
+}
+
+# -----------------------------------------------------------------------------
 # Main Execution
 # -----------------------------------------------------------------------------
 
 # Display ASCII art banner
 show_ascii_hello
+
+# Warn the user what will happen and give them a chance to cancel before any
+# changes are made to their system.
+confirm_install
 
 # Note: root privileges are handled by run_privileged() during dependency
 # installation. It uses 'sudo' when needed and falls back to running directly
@@ -430,6 +558,11 @@ show_ascii_hello
 
 # Install required dependencies based on OS detection
 install_dependencies
+
+# Ensure the en_US.UTF-8 locale exists (dotfiles set LC_ALL=en_US.UTF-8).
+# Prevents "setlocale: LC_ALL: cannot change locale" warnings in minimal
+# containers where the locale is not generated by default.
+setup_locale
 
 # Ensure critical commands are installed (this check is redundant if install_dependencies is run)
 is_installed "git"
