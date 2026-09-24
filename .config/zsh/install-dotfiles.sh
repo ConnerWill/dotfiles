@@ -142,6 +142,100 @@ function is_installed(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: is_dependency_satisfied
+# Description: Determines whether a dependency is already available by checking
+#              the command(s) that satisfy it. This is needed because the
+#              package name does not always match the executable name
+#              (e.g. the 'neovim' package provides the 'nvim' command, and
+#              'lua5.4' provides the 'lua5.4' command). Editor packages are
+#              treated as satisfied if either 'nvim' or 'vim' is present, per
+#              the "neovim OR vim" requirement.
+# -----------------------------------------------------------------------------
+function is_dependency_satisfied(){
+  local pkg="$1"
+  local candidates=()
+
+  case "${pkg}" in
+    neovim|nvim|vim)
+      # Any editor is fine: neovim OR vim satisfies the requirement.
+      candidates=("nvim" "vim")
+      ;;
+    lua*)
+      # Package may be lua, lua5.4, lua5.3, etc. Accept any matching command.
+      candidates=("${pkg}" "lua" "lua5.4" "lua5.3" "luajit")
+      ;;
+    *)
+      candidates=("${pkg}")
+      ;;
+  esac
+
+  local cmd
+  for cmd in "${candidates[@]}"; do
+    if command -v "${cmd}" >/dev/null 2>&1; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# -----------------------------------------------------------------------------
+# Function: run_privileged
+# Description: Runs a command with root privileges. Uses 'sudo' when not already
+#              running as root; otherwise runs the command directly. This lets
+#              the installer work both on normal user systems (via sudo) and in
+#              minimal root containers such as Alpine/Docker where sudo may be
+#              absent.
+# -----------------------------------------------------------------------------
+function run_privileged(){
+  if [[ "$(id -u)" -eq 0 ]]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo "$@"
+  else
+    write_error "This command needs root privileges but 'sudo' is not available and you are not root: $*"
+    return 1
+  fi
+}
+
+# -----------------------------------------------------------------------------
+# Function: enable_alpine_community_repo
+# Description: Ensures Alpine's 'community' repository is enabled. Several
+#              dependencies (neovim, zsh, bat, lsd, lua5.4) are published only
+#              in 'community', not 'main', so 'apk add' would otherwise fail to
+#              find them. This uncomments an existing commented community line
+#              matching the current main mirror/release, or appends one derived
+#              from the enabled 'main' repository line.
+# -----------------------------------------------------------------------------
+function enable_alpine_community_repo(){
+  local repo_file="/etc/apk/repositories"
+  [[ -f "${repo_file}" ]] || return 0
+
+  # Already enabled? Nothing to do.
+  if grep -Eq '^[^#].*/community$' "${repo_file}"; then
+    write_verbose "Alpine community repository already enabled."
+    return 0
+  fi
+
+  # Try to uncomment an existing commented community line.
+  if grep -Eq '^#.*/community$' "${repo_file}"; then
+    write_verbose "Enabling commented-out Alpine community repository..."
+    run_privileged sed -i -E 's|^#(.*/community)$|\1|' "${repo_file}"
+    return 0
+  fi
+
+  # Otherwise, derive a community line from the enabled main line.
+  local main_line
+  main_line="$(grep -E '^[^#].*/main$' "${repo_file}" | head -n1)"
+  if [[ -n "${main_line}" ]]; then
+    local community_line="${main_line%/main}/community"
+    write_verbose "Adding Alpine community repository: ${community_line}"
+    printf '%s\n' "${community_line}" | run_privileged tee -a "${repo_file}" >/dev/null
+  else
+    write_error "Could not determine Alpine 'main' repository to derive 'community'. Enable it manually in ${repo_file}."
+  fi
+}
+
+# -----------------------------------------------------------------------------
 # Function: install_dependencies
 # Description: Detects the OS and package manager, then installs required dependencies.
 # -----------------------------------------------------------------------------
@@ -161,21 +255,24 @@ function install_dependencies(){
     fi
     PKG_MANAGER="brew"
     # Define dependency list for macOS. Adjust package names if necessary.
-    DEPENDENCIES=("git" "zsh" "curl" "bat")
+    DEPENDENCIES=("git" "zsh" "curl" "bat" "lua" "neovim")
   elif [[ "${OS_TYPE}" == "Linux" ]]; then
     # Linux: Detect available package manager.
     if command -v apt-get >/dev/null 2>&1; then
       PKG_MANAGER="apt-get"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim")
     elif command -v pacman >/dev/null 2>&1; then
       PKG_MANAGER="pacman"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua" "neovim")
     elif command -v dnf >/dev/null 2>&1; then
       PKG_MANAGER="dnf"
-      DEPENDENCIES=("git" "zsh" "curl")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim")
     elif command -v yum >/dev/null 2>&1; then
       PKG_MANAGER="yum"
-      DEPENDENCIES=("git" "zsh" "curl")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim")
+    elif command -v apk >/dev/null 2>&1; then
+      PKG_MANAGER="apk"
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim")
     else
       write_error "Unsupported Linux package manager. Please install dependencies manually."
       exit 1
@@ -188,25 +285,49 @@ function install_dependencies(){
   write_verbose "Detected OS: ${OS_TYPE}"
   write_verbose "Using package manager: ${PKG_MANAGER}"
 
+  # Refresh the package database once up front rather than on every package.
+  # This is both faster and avoids partial-upgrade pitfalls (e.g. pacman -Sy).
+  case "${PKG_MANAGER}" in
+    apt-get)
+      run_privileged apt-get update
+      ;;
+    pacman)
+      run_privileged pacman -Sy --noconfirm
+      ;;
+    apk)
+      enable_alpine_community_repo
+      run_privileged apk update
+      ;;
+    brew)
+      brew update || true
+      ;;
+    dnf|yum)
+      # dnf/yum refresh their metadata automatically on install; no-op here.
+      ;;
+  esac
+
   # Loop through each dependency and install if not already installed
   for pkg in "${DEPENDENCIES[@]}"; do
-    if ! command -v "${pkg}" >/dev/null 2>&1; then
+    if ! is_dependency_satisfied "${pkg}"; then
       write_verbose "Installing ${pkg}..."
       case "${PKG_MANAGER}" in
         brew)
           brew install "${pkg}"
           ;;
         apt-get)
-          sudo apt-get update && sudo apt-get install -y "${pkg}"
+          run_privileged apt-get install -y "${pkg}"
           ;;
         dnf)
-          sudo dnf install -y "${pkg}"
+          run_privileged dnf install -y "${pkg}"
           ;;
         pacman)
-          sudo pacman -Sy --noconfirm "${pkg}"
+          run_privileged pacman -S --noconfirm --needed "${pkg}"
           ;;
         yum)
-          sudo yum install -y "${pkg}"
+          run_privileged yum install -y "${pkg}"
+          ;;
+        apk)
+          run_privileged apk add "${pkg}"
           ;;
         *)
           write_error "Package manager ${PKG_MANAGER} is not supported in this script."
@@ -302,8 +423,10 @@ function change_shell(){
 # Display ASCII art banner
 show_ascii_hello
 
-# Ensure critical commands are installed
-is_installed "sudo"
+# Note: root privileges are handled by run_privileged() during dependency
+# installation. It uses 'sudo' when needed and falls back to running directly
+# when already root (e.g. in Alpine/Docker containers), so 'sudo' is not a
+# hard requirement here.
 
 # Install required dependencies based on OS detection
 install_dependencies
