@@ -406,6 +406,47 @@ function install_dependencies(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: install_yay
+# Description: Installs the 'yay' AUR helper on Arch Linux. No-op on non-Arch
+#              systems (no 'pacman'). 'makepkg' refuses to run as root, so this
+#              is skipped when running as root.
+# -----------------------------------------------------------------------------
+function install_yay(){
+  # Only relevant on Arch-based systems.
+  if ! command -v pacman >/dev/null 2>&1; then
+    return 0
+  fi
+
+  # Already installed? Nothing to do.
+  if command -v yay >/dev/null 2>&1; then
+    write_verbose "yay is already installed."
+    return 0
+  fi
+
+  # makepkg refuses to run as root; skip rather than trying to work around it.
+  if [[ "$(id -u)" -eq 0 ]]; then
+    write_verbose "Running as root; skipping yay install (makepkg cannot run as root)."
+    return 0
+  fi
+
+  write_verbose "Installing yay (AUR helper)..."
+
+  local build_dir
+  build_dir="$(mktemp -d)"
+
+  if git clone https://aur.archlinux.org/yay.git "${build_dir}/yay" \
+    && (cd "${build_dir}/yay" && makepkg -si --noconfirm); then
+    write_verbose "yay installed successfully."
+  else
+    write_error "Failed to install yay."
+    rm -rf "${build_dir}"
+    return 1
+  fi
+
+  rm -rf "${build_dir}"
+}
+
+# -----------------------------------------------------------------------------
 # Function: clone_dotfiles
 # Description: Clones the dotfiles repository as a bare repository.
 # -----------------------------------------------------------------------------
@@ -558,6 +599,9 @@ confirm_install
 
 # Install required dependencies based on OS detection
 install_dependencies
+
+# Install the 'yay' AUR helper on Arch-based systems (no-op elsewhere).
+install_yay || write_error "Failed to install yay. You can install it manually from the AUR."
 
 # Ensure the en_US.UTF-8 locale exists (dotfiles set LC_ALL=en_US.UTF-8).
 # Prevents "setlocale: LC_ALL: cannot change locale" warnings in minimal
