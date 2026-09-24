@@ -22,7 +22,7 @@ function show_ascii_hello(){
 EOA
   printf "\x1B[0;1;3;38;5;51m"
   cat <<EOB
-.                ${DOTFILES_REPO}                .
+.               ${DOTFILES_REPO}                .
 EOB
   printf "\x1B[0;1;4;38;5;201m"
   cat <<EOC
