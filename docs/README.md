@@ -114,7 +114,7 @@ curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/hea
 
 <br>
 
-> **Test ZSH configuration in Docker**
+> **Test ZSH configuration in Docker - DOCKERFILE**
 
 ```bash
 # Clone dotfiles as a normal repository
@@ -137,32 +137,11 @@ docker run        \
     connerwill-dotfiles-zsh:latest
 ```
 
-<details>
- <summary><b>Test dotfiles in Docker - OLD METHOD</b></summary>
+> **Test ZSH configuration in Docker - DOCKER RUN**
 
-> **Test full config in Docker**
-```shell
-git clone --recurse-submodules https://github.com/connerwill/dotfiles \
-  && docker run                                                       \
-    -v $PWD/dotfiles:/root                                            \
-    -it                                                               \
-    archlinux                                                         \
-    sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh tmux git fzf bat lsd neovim && chsh --shell /usr/bin/zsh && exec zsh"
+```bash
+docker run -it archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash ; exec zsh'
 ```
-
-> **Test ZSH with no extra packages**
-```shell
-git clone --recurse-submodules https://github.com/connerwill/dotfiles \
-  && docker run                                                       \
-    -v $PWD/dotfiles:/root                                            \
-    -it                                                               \
-    archlinux                                                         \
-    sh -c "ln -rs ~/.config/zsh/.zshenv ~/ && pacman -Sy --noconfirm zsh && chsh --shell /usr/bin/zsh && exec zsh"
-```
-
-<br>
-
-</details>
 
 <br>
 
