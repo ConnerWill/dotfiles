@@ -260,19 +260,19 @@ function install_dependencies(){
     # Linux: Detect available package manager.
     if command -v apt-get >/dev/null 2>&1; then
       PKG_MANAGER="apt-get"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc")
     elif command -v pacman >/dev/null 2>&1; then
       PKG_MANAGER="pacman"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua" "neovim")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua" "neovim" "gcc")
     elif command -v dnf >/dev/null 2>&1; then
       PKG_MANAGER="dnf"
-      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc")
     elif command -v yum >/dev/null 2>&1; then
       PKG_MANAGER="yum"
-      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc")
     elif command -v apk >/dev/null 2>&1; then
       PKG_MANAGER="apk"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc" "musl-dev")
     else
       write_error "Unsupported Linux package manager. Please install dependencies manually."
       exit 1

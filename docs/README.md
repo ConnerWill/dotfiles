@@ -114,6 +114,12 @@ curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/hea
 
 <br>
 
+> **Test ZSH configuration in Docker - DOCKER RUN**
+
+```bash
+docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash ; exec zsh'
+```
+
 > **Test ZSH configuration in Docker - DOCKERFILE**
 
 ```bash
@@ -137,12 +143,6 @@ docker run        \
     connerwill-dotfiles-zsh:latest
 ```
 
-> **Test ZSH configuration in Docker - DOCKER RUN**
-
-```bash
-docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash ; exec zsh'
-```
-
 <br>
 
 </details>
@@ -159,7 +159,6 @@ docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubuserc
 - [ ] TODO
 
 -->
-
 
 # Configurations
 
