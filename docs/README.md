@@ -117,7 +117,7 @@ curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/hea
 > **Test ZSH configuration in Docker - DOCKER RUN**
 
 ```bash
-docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash ; exec zsh'
+docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | DOTFILES_ASSUME_YES=1 bash ; exec zsh'
 ```
 
 > **Test ZSH configuration in Docker - DOCKERFILE**
