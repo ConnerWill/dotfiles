@@ -1,0 +1,154 @@
+" =============================================================================
+" ~/.config/vim/vimrc  -  Fallback Vim configuration
+" =============================================================================
+" This is a lightweight, plugin-free configuration for machines that only have
+" plain Vim, or a Neovim too old to run the LazyVim-based ~/.config/nvim setup.
+"
+" It mirrors the portable settings from the Neovim config
+" (~/.config/nvim/lua/config/*.lua) using only built-in Vim features so it
+" works on a stock Vim install with no external dependencies.
+" =============================================================================
+
+" Use Vim settings rather than Vi settings. Must be first.
+set nocompatible
+
+" -----------------------------------------------------------------------------
+" Leader key  (matches nvim: vim.g.mapleader = "\\")
+" -----------------------------------------------------------------------------
+let mapleader = "\\"
+let maplocalleader = "\\"
+
+" -----------------------------------------------------------------------------
+" Core behavior mirrored from the Neovim config
+" -----------------------------------------------------------------------------
+" Sync with the system clipboard (nvim: clipboard = "unnamedplus").
+" Only enable if this Vim was built with clipboard support, otherwise it errors.
+if has('clipboard')
+  if has('unnamedplus')
+    set clipboard=unnamedplus
+  else
+    set clipboard=unnamed
+  endif
+endif
+
+" Highlight the current column (nvim: cursorcolumn = true)
+set cursorcolumn
+
+" Mouse in normal + visual modes only (nvim: mouse = "nv")
+if has('mouse')
+  set mouse=nv
+endif
+
+" -----------------------------------------------------------------------------
+" Sensible defaults (LazyVim sets these implicitly; plain Vim does not)
+" -----------------------------------------------------------------------------
+filetype plugin indent on          " Enable filetype detection, plugins, indent
+syntax enable                      " Enable syntax highlighting
+
+set number                         " Absolute line numbers
+set relativenumber                 " Relative line numbers (hybrid with 'number')
+set signcolumn=yes                 " Always show the sign column
+set cursorline                     " Highlight the current line
+set scrolloff=4                    " Keep lines of context around the cursor
+set sidescrolloff=8
+
+set expandtab                      " Use spaces instead of tabs
+set shiftwidth=2                   " Size of an indent
+set tabstop=2                      " Number of spaces a <Tab> counts for
+set softtabstop=2
+set smartindent                    " Smart autoindenting on new lines
+set autoindent
+
+set ignorecase                     " Case-insensitive searching...
+set smartcase                      " ...unless the query has capitals
+set hlsearch                       " Highlight search matches
+set incsearch                      " Incremental search
+
+set splitbelow                     " New horizontal splits go below
+set splitright                     " New vertical splits go right
+set wrap                           " Wrap long lines
+set linebreak                      " Wrap at word boundaries
+
+set termguicolors                  " True color support (guarded below)
+set laststatus=2                   " Always show the status line
+set showcmd                        " Show partial commands
+set wildmenu                       " Better command-line completion
+set wildmode=longest:full,full
+set confirm                        " Prompt instead of failing on unsaved changes
+set hidden                         " Allow switching buffers without saving
+set updatetime=300                 " Faster CursorHold events
+
+set undofile                       " Persistent undo
+set undodir=$HOME/.config/vim/undo//
+set backupdir=$HOME/.config/vim/backup//
+set directory=$HOME/.config/vim/swap//
+
+" Fall back gracefully if the terminal does not support true color
+if !has('gui_running') && $COLORTERM !=# 'truecolor' && $COLORTERM !=# '24bit'
+  set notermguicolors
+endif
+
+" -----------------------------------------------------------------------------
+" Ensure state directories exist (for undo/backup/swap above)
+" -----------------------------------------------------------------------------
+for s:dir in ['undo', 'backup', 'swap']
+  let s:path = expand('$HOME/.config/vim/' . s:dir)
+  if !isdirectory(s:path)
+    call mkdir(s:path, 'p', 0700)
+  endif
+endfor
+
+" =============================================================================
+" Filetype detection  (ported from nvim autocmds.lua)
+" =============================================================================
+augroup file_types
+  autocmd!
+
+  " Recognize Jenkins files as groovy
+  autocmd BufEnter,BufRead,BufNewFile *.Jenkinsfile,*.jenkinsfile,Jenkinsfile,jenkinsfile
+        \ setfiletype groovy
+
+  " Docker Compose files -> yaml (Vim has no yaml.docker-compose subtype)
+  autocmd BufEnter,BufRead,BufNewFile docker-compose*.yml,docker-compose*.yaml,compose*.yml,compose*.yaml
+        \ setfiletype yaml
+
+  " Common Ansible layouts -> yaml.ansible
+  autocmd BufEnter,BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml
+        \ setfiletype yaml.ansible
+  autocmd BufEnter,BufRead,BufNewFile */roles/*/tasks/*.yml,*/roles/*/tasks/*.yaml,*/roles/*/handlers/*.yml,*/roles/*/handlers/*.yaml
+        \ setfiletype yaml.ansible
+  autocmd BufEnter,BufRead,BufNewFile */group_vars/*.yml,*/group_vars/*.yaml,*/host_vars/*.yml,*/host_vars/*.yaml
+        \ setfiletype yaml.ansible
+  autocmd BufEnter,BufRead,BufNewFile site.yml,site.yaml,playbook.yml,playbook.yaml
+        \ setfiletype yaml.ansible
+
+  " Go straight to INSERT mode in a git commit message
+  autocmd VimEnter COMMIT_EDITMSG exec 'norm gg' | startinsert!
+augroup END
+
+" =============================================================================
+" Show cursorline only in the active window  (ported from nvim autocmds.lua)
+" =============================================================================
+augroup auto_cursorline
+  autocmd!
+  autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  autocmd WinLeave * setlocal nocursorline
+augroup END
+
+" =============================================================================
+" Create parent directories when saving a file  (ported from nvim autocmds.lua)
+" =============================================================================
+augroup auto_mkdir
+  autocmd!
+  autocmd BufWritePre * call s:MkdirOnWrite(expand('<afile>:p:h'))
+augroup END
+
+function! s:MkdirOnWrite(dir) abort
+  " Skip URLs / non-file buffers (e.g. scp://, fugitive://)
+  if a:dir =~# '^\w\+://' || empty(a:dir)
+    return
+  endif
+  if !isdirectory(a:dir)
+    call mkdir(a:dir, 'p')
+  endif
+endfunction
