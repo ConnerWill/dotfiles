@@ -13,7 +13,7 @@ alias e="${EDITOR}"
 ### [~]............ SUDO
 ### [=]==================================[=]
 if [[ "${commands[sudo]}" ]] && [[ -z "${USEDOAS}" ]]; then
-    export SUDOCMD="${${SUDOCMD}:-sudo}"
+    export SUDOCMD="${SUDOCMD:-sudo}"
     alias suso="${SUDOCMD}"
     alias sudu="${SUDOCMD}"
     alias sydo="${SUDOCMD}"
