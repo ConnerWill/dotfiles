@@ -1,0 +1,113 @@
+name: Test Dotfiles Installation
+
+# Verifies that the bare-repository installation method actually installs the
+# dotfiles into $HOME and populates git submodules (e.g. dotf). This guards
+# against regressions such as forgetting the `checkout` or `submodule update`
+# steps, which would leave the home directory empty.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-bare-install:
+    name: Bare-repo install method
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository (for the installer script)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y git zsh
+
+      - name: Install dotfiles into an isolated HOME (bare-repo method)
+        env:
+          # Use an isolated HOME so the runner's own files are untouched.
+          TEST_HOME: ${{ runner.temp }}/dotfiles-home
+        run: |
+          set -euo pipefail
+          mkdir -p "${TEST_HOME}"
+          export HOME="${TEST_HOME}"
+          DOTFILES_DIR="${HOME}/.dotfiles"
+
+          echo "::group::Clone bare repository"
+          git clone \
+            --bare \
+            --config status.showUntrackedFiles=no \
+            --config core.excludesfile="${DOTFILES_DIR}/.gitignore" \
+            --verbose --progress \
+            "https://github.com/${GITHUB_REPOSITORY}.git" "${DOTFILES_DIR}"
+          echo "::endgroup::"
+
+          echo "::group::Checkout working tree into HOME"
+          git --work-tree="${HOME}" --git-dir="${DOTFILES_DIR}" checkout --force main
+          echo "::endgroup::"
+
+          echo "::group::Initialize submodules"
+          git --work-tree="${HOME}" --git-dir="${DOTFILES_DIR}" -C "${HOME}" \
+            submodule update --init --recursive
+          echo "::endgroup::"
+
+      - name: Assert dotfiles were installed
+        env:
+          TEST_HOME: ${{ runner.temp }}/dotfiles-home
+        run: |
+          set -euo pipefail
+          HOME_DIR="${TEST_HOME}"
+          DOTF_DIR="${HOME_DIR}/.config/zsh/zsh/user/functions/functions-manual/dotf"
+          fail=0
+
+          check_exists() {
+            if [ -e "$1" ]; then
+              echo "  OK: $1"
+            else
+              echo "  MISSING: $1"
+              fail=1
+            fi
+          }
+
+          echo "Verifying core dotfiles..."
+          check_exists "${HOME_DIR}/.zshenv"
+          check_exists "${HOME_DIR}/.config"
+          check_exists "${HOME_DIR}/.gitmodules"
+
+          echo "Verifying dotf submodule is populated..."
+          if [ -d "${DOTF_DIR}" ] && [ -n "$(ls -A "${DOTF_DIR}" 2>/dev/null)" ]; then
+            echo "  OK: submodule dir is non-empty: ${DOTF_DIR}"
+            check_exists "${DOTF_DIR}/LICENSE"
+          else
+            echo "  MISSING or EMPTY submodule: ${DOTF_DIR}"
+            fail=1
+          fi
+
+          if [ "${fail}" -ne 0 ]; then
+            echo "Installation verification FAILED."
+            exit 1
+          fi
+          echo "Installation verification PASSED."
+
+  test-install-script:
+    name: install-dotfiles.sh (syntax + dry structure)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Syntax-check the installer script
+        run: bash -n .config/zsh/install-dotfiles.sh
+
+      - name: Ensure installer performs checkout and submodule init
+        run: |
+          set -euo pipefail
+          script=".config/zsh/install-dotfiles.sh"
+          grep -q "checkout --force main" "${script}" \
+            || { echo "Installer is missing the 'checkout --force main' step"; exit 1; }
+          grep -q "submodule update --init" "${script}" \
+            || { echo "Installer is missing the 'submodule update --init' step"; exit 1; }
+          echo "Installer contains the required checkout and submodule steps."

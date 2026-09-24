@@ -229,19 +229,52 @@ function clone_dotfiles(){
     return 1
   else
     write_verbose "Cloning dotfiles: ${DOTFILES_REPO} to directory: ${DOTFILES_DIR}"
+    # Note: --recurse-submodules is intentionally omitted here. A bare repository
+    # has no working tree, so submodules cannot be checked out during a bare clone.
+    # Submodules are initialized separately in init_submodules() after checkout.
     git clone                                               \
       --bare                                                  \
       --config status.showUntrackedFiles=no                   \
       --config core.excludesfile="${DOTFILES_DIR}/.gitignore" \
-      --recurse-submodules                                    \
       --verbose --progress                                    \
       "${DOTFILES_REPO}" "${DOTFILES_DIR}"
   fi
 }
 
 # -----------------------------------------------------------------------------
+# Function: checkout_dotfiles
+# Description: Checks out the working tree from the bare repository into HOME.
+#              This is what actually installs the dotfiles into the home directory.
+# -----------------------------------------------------------------------------
+function checkout_dotfiles(){
+  write_verbose "Checking out dotfiles into: ${HOME}"
+  write_verbose "This will overwrite existing files in your home directory!"
+  git                             \
+    --work-tree="${HOME}"         \
+    --git-dir="${DOTFILES_DIR}"   \
+    checkout --force main
+}
+
+# -----------------------------------------------------------------------------
+# Function: init_submodules
+# Description: Initializes and updates git submodules (e.g. 'dotf') for the
+#              bare dotfiles repository. Because the repo is bare, submodule
+#              commands must be run with the work-tree set to HOME.
+# -----------------------------------------------------------------------------
+function init_submodules(){
+  write_verbose "Initializing submodules into: ${HOME}"
+  git                             \
+    --work-tree="${HOME}"         \
+    --git-dir="${DOTFILES_DIR}"   \
+    -C "${HOME}"                  \
+    submodule update --init --recursive
+}
+
+# -----------------------------------------------------------------------------
 # Function: clone_dotf
-# Description: Clones the dotf repository.
+# Description: Clones the dotf repository standalone. This is a fallback for
+#              non-bare / manual setups; the normal install uses init_submodules
+#              since 'dotf' is tracked as a submodule of the dotfiles repo.
 # -----------------------------------------------------------------------------
 function clone_dotf(){
   if [[ -d "${DOTF_DIR}" ]]; then
@@ -281,10 +314,19 @@ is_installed "zsh"
 
 # Clone repos
 clone_dotfiles
-clone_dotf
+
+# Check out the dotfiles into HOME (this actually installs them)
+checkout_dotfiles
+
+# Initialize submodules (installs 'dotf' and any other submodules)
+init_submodules
+
+# Note: the 'dotf' repository is tracked as a git submodule of the dotfiles
+# repo and is installed by init_submodules above. The standalone clone_dotf
+# function is kept only as a fallback for manual/non-bare setups.
 
 # Set shell
-change_shell
+change_shell || write_error "Failed to change the default shell. You can change it manually with: chsh --shell \"\$(command -v zsh)\""
 
 # Display ASCII art banner 2
 show_ascii_goodbye
