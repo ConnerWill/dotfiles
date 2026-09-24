@@ -222,7 +222,10 @@ return {
     opts = {
       linters_by_ft = {
         lua = { "selene", "luacheck" },
-        markdown = { "markdownlint" },
+        -- markdown is handled by the LazyVim markdown extra
+        -- (lazyvim.plugins.extras.lang.markdown) via its own markdownlint
+        -- setup, so it is intentionally NOT registered here to avoid
+        -- duplicate Markdown diagnostics.
       },
       linters = {
         selene = {
@@ -262,10 +265,9 @@ return {
         null_ls.builtins.diagnostics.actionlint,
       })
 
-      -- add ansible-lint as diagnostics
-      opts.sources = vim.list_extend(opts.sources, {
-        null_ls.builtins.diagnostics.ansiblelint,
-      })
+      -- ansible-lint is handled by the LazyVim ansible extra
+      -- (lazyvim.plugins.extras.lang.ansible), so it is intentionally NOT
+      -- registered here to avoid duplicate Ansible diagnostics.
 
       -- add dotenv_linter as diagnostics
       opts.sources = vim.list_extend(opts.sources, {
