@@ -146,8 +146,7 @@ git clone --depth=1 https://github.com/<owner>/<plugin>.git
 rm -rf <plugin>/.git
 
 # 3. Enable it (see "Enabling a Plugin" below)
-cd "${ZSH_PLUGINS_ENABLED}"
-ln -s ../plugins-available/<plugin>/<plugin>.plugin.zsh <plugin>.plugin.zsh
+ln -rs "${ZSH_PLUGINS_AVAILABLE}/<plugin>/<plugin>.plugin.zsh" "${ZSH_PLUGINS_ENABLED}/<plugin>.plugin.zsh"
 
 # 4. Track the new files in the dotfiles bare repo
 dotf add "${ZSH_PLUGINS_AVAILABLE}/<plugin>"
@@ -170,8 +169,7 @@ Each plugin is a directory under `plugins-available/`; enable it by symlinking
 its loader script (usually `*.plugin.zsh` or `*.zsh`) into `plugins-enabled/`:
 
 ```bash
-cd "${ZSH_PLUGINS_ENABLED}"
-ln -s ../plugins-available/zsh-autopair/autopair.zsh autopair.zsh
+ln -rs "${ZSH_PLUGINS_AVAILABLE}/zsh-autopair/autopair.zsh" "${ZSH_PLUGINS_ENABLED}/autopair.zsh"
 
 # Reload
 exec zsh
@@ -344,8 +342,7 @@ Enable a function by symlinking it from `functions-available/` into
 back into `functions-available/`:
 
 ```bash
-cd "${ZSH_FUNCTIONS_ENABLED}"
-ln -s ../functions-available/mkcd.zsh mkcd.zsh
+ln -rs "${ZSH_FUNCTIONS_AVAILABLE}/mkcd.zsh" "${ZSH_FUNCTIONS_ENABLED}/mkcd.zsh"
 
 # Reload
 exec zsh
