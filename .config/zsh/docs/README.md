@@ -29,6 +29,7 @@ symlink pattern.**
 - [ZSH](#zsh)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Structure](#structure)
   - [Load Order](#load-order)
   - [Plugins](#plugins)
     - [Installing a Plugin](#installing-a-plugin)
@@ -71,7 +72,8 @@ symlink pattern.**
     - [Vi Command Mode](#vi-command-mode)
     - [Plugins](#plugins-1)
   - [Configuration Toggles](#configuration-toggles)
-  - [Structure](#structure)
+  - [Tools](#tools)
+  - [Libraries](#libraries)
 - [Docker](#docker)
 <!--toc:end-->
 
@@ -95,6 +97,51 @@ symlink pattern.**
   `.private/*.private.zsh`, which is sourced last and kept out of the repo.
 - **Debugging & profiling** — built-in toggles for verbose startup, debug
   logging, and `zprof` startup profiling.
+
+---
+
+## Structure
+
+These are the files/directories that are sourced on ZSH startup:
+
+```
+.
+├── zsh/
+│   └── user/
+│       ├── completion/               # Custom _completions
+│       ├── fpath/
+│       ├── functions/
+│       │   ├── functions-available   # All functions
+│       │   └── functions-enabled     # Symlinks to enable
+│       ├── plugins/
+│       │   ├── plugins-available     # All plugins
+│       │   └── plugins-enabled       # Symlinks to enable
+│       ├── .private/                 # Untracked secrets (*.private.zsh)
+│       └── zsh.d/
+│           ├── 00_pre.zsh
+│           ├── 09_path.zsh
+│           ├── 10_variables.zsh
+│           ├── 20_options.zsh
+│           ├── 21_history.zsh
+│           ├── 30_modules.zsh
+│           ├── 40_plugins.zsh
+│           ├── 50_keybindings.zsh
+│           ├── 60_functions.zsh
+│           ├── 70_aliases.zsh
+│           ├── 71_vendor_aliases.zsh
+│           ├── 75_OS_specific.zsh
+│           ├── 80_hooks.zsh
+│           ├── 82_colors.zsh
+│           ├── 83_vcs_prompts.zsh
+│           ├── 85_highlighting.zsh
+│           ├── 90_completions.zsh
+│           ├── 98_post.zsh
+│           └── 99_keybindings.zsh
+├── .zshenv
+├── .zshrc
+├── .zlogin
+└── .zprofile
+```
 
 ---
 
@@ -599,48 +646,47 @@ ZSH_USER_DIR_NAME=work exec zsh
 
 ---
 
-## Structure
+## Tools
 
-These are the files/directories that are sourced on ZSH startup:
+Standalone helper scripts and reference material live in `zsh/tools/`. These are
+not sourced on startup — they're run manually when needed.
 
-```
-.
-├── zsh/
-│   └── user/
-│       ├── completion/               # Custom _completions
-│       ├── fpath/
-│       ├── functions/
-│       │   ├── functions-available   # All functions
-│       │   └── functions-enabled     # Symlinks to enable
-│       ├── plugins/
-│       │   ├── plugins-available     # All plugins
-│       │   └── plugins-enabled       # Symlinks to enable
-│       ├── .private/                 # Untracked secrets (*.private.zsh)
-│       └── zsh.d/
-│           ├── 00_pre.zsh
-│           ├── 09_path.zsh
-│           ├── 10_variables.zsh
-│           ├── 20_options.zsh
-│           ├── 21_history.zsh
-│           ├── 30_modules.zsh
-│           ├── 40_plugins.zsh
-│           ├── 50_keybindings.zsh
-│           ├── 60_functions.zsh
-│           ├── 70_aliases.zsh
-│           ├── 71_vendor_aliases.zsh
-│           ├── 75_OS_specific.zsh
-│           ├── 80_hooks.zsh
-│           ├── 82_colors.zsh
-│           ├── 83_vcs_prompts.zsh
-│           ├── 85_highlighting.zsh
-│           ├── 90_completions.zsh
-│           ├── 98_post.zsh
-│           └── 99_keybindings.zsh
-├── .zshenv
-├── .zshrc
-├── .zlogin
-└── .zprofile
-```
+| Tool                              | Description                                                                 |
+| --------------------------------- | --------------------------------------------------------------------------- |
+| `pkgsearch`                       | fzf-driven browser/installer for your distro's packages (with AUR support on Arch) |
+| `compile-zshconfig/`              | Recipe for flattening the whole startup into a single `combined.zsh` (see its `README.md`) |
+| `debugging/`                      | A collection of zsh debuggers/tracers — `zshdb`, `ztrace`, `zbrowse`, `zhooks`, `zsnapshot`, `zui`, and `reporter` — plus `zsh-trace.zsh` and a `README.md` with a debug-log recipe |
+| `git-check-gitattributes.sh`      | `git-check-missing-gitattributes`: flag tracked files with no `.gitattributes` rule |
+| `zsh-zle-list-all.zsh`            | Print every ZLE widget alongside its `which` definition                     |
+| `ansi-escape-sequences/`          | Reference + scripts for ANSI escapes: color tables, `ansi2html`, `termlink`, `printimage.zsh`, an `ansiescapes.md` cheatsheet, and a `colors/` subdir of palette demos |
+| `loading-ascii-art/`              | ASCII-art loading banners and a full-width loading-bar script               |
+| `prompts/`                        | Extra prompt themes (`prompts/default/prompt_*_setup`) and `more-prompt-ideas.zsh` |
+| `templates/`                      | Starter templates: example scripts and a `zsh.gitignore`                    |
+| `symbols`                         | A reference collection of Unicode/glyph symbols                             |
+
+## Libraries
+
+Reusable helper libraries live in `zsh/lib/`. They are meant to be `source`d
+(directly or by functions/startup files) rather than run standalone.
+
+| Library                | Provides                                                                    |
+| ---------------------- | --------------------------------------------------------------------------- |
+| `slog.sh`              | POSIX-compatible logging (bash/dash/zsh) to stdout and/or a file            |
+| `parseopts`            | Option-parsing helper/`getopts`-style demo for building CLIs                |
+| `is_script_sourced`    | Detect whether a script was sourced vs executed directly                    |
+| `ostype`               | OS predicates: `islinux`, `isdarwin`, `isfreebsd`, `isopenbsd`, `issolaris`, `isandroid` |
+| `zshversion`           | zsh-version predicates (`is4`, `is41`, `is42`, …) for compatibility guards  |
+| `zrcautoload`          | `autoload` wrapper used early in startup                                    |
+| `zshcompletion`        | Completion-system setup helpers (dedupes `path`/`fpath`, loads modules)     |
+| `reload`               | `reload` helper — `exec "${SHELL}"`                                         |
+| `motd`                 | `zshlib_motd`: render a `figlet` message-of-the-day banner                  |
+| `printcentered` / `print-centered` / `bash-print-centered.sh` | Center text in the terminal width           |
+| `printleft` / `printline` / `print-centered` | Text/line layout helpers                                     |
+| `listbindings`         | Library backing the keybinding listing                                      |
+| `progressbars_lib/`    | Assorted progress-bar / loading-bar implementations                         |
+| `pipes/`               | `pipes.sh`/`pipesX.sh`/`rain.sh`/`weave.sh` terminal screensavers           |
+| `zshlib_template`      | Template for writing a new sourced library                                  |
+| `DEMOPROMPT.zsh`       | Library backing the `DEMOPROMPT` function                                   |
 
 ---
 
