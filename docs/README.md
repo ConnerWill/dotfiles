@@ -30,9 +30,13 @@
 
 ## Installation
 
-### Standard Installation</details></summary>
+### Install Script
 
-> **Clone this repository to use as your dotfiles**
+```bash
+curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash
+```
+
+### Standard Installation
 
 ```shell
 git clone \
@@ -43,8 +47,6 @@ git clone \
  https://github.com/ConnerWill/dotfiles.git "${HOME}/.dotfiles"
 ```
 
-> Then checkout the main branch, initialize submodules, and exec zsh
-
 ```diff
 - This will overwrite existing files! Make sure to backup first!
 ```
@@ -53,15 +55,6 @@ git clone \
 git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
  && git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" -C "${HOME}" submodule update --init --recursive \
  && exec zsh
-```
-
-
-### Installation Script
-
-> Installation Script Online
-
-```bash
-curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash
 ```
 
 ---
