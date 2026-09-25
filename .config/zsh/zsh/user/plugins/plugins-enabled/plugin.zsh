@@ -1,1 +1,0 @@
-../plugins-available/zsh-arduino/plugin.zsh

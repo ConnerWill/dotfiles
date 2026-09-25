@@ -1,7 +1,0 @@
-
-ar_upload() {
-        if [[ -z $AR_BIN ]]; then
-            ar_build $*
-        fi
-        arduino-cli -v upload --fqbn=$AR_FQBN -i $AR_BIN -p $AR_PORT
-}

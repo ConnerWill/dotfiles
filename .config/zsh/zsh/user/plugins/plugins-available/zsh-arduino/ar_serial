@@ -1,6 +1,0 @@
-
-ar_serial() {
-    [ ! -z $AR_SERIAL ] || ar_configure
-    miniterm.py $AR_SERIAL 115200
-}
-
