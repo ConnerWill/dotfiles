@@ -1,0 +1,580 @@
+#!/usr/bin/env zsh
+#shellcheck disable=2148,2059
+
+function zplugin(){
+  ZPLUGINVERSION="1.0.0"
+  PROG="zplugin"
+
+  ## Resolve plugin directories (fall back if the env vars are not exported yet)
+  local _zp_dir
+  _zp_dir="${ZSH_PLUGINS_DIR:-${ZSH_USER_DIR:-${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}}/plugins}"
+  ZPLUGINS_AVAILABLE="${ZSH_PLUGINS_AVAILABLE:-${_zp_dir}/plugins-available}"
+  ZPLUGINS_ENABLED="${ZSH_PLUGINS_ENABLED:-${_zp_dir}/plugins-enabled}"
+
+  export PROG ZPLUGINS_AVAILABLE ZPLUGINS_ENABLED
+
+###{{{ COLORS
+
+## Check if 'NO_COLOR' environment variable is defined
+## if 'NO_COLOR' is defined, do not define color array
+NO_COLOR=${NO_COLOR:-""}
+if [[ -n ${NO_COLOR} ]]; then
+  declare -A colors
+  colors[ColorOff]='\x1B[0m'
+  colors[bold]=''
+  colors[italic]=''
+  colors[underline]=''
+  colors[Black]=''
+  colors[Gray]=''
+  colors[DarkGray]=''
+  colors[White]=''
+  colors[Red]=''
+  colors[Green]=''
+  colors[Yellow]=''
+  colors[Blue]=''
+  colors[Purple]=''
+  colors[Magenta]=''
+  colors[Cyan]=''
+  colors[reset]='\x1B[0m'
+else
+  declare -A colors
+  colors[ColorOff]='\x1B[0m'
+  colors[bold]='\x1B[1m'
+  colors[italic]='\x1B[3m'
+  colors[underline]='\x1B[4m'
+  colors[Black]='\x1B[30m'
+  colors[Gray]='\x1B[38;5;245m'
+  colors[DarkGray]='\x1B[38;5;8m'
+  colors[White]='\x1B[38;5;15m'
+  colors[Red]='\x1B[38;5;196m'
+  colors[Green]='\x1B[38;5;46m'
+  colors[Yellow]='\x1B[38;5;190m'
+  colors[Blue]='\x1B[38;5;33m'
+  colors[Purple]='\x1B[38;5;93m'
+  colors[Magenta]='\x1B[38;5;201m'
+  colors[Cyan]='\x1B[38;5;87m'
+  colors[reset]='\x1B[0m'
+fi
+
+###}}} COLORS
+
+###{{{ MESSAGES
+
+ _zplugin_msg(){       printf "${colors[bold]}${colors[Purple]}[%s]\x1B[0m:\t${colors[DarkGray]}%s\x1B[0m\n" "${PROG}" "${*}" ; }
+ _zplugin_msg_ok(){    printf "\x1B[0;1;48;5;46m${colors[bold]}${colors[White]}[ OK  ]\x1B[0m:\t${colors[Green]}%s\x1B[0m\n" "${*}" ; }
+ _zplugin_msg_info(){  printf "\x1B[0;1;48;5;33m${colors[bold]}${colors[White]}[INFO ]\x1B[0m:\t${colors[Blue]}%s\x1B[0m\n" "${*}" ; }
+ _zplugin_msg_warn(){  printf "\x1B[0;1;48;5;190m${colors[bold]}${colors[Black]}[WARN ]\x1B[0m:\t${colors[Yellow]}%s\x1B[0m\n" "${*}" ; }
+ _zplugin_msg_fail(){  printf "\x1B[0;1;4;48;5;196m${colors[bold]}${colors[White]}[FAILED]\x1B[0m:\t${colors[Red]}%s\x1B[0m\n" "${*}" ; }
+ _zplugin_msg_error(){ printf "\x1B[0;1;48;5;196m${colors[bold]}${colors[White]}[ERROR]\x1B[0m:\t${colors[Red]}%s\x1B[0m\n" "${*}" ; }
+
+###}}} MESSAGES
+
+###{{{ ZPLUGIN HELP
+
+  function _zplugin_version(){
+    printf "%s %s\n" "${PROG}" "${ZPLUGINVERSION}"
+  }
+
+  function _zplugin_help_name(){
+    printf "$(cat <<HELPMENUNAME
+
+${colors[bold]}${colors[Blue]}NAME${colors[reset]}
+
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]}
+
+HELPMENUNAME
+    )\n\n"
+  }
+
+  function _zplugin_help(){
+    printf "$(cat <<HELPMENU
+
+${colors[bold]}${colors[Blue]}DESCRIPTION${colors[reset]}
+
+  ${colors[White]}Install, enable, disable, and remove vendored zsh plugins${colors[reset]}
+  ${colors[White]}using the enabled/available symlink pattern (like nginx sites-enabled)${colors[reset]}
+
+
+${colors[bold]}${colors[Blue]}USAGE${colors[reset]}
+
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} [-hV] [--help|help] [--usage|usage] [--examples|examples]
+       [install|i|add <repo>] [enable|e <name>] [disable|d <name>]
+       [remove|rm <name>] [list|ls]
+
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}install${colors[reset]} <repo>   ${colors[DarkGray]}# repo = full URL, or user/repo (assumes GitHub)${colors[reset]}
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}enable${colors[reset]}  <name>
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}disable${colors[reset]} <name>
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}remove${colors[reset]}  <name>
+  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}list${colors[reset]}
+
+HELPMENU
+    )\n\n"
+  }
+
+  function _zplugin_help_options(){
+    printf "$(cat <<HELPMENUOPTIONS
+
+${colors[bold]}${colors[Blue]}OPTIONS${colors[reset]}
+
+    ${colors[Yellow]}install${colors[reset]}, ${colors[Yellow]}i${colors[reset]}, ${colors[Yellow]}add${colors[reset]} <repo>
+          Clone a plugin into plugins-available, strip its .git,
+          enable it (symlink loader into plugins-enabled), and track
+          the files with ${colors[bold]}${colors[Green]}dotf${colors[reset]} (if available)
+
+    ${colors[Yellow]}enable${colors[reset]}, ${colors[Yellow]}e${colors[reset]} <name>
+          Symlink an already-installed plugin's loader into plugins-enabled
+
+    ${colors[Yellow]}disable${colors[reset]}, ${colors[Yellow]}d${colors[reset]} <name>
+          Remove a plugin's symlink from plugins-enabled
+
+    ${colors[Yellow]}remove${colors[reset]}, ${colors[Yellow]}rm${colors[reset]} <name>
+          Disable and delete a plugin from plugins-available
+
+    ${colors[Yellow]}list${colors[reset]}, ${colors[Yellow]}ls${colors[reset]}
+          List available plugins and their enabled state
+
+
+${colors[bold]}${colors[Blue]}META OPTIONS${colors[reset]}
+
+    -h, h
+        Show the help menu
+
+    --help, help
+        Show the full ${PROG} help menu
+
+    --usage, usage
+        Show ${PROG} usage
+
+    --examples, examples
+        Show ${PROG} examples
+
+    -V, --version
+        Show ${PROG} version
+
+HELPMENUOPTIONS
+    )\n\n"
+  }
+
+  function _zplugin_help_examples(){
+    printf "$(cat <<HELPMENUEXAMPLES
+
+${colors[bold]}${colors[Blue]}EXAMPLES${colors[reset]}
+
+  Install a plugin using the ${colors[italic]}user/repo${colors[reset]} shorthand.
+  GitHub is assumed, so this clones ${colors[italic]}https://github.com/hlissner/zsh-autopair${colors[reset]}:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}install${colors[reset]} hlissner/zsh-autopair
+
+
+  Install a plugin from a full git URL (any host, not just GitHub).
+  The plugin is vendored (its nested .git is stripped) and enabled automatically:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}install${colors[reset]} https://github.com/skywind3000/z.lua.git
+
+
+  List every installed plugin along with whether it is currently enabled.
+  Enabled plugins show a filled ${colors[Green]}\u25CF${colors[reset]} marker, disabled ones a hollow \u25CB:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}list${colors[reset]}
+
+
+  Temporarily turn a plugin off without deleting it. This just removes the
+  symlink from plugins-enabled; the files stay in plugins-available:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}disable${colors[reset]} zsh-autopair
+
+
+  Turn a previously-disabled plugin back on by re-creating its symlink:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}enable${colors[reset]} zsh-autopair
+
+
+  Completely remove a plugin: this disables it first, then deletes it
+  from plugins-available. Since plugins are vendored, re-install to update:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}${PROG}${colors[reset]} ${colors[Yellow]}remove${colors[reset]} zsh-autopair
+
+
+  After any install/enable/disable/remove, reload zsh so the change takes effect:
+
+    ${colors[DarkGray]}\$${colors[reset]}  ${colors[bold]}${colors[Green]}exec zsh${colors[reset]}
+
+HELPMENUEXAMPLES
+    )\n\n"
+  }
+
+  function _zplugin_help_more_info(){
+    printf "$(cat <<HELPMENUMOREINFO
+
+${colors[bold]}${colors[Blue]}MORE${colors[reset]}
+
+  Plugins are vendored: cloned into plugins-available, then their .git is
+  removed so the dotfiles repo tracks them as plain files. Enable by
+  symlinking the loader script into plugins-enabled. Run '${colors[bold]}${colors[Green]}exec zsh${colors[reset]}' to reload.
+
+HELPMENUMOREINFO
+    )\n\n"
+  }
+
+  function _zplugin_help_full(){
+    _zplugin_help_name
+    _zplugin_help
+    _zplugin_help_options
+    _zplugin_help_examples
+    _zplugin_help_more_info
+  }
+#"
+###}}} ZPLUGIN HELP
+
+###{{{ HELPERS
+
+  ## Normalize a repo argument into a clone URL.
+  ## Accepts:  user/repo  ->  https://github.com/user/repo.git
+  ##           full URL   ->  used as-is
+  _zplugin_normalize_url(){
+    local _in="${1}"
+    case "${_in}" in
+      http://*|https://*|git://*|ssh://*|git@*)
+        printf "%s" "${_in}"
+        ;;
+      */*)
+        ## user/repo shorthand -> assume GitHub
+        printf "https://github.com/%s" "${_in%/}"
+        ;;
+      *)
+        printf "%s" "${_in}"
+        ;;
+    esac
+  }
+
+  ## Derive the plugin directory name from a repo/url (strip .git and trailing slash)
+  _zplugin_name_from(){
+    local _n="${1%/}"
+    _n="${_n##*/}"
+    printf "%s" "${_n%.git}"
+  }
+
+  ## Find the loader script inside an installed plugin directory.
+  ## Prefers *.plugin.zsh, then <name>.zsh, then any single *.zsh.
+  _zplugin_find_loader(){
+    local _dir="${1}" _name="${2}" _f
+    if [[ -f "${_dir}/${_name}.plugin.zsh" ]]; then
+      printf "%s" "${_dir}/${_name}.plugin.zsh"; return 0
+    fi
+    for _f in "${_dir}"/*.plugin.zsh(N); do
+      printf "%s" "${_f}"; return 0
+    done
+    if [[ -f "${_dir}/${_name}.zsh" ]]; then
+      printf "%s" "${_dir}/${_name}.zsh"; return 0
+    fi
+    ## Fall back to a lone *.zsh file
+    local -a _zfiles
+    _zfiles=("${_dir}"/*.zsh(N))
+    if (( ${#_zfiles} == 1 )); then
+      printf "%s" "${_zfiles[1]}"; return 0
+    fi
+    return 1
+  }
+
+  ## Track files with dotf if it is available (non-fatal if not)
+  _zplugin_dotf_track(){
+    if command -v dotf >/dev/null 2>&1; then
+      dotf add "${@}" >/dev/null 2>&1 \
+        && _zplugin_msg_ok "Tracked with dotf: ${*}" \
+        || _zplugin_msg_warn "Could not track with dotf: ${*}"
+    fi
+  }
+
+  ## Enable an installed plugin by symlinking its loader into plugins-enabled
+  _zplugin_enable(){
+    local _name="${1}"
+    local _src="${ZPLUGINS_AVAILABLE}/${_name}"
+    if [[ ! -d "${_src}" ]]; then
+      _zplugin_msg_error "Plugin not installed: ${_name}"
+      return 1
+    fi
+    local _loader
+    _loader="$(_zplugin_find_loader "${_src}" "${_name}")"
+    if [[ -z "${_loader}" ]]; then
+      _zplugin_msg_error "Could not find a loader script (*.plugin.zsh or *.zsh) in: ${_src}"
+      return 1
+    fi
+    local _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
+    if [[ -L "${_link}" || -e "${_link}" ]]; then
+      _zplugin_msg_info "Already enabled: ${_link##*/}"
+      return 0
+    fi
+    ln -rs "${_loader}" "${_link}" \
+      && _zplugin_msg_ok "Enabled: ${_link##*/}  ->  ${_loader}" \
+      || { _zplugin_msg_fail "Failed to enable: ${_name}"; return 1; }
+    _zplugin_dotf_track "${_link}"
+  }
+
+  ## Disable a plugin by removing its symlink(s) from plugins-enabled
+  _zplugin_disable(){
+    local _name="${1}"
+    local _src="${ZPLUGINS_AVAILABLE}/${_name}"
+    local _loader _link _removed=0
+    if [[ -d "${_src}" ]]; then
+      _loader="$(_zplugin_find_loader "${_src}" "${_name}")"
+      [[ -n "${_loader}" ]] && _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
+    fi
+    ## Fall back to matching by name if we could not resolve the loader
+    [[ -z "${_link}" ]] && _link="${ZPLUGINS_ENABLED}/${_name}.plugin.zsh"
+
+    local _candidate
+    for _candidate in "${_link}" "${ZPLUGINS_ENABLED}/${_name}.zsh" "${ZPLUGINS_ENABLED}/${_name}.plugin.zsh"; do
+      if [[ -L "${_candidate}" || -e "${_candidate}" ]]; then
+        rm -f "${_candidate}" \
+          && { _zplugin_msg_ok "Disabled: ${_candidate##*/}"; _removed=1; } \
+          || _zplugin_msg_fail "Failed to remove symlink: ${_candidate}"
+      fi
+    done
+    (( _removed )) || _zplugin_msg_warn "No enabled symlink found for: ${_name}"
+  }
+
+###}}} HELPERS
+
+###{{{ SUBCOMMANDS
+
+  _zplugin_install(){
+    local _arg="${1}"
+    if [[ -z "${_arg}" ]]; then
+      _zplugin_msg_error "No repo given. Usage: ${PROG} install <user/repo | url>"
+      return 1
+    fi
+    if ! command -v git >/dev/null 2>&1; then
+      _zplugin_msg_error "git is required but not found in PATH"
+      return 1
+    fi
+
+    local _url _name _dest
+    _url="$(_zplugin_normalize_url "${_arg}")"
+    _name="$(_zplugin_name_from "${_url}")"
+    _dest="${ZPLUGINS_AVAILABLE}/${_name}"
+
+    _zplugin_msg_info "Repo:  ${_url}"
+    _zplugin_msg_info "Name:  ${_name}"
+    _zplugin_msg_info "Dest:  ${_dest}"
+
+    if [[ -d "${_dest}" ]]; then
+      _zplugin_msg_error "Already installed: ${_dest}  (remove it first with '${PROG} remove ${_name}')"
+      return 1
+    fi
+
+    mkdir -p "${ZPLUGINS_AVAILABLE}" "${ZPLUGINS_ENABLED}" || {
+      _zplugin_msg_fail "Could not create plugin directories"
+      return 1
+    }
+
+    _zplugin_msg "Cloning ${_name}..."
+    if ! git clone --depth=1 "${_url}" "${_dest}"; then
+      _zplugin_msg_fail "git clone failed for: ${_url}"
+      return 1
+    fi
+
+    ## Vendor it: strip the nested .git so the dotfiles repo tracks plain files
+    rm -rf "${_dest}/.git" \
+      && _zplugin_msg_ok "Removed nested .git (vendored)" \
+      || _zplugin_msg_warn "Could not remove ${_dest}/.git"
+
+    ## Enable it
+    _zplugin_enable "${_name}" || return 1
+
+    ## Track the plugin files with dotf
+    _zplugin_dotf_track "${_dest}"
+
+    _zplugin_msg_ok "Installed ${_name}. Run 'exec zsh' to load it."
+  }
+
+  _zplugin_remove(){
+    local _name="${1}"
+    if [[ -z "${_name}" ]]; then
+      _zplugin_msg_error "No plugin given. Usage: ${PROG} remove <name>"
+      return 1
+    fi
+    local _dest="${ZPLUGINS_AVAILABLE}/${_name}"
+    if [[ ! -d "${_dest}" ]]; then
+      _zplugin_msg_error "Not installed: ${_name}"
+      return 1
+    fi
+
+    _zplugin_disable "${_name}"
+    rm -rf "${_dest}" \
+      && _zplugin_msg_ok "Removed: ${_dest}" \
+      || { _zplugin_msg_fail "Failed to remove: ${_dest}"; return 1; }
+  }
+
+  _zplugin_list(){
+    local _p _name _enabled _loader _link
+    if [[ ! -d "${ZPLUGINS_AVAILABLE}" ]]; then
+      _zplugin_msg_warn "No plugins-available directory: ${ZPLUGINS_AVAILABLE}"
+      return 0
+    fi
+    printf "\n${colors[bold]}${colors[Blue]}Available plugins${colors[reset]} ${colors[DarkGray]}(%s)${colors[reset]}\n\n" "${ZPLUGINS_AVAILABLE}"
+    for _p in "${ZPLUGINS_AVAILABLE}"/*(N/); do
+      _name="${_p:t}"
+      _enabled=""
+      _loader="$(_zplugin_find_loader "${_p}" "${_name}")"
+      if [[ -n "${_loader}" ]]; then
+        _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
+        [[ -L "${_link}" || -e "${_link}" ]] && _enabled=1
+      fi
+      if [[ -n "${_enabled}" ]]; then
+        printf "  ${colors[Green]}${colors[bold]}\u25CF${colors[reset]} ${colors[Green]}%-30s${colors[reset]} ${colors[DarkGray]}enabled${colors[reset]}\n" "${_name}"
+      else
+        printf "  ${colors[DarkGray]}\u25CB %-30s disabled${colors[reset]}\n" "${_name}"
+      fi
+    done
+    printf "\n"
+  }
+
+###}}} SUBCOMMANDS
+
+  case "${1}" in
+      "--help" | "help")
+          _zplugin_help_full
+          return
+          ;;
+      "-h" | "h")
+          _zplugin_help_name
+          _zplugin_help
+          printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
+          return
+          ;;
+      "--usage" | "usage")
+          _zplugin_help_name
+          _zplugin_help
+          printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
+          return
+          ;;
+      "--examples" | "examples")
+          _zplugin_help_name
+          _zplugin_help_examples
+          _zplugin_help_more_info
+          printf "\nrun '%s --help' to see the full help menu\n" "${PROG}"
+          return
+          ;;
+      "-V" | "--version")
+          _zplugin_version
+          return
+          ;;
+      "install" | "i" | "add")
+          shift
+          _zplugin_install "${1}"
+          ;;
+      "enable" | "e")
+          shift
+          _zplugin_enable "${1}"
+          ;;
+      "disable" | "d")
+          shift
+          _zplugin_disable "${1}"
+          ;;
+      "remove" | "rm")
+          shift
+          _zplugin_remove "${1}"
+          ;;
+      "list" | "ls" | "")
+          _zplugin_list
+          ;;
+      *)
+          _zplugin_msg_error "Unknown subcommand: ${1}"
+          printf "\nrun '%s --help' to see the help menu\n" "${PROG}"
+          return 1
+          ;;
+  esac
+
+}
+
+###{{{ COMPLETION
+
+## Completion function for zplugin. Completes subcommands, the meta options,
+## and — for enable/disable/remove — the names of installed plugins.
+_zplugin(){
+  local curcontext="${curcontext}" state line
+  typeset -A opt_args
+
+  ## Resolve plugins-available so we can offer installed plugin names
+  local _zp_avail
+  _zp_avail="${ZSH_PLUGINS_AVAILABLE:-${ZSH_PLUGINS_DIR:-${ZSH_USER_DIR:-${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}}/plugins}/plugins-available}"
+
+  local -a _subcmds
+  _subcmds=(
+    'install:Clone, vendor, and enable a plugin (user/repo or full URL)'
+    'i:Alias for install'
+    'add:Alias for install'
+    'enable:Symlink an installed plugin into plugins-enabled'
+    'e:Alias for enable'
+    'disable:Remove a plugin symlink from plugins-enabled'
+    'd:Alias for disable'
+    'remove:Disable and delete a plugin from plugins-available'
+    'rm:Alias for remove'
+    'list:List available plugins and their enabled state'
+    'ls:Alias for list'
+    'help:Show the full help menu'
+    'usage:Show usage'
+    'examples:Show examples'
+    '-h:Show the help menu'
+    '--help:Show the full help menu'
+    '--usage:Show usage'
+    '--examples:Show examples'
+    '-V:Show version'
+    '--version:Show version'
+  )
+
+  _arguments -C \
+    '1: :->cmd' \
+    '*:: :->args' && return 0
+
+  case "${state}" in
+    cmd)
+      _describe -t commands "${PROG:-zplugin} subcommand" _subcmds
+      ;;
+    args)
+      case "${line[1]}" in
+        enable|e|disable|d|remove|rm)
+          ## Complete names of installed plugins (directories in plugins-available)
+          local -a _plugins
+          if [[ -d "${_zp_avail}" ]]; then
+            _plugins=("${_zp_avail}"/*(/N:t))
+          fi
+          if (( ${#_plugins} )); then
+            _describe -t plugins 'installed plugin' _plugins
+          else
+            _message 'no installed plugins found'
+          fi
+          ;;
+        install|i|add)
+          _message 'plugin repo (user/repo or full git URL)'
+          ;;
+        *)
+          _message 'no more arguments'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+## Register the completion. compinit (which provides compdef) runs at a later
+## startup stage than this file, so register now if compdef already exists,
+## otherwise defer via a one-shot precmd hook that fires after startup.
+if (( ${+functions[compdef]} )); then
+  compdef _zplugin zplugin
+else
+  _zplugin_compinit_hook(){
+    if (( ${+functions[compdef]} )); then
+      compdef _zplugin zplugin
+      add-zsh-hook -d precmd _zplugin_compinit_hook 2>/dev/null
+      unfunction _zplugin_compinit_hook 2>/dev/null
+    fi
+  }
+  autoload -Uz add-zsh-hook 2>/dev/null && add-zsh-hook precmd _zplugin_compinit_hook
+fi
+
+###}}} COMPLETION
+
+# Check if the script is being sourced (zsh: zsh_eval_context ends in 'file' when sourced)
+if [[ "${zsh_eval_context[-1]}" == "toplevel" ]]; then
+  zplugin "${@}"
+fi
