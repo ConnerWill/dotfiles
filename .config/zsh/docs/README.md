@@ -537,10 +537,11 @@ Custom keybindings configured in `zsh.d/50_keybindings.zsh` and
 | <kbd>Delete</kbd> | Delete one char forward                   |
 | <kbd>Ctrl</kbd>+<kbd>←</kbd> | Move backward one word          |
 | <kbd>Ctrl</kbd>+<kbd>→</kbd> | Move forward one word           |
-| <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> | Delete previous word    |
 | <kbd>Ctrl</kbd>+<kbd>Delete</kbd> | Delete next word           |
 | <kbd>Ctrl</kbd>+<kbd>j</kbd> | Delete everything before cursor |
-| <kbd>Esc</kbd>+<kbd>w</kbd> | Kill from cursor to mark          |
+| <kbd>Esc</kbd>+<kbd>w</kbd> | Wrap current buffer in `$(which ...)` (`wrapwhich-command-line`) |
+| <kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>U</kbd> | Uppercase word (`change-case`) |
+| <kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>L</kbd> | Lowercase word (`change-case`) |
 | <kbd>Ctrl</kbd>+<kbd>x</kbd> <kbd>Ctrl</kbd>+<kbd>e</kbd> | Edit current command line in `$EDITOR` |
 | <kbd>Alt</kbd>+<kbd>m</kbd> | Copy previous shell word (file rename magic) |
 | <kbd>.</kbd>   | Expand `..` to `../..` (rationalise-dot)     |
@@ -554,8 +555,9 @@ Custom keybindings configured in `zsh.d/50_keybindings.zsh` and
 | <kbd>↓</kbd>   | Fuzzy find history / next command            |
 | <kbd>PageUp</kbd> | Up a line of history                      |
 | <kbd>PageDown</kbd> | Down a line of history                  |
-| <kbd>Ctrl</kbd>+<kbd>h</kbd> | Multi-word history search       |
-| <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> | fzf history search (`zsh-fzf-history-search`) |
+| <kbd>Ctrl</kbd>+<kbd>h</kbd> | Multi-word history search (`history-search-multi-word`) |
+| <kbd>Ctrl</kbd>+<kbd>R</kbd> | fzf history search (`zsh-fzf-history-search`) |
+| <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> | fzf history search — terminals that send `^R` for this key (`zsh-fzf-history-search`) |
 
 ### Navigation
 
@@ -599,7 +601,7 @@ Custom keybindings configured in `zsh.d/50_keybindings.zsh` and
 | <kbd>S</kbd> (visual) | Add surround                          |
 | <kbd>ZZ</kbd>  | Kill region                                  |
 | <kbd>ZQ</kbd>  | Exit shell                                   |
-| <kbd>Ctrl</kbd>+<kbd>h</kbd> | Up one directory (`_up-dir`)    |
+| <kbd>Ctrl</kbd>+<kbd>h</kbd> | Multi-word history search (`history-search-multi-word`; overrides the old `_up-dir` binding) |
 | <kbd>Alt</kbd>+<kbd>j</kbd> | Show `which-command` for current buffer |
 | <kbd>Esc</kbd>+<kbd>w</kbd> | Wrap current buffer in `$(which ...)` |
 
@@ -609,7 +611,7 @@ Keybindings provided by enabled plugins:
 
 | Key            | Plugin                     | Action                                  |
 | -------------- | -------------------------- | --------------------------------------- |
-| <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> | `zsh-fzf-history-search` | Fuzzy reverse-search of history via fzf |
+| <kbd>Ctrl</kbd>+<kbd>R</kbd> / <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> | `zsh-fzf-history-search` | Fuzzy reverse-search of history via fzf (bound to `^R`; some terminals emit `^R` for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd>) |
 | <kbd>Ctrl</kbd>+<kbd>z</kbd> | `symmetric-ctrl-z`   | Toggle foreground/background of last job |
 | <kbd>Ctrl</kbd>+<kbd>o</kbd> | `copier`             | Copy current command line to clipboard   |
 | <kbd>Ctrl</kbd>+<kbd>n</kbd> / <kbd>Ctrl</kbd>+<kbd>p</kbd> | `history-search-multi-word` | Next / previous match while searching |
