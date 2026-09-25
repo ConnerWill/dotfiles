@@ -365,9 +365,9 @@ functions that can be enabled.
 | Function        | Description                                              |
 | --------------- | -------------------------------------------------------- |
 | `mkcd`          | Create a directory and `cd` into it                      |
-| `cdx`           | `cd` to config directories based on a letter shortcut    |
+| `cdX` / `cdz`   | `cd` to config directories based on a letter shortcut    |
 | `cdlink`        | When `cd`-ing to a symlink, follow to the real target    |
-| `cd-correction` | If you `cd` to a file, `cd` into its directory instead   |
+| `cd`            | `cd` correction: if you `cd` to a file, `cd` into its directory instead |
 | `cd-repo`       | `cd` to the current git repository root                  |
 | `repo-root`     | Print the current git repository root                    |
 | `gitcd`         | Clone a repo, then `cd` into it                          |
@@ -383,7 +383,7 @@ functions that can be enabled.
 | `git-blame-percentages`  | Show per-author blame percentages for a repo    |
 | `git-open-url`           | Open the repo's `origin` remote URL in browser  |
 | `gh-gist-clone`          | Clone a GitHub gist                             |
-| `rm-git`                 | Remove `.git*` files/dirs below the cwd         |
+| `rm_git`                 | Remove `.git*` files/dirs below the cwd         |
 | `wdotf`                  | Manage a Windows-side dotfiles bare repo        |
 
 #### fzf / search
@@ -393,7 +393,7 @@ functions that can be enabled.
 | `fzfrg`               | Fuzzy-find with ripgrep                         |
 | `fzfcolor`            | Fuzzy finder that previews file contents        |
 | `manfzf`              | Fuzzy-find man pages                            |
-| `man-global-apropos`  | Global `apropos` search across man pages        |
+| `man_global_apropos`  | Global `apropos` search across man pages        |
 | `cht`                 | Query `cht.sh` cheat sheets                     |
 
 #### Color / ANSI
@@ -403,7 +403,7 @@ functions that can be enabled.
 | `ansi-colors`                | Print an ANSI color table                |
 | `colortest`                  | Print an ANSI color table                |
 | `listcolorANSI`              | Print the 256-color ANSI palette         |
-| `terminal-truecolor-tests`   | Test terminal truecolor support          |
+| `check-if-truecolor`         | Test terminal truecolor support          |
 | `highlight`                  | Highlight regex matches in text (perl)   |
 | `hl`                         | Syntax-highlight files via `highlight`   |
 | `draw_entire_line`           | Draw a full-width line in a given style   |
@@ -416,22 +416,22 @@ functions that can be enabled.
 | `rmls`                                | List files before removing, on approval |
 | `chmodchown`                          | Match a target's perms/owner to a reference file |
 | `count-characters`                    | Count characters in the given args     |
-| `split-path`                          | Split `$PATH` onto separate lines      |
+| `split-path` (`pathnewlines` / `fpathnewlines`) | Split `$PATH` / `$fpath` onto separate lines |
 | `find-and-replace-in-all-files-below` | Recursive `sed` find-and-replace       |
 | `replace-backslashes-with-forward`    | Replace backslashes with forward slashes |
-| `create-pdf`                          | Generate a minimal PDF from text       |
-| `zsh-realpath2clip`                   | Copy a path's `realpath` to clipboard  |
+| `create_pdf`                          | Generate a minimal PDF from text       |
+| `realpath2clip` (`cd2clip` / `pwd2clip`) | Copy a path's `realpath` (or cwd) to clipboard |
 | `xdg-open-clip`                       | Open the clipboard contents' URL/file  |
 
 #### Network / remote
 
 | Function             | Description                                   |
 | -------------------- | --------------------------------------------- |
-| `ssh-copy-key`       | Copy SSH public/private key to clipboard      |
+| `copysshkeypublic` / `copysshkeyprivate` | Copy SSH public/private key to clipboard |
 | `ssh-secure-keygen`  | Create SSH keys                               |
 | `rclone-tree`        | Show an rclone remote as a tree               |
 | `rsync-timemachine`  | Time Machine-style backups with rsync         |
-| `wget-website`       | Mirror a website with `wget`                  |
+| `wgetmirrorwebsite`  | Mirror a website with `wget`                  |
 | `wetty-download`     | Download files through WeTTY                  |
 | `yt-dlp_download`    | Download a video (with subs) via `yt-dlp`     |
 | `espeak-url`         | Fetch a page, convert to text, speak via espeak |
@@ -440,7 +440,7 @@ functions that can be enabled.
 
 | Function                     | Description                              |
 | ---------------------------- | ---------------------------------------- |
-| `gpg-encrypt`                | Encrypt a file with GPG                  |
+| `gpg-encrypt-file` / `gpg-decrypt-file` | Encrypt / decrypt a file with GPG      |
 | `gpgID`                      | Return the ID of a GPG key               |
 | `fail2ban-client-status-all` | Show the status of all Fail2Ban jails    |
 | `verify-fstab`              | Verify `/etc/fstab` with `findmnt`        |
@@ -452,21 +452,20 @@ functions that can be enabled.
 | Function                  | Description                                  |
 | ------------------------- | -------------------------------------------- |
 | `hyperlink`               | Format text + URL into a clickable hyperlink |
-| `asciinema-rec`           | Record the terminal with asciinema           |
-| `terminal-record-script`  | Record the terminal with `script`            |
-| `zsh-loading-bar`         | Show a loading bar                           |
-| `turn-off-monitors`       | Toggle monitor power via `xset`              |
+| `asciinemarec`            | Record the terminal with asciinema           |
+| `script-terminal-rec`     | Record the terminal with `script`            |
+| `zsh-rainbow-loading-bar` / `zsh-rainbow-loading-bar-oneline` | Show a (rainbow) loading bar |
+| `toggle-monitor-power`    | Toggle monitor power via `xset`              |
 | `nitrogen-set-wallpaper`  | Set the wallpaper with nitrogen              |
 | `pacmangraph`             | Generate a dependency graph with pacgraph    |
-| `printimage`              | Print an image in the terminal               |
 
 #### Misc
 
 | Function       | Description                                    |
 | -------------- | ---------------------------------------------- |
 | `ez`           | Reload zsh (`exec zsh`)                         |
-| `zsh-reload`   | Reload zsh (`exec zsh`)                         |
-| `diagnostics`  | Generate a zsh diagnostics dump                 |
+| `zshreload`    | Reload zsh (`exec zsh`)                         |
+| `zsh_diagnostic_dump` | Generate a zsh diagnostics dump          |
 | `DEMOPROMPT`   | Switch to a preset "demo" prompt                |
 | `thisisntvim`  | Remind you that you are not in vim              |
 | `read-Yn`      | Yes/No prompt helper                            |
