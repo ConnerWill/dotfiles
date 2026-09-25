@@ -31,8 +31,25 @@ symlink pattern.**
   - [Features](#features)
   - [Load Order](#load-order)
   - [Plugins](#plugins)
+    - [Installing a Plugin](#installing-a-plugin)
     - [Enabling a Plugin](#enabling-a-plugin)
     - [Enabled Plugins](#enabled-plugins)
+      - [z.lua](#zlua)
+      - [zsh-fzf-history-search](#zsh-fzf-history-search)
+      - [colored-man-pages](#colored-man-pages)
+      - [autopair](#autopair)
+      - [k](#k)
+      - [copier](#copier)
+      - [change-case](#change-case)
+      - [zsh-system-clipboard](#zsh-system-clipboard)
+      - [zsh-autoswitch-virtualenv](#zsh-autoswitch-virtualenv)
+      - [undollar](#undollar)
+      - [history-search-multi-word](#history-search-multi-word)
+      - [expand-ealias](#expand-ealias)
+      - [zprofile](#zprofile)
+      - [symmetric-ctrl-z](#symmetric-ctrl-z)
+      - [cheatsheet](#cheatsheet)
+      - [sudo](#sudo)
   - [Functions](#functions)
     - [Enabling a Function](#enabling-a-function)
     - [Enabled Functions](#enabled-functions)
@@ -111,6 +128,42 @@ After `zsh.d/`, files in `.private/` are sourced last.
 
 Plugins live in `zsh/user/plugins/`.
 
+### Installing a Plugin
+
+Plugins are *vendored*: their files are committed directly into the dotfiles
+repo rather than tracked as git submodules. To achieve this, clone the plugin
+into `plugins-available/` and then remove its nested `.git` directory — git
+will not track files inside a directory that contains its own `.git`, so
+removing it turns the plugin into plain, tracked files.
+
+```bash
+cd "${ZDOTDIR}/zsh/user/plugins/plugins-available"
+
+# 1. Clone the plugin (shallow — history is discarded anyway)
+git clone --depth=1 https://github.com/<owner>/<plugin>.git
+
+# 2. Remove its git metadata so it becomes plain files in the dotfiles repo
+rm -rf <plugin>/.git
+
+# 3. Enable it (see "Enabling a Plugin" below)
+cd ../plugins-enabled
+ln -s ../plugins-available/<plugin>/<plugin>.plugin.zsh <plugin>.plugin.zsh
+
+# 4. Track the new files in the dotfiles bare repo
+dotf add "${ZDOTDIR}/zsh/user/plugins/plugins-available/<plugin>"
+dotf add "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/<plugin>.plugin.zsh"
+
+# 5. Reload
+exec zsh
+```
+
+> **Note:** the loader script is usually `*.plugin.zsh` or `*.zsh` — check the
+> plugin's repository for the correct filename.
+
+To **update** a vendored plugin later, re-clone it, `rm -rf .git`, and copy the
+files over the existing directory (the `Upstream:` link under each plugin in
+[Enabled Plugins](#enabled-plugins) records where each one came from).
+
 ### Enabling a Plugin
 
 Each plugin is a directory under `plugins-available/`; enable it by symlinking
@@ -132,26 +185,151 @@ rm "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/autopair.zsh"
 
 ### Enabled Plugins
 
-The following plugins are currently enabled (symlinked into `plugins-enabled/`):
+The following plugins are currently enabled (symlinked into `plugins-enabled/`).
 
-| Plugin                        | Description                                        |
-| ----------------------------- | -------------------------------------------------- |
-| `z.lua`                       | Fast directory jumping based on frecency           |
-| `zsh-fzf-history-search`      | Fuzzy history search via fzf                       |
-| `colored-man-pages`           | Adds color to man pages                            |
-| `autopair`                    | Auto-closes brackets, quotes, and parentheses      |
-| `k`                           | Directory listings with git status and file sizes  |
-| `copier`                      | Copy command output / buffer helpers               |
-| `change-case`                 | Convert word/case styles on the command line       |
-| `zsh-system-clipboard`        | Integrates yank/paste with the system clipboard    |
-| `zsh-autoswitch-virtualenv`   | Auto-activates Python virtualenvs per directory    |
-| `undollar`                    | Strips leading `$` from pasted commands            |
-| `history-search-multi-word`   | Multi-word incremental history search              |
-| `expand-ealias`               | Expands "explicit" aliases inline                  |
-| `zprofile`                    | Startup profiling helper                           |
-| `symmetric-ctrl-z`            | Toggle foreground/background jobs with `Ctrl-Z`    |
-| `cheatsheet`                  | Quick-reference cheatsheet command                 |
-| `sudo`                        | Prefix the current/previous command with `sudo`    |
+#### z.lua
+
+Fast directory jumping based on "frecency" (frequency + recency). It tracks the
+directories you visit and lets you jump straight to them, e.g. `z foo` jumps to
+the most frecent directory matching `foo`, and `z foo bar` matches a path
+containing both. Also supports interactive selection (`z -i`), fzf-backed
+selection (`z -I`), and quick parent-directory jumps (`z -b foo`). A faster,
+more portable alternative to `z.sh`/autojump.
+
+- Upstream: <https://github.com/skywind3000/z.lua>
+
+#### zsh-fzf-history-search
+
+Replaces the default `Ctrl-R` reverse history search with an
+[fzf](https://github.com/junegunn/fzf)-driven, fuzzy, searchable list of your
+command history. Requires `fzf` to be installed.
+
+- Upstream: <https://github.com/joshskidmore/zsh-fzf-history-search>
+
+#### colored-man-pages
+
+Provides a `man` wrapper that colorizes man pages by setting the
+`LESS_TERMCAP_*` environment variables (bold, underline, reverse, etc.) that
+`less` uses for rendering. ANSI sequences are pulled from the terminfo database
+via `tput`.
+
+- Upstream: <https://github.com/ael-code/zsh-colored-man-pages>
+
+#### autopair
+
+Intelligently auto-closes, skips over, and deletes matching delimiters
+(brackets, quotes, spaces). It inserts matching pairs, skips over an existing
+closing character instead of inserting a duplicate, auto-deletes both halves of
+a pair on backspace, and expands/contracts spaces between brackets — only when
+doing so makes sense (balanced pairs, cursor not next to a boundary character).
+
+- Upstream: <https://github.com/hlissner/zsh-autopair>
+
+#### k
+
+Directory listings for zsh with git features. Like `ls`, but adds color and
+inline git status for files and directories, grades file sizes by color (green
+for small, red for large), and fades dates with age. Human-readable sizes are
+available via `-h` (requires `numfmt`/`gnumfmt` from GNU coreutils).
+
+- Upstream: <https://github.com/supercrabtree/k>
+
+#### copier
+
+Oh-My-Zsh clipboard utilities packaged as a standalone plugin. Provides
+`clipcopy`/`clippaste` for copying to and pasting from the command line,
+`copydir` to copy the current directory path, `copyfile` to copy a file's
+contents, and `copybuffer` (bound to <kbd>Ctrl</kbd>+<kbd>o</kbd>) to copy the
+current command buffer to the clipboard.
+
+- Upstream: <https://github.com/zshzoo/copier>
+
+#### change-case
+
+Adds ZLE widgets to convert the case/word style of text on the command line
+(e.g. upper, lower). Inspired by VSCode/Sublime, the author suggests bindings
+like <kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>U</kbd> to uppercase and
+<kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>L</kbd> to lowercase.
+
+- Upstream: <https://github.com/mtxr/zsh-change-case>
+
+#### zsh-system-clipboard
+
+Synchronizes ZLE (Zsh Line Editor) yank/paste operations with the system
+clipboard for vi-emulation keymaps. Normally ZLE keeps its own clipboard buffer,
+so yanking with <kbd>y</kbd> in vi normal mode won't reach the system clipboard;
+this plugin bridges the two without overriding ZLE's own registers. Works on
+Linux, macOS, and Android (Termux), and can also sync tmux buffers when
+`ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT` is set to `'true'`.
+
+- Upstream: <https://github.com/kutsan/zsh-system-clipboard>
+
+#### zsh-autoswitch-virtualenv
+
+Automatically activates and deactivates Python virtualenvs as you `cd` between
+projects. It looks for a `.venv` file in the directory (the marker filename is
+configurable via `AUTOSWITCH_FILE`) and activates the matching environment,
+storing environments under `$AUTOSWITCH_VIRTUAL_ENV_DIR` (default
+`~/.virtualenvs`). It refuses to source paths containing `..` as a safety check.
+
+- Upstream: <https://github.com/MichaelAquilina/zsh-autoswitch-virtualenv>
+
+#### undollar
+
+Strips a leading `$` from a pasted command. When you copy a command from the web
+that includes the shell-prompt `$` (e.g. `$ tar xvfJ file.tar.xz`), undollar
+registers `$` as an alias that simply runs whatever follows it, so the stray
+prompt character no longer causes a "command not found" error.
+
+- Upstream: <https://github.com/zpm-zsh/undollar>
+
+#### history-search-multi-word
+
+Binds `Ctrl-R` to a multi-word history search: enter several keywords and it
+finds history entries matching *all* of them (AND matching), with syntax
+highlighting. Also offers "context viewing" to see matched commands alongside
+their surrounding history.
+
+- Upstream: <https://github.com/zdharma-continuum/history-search-multi-word>
+
+#### expand-ealias
+
+Expands "explicit" aliases inline as you type. Aliases registered with the
+`ealias` helper are expanded in place the moment you press <kbd>Space</kbd>, so
+you see the full command before running it (similar to vim abbreviations), while
+ordinary aliases are left untouched. Press <kbd>Ctrl</kbd>+<kbd>Space</kbd> for a
+magic space that bypasses expansion.
+
+#### zprofile
+
+Startup profiling helper. Wrap the section of your `.zshrc` you want to measure
+between `zprofile::before` and `zprofile::after` (gated on `$ZPROFILE`), then use
+the `zprofile`, `zprofile benchmark`, or `zprofile <FUNCTION_CALL>` commands to
+inspect timing.
+
+- Upstream: <https://github.com/qoomon/zprofile>
+
+#### symmetric-ctrl-z
+
+Makes <kbd>Ctrl</kbd>+<kbd>Z</kbd> symmetric: as well as suspending a foreground
+job, pressing it on an empty command line brings the most recent background job
+back to the foreground. Based on Oh-My-Zsh's `fancy-ctrl-z`.
+
+- Upstream: <https://github.com/zshzoo/symmetric-ctrl-z>
+
+#### cheatsheet
+
+A `cs` command to view, create, edit, list, and remove personal cheatsheets.
+Sheets are stored under `~/.config/cs-zsh/sheets` and edited with `$EDITOR`
+(falling back to `vim`). Examples: `cs add my-cheatsheet`, `cs list`,
+`cs my-cheatsheet`.
+
+#### sudo
+
+Press the bound hotkey (default <kbd>Esc</kbd> <kbd>s</kbd>) to toggle `sudo` (or
+`sudoedit`) at the front of the current command line. If the line is empty, it
+pulls the last command from history first, so you can re-run the previous command
+with `sudo`. Based on the Oh-My-Zsh `sudo` plugin.
 
 ---
 
