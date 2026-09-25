@@ -1,0 +1,3 @@
+ar_env() {
+    typeset |grep "^AR_"
+}

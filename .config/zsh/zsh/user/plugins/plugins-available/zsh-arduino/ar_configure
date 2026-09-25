@@ -1,0 +1,19 @@
+
+function ar_configure()
+{
+    vscode=".vscode/arduino.json"
+    if [[ -r $vscode  ]] then
+            echo "found vscode config"
+            AR_FQBN=$(jq -j '.board + ":" + .configuration' $vscode)
+            AR_PORT=$(jq -j '.port' $vscode)
+            AR_SERIAL=$AR_PORT
+    else
+            echo "using defaults"
+            AR_UPLOAD=BMPMethod 
+            AR_BOARD=Arduino_STM32:STM32F1:genericSTM32F103C
+            AR_VARIANT=STM32F103CB
+            AR_FQBN=$BOARD:device_variant=$VARIANT,upload_method=$UPLOAD,cpu_speed=speed_72mhz,opt=osstd
+            AR_PORT=/dev/ttyACM0
+            AR_SERIAL=/dev/ttyACM1
+    fi
+}
