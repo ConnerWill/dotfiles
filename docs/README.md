@@ -5,7 +5,6 @@
 | ![lf screenshot](https://user-images.githubusercontent.com/10108377/140654098-bafadfdf-76d9-43ac-87b9-e42308ea11a3.png) | ![zsh screenshot](https://user-images.githubusercontent.com/10108377/140654211-2bd25f1a-2677-4cf7-ab2e-d043e65e40e5.png) | ![fzf screenshot](https://user-images.githubusercontent.com/10108377/140654357-1bc87a9c-b395-458c-81d4-ce992c589fac.png) |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 
-
 # **ｄｏｔｆｉｌｅｓ**
 
 > *My Personal dotfiles*
@@ -31,10 +30,7 @@
 
 ## Installation
 
-<details>
- <summary><b>Standard Installation</b></summary>
-
-<br>
+### Standard Installation</details></summary>
 
 > **Clone this repository to use as your dotfiles**
 
@@ -49,12 +45,9 @@ git clone \
 
 > Then checkout the main branch, initialize submodules, and exec zsh
 
-<div align="center">
-
 ```diff
 - This will overwrite existing files! Make sure to backup first!
 ```
-</div>
 
 ```shell
 git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
@@ -62,65 +55,26 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
  && exec zsh
 ```
 
-<br>
 
-<details>
- <summary><b>Single Command</b></summary>
+### Installation Script
 
-<br>
-
- <div align="center">
-
-
- ```diff
-- This will overwrite existing files! Make sure to backup first!
-```
-
- </div>
-
-```shell
-
- clear \
- && export DOTFILES="${HOME}/.dotfiles" \
- && alias dotf='git --work-tree="${HOME}" --git-dir="${DOTFILES}"' \
- && git clone \
-    --bare                                                    \
-    --config status.showUntrackedFiles=no                     \
-    --config core.excludesfile="${DOTFILES}/.gitignore"       \
-    --verbose --progress                                      \
-    https://github.com/ConnerWill/dotfiles.git "${DOTFILES}"  \
- && git --work-tree="${HOME}" --git-dir="${DOTFILES}" checkout --force main \
- && git --work-tree="${HOME}" --git-dir="${DOTFILES}" -C "${HOME}" submodule update --init --recursive \
- && exec zsh
-
-```
-
-</details>
-
-<details>
- <summary><b>Installation Script</b></summary>
-
-Installation Script Online
+> Installation Script Online
 
 ```bash
 curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash
 ```
 
-</details>
-</details>
+---
 
-<details>
- <summary><b>Test dotfiles in Docker</b></summary>
+## Test dotfiles With Docker
 
-<br>
-
-> **Test ZSH configuration in Docker - DOCKER RUN**
+### Docker Run
 
 ```bash
 docker run -it --rm archlinux bash -c 'curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | DOTFILES_ASSUME_YES=1 bash ; exec zsh'
 ```
 
-> **Test ZSH configuration in Docker - DOCKERFILE**
+### Dockerfile
 
 ```bash
 # Clone dotfiles as a normal repository
@@ -143,42 +97,26 @@ docker run        \
     connerwill-dotfiles-zsh:latest
 ```
 
-<br>
-
-</details>
-
 ---
 
-<!--
+## Configurations
 
-# Features
-
-- [x] Fully featured ZSH configuration
-  - [x]
-- [x] Mars
-- [ ] TODO
-
--->
-
-# Configurations
-
-* **Xresources**
+* **zsh**
+* **neovim**
 * **awesome**
 * **bat**
-* fish
 * **git**
+* **fish**
 * **kitty**
 * **lynx**
 * **nano**
-* **nvim**
-* powershell
+* **powershell**
+* **Xresources**
 * **sx**
 * **termux**
 * **tmux**
-* **zsh**
 
-
-# Contributing
+## Contributing
 
 <details>
   <summary>Click to expand contributing section</summary>
@@ -194,7 +132,6 @@ If you have a suggestion that would make this better, please fork the repo and c
 3. Commit your Changes (`git commit -m 'Added some AmazingFeature'`)
 4. Push to the Branch (`git push origin AmazingFeature`)
 5. Open a Pull Request
-
 
 </details>
 
