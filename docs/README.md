@@ -32,6 +32,8 @@
 
 ### Install Script
 
+[`install-dotfiles.sh`](/.config/zsh/install-dotfiles.sh)
+
 ```bash
 curl --silent -L "https://raw.githubusercontent.com/ConnerWill/dotfiles/refs/heads/main/.config/zsh/install-dotfiles.sh" | bash
 ```
@@ -92,22 +94,11 @@ docker run        \
 
 ---
 
-## Configurations
+## Dotfiles Manager (dotf)
 
-* **zsh**
-* **neovim**
-* **awesome**
-* **bat**
-* **git**
-* **fish**
-* **kitty**
-* **lynx**
-* **nano**
-* **powershell**
-* **Xresources**
-* **sx**
-* **termux**
-* **tmux**
+- [dotf](https://github.com/connerwill/dotf)
+
+---
 
 ## Contributing
 
