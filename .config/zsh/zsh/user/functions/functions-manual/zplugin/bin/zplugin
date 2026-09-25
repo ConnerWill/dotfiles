@@ -299,7 +299,9 @@ HELPMENUMOREINFO
       _zplugin_msg_error "Could not find a loader script (*.plugin.zsh or *.zsh) in: ${_src}"
       return 1
     fi
-    local _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
+    ## Name the symlink after the plugin itself so it is descriptive and
+    ## unique, rather than reusing a generic loader filename (e.g. plugin.zsh)
+    local _link="${ZPLUGINS_ENABLED}/${_name}.plugin.zsh"
     if [[ -L "${_link}" || -e "${_link}" ]]; then
       _zplugin_msg_info "Already enabled: ${_link##*/}"
       return 0
@@ -314,16 +316,19 @@ HELPMENUMOREINFO
   _zplugin_disable(){
     local _name="${1}"
     local _src="${ZPLUGINS_AVAILABLE}/${_name}"
-    local _loader _link _removed=0
+    local _loader _removed=0
+
+    ## Preferred (current) link name is descriptive: <name>.plugin.zsh.
+    ## Also clean up any legacy links named after the loader file or <name>.zsh.
+    local -a _candidates
+    _candidates=("${ZPLUGINS_ENABLED}/${_name}.plugin.zsh" "${ZPLUGINS_ENABLED}/${_name}.zsh")
     if [[ -d "${_src}" ]]; then
       _loader="$(_zplugin_find_loader "${_src}" "${_name}")"
-      [[ -n "${_loader}" ]] && _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
+      [[ -n "${_loader}" ]] && _candidates+=("${ZPLUGINS_ENABLED}/${_loader##*/}")
     fi
-    ## Fall back to matching by name if we could not resolve the loader
-    [[ -z "${_link}" ]] && _link="${ZPLUGINS_ENABLED}/${_name}.plugin.zsh"
 
     local _candidate
-    for _candidate in "${_link}" "${ZPLUGINS_ENABLED}/${_name}.zsh" "${ZPLUGINS_ENABLED}/${_name}.plugin.zsh"; do
+    for _candidate in "${_candidates[@]}"; do
       if [[ -L "${_candidate}" || -e "${_candidate}" ]]; then
         rm -f "${_candidate}" \
           && { _zplugin_msg_ok "Disabled: ${_candidate##*/}"; _removed=1; } \
@@ -415,11 +420,17 @@ HELPMENUMOREINFO
     for _p in "${ZPLUGINS_AVAILABLE}"/*(N/); do
       _name="${_p:t}"
       _enabled=""
+      ## Current descriptive link name, plus legacy fallbacks
       _loader="$(_zplugin_find_loader "${_p}" "${_name}")"
-      if [[ -n "${_loader}" ]]; then
-        _link="${ZPLUGINS_ENABLED}/${_loader##*/}"
-        [[ -L "${_link}" || -e "${_link}" ]] && _enabled=1
-      fi
+      for _link in \
+        "${ZPLUGINS_ENABLED}/${_name}.plugin.zsh" \
+        "${ZPLUGINS_ENABLED}/${_name}.zsh" \
+        ${_loader:+"${ZPLUGINS_ENABLED}/${_loader##*/}"}; do
+        if [[ -L "${_link}" || -e "${_link}" ]]; then
+          _enabled=1
+          break
+        fi
+      done
       if [[ -n "${_enabled}" ]]; then
         printf "  ${colors[Green]}${colors[bold]}\u25CF${colors[reset]} ${colors[Green]}%-30s${colors[reset]} ${colors[DarkGray]}enabled${colors[reset]}\n" "${_name}"
       else
