@@ -137,7 +137,7 @@ will not track files inside a directory that contains its own `.git`, so
 removing it turns the plugin into plain, tracked files.
 
 ```bash
-cd "${ZDOTDIR}/zsh/user/plugins/plugins-available"
+cd "${ZSH_PLUGINS_AVAILABLE}"
 
 # 1. Clone the plugin (shallow — history is discarded anyway)
 git clone --depth=1 https://github.com/<owner>/<plugin>.git
@@ -146,12 +146,12 @@ git clone --depth=1 https://github.com/<owner>/<plugin>.git
 rm -rf <plugin>/.git
 
 # 3. Enable it (see "Enabling a Plugin" below)
-cd ../plugins-enabled
+cd "${ZSH_PLUGINS_ENABLED}"
 ln -s ../plugins-available/<plugin>/<plugin>.plugin.zsh <plugin>.plugin.zsh
 
 # 4. Track the new files in the dotfiles bare repo
-dotf add "${ZDOTDIR}/zsh/user/plugins/plugins-available/<plugin>"
-dotf add "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/<plugin>.plugin.zsh"
+dotf add "${ZSH_PLUGINS_AVAILABLE}/<plugin>"
+dotf add "${ZSH_PLUGINS_ENABLED}/<plugin>.plugin.zsh"
 
 # 5. Reload
 exec zsh
@@ -170,7 +170,7 @@ Each plugin is a directory under `plugins-available/`; enable it by symlinking
 its loader script (usually `*.plugin.zsh` or `*.zsh`) into `plugins-enabled/`:
 
 ```bash
-cd "${ZDOTDIR}/zsh/user/plugins/plugins-enabled"
+cd "${ZSH_PLUGINS_ENABLED}"
 ln -s ../plugins-available/zsh-autopair/autopair.zsh autopair.zsh
 
 # Reload
@@ -180,7 +180,7 @@ exec zsh
 To disable, remove the symlink from `plugins-enabled/`:
 
 ```bash
-rm "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/autopair.zsh"
+rm "${ZSH_PLUGINS_ENABLED}/autopair.zsh"
 ```
 
 ### Enabled Plugins
@@ -344,7 +344,7 @@ Enable a function by symlinking it from `functions-available/` into
 back into `functions-available/`:
 
 ```bash
-cd "${ZDOTDIR}/zsh/user/functions/functions-enabled"
+cd "${ZSH_FUNCTIONS_ENABLED}"
 ln -s ../functions-available/mkcd.zsh mkcd.zsh
 
 # Reload
@@ -354,7 +354,7 @@ exec zsh
 To disable, remove the symlink from `functions-enabled/`:
 
 ```bash
-rm "${ZDOTDIR}/zsh/user/functions/functions-enabled/mkcd.zsh"
+rm "${ZSH_FUNCTIONS_ENABLED}/mkcd.zsh"
 ```
 
 ### Enabled Functions
