@@ -18,8 +18,45 @@
 ```
 
 A fully modular ZSH setup: startup files are split into numbered load stages,
-and functions/plugins are toggled with an Apache-style `enabled`/`available`
+and functions/plugins are toggled with an nginx-style `enabled`/`available`
 symlink pattern.
+
+---
+
+## Table of Contents
+
+<!--toc:start-->
+- [ZSH](#zsh)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Load Order](#load-order)
+  - [Functions](#functions)
+    - [Enabling a Function](#enabling-a-function)
+    - [Enabled Functions](#enabled-functions)
+      - [Navigation / cd](#navigation-cd)
+      - [Git](#git)
+      - [fzf / search](#fzf-search)
+      - [Color / ANSI](#color-ansi)
+      - [Files / text](#files-text)
+      - [Network / remote](#network-remote)
+      - [Security / system](#security-system)
+      - [Terminal / display](#terminal-display)
+      - [Misc](#misc)
+  - [Plugins](#plugins)
+    - [Enabling a Plugin](#enabling-a-plugin)
+    - [Enabled Plugins](#enabled-plugins)
+  - [Keybindings](#keybindings)
+    - [Line Editing](#line-editing)
+    - [History](#history)
+    - [Navigation](#navigation)
+    - [Selection (Shift-Select)](#selection-shift-select)
+    - [Completion Menu (menuselect)](#completion-menu-menuselect)
+    - [Vi Command Mode](#vi-command-mode)
+    - [Plugins](#plugins-1)
+  - [Configuration Toggles](#configuration-toggles)
+  - [Structure](#structure)
+- [Docker](#docker)
+<!--toc:end-->
 
 ---
 
@@ -30,7 +67,7 @@ symlink pattern.
   monolithic file.
 - **Enabled/available toggles** — functions and plugins live in
   `*-available/` directories and are activated by symlinking them into the
-  matching `*-enabled/` directory (like Apache `sites-enabled`).
+  matching `*-enabled/` directory (like nginx `sites-enabled`).
 - **80+ custom functions** — fzf integrations, git helpers, ANSI/color tooling,
   and rclone/ssh/gpg utilities in `functions/functions-available/`.
 - **Curated plugins** — syntax highlighting, autosuggestions, autopair,
@@ -70,29 +107,174 @@ After `zsh.d/`, files in `.private/` are sourced last.
 
 ---
 
-## Enabling a Function or Plugin
+## Functions
 
-Activate a function or plugin by symlinking it from `*-available/` into
-`*-enabled/`:
+Functions live in `zsh/user/functions/`.
+
+### Enabling a Function
+
+Enable a function by symlinking it from `functions-available/` into
+`functions-enabled/`. The symlink lives inside `functions-enabled/` and points
+back into `functions-available/`:
 
 ```bash
-# Enable a function
-cd "${ZDOTDIR}/zsh/user/functions"
-ln -s ../functions-available/mkcd.zsh functions-enabled/mkcd.zsh
-
-# Enable a plugin
-cd "${ZDOTDIR}/zsh/user/plugins"
-ln -s ../plugins-available/zsh-autosuggestions plugins-enabled/zsh-autosuggestions
+cd "${ZDOTDIR}/zsh/user/functions/functions-enabled"
+ln -s ../functions-available/mkcd.zsh mkcd.zsh
 
 # Reload
 exec zsh
 ```
 
-To disable, remove the symlink from the `*-enabled/` directory.
+To disable, remove the symlink from `functions-enabled/`:
+
+```bash
+rm "${ZDOTDIR}/zsh/user/functions/functions-enabled/mkcd.zsh"
+```
+
+### Enabled Functions
+
+The following functions are currently enabled (symlinked into
+`functions-enabled/`). See `functions-available/` for the full set of
+functions that can be enabled.
+
+#### Navigation / cd
+
+| Function        | Description                                              |
+| --------------- | -------------------------------------------------------- |
+| `mkcd`          | Create a directory and `cd` into it                      |
+| `cdx`           | `cd` to config directories based on a letter shortcut    |
+| `cdlink`        | When `cd`-ing to a symlink, follow to the real target    |
+| `cd-correction` | If you `cd` to a file, `cd` into its directory instead   |
+| `cd-repo`       | `cd` to the current git repository root                  |
+| `repo-root`     | Print the current git repository root                    |
+| `gitcd`         | Clone a repo, then `cd` into it                          |
+| `dirselect`     | Interactive directory selector                           |
+| `rmcwd`         | Remove the current working directory                     |
+
+#### Git
+
+| Function                 | Description                                     |
+| ------------------------ | ----------------------------------------------- |
+| `g`                      | Render Markdown in the terminal                 |
+| `gi`                     | `git` wrapper; runs `git status` with no args   |
+| `git-blame-percentages`  | Show per-author blame percentages for a repo    |
+| `git-open-url`           | Open the repo's `origin` remote URL in browser  |
+| `gh-gist-clone`          | Clone a GitHub gist                             |
+| `rm-git`                 | Remove `.git*` files/dirs below the cwd         |
+| `wdotf`                  | Manage a Windows-side dotfiles bare repo        |
+
+#### fzf / search
+
+| Function              | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| `fzfrg`               | Fuzzy-find with ripgrep                         |
+| `fzfcolor`            | Fuzzy finder that previews file contents        |
+| `manfzf`              | Fuzzy-find man pages                            |
+| `man-global-apropos`  | Global `apropos` search across man pages        |
+| `cht`                 | Query `cht.sh` cheat sheets                     |
+
+#### Color / ANSI
+
+| Function                     | Description                              |
+| ---------------------------- | ---------------------------------------- |
+| `ansi-colors`                | Print an ANSI color table                |
+| `colortest`                  | Print an ANSI color table                |
+| `listcolorANSI`              | Print the 256-color ANSI palette         |
+| `terminal-truecolor-tests`   | Test terminal truecolor support          |
+| `highlight`                  | Highlight regex matches in text (perl)   |
+| `hl`                         | Syntax-highlight files via `highlight`   |
+| `draw_entire_line`           | Draw a full-width line in a given style   |
+| `line`                       | Fill the terminal width with a character |
+
+#### Files / text
+
+| Function                              | Description                            |
+| ------------------------------------- | -------------------------------------- |
+| `rmls`                                | List files before removing, on approval |
+| `chmodchown`                          | Match a target's perms/owner to a reference file |
+| `count-characters`                    | Count characters in the given args     |
+| `split-path`                          | Split `$PATH` onto separate lines      |
+| `find-and-replace-in-all-files-below` | Recursive `sed` find-and-replace       |
+| `replace-backslashes-with-forward`    | Replace backslashes with forward slashes |
+| `create-pdf`                          | Generate a minimal PDF from text       |
+| `zsh-realpath2clip`                   | Copy a path's `realpath` to clipboard  |
+| `xdg-open-clip`                       | Open the clipboard contents' URL/file  |
+
+#### Network / remote
+
+| Function             | Description                                   |
+| -------------------- | --------------------------------------------- |
+| `ssh-copy-key`       | Copy SSH public/private key to clipboard      |
+| `ssh-secure-keygen`  | Create SSH keys                               |
+| `rclone-tree`        | Show an rclone remote as a tree               |
+| `rsync-timemachine`  | Time Machine-style backups with rsync         |
+| `wget-website`       | Mirror a website with `wget`                  |
+| `wetty-download`     | Download files through WeTTY                  |
+| `yt-dlp_download`    | Download a video (with subs) via `yt-dlp`     |
+| `espeak-url`         | Fetch a page, convert to text, speak via espeak |
+
+#### Security / system
+
+| Function                     | Description                              |
+| ---------------------------- | ---------------------------------------- |
+| `gpg-encrypt`                | Encrypt a file with GPG                  |
+| `gpgID`                      | Return the ID of a GPG key               |
+| `fail2ban-client-status-all` | Show the status of all Fail2Ban jails    |
+| `verify-fstab`              | Verify `/etc/fstab` with `findmnt`        |
+| `rm-.ansible`                | Safely remove nested `.ansible` dirs     |
+| `jenkins-validate`           | Validate a Jenkinsfile via the linter    |
+
+#### Terminal / display
+
+| Function                  | Description                                  |
+| ------------------------- | -------------------------------------------- |
+| `hyperlink`               | Format text + URL into a clickable hyperlink |
+| `asciinema-rec`           | Record the terminal with asciinema           |
+| `terminal-record-script`  | Record the terminal with `script`            |
+| `zsh-loading-bar`         | Show a loading bar                           |
+| `turn-off-monitors`       | Toggle monitor power via `xset`              |
+| `nitrogen-set-wallpaper`  | Set the wallpaper with nitrogen              |
+| `pacmangraph`             | Generate a dependency graph with pacgraph    |
+| `printimage`              | Print an image in the terminal               |
+
+#### Misc
+
+| Function       | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `ez`           | Reload zsh (`exec zsh`)                         |
+| `zsh-reload`   | Reload zsh (`exec zsh`)                         |
+| `diagnostics`  | Generate a zsh diagnostics dump                 |
+| `DEMOPROMPT`   | Switch to a preset "demo" prompt                |
+| `thisisntvim`  | Remind you that you are not in vim              |
+| `read-Yn`      | Yes/No prompt helper                            |
+| `llll`         | Directory listing helper                        |
 
 ---
 
-## Enabled Plugins
+## Plugins
+
+Plugins live in `zsh/user/plugins/`.
+
+### Enabling a Plugin
+
+Each plugin is a directory under `plugins-available/`; enable it by symlinking
+its loader script (usually `*.plugin.zsh` or `*.zsh`) into `plugins-enabled/`:
+
+```bash
+cd "${ZDOTDIR}/zsh/user/plugins/plugins-enabled"
+ln -s ../plugins-available/zsh-autopair/autopair.zsh autopair.zsh
+
+# Reload
+exec zsh
+```
+
+To disable, remove the symlink from `plugins-enabled/`:
+
+```bash
+rm "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/autopair.zsh"
+```
+
+### Enabled Plugins
 
 The following plugins are currently enabled (symlinked into `plugins-enabled/`):
 
