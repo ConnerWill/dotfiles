@@ -499,26 +499,28 @@ _zplugin(){
   local _zp_avail
   _zp_avail="${ZSH_PLUGINS_AVAILABLE:-${ZSH_PLUGINS_DIR:-${ZSH_USER_DIR:-${ZDOTDIR}/zsh/${ZSH_USER_NAME:-user}}/plugins}/plugins-available}"
 
-  local -a _subcmds
+  local -a _subcmds _metaopts
   _subcmds=(
     'install:Clone, vendor, and enable a plugin (user/repo or full URL)'
-    'i:Alias for install'
-    'add:Alias for install'
+    'i:Clone, vendor, and enable a plugin (user/repo or full URL)'
+    'add:Clone, vendor, and enable a plugin (user/repo or full URL)'
     'enable:Symlink an installed plugin into plugins-enabled'
-    'e:Alias for enable'
+    'e:Symlink an installed plugin into plugins-enabled'
     'disable:Remove a plugin symlink from plugins-enabled'
-    'd:Alias for disable'
+    'd:Remove a plugin symlink from plugins-enabled'
     'remove:Disable and delete a plugin from plugins-available'
-    'rm:Alias for remove'
+    'rm:Disable and delete a plugin from plugins-available'
     'list:List available plugins and their enabled state'
-    'ls:Alias for list'
+    'ls:List available plugins and their enabled state'
+  )
+  _metaopts=(
     'help:Show the full help menu'
-    'usage:Show usage'
-    'examples:Show examples'
-    '-h:Show the help menu'
     '--help:Show the full help menu'
+    'usage:Show usage'
     '--usage:Show usage'
+    'examples:Show examples'
     '--examples:Show examples'
+    '-h:Show the help menu'
     '-V:Show version'
     '--version:Show version'
   )
@@ -529,7 +531,8 @@ _zplugin(){
 
   case "${state}" in
     cmd)
-      _describe -t commands "${PROG:-zplugin} subcommand" _subcmds
+      _describe -t commands "zplugin subcommand" _subcmds
+      _describe -t metaopts "zplugin meta option" _metaopts
       ;;
     args)
       case "${line[1]}" in
