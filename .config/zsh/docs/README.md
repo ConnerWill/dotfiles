@@ -17,9 +17,9 @@
  ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-A fully modular ZSH setup: startup files are split into numbered load stages,
+> **A fully modular ZSH setup: startup files are split into numbered load stages,
 and functions/plugins are toggled with an nginx-style `enabled`/`available`
-symlink pattern.
+symlink pattern.**
 
 ---
 
