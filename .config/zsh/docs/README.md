@@ -466,6 +466,7 @@ functions that can be enabled.
 | `ez`           | Reload zsh (`exec zsh`)                         |
 | `zshreload`    | Reload zsh (`exec zsh`)                         |
 | `zsh_diagnostic_dump` | Generate a zsh diagnostics dump          |
+| `zsh_listbindings` | List all zsh keybindings across every keymap |
 | `DEMOPROMPT`   | Switch to a preset "demo" prompt                |
 | `thisisntvim`  | Remind you that you are not in vim              |
 | `read-Yn`      | Yes/No prompt helper                            |
@@ -572,6 +573,9 @@ Keybindings provided by enabled plugins:
 > its keymap) to auto-close and auto-delete matching pairs.
 
 > Press <kbd>Ctrl</kbd>+<kbd>x</kbd> <kbd>Ctrl</kbd>+<kbd>z</kbd> to display the current keybindings.
+
+> Run `zsh_listbindings` to print every keybinding across all keymaps, grouped
+> and colorized by keymap.
 
 ---
 

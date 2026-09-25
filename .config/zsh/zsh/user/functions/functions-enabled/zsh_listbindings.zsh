@@ -1,0 +1,1 @@
+../functions-available/zsh_listbindings.zsh
