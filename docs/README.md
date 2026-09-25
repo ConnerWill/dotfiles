@@ -109,6 +109,12 @@ docker run        \
 
 ---
 
+## Plugin Manager (zplugin)
+
+- [zplugin](/.config/zsh/zsh/user/functions/functions-manual/zplugin/docs/README.md)
+
+---
+
 ## Contributing
 
 <details>
