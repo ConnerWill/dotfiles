@@ -626,6 +626,13 @@ Keybindings provided by enabled plugins:
 > Run `zsh_listbindings` to print every keybinding across all keymaps, grouped
 > and colorized by keymap.
 
+To print **every ZLE widget** alongside its `which` definition, run (this is
+also available as the `zsh/tools/zsh-zle-list-all.zsh` tool):
+
+```bash
+for zlecmd in $(zle -la | cut -d" " -f1); do printf "\n\n\n\n\e[0;1;4;38;5;46m%s\e[0m\n\n" "${zlecmd}"; which "${zlecmd}"; done
+```
+
 ---
 
 ## Configuration Toggles
