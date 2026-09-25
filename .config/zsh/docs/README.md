@@ -409,7 +409,8 @@ functions that can be enabled.
 | Function        | Description                                              |
 | --------------- | -------------------------------------------------------- |
 | `mkcd`          | Create a directory and `cd` into it                      |
-| `cdX` / `cdz`   | `cd` to config directories based on a letter shortcut    |
+| `cdX`           | List the currently defined `cd*` shortcut aliases        |
+| `cdz`           | `cd` to a path (defaults to `ZDOTDIR`); backs the `cd*` letter shortcuts, and opens the path in `$EDITOR` if a 2nd arg is given |
 | `cdlink`        | When `cd`-ing to a symlink, follow to the real target    |
 | `cd`            | `cd` correction: if you `cd` to a file, `cd` into its directory instead |
 | `cd-repo`       | `cd` to the current git repository root                  |
