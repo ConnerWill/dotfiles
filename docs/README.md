@@ -28,6 +28,15 @@
 
 ---
 
+## Documentation
+
+Individual configurations have their own documentation:
+
+- [**ZSH**](/.config/zsh/README.md) — modular shell config, custom functions, plugins, and toggles
+- [**Neovim**](/.config/nvim/README.md) — LazyVim-based editor setup, plugins, and colorschemes
+
+---
+
 ## Installation
 
 ### Install Script
