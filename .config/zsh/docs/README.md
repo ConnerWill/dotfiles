@@ -30,6 +30,9 @@ symlink pattern.**
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Load Order](#load-order)
+  - [Plugins](#plugins)
+    - [Enabling a Plugin](#enabling-a-plugin)
+    - [Enabled Plugins](#enabled-plugins)
   - [Functions](#functions)
     - [Enabling a Function](#enabling-a-function)
     - [Enabled Functions](#enabled-functions)
@@ -42,9 +45,6 @@ symlink pattern.**
       - [Security / system](#security-system)
       - [Terminal / display](#terminal-display)
       - [Misc](#misc)
-  - [Plugins](#plugins)
-    - [Enabling a Plugin](#enabling-a-plugin)
-    - [Enabled Plugins](#enabled-plugins)
   - [Keybindings](#keybindings)
     - [Line Editing](#line-editing)
     - [History](#history)
@@ -104,6 +104,54 @@ On startup `.zshrc` sources every `*.zsh` file in `zsh.d/` in numeric order:
 | `99_`  | Final keybindings / overrides |
 
 After `zsh.d/`, files in `.private/` are sourced last.
+
+---
+
+## Plugins
+
+Plugins live in `zsh/user/plugins/`.
+
+### Enabling a Plugin
+
+Each plugin is a directory under `plugins-available/`; enable it by symlinking
+its loader script (usually `*.plugin.zsh` or `*.zsh`) into `plugins-enabled/`:
+
+```bash
+cd "${ZDOTDIR}/zsh/user/plugins/plugins-enabled"
+ln -s ../plugins-available/zsh-autopair/autopair.zsh autopair.zsh
+
+# Reload
+exec zsh
+```
+
+To disable, remove the symlink from `plugins-enabled/`:
+
+```bash
+rm "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/autopair.zsh"
+```
+
+### Enabled Plugins
+
+The following plugins are currently enabled (symlinked into `plugins-enabled/`):
+
+| Plugin                        | Description                                        |
+| ----------------------------- | -------------------------------------------------- |
+| `z.lua`                       | Fast directory jumping based on frecency           |
+| `zsh-fzf-history-search`      | Fuzzy history search via fzf                       |
+| `colored-man-pages`           | Adds color to man pages                            |
+| `autopair`                    | Auto-closes brackets, quotes, and parentheses      |
+| `k`                           | Directory listings with git status and file sizes  |
+| `copier`                      | Copy command output / buffer helpers               |
+| `change-case`                 | Convert word/case styles on the command line       |
+| `zsh-system-clipboard`        | Integrates yank/paste with the system clipboard    |
+| `zsh-autoswitch-virtualenv`   | Auto-activates Python virtualenvs per directory    |
+| `undollar`                    | Strips leading `$` from pasted commands            |
+| `history-search-multi-word`   | Multi-word incremental history search              |
+| `expand-ealias`               | Expands "explicit" aliases inline                  |
+| `zprofile`                    | Startup profiling helper                           |
+| `symmetric-ctrl-z`            | Toggle foreground/background jobs with `Ctrl-Z`    |
+| `cheatsheet`                  | Quick-reference cheatsheet command                 |
+| `sudo`                        | Prefix the current/previous command with `sudo`    |
 
 ---
 
@@ -248,54 +296,6 @@ functions that can be enabled.
 | `thisisntvim`  | Remind you that you are not in vim              |
 | `read-Yn`      | Yes/No prompt helper                            |
 | `llll`         | Directory listing helper                        |
-
----
-
-## Plugins
-
-Plugins live in `zsh/user/plugins/`.
-
-### Enabling a Plugin
-
-Each plugin is a directory under `plugins-available/`; enable it by symlinking
-its loader script (usually `*.plugin.zsh` or `*.zsh`) into `plugins-enabled/`:
-
-```bash
-cd "${ZDOTDIR}/zsh/user/plugins/plugins-enabled"
-ln -s ../plugins-available/zsh-autopair/autopair.zsh autopair.zsh
-
-# Reload
-exec zsh
-```
-
-To disable, remove the symlink from `plugins-enabled/`:
-
-```bash
-rm "${ZDOTDIR}/zsh/user/plugins/plugins-enabled/autopair.zsh"
-```
-
-### Enabled Plugins
-
-The following plugins are currently enabled (symlinked into `plugins-enabled/`):
-
-| Plugin                        | Description                                        |
-| ----------------------------- | -------------------------------------------------- |
-| `z.lua`                       | Fast directory jumping based on frecency           |
-| `zsh-fzf-history-search`      | Fuzzy history search via fzf                       |
-| `colored-man-pages`           | Adds color to man pages                            |
-| `autopair`                    | Auto-closes brackets, quotes, and parentheses      |
-| `k`                           | Directory listings with git status and file sizes  |
-| `copier`                      | Copy command output / buffer helpers               |
-| `change-case`                 | Convert word/case styles on the command line       |
-| `zsh-system-clipboard`        | Integrates yank/paste with the system clipboard    |
-| `zsh-autoswitch-virtualenv`   | Auto-activates Python virtualenvs per directory    |
-| `undollar`                    | Strips leading `$` from pasted commands            |
-| `history-search-multi-word`   | Multi-word incremental history search              |
-| `expand-ealias`               | Expands "explicit" aliases inline                  |
-| `zprofile`                    | Startup profiling helper                           |
-| `symmetric-ctrl-z`            | Toggle foreground/background jobs with `Ctrl-Z`    |
-| `cheatsheet`                  | Quick-reference cheatsheet command                 |
-| `sudo`                        | Prefix the current/previous command with `sudo`    |
 
 ---
 
