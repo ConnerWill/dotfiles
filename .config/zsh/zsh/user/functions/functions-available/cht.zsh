@@ -1,4 +1,4 @@
-function cht(){
+cht() {
   local i chtoutput
   for i in "${@}"; do
     printf "Searching for %s ...\n" "${i}"
@@ -7,3 +7,6 @@ function cht(){
   done
   echo -e "${chtoutput}" | "${PAGER:-${commands[cat]}}"
 }
+
+# compdef is not loaded at this point...
+#compdef _path_commands cht
