@@ -30,7 +30,7 @@ symlink pattern.**
   - [Load Order](#load-order)
   - [Plugins](#plugins)
     - [Installing a Plugin](#installing-a-plugin)
-      - [Using zplugin](#using-zplugin)
+      - [Using dotz](#using-dotz)
       - [Manually](#manually)
     - [Enabling a Plugin](#enabling-a-plugin)
     - [Enabled Plugins](#enabled-plugins)
@@ -176,22 +176,22 @@ Plugins live in `zsh/user/plugins/`.
 
 ### Installing a Plugin
 
-#### Using `zplugin`
+#### Using `dotz`
 
-The quickest way is the [`zplugin`](../zsh/user/functions/functions-manual/zplugin/docs/README.md)
+The quickest way is the [`dotz`](../zsh/user/functions/functions-manual/dotz/docs/README.md)
 helper (a `dotf`-style function that clones, vendors, enables, and tracks a
 plugin in one step). Pass a full URL, or the `user/repo` shorthand (GitHub is
 assumed):
 
 ```bash
-zplugin install hlissner/zsh-autopair                        # user/repo shorthand
-zplugin install https://github.com/skywind3000/z.lua.git     # full URL
+dotz install hlissner/zsh-autopair                        # user/repo shorthand
+dotz install https://github.com/skywind3000/z.lua.git     # full URL
 
-zplugin list              # show available plugins + enabled state (● enabled / ○ disabled)
-zplugin enable  <name>    # symlink an installed plugin's loader into plugins-enabled
-zplugin disable <name>    # remove the symlink from plugins-enabled
-zplugin remove  <name>    # disable and delete from plugins-available
-zplugin --help            # full help menu (also: usage, examples, -V/--version)
+dotz list              # show available plugins + enabled state (● enabled / ○ disabled)
+dotz enable  <name>    # symlink an installed plugin's loader into plugins-enabled
+dotz disable <name>    # remove the symlink from plugins-enabled
+dotz remove  <name>    # disable and delete from plugins-available
+dotz --help            # full help menu (also: usage, examples, -V/--version)
 
 # Reload
 exec zsh
@@ -200,19 +200,19 @@ exec zsh
 Subcommands have short aliases: `install` (`i`, `add`), `enable` (`e`),
 `disable` (`d`), `remove` (`rm`), and `list` (`ls`).
 
-`zplugin install` normalizes the argument into a clone URL (`user/repo` →
+`dotz install` normalizes the argument into a clone URL (`user/repo` →
 `https://github.com/user/repo`), clones shallowly into `plugins-available/`,
 removes the nested `.git` (vendoring it), auto-detects and symlinks the loader
 script (`<name>.plugin.zsh` → any `*.plugin.zsh` → `<name>.zsh` → a lone
 `*.zsh`) into `plugins-enabled/`, and — if `dotf` is available — tracks the new
-files. To update a vendored plugin later, `zplugin remove <name>` then
-`zplugin install <repo>` again. The manual steps below do the same thing by
+files. To update a vendored plugin later, `dotz remove <name>` then
+`dotz install <repo>` again. The manual steps below do the same thing by
 hand.
 
-> **Note:** `zplugin` is a *manual* function — it is sourced directly from
+> **Note:** `dotz` is a *manual* function — it is sourced directly from
 > `zsh.d/60_functions.zsh` rather than enabled via the
 > `functions-available`/`functions-enabled` symlink pattern. See its
-> [README](../zsh/user/functions/functions-manual/zplugin/docs/README.md) for
+> [README](../zsh/user/functions/functions-manual/dotz/docs/README.md) for
 > full details.
 
 #### Manually
