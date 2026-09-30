@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2059  # Intentional: color escapes from the ${colors[*]} array are used in printf format strings.
+
 set -e
 
 # -----------------------------------------------------------------------------
@@ -12,23 +14,96 @@ DOTF_DIR="${ZSH_FUNCTIONS_MANUAL:-${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/zsh/us
 VERBOSE=1
 
 # -----------------------------------------------------------------------------
+# Colors
+# Description: Associative array of ANSI escapes (mirrors the palette used by
+#              'dotf'). Honors the NO_COLOR environment variable: when NO_COLOR
+#              is set, all entries expand to empty strings so output is plain.
+# -----------------------------------------------------------------------------
+NO_COLOR=${NO_COLOR:-""}
+if [[ -n ${NO_COLOR} ]]; then
+  declare -A colors
+  colors[ColorOff]='\x1B[0m'
+  colors[bold]=''
+  colors[italic]=''
+  colors[underline]=''
+  colors[Black]=''
+  colors[Gray]=''
+  colors[DarkGray]=''
+  colors[White]=''
+  colors[BrightWhite]=''
+  colors[Red]=''
+  colors[Green]=''
+  colors[Yellow]=''
+  colors[BrightYellow]=''
+  colors[Blue]=''
+  colors[Indigo]=''
+  colors[Purple]=''
+  colors[Magenta]=''
+  colors[Cyan]=''
+  colors[BrightCyan]=''
+  colors[Orange]=''
+  colors[BgBlack]=''
+  colors[BgRed]=''
+  colors[BgGreen]=''
+  colors[BgYellow]=''
+  colors[BgBlue]=''
+  colors[BgPurple]=''
+  colors[BgMagenta]=''
+  colors[BgCyan]=''
+  colors[BgWhite]=''
+  colors[reset]='\x1B[0m'
+else
+  declare -A colors
+  colors[ColorOff]='\x1B[0m'
+  colors[bold]='\x1B[1m'
+  colors[italic]='\x1B[3m'
+  colors[underline]='\x1B[4m'
+  colors[Black]='\x1B[30m'
+  colors[Gray]='\x1B[38;5;245m'
+  colors[DarkGray]='\x1B[38;5;8m'
+  colors[White]='\x1B[38;5;15m'
+  colors[BrightWhite]='\x1B[38;5;255m'
+  colors[Red]='\x1B[38;5;196m'
+  colors[Green]='\x1B[38;5;46m'
+  colors[Yellow]='\x1B[38;5;190m'
+  colors[BrightYellow]='\x1B[38;5;226m'
+  colors[Blue]='\x1B[38;5;33m'
+  colors[Indigo]='\x1B[38;5;57m'
+  colors[Purple]='\x1B[38;5;93m'
+  colors[Magenta]='\x1B[38;5;201m'
+  colors[Cyan]='\x1B[38;5;87m'
+  colors[BrightCyan]='\x1B[38;5;51m'
+  colors[Orange]='\x1B[38;5;208m'
+  colors[BgBlack]='\x1B[48;5;0m'
+  colors[BgRed]='\x1B[48;5;196m'
+  colors[BgGreen]='\x1B[48;5;46m'
+  colors[BgYellow]='\x1B[48;5;226m'
+  colors[BgBlue]='\x1B[48;5;21m'
+  colors[BgPurple]='\x1B[48;5;93m'
+  colors[BgMagenta]='\x1B[48;5;201m'
+  colors[BgCyan]='\x1B[48;5;87m'
+  colors[BgWhite]='\x1B[48;5;15m'
+  colors[reset]='\x1B[0m'
+fi
+
+# -----------------------------------------------------------------------------
 # Function: show_ascii_hello
 # Description: Displays an ASCII art banner with repository information.
 # -----------------------------------------------------------------------------
 function show_ascii_hello(){
-  printf "\x1B[0;1;4;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
   cat <<EOA
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOA
-  printf "\x1B[0;1;3;38;5;51m"
+  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[BrightCyan]}"
   cat <<EOB
 .               ${DOTFILES_REPO}                .
 EOB
-  printf "\x1B[0;1;4;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
   cat <<EOC
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOC
-  printf "\x1B[0;38;5;57m"
+  printf "${colors[reset]}${colors[Indigo]}"
   cat <<EOB
 .                                                                         .
 .                                                                         .
@@ -50,11 +125,11 @@ EOC
 .            .:#@@@#-.                                   -@@+=*@+.        .
 .                                                         ..--:.          .
 EOB
-  printf "\x1B[0;1;4;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
   cat <<EOA
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOA
-  printf "\x1B[0m"
+  printf "${colors[reset]}"
   sleep 1
 }
 
@@ -64,11 +139,11 @@ EOA
 # Description: Displays an ASCII art goodbye
 # -----------------------------------------------------------------------------
 function show_ascii_goodbye(){
-  printf "\x1B[0;1;4;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
   cat <<EOA
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOA
-  printf "\x1B[0;1;38;5;46m"
+  printf "${colors[reset]}${colors[bold]}${colors[Green]}"
   cat <<EOA
 +------+.      +------+       +------+       +------+      .+------+
 |\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|
@@ -78,11 +153,11 @@ EOA
  \`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'
    \`+------+     +------+     +------+     +------+     +------+'
 EOA
-  printf "\x1B[0;1;3;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
   cat <<EOB
                              GOODBYE :)
 EOB
-  printf "\x1B[0;1;38;5;46m"
+  printf "${colors[reset]}${colors[bold]}${colors[Green]}"
   cat <<EOC
    .+------+     +------+     +------+     +------+     +------+.
  .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`.
@@ -100,11 +175,55 @@ EOB
 |.'      .'    |/      /      |      |      \      \|    \`.      \`.|
 +------+'      +------+       +------+       +------+      \`+------+
 EOC
-  printf "\x1B[0;1;4;38;5;201m"
+  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
   cat <<EOA
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 EOA
-  printf "\x1B[0m"
+  printf "${colors[reset]}"
+}
+
+# -----------------------------------------------------------------------------
+# Function: show_test_guide
+# Description: Prints a brief "getting started" guide after installation,
+#              showing the user a few things to try to verify the dotfiles work
+#              (reloading zsh, tab-completion, plugins, neovim, functions, etc.).
+# -----------------------------------------------------------------------------
+function show_test_guide(){
+  printf "$(cat <<TESTGUIDE
+
+${colors[bold]}${colors[underline]}${colors[Cyan]}Try it out — a few things to test your new setup:${colors[reset]}
+
+${colors[bold]}${colors[Green]}  1. Start a fresh zsh session (loads everything):${colors[reset]}
+${colors[Cyan]}       exec zsh          ${colors[DarkGray]}# or: ez / zshreload${colors[reset]}
+
+${colors[bold]}${colors[Green]}  2. Test tab-completion (menu should appear):${colors[reset]}
+${colors[Cyan]}       cd <Tab>          ${colors[DarkGray]}# cycle entries with Tab / h j k l${colors[reset]}
+${colors[Cyan]}       git <Tab>         ${colors[DarkGray]}# subcommand completion${colors[reset]}
+
+${colors[bold]}${colors[Green]}  3. Test history search & plugins:${colors[reset]}
+${colors[Cyan]}       Ctrl-Backspace    ${colors[DarkGray]}# fzf fuzzy history search${colors[reset]}
+${colors[Cyan]}       type ( or \"       ${colors[DarkGray]}# autopair auto-closes the pair${colors[reset]}
+${colors[Cyan]}       z <partial-dir>   ${colors[DarkGray]}# z.lua 'frecency' jump${colors[reset]}
+
+${colors[bold]}${colors[Green]}  4. Open Neovim to trigger plugin setup:${colors[reset]}
+${colors[Cyan]}       nvim              ${colors[DarkGray]}# first launch installs/loads plugins${colors[reset]}
+
+${colors[bold]}${colors[Green]}  5. Try some of the custom functions:${colors[reset]}
+${colors[Cyan]}       mkcd testdir      ${colors[DarkGray]}# make a dir and cd into it${colors[reset]}
+${colors[Cyan]}       colortest         ${colors[DarkGray]}# print an ANSI color table${colors[reset]}
+${colors[Cyan]}       ansi-colors       ${colors[DarkGray]}# show an ANSI color table${colors[reset]}
+${colors[Cyan]}       listcolorANSI     ${colors[DarkGray]}# show the 256-color ANSI palette${colors[reset]}
+${colors[Cyan]}       zsh_listbindings  ${colors[DarkGray]}# list all keybindings${colors[reset]}
+
+${colors[bold]}${colors[Green]}  6. Manage plugins & dotfiles:${colors[reset]}
+${colors[Cyan]}       dotz list         ${colors[DarkGray]}# show plugins (● enabled / ○ disabled)${colors[reset]}
+${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status${colors[reset]}
+
+${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run 'zsh_listbindings' to list all keybindings.${colors[reset]}
+${colors[bold]}${colors[italic]}${colors[Orange]}  Docs: ${HOME}/.config/zsh/docs/README.md${colors[reset]}
+
+TESTGUIDE
+  )\n"
 }
 
 # -----------------------------------------------------------------------------
@@ -113,7 +232,7 @@ EOA
 # -----------------------------------------------------------------------------
 function write_error(){
   local input_msg="$1"
-  printf "\x1B[0;1;48;5;196;38;5;255m[ERROR]\x1B[0;38;5;255m  : \x1B[0;38;5;196m%s\x1B[0m\n" "${input_msg}"
+  printf "${colors[reset]}${colors[bold]}${colors[BgRed]}${colors[BrightWhite]}[ERROR]${colors[reset]}${colors[BrightWhite]}  : ${colors[reset]}${colors[Red]}%s${colors[reset]}\n" "${input_msg}"
 }
 
 # -----------------------------------------------------------------------------
@@ -123,7 +242,7 @@ function write_error(){
 function write_verbose(){
   local input_msg="$1"
   if [[ "${VERBOSE}" == 1 ]]; then
-    printf "\x1B[0;1;48;5;21;38;5;226m[VERBOSE]\x1B[0;38;5;255m: \x1B[0;38;5;226m%s\x1B[0m\n" "${input_msg}"
+    printf "${colors[reset]}${colors[bold]}${colors[BgBlue]}${colors[BrightYellow]}[VERBOSE]${colors[reset]}${colors[BrightWhite]}: ${colors[reset]}${colors[BrightYellow]}%s${colors[reset]}\n" "${input_msg}"
   fi
 }
 
@@ -536,8 +655,8 @@ function change_shell(){
 function confirm_install(){
   local delay="${DOTFILES_CONFIRM_DELAY:-10}"
 
-  printf "\x1B[0;1;38;5;208m%s\x1B[0m\n" "This installer will make the following changes to your system:"
-  printf "\x1B[0;38;5;208m"
+  printf "${colors[reset]}${colors[bold]}${colors[Orange]}%s${colors[reset]}\n" "This installer will make the following changes to your system:"
+  printf "${colors[reset]}${colors[Orange]}"
   cat <<EOS
   1. Install dependencies via your system package manager (may require sudo):
        git, zsh, curl, bat, lsd, lua, neovim, gcc (package names vary by OS).
@@ -552,7 +671,7 @@ function confirm_install(){
 
   Source repo: ${DOTFILES_REPO}
 EOS
-  printf "\x1B[0m"
+  printf "${colors[reset]}"
 
   # Allow non-interactive/automated installs to skip the prompt.
   if [[ "${DOTFILES_ASSUME_YES:-0}" == "1" ]]; then
@@ -562,7 +681,7 @@ EOS
 
   # Interactive terminal available: let the user confirm or cancel.
   if [[ -t 0 ]]; then
-    printf "\x1B[0;1;38;5;226m%s\x1B[0m" \
+    printf "${colors[reset]}${colors[bold]}${colors[BrightYellow]}%s${colors[reset]}" \
       "Press ENTER to continue, or Ctrl+C to cancel (auto-continues in ${delay}s)... "
     # read returns non-zero on timeout; that is fine, we proceed either way.
     read -r -t "${delay}" _ || true
@@ -571,13 +690,13 @@ EOS
   fi
 
   # No TTY (piped install): plain countdown so the user can still Ctrl+C.
-  printf "\x1B[0;1;38;5;226mStarting in %ss... press Ctrl+C to cancel.\x1B[0m\n" "${delay}"
+  printf "${colors[reset]}${colors[bold]}${colors[BrightYellow]}Starting in %ss... press Ctrl+C to cancel.${colors[reset]}\n" "${delay}"
   local i
   for (( i = delay; i > 0; i-- )); do
-    printf "\r\x1B[0;38;5;226m  %2ss \x1B[0m" "${i}"
+    printf "\r${colors[reset]}${colors[BrightYellow]}  %2ss ${colors[reset]}" "${i}"
     sleep 1
   done
-  printf "\r\x1B[0;38;5;46m  Continuing...            \x1B[0m\n"
+  printf "\r${colors[reset]}${colors[Green]}  Continuing...            ${colors[reset]}\n"
   return 0
 }
 
@@ -630,3 +749,6 @@ change_shell || write_error "Failed to change the default shell. You can change 
 
 # Display ASCII art banner 2
 show_ascii_goodbye
+
+# Print a brief guide of things to run to test the dotfiles out.
+show_test_guide
