@@ -734,7 +734,7 @@ EOS
 # Main Execution
 # -----------------------------------------------------------------------------
 
-draw_line '▀' "${colors[Magenta]}"
+draw_line '▀' "${colors[Yellow]}"
 
 # Display ASCII art banner
 show_ascii_hello
@@ -799,4 +799,4 @@ draw_line '▀' "${colors[Yellow]}"
 # Print a brief guide of things to run to test the dotfiles out.
 show_test_guide
 
-draw_line '▀' "${colors[Magenta]}"
+draw_line '▀' "${colors[Yellow]}"
