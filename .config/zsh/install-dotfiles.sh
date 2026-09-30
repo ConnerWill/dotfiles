@@ -216,10 +216,10 @@ function print_centered(){
 # Description: Displays the dotfiles URL
 # -----------------------------------------------------------------------------
 function show_dotfiles_url(){
-  draw_line '▀' "${colors[Magenta]}"
+  draw_line '▀' "${colors[Green]}"
   printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[BrightCyan]}"
   print_centered "${DOTFILES_REPO}"
-  draw_line '▀' "${colors[Magenta]}"
+  draw_line '▀' "${colors[Green]}"
   printf "${colors[reset]}"
 }
 
@@ -229,8 +229,7 @@ function show_dotfiles_url(){
 # -----------------------------------------------------------------------------
 function show_ascii_hello(){
   show_dotfiles_url
-  cat <<EOB
-EOB
+  draw_line '▀' "${colors[Magenta]}"
   printf "${colors[reset]}${colors[Indigo]}"
   cat <<EOB
 .                                                                         .
@@ -264,10 +263,7 @@ EOB
 # Description: Displays an ASCII art goodbye
 # -----------------------------------------------------------------------------
 function show_ascii_goodbye(){
-  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
-  cat <<EOA
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-EOA
+  draw_line '▀' "${colors[Magenta]}"
   printf "${colors[reset]}${colors[bold]}${colors[Green]}"
   cat <<EOA
 +------+.      +------+       +------+       +------+      .+------+
@@ -300,11 +296,8 @@ EOB
 |.'      .'    |/      /      |      |      \      \|    \`.      \`.|
 +------+'      +------+       +------+       +------+      \`+------+
 EOC
-  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
-  cat <<EOA
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-EOA
   printf "${colors[reset]}"
+  draw_line '▀' "${colors[Magenta]}"
 }
 
 # -----------------------------------------------------------------------------
@@ -668,7 +661,9 @@ function install_yay(){
   fi
 
   # makepkg refuses to run as root; skip rather than trying to work around it.
-  if [[ "$(id -u)" -eq 0 ]]; then
+  local user_id
+  user_id="$(id -u)"
+  if [[ "${user_id}" -eq 0 ]]; then
     write_verbose "Running as root; skipping yay install (makepkg cannot run as root)."
     return 0
   fi
@@ -763,7 +758,10 @@ function clone_dotf(){
 # -----------------------------------------------------------------------------
 function change_shell(){
   is_installed "chsh"
-  chsh --shell="$(command -v zsh)" "$(whoami)"
+  local zsh_location who_am_i
+  zsh_location="$(command -v zsh)"
+  who_am_i="$(whoami)"
+  chsh --shell="${zsh_location}" "${who_am_i}"
 }
 
 # -----------------------------------------------------------------------------
@@ -780,22 +778,23 @@ function change_shell(){
 function confirm_install(){
   local delay="${DOTFILES_CONFIRM_DELAY:-10}"
 
-  printf "${colors[reset]}${colors[bold]}${colors[Orange]}%s${colors[reset]}\n" "This installer will make the following changes to your system:"
+  printf "${colors[reset]}${colors[bold]}${colors[Yellow]}%s${colors[reset]}\n" "This installer will make the following changes to your system:"
   printf "${colors[reset]}${colors[Orange]}"
-  cat <<EOS
-  1. Install dependencies via your system package manager (may require sudo):
-       git, zsh, curl, bat, lsd, lua, neovim, gcc (package names vary by OS).
-  2. Generate the en_US.UTF-8 locale if it is missing.
-  3. Clone the dotfiles repo as a BARE repository into:
-       ${DOTFILES_DIR}
-  4. Check the dotfiles out into your HOME directory: '${HOME}'
-     !!! This OVERWRITES existing files in your home directory
-      (e.g. .zshrc, .config/*) with versions from the repo. Back up anything important. !!!
-  5. Initialize git submodules (installs 'dotf' into your config).
-  6. Change your default login shell to zsh (via chsh).
+  printf "$(cat <<CONFIRMTEXT
+  ${colors[Green]}1. ${colors[Orange]}Install dependencies via your system package manager (may require sudo):${colors[reset]}
+       ${colors[Blue]}git${colors[Orange]}, ${colors[Blue]}zsh${colors[Orange]}, ${colors[Blue]}curl${colors[Orange]}, ${colors[Blue]}bat${colors[Orange]}, ${colors[Blue]}lsd${colors[Orange]}, ${colors[Blue]}lua${colors[Orange]}, ${colors[Blue]}neovim${colors[Orange]}, ${colors[Blue]}gcc${colors[reset]}${colors[Orange]} ${colors[Gray]}${colors[italic]}(package names vary by OS).${colors[reset]}
+  ${colors[Green]}2. ${colors[Orange]}Generate the en_US.UTF-8 locale if it is missing.${colors[reset]}
+  ${colors[Green]}3. ${colors[Orange]}Clone the dotfiles repo as a BARE repository into:${colors[reset]}
+       ${colors[Cyan]}${DOTFILES_DIR}${colors[reset]}
+  ${colors[Green]}4. ${colors[Orange]}Check the dotfiles out into your HOME directory: '${HOME}'${colors[reset]}
+     ${colors[Red]}${colors[bold]}!!! This OVERWRITES existing files in your home directory${colors[reset]}
+      ${colors[Gray]}${colors[bold]}${colors[italic]}(e.g. .zshrc, .config/*)${colors[reset]} ${colors[Red]}${colors[bold]}with versions from the repo. Back up anything important. !!!${colors[reset]}
+  ${colors[Green]}5. ${colors[Orange]}Initialize git submodules ${colors[Gray]}${colors[italic]}(installs '${colors[Blue]}dotf${colors[Gray]}' into your config).${colors[reset]}
+  ${colors[Green]}6. ${colors[Orange]}Change your default login shell to zsh ${colors[Gray]}${colors[italic]}(via chsh).${colors[reset]}
 
-  Source repo: ${DOTFILES_REPO}
-EOS
+  ${colors[Green]}Source repo: ${colors[Cyan]}${DOTFILES_REPO}${colors[reset]}
+CONFIRMTEXT
+  )\n"
   printf "${colors[reset]}"
 
   # Allow non-interactive/automated installs to skip the prompt.
@@ -841,13 +840,10 @@ confirm_install
 # Show a rainbow loading bar as a visual transition into the install steps.
 show_rainbow_loading_bar 0.5
 
-draw_line '─' "${colors[Cyan]}"
-
 # Note: root privileges are handled by run_privileged() during dependency
 # installation. It uses 'sudo' when needed and falls back to running directly
 # when already root (e.g. in Alpine/Docker containers), so 'sudo' is not a
 # hard requirement here.
-
 # Install required dependencies based on OS detection
 install_dependencies
 
