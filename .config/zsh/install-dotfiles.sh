@@ -117,22 +117,120 @@ function draw_line(){
 }
 
 # -----------------------------------------------------------------------------
+# Function: rainbow_color
+# Description: Maps an index (0-255) to an "r g b" triple along the HSV colour
+#              wheel, producing a smooth rainbow gradient. Adapted from the
+#              zsh-rainbow-loading-bar reference function. Echoes three
+#              space-separated integers (each 0-255) for use as a truecolor
+#              background (\x1B[48;2;<r>;<g>;<b>m).
+# Usage:       rainbow_color <index>
+# -----------------------------------------------------------------------------
+function rainbow_color(){
+  local n="$1"
+  local h f t q
+  h=$(( n / 43 ))
+  f=$(( n - 43 * h ))
+  t=$(( f * 255 / 43 ))
+  q=$(( 255 - t ))
+  case "${h}" in
+    0) echo "255 ${t} 0" ;;
+    1) echo "${q} 255 0" ;;
+    2) echo "0 255 ${t}" ;;
+    3) echo "0 ${q} 255" ;;
+    4) echo "${t} 0 255" ;;
+    *) echo "255 0 ${q}" ;;
+  esac
+}
+
+# -----------------------------------------------------------------------------
+# Function: show_rainbow_loading_bar
+# Description: Draws an animated rainbow progress bar that fills across the full
+#              terminal width, then resets the colour. Honors NO_COLOR (prints a
+#              plain filling bar instead). Falls back to 80 columns when the
+#              width cannot be determined (e.g. piped install with no TTY).
+# Usage:       show_rainbow_loading_bar [duration_seconds]
+# Examples:    show_rainbow_loading_bar        # ~1.5s sweep
+#              show_rainbow_loading_bar 3       # ~3s sweep
+# -----------------------------------------------------------------------------
+function show_rainbow_loading_bar(){
+  local duration="${1:-1.5}"
+  local cols i r g b delay
+
+  # Determine terminal width, falling back to $COLUMNS then 80.
+  cols="$(tput cols 2>/dev/null)"
+  [[ -z "${cols}" || "${cols}" -le 0 ]] && cols="${COLUMNS:-80}"
+
+  # Per-cell delay so the whole sweep takes roughly ${duration} seconds.
+  delay="$(awk -v d="${duration}" -v c="${cols}" 'BEGIN { if (c <= 0) c = 80; printf "%.4f", d / c }')"
+
+  # Hide the cursor during the animation, and always restore it on exit.
+  printf '\x1B[?25l'
+
+  local step
+  for (( i = 0; i < cols; i++ )); do
+    if [[ -n "${NO_COLOR}" ]]; then
+      # Plain mode: fill with block characters, no colour.
+      printf '\r'
+      local bar=""
+      local j
+      for (( j = 0; j <= i; j++ )); do bar+="█"; done
+      printf '%s' "${bar}"
+    else
+      # Map this cell's position onto the 0-255 rainbow wheel.
+      step=$(( i * 255 / (cols > 1 ? cols - 1 : 1) ))
+      read -r r g b <<< "$(rainbow_color "${step}")"
+      printf '\x1B[48;2;%s;%s;%sm ' "${r}" "${g}" "${b}"
+    fi
+    sleep "${delay}"
+  done
+
+  # Reset colour, restore the cursor, and drop to the next line.
+  printf "${colors[reset]}\x1B[?25h\n"
+}
+
+# -----------------------------------------------------------------------------
+# Function: print_centered
+# Description: Display text centered on the screen
+# -----------------------------------------------------------------------------
+function print_centered(){
+  declare -i NB_COLS
+  [[ $# -ge 3 ]] && NB_COLS=$3  || NB_COLS="$(tput cols 2>/dev/null)"
+  [[ ${NB_COLS} -le 0 ]] && NB_COLS=80
+  [[ $# -ge 4 ]] && SURROUNDING_CHAR=${4:0:1}  && NB_COLS=$((NB_COLS - 2 ))
+  declare -i str_len="${#1}"
+  [[ ${str_len} -ge ${NB_COLS} ]] && echo "${1}" && return 0
+  declare -i filler_len="$(( (NB_COLS - str_len) / 2 ))"
+  [[ $# -ge 2 ]] && ch="${2:0:1}"  || ch=" "
+  filler=""
+  for ((i = 0; i < filler_len; i++ )) do
+          filler="${filler}${ch}"
+  done
+  printf "%s%s%s%s" "${SURROUNDING_CHAR}" "${filler}" "${1}" "${filler}"
+  [[ $(( (NB_COLS - str_len) % 2 )) -ne 0 ]] && printf "%s" "${ch}"
+  printf "%s\n" "${SURROUNDING_CHAR}"
+  return 0
+}
+
+# -----------------------------------------------------------------------------
+# Function: show_dotfiles_url
+# Description: Displays the dotfiles URL
+# -----------------------------------------------------------------------------
+function show_dotfiles_url(){
+  draw_line '▀' "${colors[Magenta]}"
+  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[BrightCyan]}"
+  print_centered "${DOTFILES_REPO}"
+  draw_line '▀' "${colors[Magenta]}"
+  printf "${colors[reset]}"
+}
+
+# -----------------------------------------------------------------------------
 # Function: show_ascii_hello
 # Description: Displays an ASCII art banner with repository information.
 # -----------------------------------------------------------------------------
 function show_ascii_hello(){
-  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
-  cat <<EOA
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-EOA
-  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[BrightCyan]}"
+  show_dotfiles_url
   cat <<EOB
-.               ${DOTFILES_REPO}                .
 EOB
-  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
-  cat <<EOC
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-EOC
   printf "${colors[reset]}${colors[Indigo]}"
   cat <<EOB
 .                                                                         .
@@ -155,11 +253,8 @@ EOC
 .            .:#@@@#-.                                   -@@+=*@+.        .
 .                                                         ..--:.          .
 EOB
-  printf "${colors[reset]}${colors[bold]}${colors[underline]}${colors[Magenta]}"
-  cat <<EOA
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-EOA
   printf "${colors[reset]}"
+  draw_line '▀' "${colors[Magenta]}"
   sleep 1
 }
 
@@ -743,6 +838,9 @@ show_ascii_hello
 # changes are made to their system.
 confirm_install
 
+# Show a rainbow loading bar as a visual transition into the install steps.
+show_rainbow_loading_bar 0.5
+
 draw_line '─' "${colors[Cyan]}"
 
 # Note: root privileges are handled by run_privileged() during dependency
@@ -794,7 +892,8 @@ draw_line '─' "${colors[Cyan]}"
 # Display ASCII art banner 2
 show_ascii_goodbye
 
-draw_line '▀' "${colors[Yellow]}"
+# Show a rainbow loading bar
+show_rainbow_loading_bar 0.5
 
 # Print a brief guide of things to run to test the dotfiles out.
 show_test_guide
