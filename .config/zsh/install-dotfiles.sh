@@ -231,27 +231,25 @@ function show_ascii_hello(){
   show_dotfiles_url
   draw_line '▀' "${colors[Magenta]}"
   printf "${colors[reset]}${colors[Indigo]}"
-  cat <<EOB
-.                                                                         .
-.                                                                         .
-.                     .-+=======---::..                                   .
-.                   :=+##@@@@@@@@@@@@@%@@@#.                              .
-.                .=:*=@#@@@@@@%@@@@@@@@@@@@%+.      ..                    .
-.  ...::..    .:+.*=%%%@@@@@@*%@@@@@@@@@@@@@%#-.    ..                    .
-. .%@@@%%%%*--=.=*+@#@@@@@@@@=#@@@@@@@@@@@@@@@##-.:..:                    .
-. *@@@@@@@@@@@@@=%@##%%#####*+%%#%%%%%%%%%%%@@@@*%#@%%#*+=:..             .
-.=%#....................:::::::--:-+#@@@@@@@@@@@@@#*%@@@@@%%#+=+*+:.      .
-.#@@*=-:-::.-@@#**%@@-.       +%%.    .... . ...............:-=+#%@@%+:.  .
-..#%@@@@@@@%*@@@@@@@@=.#@@@@%@@@@@@@%%%%%###*=:-:......  .#%%##%=.    .:=..
-#%###**++++@@@@+::-#@@@:---==++***###%%%%@@@@@@#%*@@@@@@:*@@@@@@#+%%+==#@..
-=@@@@@@@@@@@@*.     :@@@@@@@@@@@%%%%%##****+++=---:::..:@@@%-:=@@@-::::....
-.=#*++@@@@@@@. :@@%. =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=    .*@@@@@@@@@-
-.  .:=#%@@@@%. =@@@: =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#..@@=.:@@@@@@@@:.
-.          .@=  .:. .%%++:..:::::::::--------===#%%%%%%%@#..%@-.:@%%%%%=  .
-.           .%#:. .=@%.                                 -@+    .**.       .
-.            .:#@@@#-.                                   -@@+=*@+.        .
-.                                                         ..--:.          .
-EOB
+  print_centered '.                                                                         .'
+  print_centered '.                                                                         .'
+  print_centered '.                     .-+=======---::..                                   .'
+  print_centered '.                   :=+##@@@@@@@@@@@@@%@@@#.                              .'
+  print_centered '.                .=:*=@#@@@@@@%@@@@@@@@@@@@%+.      ..                    .'
+  print_centered '.  ...::..    .:+.*=%%%@@@@@@*%@@@@@@@@@@@@@%#-.    ..                    .'
+  print_centered '. .%@@@%%%%*--=.=*+@#@@@@@@@@=#@@@@@@@@@@@@@@@##-.:..:                    .'
+  print_centered '. *@@@@@@@@@@@@@=%@##%%#####*+%%#%%%%%%%%%%%@@@@*%#@%%#*+=:..             .'
+  print_centered '.=%#....................:::::::--:-+#@@@@@@@@@@@@@#*%@@@@@%%#+=+*+:.      .'
+  print_centered '.#@@*=-:-::.-@@#**%@@-.       +%%.    .... . ...............:-=+#%@@%+:.  .'
+  print_centered '..#%@@@@@@@%*@@@@@@@@=.#@@@@%@@@@@@@%%%%%###*=:-:......  .#%%##%=.    .:=..'
+  print_centered '#%###**++++@@@@+::-#@@@:---==++***###%%%%@@@@@@#%*@@@@@@:*@@@@@@#+%%+==#@..'
+  print_centered '=@@@@@@@@@@@@*.     :@@@@@@@@@@@%%%%%##****+++=---:::..:@@@%-:=@@@-::::....'
+  print_centered '.=#*++@@@@@@@. :@@%. =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=    .*@@@@@@@@@-'
+  print_centered '.  .:=#%@@@@%. =@@@: =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#..@@=.:@@@@@@@@:.'
+  print_centered '.          .@=  .:. .%%++:..:::::::::--------===#%%%%%%%@#..%@-.:@%%%%%=  .'
+  print_centered '.           .%#:. .=@%.                                 -@+    .**.       .'
+  print_centered '.            .:#@@@#-.                                   -@@+=*@+.        .'
+  print_centered '.                                                         ..--:.          .'
   printf "${colors[reset]}"
   draw_line '▀' "${colors[Magenta]}"
   sleep 1
@@ -265,37 +263,64 @@ EOB
 function show_ascii_goodbye(){
   draw_line '▀' "${colors[Magenta]}"
   printf "${colors[reset]}${colors[bold]}${colors[Green]}"
-  cat <<EOA
-+------+.      +------+       +------+       +------+      .+------+
-|\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|
-|  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |
-|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
-+---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+
- \`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'
-   \`+------+     +------+     +------+     +------+     +------+'
-EOA
-  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
-  cat <<EOB
-                             GOODBYE :)
-EOB
-  printf "${colors[reset]}${colors[bold]}${colors[Green]}"
-  cat <<EOC
-   .+------+     +------+     +------+     +------+     +------+.
- .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`.
-+---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+
-|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
-|  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |
-|.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |
-+------+'      +------+       +------+       +------+      \`+------+
 
-   .+------+     +------+     +------+     +------+     +------+.
- .' |      |    /|      |     |      |     |      |\    |      | \`.
-+   |      |   + |      |     +      +     |      | +   |      |   +
-|   |      |   | |      |     |      |     |      | |   |      |   |
-|  .+------+   | +------+     +------+     +------+ |   +------+.  |
-|.'      .'    |/      /      |      |      \      \|    \`.      \`.|
-+------+'      +------+       +------+       +------+      \`+------+
-EOC
+print_centered '+------+.      +------+       +------+       +------+      .+------+'
+print_centered "|\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|"
+print_centered "|  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |"
+print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
+print_centered "+---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+"
+print_centered "\`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'"
+print_centered "\`+------+     +------+     +------+     +------+     +------+'"
+printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
+print_centered "GOODBYE :)"
+printf "${colors[reset]}${colors[bold]}${colors[Green]}"
+print_centered "   .+------+     +------+     +------+     +------+     +------+."
+print_centered " .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`."
+print_centered "+---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+"
+print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
+print_centered "|  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |"
+print_centered "|.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |"
+print_centered "+------+'      +------+       +------+       +------+      \`+------+"
+print_centered ""
+print_centered "   .+------+     +------+     +------+     +------+     +------+."
+print_centered " .' |      |    /|      |     |      |     |      |\    |      | \`."
+print_centered "+   |      |   + |      |     +      +     |      | +   |      |   +"
+print_centered "|   |      |   | |      |     |      |     |      | |   |      |   |"
+print_centered "|  .+------+   | +------+     +------+     +------+ |   +------+.  |"
+print_centered "|.'      .'    |/      /      |      |      \      \|    \`.      \`.|"
+print_centered "+------+'      +------+       +------+       +------+      \`+------+"
+
+#   cat <<EOA
+# +------+.      +------+       +------+       +------+      .+------+
+# |\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|
+# |  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |
+# |   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
+# +---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+
+#  \`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'
+#    \`+------+     +------+     +------+     +------+     +------+'
+# EOA
+#   printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
+#   cat <<EOB
+#                              GOODBYE :)
+# EOB
+#   printf "${colors[reset]}${colors[bold]}${colors[Green]}"
+#   cat <<EOC
+#    .+------+     +------+     +------+     +------+     +------+.
+#  .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`.
+# +---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+
+# |   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
+# |  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |
+# |.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |
+# +------+'      +------+       +------+       +------+      \`+------+
+#
+#    .+------+     +------+     +------+     +------+     +------+.
+#  .' |      |    /|      |     |      |     |      |\    |      | \`.
+# +   |      |   + |      |     +      +     |      | +   |      |   +
+# |   |      |   | |      |     |      |     |      | |   |      |   |
+# |  .+------+   | +------+     +------+     +------+ |   +------+.  |
+# |.'      .'    |/      /      |      |      \      \|    \`.      \`.|
+# +------+'      +------+       +------+       +------+      \`+------+
+# EOC
   printf "${colors[reset]}"
   draw_line '▀' "${colors[Magenta]}"
 }
@@ -312,7 +337,7 @@ function show_test_guide(){
 ${colors[bold]}${colors[underline]}${colors[Cyan]}Try it out — a few things to test your new setup:${colors[reset]}
 
 ${colors[bold]}${colors[Green]}  1. Start a fresh zsh session (loads everything):${colors[reset]}
-${colors[Cyan]}       exec zsh          ${colors[DarkGray]}# or: ez / zshreload${colors[reset]}
+${colors[Cyan]}       ez          ${colors[DarkGray]}# or: zshreload / exec zsh${colors[reset]}
 
 ${colors[bold]}${colors[Green]}  2. Test tab-completion (menu should appear):${colors[reset]}
 ${colors[Cyan]}       cd <Tab>          ${colors[DarkGray]}# cycle entries with Tab / h j k l${colors[reset]}
@@ -337,8 +362,9 @@ ${colors[bold]}${colors[Green]}  6. Manage plugins & dotfiles:${colors[reset]}
 ${colors[Cyan]}       dotz list         ${colors[DarkGray]}# show plugins (● enabled / ○ disabled)${colors[reset]}
 ${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status${colors[reset]}
 
-${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run 'zsh_listbindings' to list all keybindings.${colors[reset]}
-${colors[bold]}${colors[italic]}${colors[Orange]}  Docs: ${HOME}/.config/zsh/docs/README.md${colors[reset]}
+${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}e${colors[Orange]}' to start NeoVim.${colors[reset]}
+${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}zsh_listbindings${colors[Orange]}' to list all keybindings.${colors[reset]}
+${colors[bold]}${colors[italic]}${colors[Orange]}  Docs: ${colors[Green]}${HOME}/.config/zsh/docs/README.md${colors[reset]}
 
 TESTGUIDE
   )\n"
