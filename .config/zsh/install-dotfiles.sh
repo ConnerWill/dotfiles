@@ -322,7 +322,7 @@ function show_test_guide(){
 ${colors[bold]}${colors[underline]}${colors[Cyan]}Try it out — a few things to test your new setup:${colors[reset]}
 
 ${colors[bold]}${colors[Green]}  1. Start a fresh zsh session (loads everything):${colors[reset]}
-${colors[Cyan]}       ez          ${colors[DarkGray]}# or: zshreload / exec zsh${colors[reset]}
+${colors[Cyan]}       ez                ${colors[DarkGray]}# or: zshreload / exec zsh${colors[reset]}
 
 ${colors[bold]}${colors[Green]}  2. Test tab-completion (menu should appear):${colors[reset]}
 ${colors[Cyan]}       cd <Tab>          ${colors[DarkGray]}# cycle entries with Tab / h j k l${colors[reset]}
