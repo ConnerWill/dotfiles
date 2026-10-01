@@ -345,7 +345,7 @@ ${colors[Cyan]}       zsh_listbindings  ${colors[DarkGray]}# list all keybinding
 
 ${colors[bold]}${colors[Green]}  6. Manage plugins & dotfiles:${colors[reset]}
 ${colors[Cyan]}       dotz list         ${colors[DarkGray]}# show plugins (● enabled / ○ disabled)${colors[reset]}
-${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status${colors[reset]} ${colors[Orange]}${DOTF_REPO}${colors[reset]}
+${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status ${DOTF_REPO}${colors[reset]}
 
 ${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}e${colors[Orange]}' to start NeoVim.${colors[reset]}
 ${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}zsh_listbindings${colors[Orange]}' to list all keybindings.${colors[reset]}
