@@ -2,7 +2,22 @@
 
 # shellcheck disable=SC2059  # Intentional: color escapes from the ${colors[*]} array are used in printf format strings.
 
-set -e
+set -Eeuo pipefail
+
+# -----------------------------------------------------------------------------
+# Require bash 4+ (this script uses associative arrays via 'declare -A').
+# macOS ships bash 3.2, so a 'curl | bash' there would otherwise fail cryptically.
+# -----------------------------------------------------------------------------
+if (( BASH_VERSINFO[0] < 4 )); then
+  echo "This installer requires bash 4+ (current: ${BASH_VERSION}). Install a newer bash and re-run." >&2
+  exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# Fail loudly instead of leaving a silently half-installed system.
+# -----------------------------------------------------------------------------
+# shellcheck disable=SC2154  # 'ec' is assigned at the start of the trap body.
+trap 'ec=$?; printf "\x1B[1;41;97m[ERROR]\x1B[0m install failed at line %s (exit %s). Your system may be partially configured.\n" "${LINENO}" "${ec}" >&2' ERR
 
 # -----------------------------------------------------------------------------
 # Repository URLs and Directories
@@ -11,7 +26,9 @@ DOTFILES_REPO="https://github.com/ConnerWill/dotfiles.git"
 DOTFILES_DIR="${HOME}/.dotfiles"
 DOTF_REPO="https://github.com/ConnerWill/dotf.git"
 DOTF_DIR="${ZSH_FUNCTIONS_MANUAL:-${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/zsh/user/functions/functions-manual/dotf}"
-VERBOSE=1
+# VERBOSE: on by default; override with VERBOSE=0 (or any non-1 value) to quiet
+# the [VERBOSE] progress messages.
+VERBOSE="${VERBOSE:-1}"
 
 # -----------------------------------------------------------------------------
 # Colors
@@ -194,6 +211,7 @@ function show_rainbow_loading_bar(){
 # -----------------------------------------------------------------------------
 function print_centered(){
   declare -i NB_COLS
+  local SURROUNDING_CHAR="" ch filler i
   [[ $# -ge 3 ]] && NB_COLS=$3  || NB_COLS="$(tput cols 2>/dev/null)"
   [[ ${NB_COLS} -le 0 ]] && NB_COLS=80
   [[ $# -ge 4 ]] && SURROUNDING_CHAR=${4:0:1}  && NB_COLS=$((NB_COLS - 2 ))
@@ -263,64 +281,31 @@ function show_ascii_hello(){
 function show_ascii_goodbye(){
   draw_line '▀' "${colors[Magenta]}"
   printf "${colors[reset]}${colors[bold]}${colors[Green]}"
-
-print_centered '+------+.      +------+       +------+       +------+      .+------+'
-print_centered "|\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|"
-print_centered "|  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |"
-print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
-print_centered "+---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+"
-print_centered "\`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'"
-print_centered "\`+------+     +------+     +------+     +------+     +------+'"
-printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
-print_centered "GOODBYE :)"
-printf "${colors[reset]}${colors[bold]}${colors[Green]}"
-print_centered "   .+------+     +------+     +------+     +------+     +------+."
-print_centered " .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`."
-print_centered "+---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+"
-print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
-print_centered "|  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |"
-print_centered "|.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |"
-print_centered "+------+'      +------+       +------+       +------+      \`+------+"
-print_centered ""
-print_centered "   .+------+     +------+     +------+     +------+     +------+."
-print_centered " .' |      |    /|      |     |      |     |      |\    |      | \`."
-print_centered "+   |      |   + |      |     +      +     |      | +   |      |   +"
-print_centered "|   |      |   | |      |     |      |     |      | |   |      |   |"
-print_centered "|  .+------+   | +------+     +------+     +------+ |   +------+.  |"
-print_centered "|.'      .'    |/      /      |      |      \      \|    \`.      \`.|"
-print_centered "+------+'      +------+       +------+       +------+      \`+------+"
-
-#   cat <<EOA
-# +------+.      +------+       +------+       +------+      .+------+
-# |\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|
-# |  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |
-# |   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
-# +---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+
-#  \`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'
-#    \`+------+     +------+     +------+     +------+     +------+'
-# EOA
-#   printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
-#   cat <<EOB
-#                              GOODBYE :)
-# EOB
-#   printf "${colors[reset]}${colors[bold]}${colors[Green]}"
-#   cat <<EOC
-#    .+------+     +------+     +------+     +------+     +------+.
-#  .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`.
-# +---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+
-# |   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |
-# |  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |
-# |.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |
-# +------+'      +------+       +------+       +------+      \`+------+
-#
-#    .+------+     +------+     +------+     +------+     +------+.
-#  .' |      |    /|      |     |      |     |      |\    |      | \`.
-# +   |      |   + |      |     +      +     |      | +   |      |   +
-# |   |      |   | |      |     |      |     |      | |   |      |   |
-# |  .+------+   | +------+     +------+     +------+ |   +------+.  |
-# |.'      .'    |/      /      |      |      \      \|    \`.      \`.|
-# +------+'      +------+       +------+       +------+      \`+------+
-# EOC
+  print_centered '+------+.      +------+       +------+       +------+      .+------+'
+  print_centered "|\`.    | \`.    |\     |\      |      |      /|     /|    .' |    .'|"
+  print_centered "|  \`+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+'  |"
+  print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
+  print_centered "+---+--+.  |   +-+----+ |     +------+     | +----+-+   |  .+--+---+"
+  print_centered "\`. |    \`.|    \|     \|     |      |     |/     |/    |.'    | .'"
+  print_centered "\`+------+     +------+     +------+     +------+     +------+'"
+  printf "${colors[reset]}${colors[bold]}${colors[italic]}${colors[Magenta]}"
+  print_centered "GOODBYE :)"
+  printf "${colors[reset]}${colors[bold]}${colors[Green]}"
+  print_centered "   .+------+     +------+     +------+     +------+     +------+."
+  print_centered " .' |    .'|    /|     /|     |      |     |\     |\    |\`.    | \`."
+  print_centered "+---+--+'  |   +-+----+ |     +------+     | +----+-+   |  \`+--+---+"
+  print_centered "|   |  |   |   | |    | |     |      |     | |    | |   |   |  |   |"
+  print_centered "|  ,+--+---+   | +----+-+     +------+     +-+----+ |   +---+--+   |"
+  print_centered "|.'    | .'    |/     |/      |      |      \|     \|    \`. |   \`. |"
+  print_centered "+------+'      +------+       +------+       +------+      \`+------+"
+  print_centered ""
+  print_centered "   .+------+     +------+     +------+     +------+     +------+."
+  print_centered " .' |      |    /|      |     |      |     |      |\    |      | \`."
+  print_centered "+   |      |   + |      |     +      +     |      | +   |      |   +"
+  print_centered "|   |      |   | |      |     |      |     |      | |   |      |   |"
+  print_centered "|  .+------+   | +------+     +------+     +------+ |   +------+.  |"
+  print_centered "|.'      .'    |/      /      |      |      \      \|    \`.      \`.|"
+  print_centered "+------+'      +------+       +------+       +------+      \`+------+"
   printf "${colors[reset]}"
   draw_line '▀' "${colors[Magenta]}"
 }
@@ -360,7 +345,7 @@ ${colors[Cyan]}       zsh_listbindings  ${colors[DarkGray]}# list all keybinding
 
 ${colors[bold]}${colors[Green]}  6. Manage plugins & dotfiles:${colors[reset]}
 ${colors[Cyan]}       dotz list         ${colors[DarkGray]}# show plugins (● enabled / ○ disabled)${colors[reset]}
-${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status${colors[reset]} ${colors[Orange]${DOTF_REPO}${colors[reset]}
+${colors[Cyan]}       dotf status       ${colors[DarkGray]}# dotfiles repo status${colors[reset]} ${colors[Orange]}${DOTF_REPO}${colors[reset]}
 
 ${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}e${colors[Orange]}' to start NeoVim.${colors[reset]}
 ${colors[bold]}${colors[italic]}${colors[Orange]}  Tip: run '${colors[Cyan]}zsh_listbindings${colors[Orange]}' to list all keybindings.${colors[reset]}
@@ -787,6 +772,20 @@ function change_shell(){
   local zsh_location who_am_i
   zsh_location="$(command -v zsh)"
   who_am_i="$(whoami)"
+
+  # Already the login shell? Nothing to do.
+  if [[ "${SHELL:-}" == "${zsh_location}" ]]; then
+    write_verbose "zsh is already the login shell (${zsh_location})."
+    return 0
+  fi
+
+  # chsh refuses shells not listed in /etc/shells; minimal containers often
+  # don't register zsh. Add it first so chsh succeeds.
+  if [[ -r /etc/shells ]] && ! grep -qxF "${zsh_location}" /etc/shells; then
+    write_verbose "Registering ${zsh_location} in /etc/shells."
+    printf '%s\n' "${zsh_location}" | run_privileged tee -a /etc/shells >/dev/null
+  fi
+
   chsh --shell="${zsh_location}" "${who_am_i}"
 }
 
