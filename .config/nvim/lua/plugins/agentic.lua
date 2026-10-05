@@ -46,9 +46,15 @@ return {
       -- Toggle / session control.
       -- NOTE: <C-'> and <C-,> depend on your terminal emulator forwarding those
       -- sequences. If they don't fire, remap to something like <leader>a<x>.
-      map("<C-\\>", "toggle", "Toggle Agentic Chat", { "n", "v", "i" }),
-      map("<C-'>", "add_selection_or_file_to_context", "Add file or selection to Agentic context", { "n", "v" }),
-      map("<C-,>", "new_session", "New Agentic Session", { "n", "v", "i" }),
+      map("<C-\\>",     "toggle",                           "Toggle Agentic Chat",                      { "n", "v", "i" }),
+      map("<leader>aA", "add_selection_or_file_to_context", "Add file or selection to Agentic context", { "n", "v" }),
+      map("<leader>an", "new_session",                      "New Agentic Session",                      { "n", "v", "i" }),
+
+      -- Cancel / stop control.
+      -- stop_generation interrupts the running prompt/tool but KEEPS the session.
+      -- destroy_session tears the whole session + widget down.
+      map("<leader>as", "stop_generation",  "Stop Agentic Generation",      { "n", "v", "i" }),
+      map("<leader>ax", "destroy_session",  "Destroy Agentic Session",      { "n", "v" }),
 
       -- Two-key sequence: keep out of insert mode so a literal "r" isn't consumed
       -- after pressing <A-i> while typing.
@@ -56,7 +62,7 @@ return {
 
       -- Diagnostics (normal mode only; these act on cursor/buffer context).
       map("<leader>ad", "add_current_line_diagnostics", "Add current line diagnostic to Agentic", { "n" }),
-      map("<leader>aD", "add_buffer_diagnostics", "Add all buffer diagnostics to Agentic", { "n" }),
+      map("<leader>aD", "add_buffer_diagnostics",       "Add all buffer diagnostics to Agentic",  { "n" }),
     },
   },
 }
