@@ -214,3 +214,9 @@ autoload -Uz dotf
 #         reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
 #     fi
 # fi'
+
+
+## Complete AWS https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-completion.html#cli-command-completion-linux
+if [[ "${commands[aws]}" && "${commands[aws_completer]}" ]]; then
+  complete -C "${commands[aws_completer]}" aws
+fi

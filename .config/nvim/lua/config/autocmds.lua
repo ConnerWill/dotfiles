@@ -8,12 +8,27 @@ local create_autocmd = vim.api.nvim_create_autocmd
 local create_nvim_command = vim.api.nvim_command
 create_augroup("file_types", { clear = true })
 
--- Autocommand to set filetype for Jenkinsfile to groovy
+-- Autocommand to set filetype for Jenkins files to groovy
 create_autocmd({ "BufEnter", "BufRead", "BufNewFile" }, {
   desc = "Recognize Jenkins files as groovy",
   group = "file_types",
   pattern = { "*.Jenkinsfile", "*.jenkinsfile", "Jenkinsfile", "jenkinsfile" },
   command = [[ set filetype=groovy ]],
+})
+
+-- Groovy / Grails filetype detection (see ~/repos/pssp, a Grails 5.3 project).
+--
+--   * .gradle   -> groovy  (Gradle build scripts are a Groovy DSL)
+--   * .groovy   -> groovy  (handled natively by Neovim; listed here for clarity)
+--   * .gsp      -> gsp     (Grails Server Pages; detected natively by Neovim's
+--                           own filetype rules, so no mapping is needed here)
+--
+-- Uses vim.filetype.add (the modern API) rather than an autocmd so detection
+-- is handled by Neovim's native filetype engine.
+vim.filetype.add({
+  extension = {
+    gradle = "groovy",
+  },
 })
 
 -- Scoped YAML filetype detection.

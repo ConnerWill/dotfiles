@@ -17,6 +17,11 @@ return {
         "goimports",
         "gomodifytags",
         "gopls",
+        -- Groovy: LSP for the Grails backend (~/repos/pssp). Requires a JDK on
+        -- PATH (provided by the LazyVim java extra's jdtls toolchain).
+        -- npm-groovy-lint provides both linting and formatting.
+        "groovy-language-server",
+        "npm-groovy-lint",
         "hadolint",
         "hclfmt",
         "html-lsp",
@@ -67,7 +72,12 @@ return {
         -- denols = {},
         cssls = {},
         dockerls = {},
-        -- groovyls = {},
+        -- Groovy LSP for the Grails backend. The groovy-language-server binary
+        -- is installed via mason (see ensure_installed above). It provides
+        -- completion, hover, go-to-definition, and symbols. Note: it is a
+        -- single-project server and does not resolve the full Grails/Gradle
+        -- classpath, so deep framework-aware completion is limited.
+        groovyls = {},
         -- ruff_lsp = {},
         -- tailwindcss = {
         --   root_dir = function(...)
@@ -222,6 +232,10 @@ return {
     opts = {
       linters_by_ft = {
         lua = { "selene", "luacheck" },
+        -- Groovy linting for the Grails backend via npm-groovy-lint
+        -- (installed through mason). nvim-lint ships a "npm-groovy-lint"
+        -- linter definition that targets the "groovy" filetype.
+        groovy = { "npm-groovy-lint" },
         -- markdown is handled by the LazyVim markdown extra
         -- (lazyvim.plugins.extras.lang.markdown) via its own markdownlint
         -- setup, so it is intentionally NOT registered here to avoid

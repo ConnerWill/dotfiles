@@ -32,6 +32,8 @@ return {
         "go",
         "gomod",
         "gosum",
+        "groovy", -- Grails backend + .gradle build scripts (see ~/repos/pssp)
+        "java",
         "python",
         "ruby",
         -- editor / docs

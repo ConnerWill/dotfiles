@@ -22,6 +22,10 @@ return {
       yaml = { "prettier" },
       -- Moved here from none-ls so all formatting lives in one place (conform).
       go = { "gofumpt" },
+      -- Groovy formatting for the Grails backend via npm-groovy-lint's
+      -- --format mode (installed through mason). Also covers .gradle files,
+      -- which are mapped to the groovy filetype (see config/autocmds.lua).
+      groovy = { "npm-groovy-lint" },
       hcl = { "hclfmt" },
       sh = { "shfmt", "shellharden" },
       bash = { "shfmt", "shellharden" },
