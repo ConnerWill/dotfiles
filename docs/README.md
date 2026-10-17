@@ -72,6 +72,12 @@ git --work-tree="${HOME}" --git-dir="${HOME}/.dotfiles" checkout --force main \
 
 ## Test dotfiles With Docker
 
+<div align="center">
+
+![dotfiles-docker-install-gif](./assets/dotfiles-docker-install.gif)
+
+</div>
+
 ### Docker Run
 
 ```bash

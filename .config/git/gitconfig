@@ -175,3 +175,6 @@
 	pushall = !git push -v && git push origin2 -v
 	pshall = !git push -v && git push origin2 -v
 	all = add --all
+[safe]
+	directory = /home/conner.will/Documents/PowerShell
+	directory = /home/conner.will/Documents/PowerShell/local-modules/Convert-ImageToASCIIArt
