@@ -34,6 +34,7 @@ Individual configurations have their own documentation:
 
 - [**ZSH**](/.config/zsh/docs/README.md) — modular shell config, custom functions, plugins, and toggles
 - [**Neovim**](/.config/nvim/README.md) — LazyVim-based editor setup, plugins, and colorschemes
+- [**tmux**](/.config/tmux/README.md) — tmux config, keybindings, TokyoNight theme, and TPM plugins
 
 ---
 
