@@ -55,20 +55,21 @@
 
 ## Features
 
-- **Autoloaded modular init** — `tmux.conf` is a tiny entry point that
-  autoloads **every** numbered `init/[0-9]*.conf` stage in order with a single
-  glob. Drop in a new numbered file and it loads automatically — no edit to
-  `tmux.conf`. Each stage owns one concern (base, variables, options,
-  keybindings, theme, plugins, overrides).
-- **Single-line autoload that TPM understands** — the init glob uses an
-  unquoted `~` path (`source-file -q ~/.config/tmux/init/[0-9]*.conf`). tmux
-  expands it to load every stage, and TPM can read the same path to discover
-  the `@plugin` list for `prefix + I` — so one line does both jobs. See
-  [Plugins](#plugins) for why the exact form matters.
-- **Split theme** — colors live in their own [TokyoNight](https://github.com/folke/tokyonight.nvim)
-  theme file under `init/themes/`, loaded via `init/40_themes-colors.conf`.
-- **TPM plugin management** — plugins are declared in `init/50_plugins-init.conf`
-  and installed/updated with [TPM](https://github.com/tmux-plugins/tpm).
+- **Single-file config** — everything lives in one `tmux.conf`, organized into
+  clearly numbered sections (base, variables, options, keybindings, theme,
+  plugin settings, plugin list, overrides, TPM bootstrap) that load top to
+  bottom. No `source-file`, no glob, no load-stage indirection.
+- **Plugins declared in order** — the `@plugin` list sits near the bottom so
+  plugin-ecosystem tools (TPM, tmux-menus) find it where they expect, and the
+  TPM bootstrap runs last.
+- **Correct plugin-config ordering** — plugin `@options` have a dedicated
+  section *above* the `run tpm` line (where they take effect), and a
+  post-plugin overrides section is provided for settings that must beat a
+  plugin default. See [Plugins](#plugins).
+- **TokyoNight theme** — the [TokyoNight](https://github.com/folke/tokyonight.nvim)
+  (night) status/pane colors are inlined in the theme section.
+- **TPM plugin management** — installed/updated with
+  [TPM](https://github.com/tmux-plugins/tpm).
 - **Safe plugin bootstrap** — TPM is only run if it is actually installed
   (guarded with `if-shell` + `run-shell -b`), so a fresh machine without TPM
   loads cleanly instead of erroring.
@@ -82,78 +83,45 @@
 
 ```
 tmux/
-├── tmux.conf                        # Entry point: sets TMUXDOTDIR, autoloads init/[0-9]*.conf
-├── init/
-│   ├── 00_tmux_init.conf            # Base / server options (terminal, history, indexes)
-│   ├── 10_variables.conf            # User @-options & TPM plugin path
-│   ├── 20_options.conf              # Session & window options (mouse, vi, titles, activity)
-│   ├── 30_keybindings.conf          # prefix2 + splits, pane nav/resize, reload, copy-mode
-│   ├── 40_themes-colors.conf        # Sources the active theme
-│   ├── 50_plugins-init.conf         # Plugin list + TPM bootstrap
-│   ├── 90_overrides.conf            # Local last-wins overrides (machine-specific tweaks)
-│   ├── 99_tmux_end_init.conf        # End-of-init notes (no execution)
-│   ├── example_tmux.conf            # Reference / example snippets (NOT loaded)
-│   └── themes/
-│       └── tokyonight_night.tmux    # TokyoNight (night) status/pane colors
-└── plugins/
-    └── tpm/                         # TPM (installed via git clone)
+├── tmux.conf     # The entire configuration (see section order below)
+├── README.md     # This file
+└── plugins/      # TPM-managed plugins (installed via `prefix + I`)
+    └── tpm/      # TPM itself (installed via git clone)
 ```
 
-> **How loading works.** `tmux.conf` autoloads everything with a single line:
->
-> ```tmux
-> source-file -q ~/.config/tmux/init/[0-9]*.conf
-> ```
->
-> The `[0-9]*` pattern loads `00_` … `99_` in sorted order and deliberately
-> skips `example_tmux.conf`.
->
-> **Why the path is an *unquoted* `~`** (this is load-bearing — don't "tidy" it):
->
-> - Inside a config file there is **no shell**, and tmux only expands a leading
->   `~` when it is **unquoted**. A *quoted* `'~/...'` glob would silently match
->   nothing (everything would fall back to tmux defaults — e.g. a green status
->   bar). An `-F '#{TMUXDOTDIR}/...'` form also loads fine, but see the next
->   point.
-> - TPM's plugin scanner reads `source`/`source-file` lines from `tmux.conf`
->   and follows them to find `@plugin` declarations, but it **cannot** expand
->   `-F` or `#{TMUXDOTDIR}`. The unquoted `~` path is readable by both tmux and
->   TPM, so one line both loads the config *and* lets `prefix + I` discover the
->   plugin list in `50_plugins-init.conf`. See [Plugins](#plugins).
->
-> To add a new stage, drop in a numbered `init/*.conf` file — the glob picks it
-> up automatically, no edit to `tmux.conf` required.
+> The whole config is a single `tmux.conf`. There is no `init/` directory —
+> everything that used to be split across numbered stage files is now inlined
+> as numbered *sections* within `tmux.conf`, loaded top to bottom.
 
 ---
 
 ## Load Order
 
-`tmux.conf` sets `TMUXDOTDIR`, then autoloads the init stages in numeric order
-via a single glob. Each stage owns one concern:
+`tmux.conf` is read top to bottom. Sections are ordered so that later settings
+can build on (or override) earlier ones, and so plugins initialize last:
 
-| Stage                        | Purpose                                              |
-| ---------------------------- | ---------------------------------------------------- |
-| `tmux.conf`                  | Set `TMUXDOTDIR`, then autoload the init glob        |
-| `init/00_tmux_init.conf`     | Base/server options: terminal, truecolor, history, indexes |
-| `init/10_variables.conf`     | User `@`-options and the TPM plugin path             |
-| `init/20_options.conf`       | Session/window options: mouse, vi keys, titles, activity |
-| `init/30_keybindings.conf`   | `prefix2` + splits, pane nav/resize, reload, copy-mode |
-| `init/40_themes-colors.conf` | Sources the active theme under `init/themes/`        |
-| `init/50_plugins-init.conf`  | Declares `@plugin`s, then bootstraps TPM             |
-| `init/90_overrides.conf`     | Local last-wins overrides                            |
-| `init/99_tmux_end_init.conf` | End-of-init notes (no execution)                     |
+| #  | Section                 | Purpose                                             |
+| -- | ----------------------- | --------------------------------------------------- |
+| 1  | Base / server options   | terminal, truecolor, escape-time, history, indexes  |
+| 2  | Variables & plugin path | `@`-options, `TMUX_PLUGIN_MANAGER_PATH`             |
+| 3  | Session & window options| mouse, vi keys, titles, activity, resize            |
+| 4  | Keybindings             | `prefix2` + splits, pane nav/resize, reload, copy-mode |
+| 5  | Theme / colors          | TokyoNight (night) status/pane styling              |
+| 6  | Plugin settings         | plugin `@options` — **must be above `run tpm`**     |
+| 7  | Plugin list             | `set -g @plugin '...'` declarations                 |
+| 8  | Local overrides         | machine-specific / post-plugin tweaks               |
+| 9  | TPM bootstrap           | `run tpm` (guarded `run-shell -b`) — runs last      |
 
 TPM runs last (async, via `run-shell -b`), which lets each plugin apply its own
-settings/bindings on top of the base config. `90_overrides.conf` is the place
-for anything that must win over a plugin or theme default.
+settings/bindings on top of the base config.
 
 ---
 
 ## Options
 
-Options are grouped by stage file.
+Options are grouped by the `tmux.conf` section they live in.
 
-**`00_tmux_init.conf`** — base / server:
+**Section 1 — base / server:**
 
 | Option                | Value                | Effect                                      |
 | --------------------- | -------------------- | ------------------------------------------- |
@@ -166,14 +134,14 @@ Options are grouped by stage file.
 | `base-index`          | `1`                  | Windows start at 1                          |
 | `pane-base-index`     | `1`                  | Panes start at 1                            |
 
-**`10_variables.conf`** — variables / plugin path:
+**Section 2 — variables / plugin path:**
 
 | Option                        | Value                        | Effect                        |
 | ----------------------------- | ---------------------------- | ----------------------------- |
-| `TMUXDOTDIR`                  | `$HOME/.config/tmux`         | Base dir (set in `tmux.conf`) |
+| `TMUXDOTDIR`                  | `$HOME/.config/tmux`         | Base dir (used by reload bind) |
 | `TMUX_PLUGIN_MANAGER_PATH`    | `$HOME/.config/tmux/plugins/` | Where TPM installs plugins    |
 
-**`20_options.conf`** — session / window behavior:
+**Section 3 — session / window behavior:**
 
 | Option                        | Value       | Effect                                       |
 | ----------------------------- | ----------- | -------------------------------------------- |
@@ -197,8 +165,8 @@ Options are grouped by stage file.
 
 The default prefix <kbd>Ctrl</kbd>+<kbd>b</kbd> is kept, with
 <kbd>Ctrl</kbd>+<kbd>a</kbd> added as a second prefix. Custom bindings live in
-`init/30_keybindings.conf` and are additive — they don't clobber common
-defaults.
+the keybindings section of `tmux.conf` and are additive — they don't clobber
+common defaults.
 
 ### Prefix
 
@@ -211,7 +179,7 @@ Either prefix works for everything below.
 
 ### Custom Bindings
 
-Defined in `init/30_keybindings.conf`:
+Defined in the keybindings section of `tmux.conf`:
 
 | Key                          | Action                                          |
 | ---------------------------- | ----------------------------------------------- |
@@ -269,6 +237,8 @@ for the full set:
 | `prefix` + <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> | `tmux-logging` | Save the full scrollback       |
 | `prefix` + <kbd>\\</kbd>    | `tmux-menus`     | Open the main popup menu                 |
 | `prefix` + <kbd>Enter</kbd> | `tmux-menus`     | Open the main popup menu (secondary default, if unbound) |
+| `prefix` + <kbd>Space</kbd> | `tmux-which-key` | Open the which-key popup menu            |
+| <kbd>Ctrl</kbd>+<kbd>Space</kbd> | `tmux-which-key` | Open the which-key popup menu (root key) |
 
 > `tmux-autoreload` has no keybinding — it watches `tmux.conf` and reloads
 > automatically on save. `tmux-sensible` only applies sane default options.
@@ -281,34 +251,41 @@ for the full set:
 
 ## Theme
 
-Active theme is **TokyoNight** (`night` style), in
-[`init/themes/tokyonight_night.tmux`](init/themes/tokyonight_night.tmux) and
-loaded by `init/40_themes-colors.conf`.
+Active theme is **TokyoNight** (`night` style), inlined in the theme section of
+[`tmux.conf`](tmux.conf) (upstream:
+[tokyonight.nvim](https://github.com/folke/tokyonight.nvim) `extras/tmux`).
 
 It styles the status bar, window list, pane borders, and messages with the
 TokyoNight palette (blue `#7aa2f7` accents on a dark `#1f2335` bar). The status
 line shows the session name on the left and `prefix_highlight`, date/time, and
 hostname on the right.
 
-To switch themes, drop another `*.tmux` file into `init/themes/` and point the
-`source-file` line in `init/40_themes-colors.conf` at it.
+To switch themes, replace the lines in the theme section with another theme's
+tmux snippet.
 
 ---
 
 ## Plugins
 
-Plugins are declared in
-[`init/50_plugins-init.conf`](init/50_plugins-init.conf) and managed by
+Plugins are declared at the bottom of
+[`tmux.conf`](tmux.conf) and managed by
 [TPM](https://github.com/tmux-plugins/tpm).
 
-> **Discovery gotcha.** TPM finds plugins by scanning `tmux.conf` for
-> `source`/`source-file` lines and following them to wherever `@plugin` lines
-> live. It can only follow paths it can read literally — it **cannot** expand
-> `-F` or `#{TMUXDOTDIR}`. This config's `@plugin` lines live in a *sourced*
-> file (`init/50_plugins-init.conf`), so the autoload glob in `tmux.conf` uses
-> an unquoted `~` path (`source-file -q ~/.config/tmux/init/[0-9]*.conf`) that
-> TPM *can* read and follow. If you rewrite that line to use `-F`/`#{...}` or
-> quote the `~`, `prefix + I` will silently stop finding plugins.
+> **Why the plugin list lives in `tmux.conf`.** Plugin-ecosystem tools scan
+> `tmux.conf` directly for `@plugin` declarations: TPM (`prefix + I`) and
+> **tmux-menus** both expect the list there, and tmux-menus does not follow
+> `source-file` into other files at all. Keeping the list in `tmux.conf` — the
+> conventional TPM layout — makes every such tool work with no per-tool
+> workarounds.
+
+> **Customizing plugins — ordering matters.** A plugin reads its `@options`
+> when TPM sources it (the `run tpm` line at the very bottom). So:
+>
+> - Set plugin `@options` in the **"Plugin settings" section (6)**, which is
+>   *above* `run tpm`. Setting them after `run tpm` has no effect.
+> - To override a keybinding or style a plugin sets itself, put the override
+>   *after* the `run tpm` line (or use a tmux hook), since the plugin applies
+>   those last.
 
 ### Installing TPM
 
@@ -331,7 +308,7 @@ prefix + U      # update installed plugins
 prefix + Alt+u  # uninstall plugins no longer in the list
 ```
 
-To add a plugin, add a line to `init/50_plugins-init.conf` and press
+To add a plugin, add a line to the plugin list in `tmux.conf` and press
 `prefix + I`:
 
 ```tmux
@@ -356,6 +333,7 @@ set -g @plugin 'owner/plugin-name'
 | `tmux-logging`    | Toggle pane logging, save visible output, or capture scrollback. |
 | `retmux`          | Save and restore tmux sessions/layouts.                          |
 | `tmux-menus`      | Popup menus for managing panes, windows, sessions, and settings. |
+| `tmux-which-key`  | Popup key table showing available bindings and actions.          |
 
 - `tpm` — <https://github.com/tmux-plugins/tpm>
 - `tmux-sensible` — <https://github.com/tmux-plugins/tmux-sensible>
@@ -364,6 +342,7 @@ set -g @plugin 'owner/plugin-name'
 - `tmux-logging` — <https://github.com/tmux-plugins/tmux-logging>
 - `retmux` — <https://github.com/sk1418/retmux>
 - `tmux-menus` — <https://github.com/jaclu/tmux-menus>
+- `tmux-which-key` — <https://github.com/alexwforsythe/tmux-which-key>
 
 ---
 
