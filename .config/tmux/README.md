@@ -257,8 +257,10 @@ Active theme is **TokyoNight** (`night` style), inlined in the theme section of
 
 It styles the status bar, window list, pane borders, and messages with the
 TokyoNight palette (blue `#7aa2f7` accents on a dark `#1f2335` bar). The status
-line shows the session name on the left and `prefix_highlight`, date/time, and
-hostname on the right.
+line shows the session name on the left and, on the right, a mode indicator
+(`tmux-mode-indicator`), `prefix_highlight`, a CPU indicator
+(`tmux-cpu`: `CPU: <pct>` with a load-based background color), date/time,
+and hostname on the right.
 
 To switch themes, replace the lines in the theme section with another theme's
 tmux snippet.
@@ -334,6 +336,8 @@ set -g @plugin 'owner/plugin-name'
 | `retmux`          | Save and restore tmux sessions/layouts.                          |
 | `tmux-menus`      | Popup menus for managing panes, windows, sessions, and settings. |
 | `tmux-which-key`  | Popup key table showing available bindings and actions.          |
+| `tmux-cpu`        | CPU/RAM status-bar indicators (`#{cpu_percentage}`, `#{cpu_icon}`, …). |
+| `tmux-mode-indicator` | Status-bar segment showing the current mode (`#{tmux_mode_indicator}`). |
 
 - `tpm` — <https://github.com/tmux-plugins/tpm>
 - `tmux-sensible` — <https://github.com/tmux-plugins/tmux-sensible>
@@ -343,6 +347,8 @@ set -g @plugin 'owner/plugin-name'
 - `retmux` — <https://github.com/sk1418/retmux>
 - `tmux-menus` — <https://github.com/jaclu/tmux-menus>
 - `tmux-which-key` — <https://github.com/alexwforsythe/tmux-which-key>
+- `tmux-cpu` — <https://github.com/tmux-plugins/tmux-cpu>
+- `tmux-mode-indicator` — <https://github.com/MunifTanjim/tmux-mode-indicator>
 
 ---
 
