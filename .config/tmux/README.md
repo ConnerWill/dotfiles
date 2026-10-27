@@ -27,7 +27,7 @@
 ## Table of Contents
 
 <!--toc:start-->
-- [🖥️ tmux](#️-tmux)
+- [tmux](#tmux)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Structure](#structure)
@@ -45,7 +45,7 @@
     - [Managing Plugins](#managing-plugins)
     - [Enabled Plugins](#enabled-plugins)
   - [Usage](#usage)
-    - [Start / Attach](#start--attach)
+    - [Start / Attach](#start-attach)
     - [Reload the Config](#reload-the-config)
     - [Inspect Settings](#inspect-settings)
     - [Test Safely](#test-safely)
