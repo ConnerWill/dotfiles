@@ -1,5 +1,5 @@
 toiletpreview() {
-  local fonts_dir=/usr/share/figlet/fonts
+  local fonts_dir=${FIGLET_FONTDIR:-/usr/share/figlet/fonts}
   local text=${1}
   local font name sample
 
