@@ -60,9 +60,11 @@
   glob. Drop in a new numbered file and it loads automatically — no edit to
   `tmux.conf`. Each stage owns one concern (base, variables, options,
   keybindings, theme, plugins, overrides).
-- **Portable paths** — a `TMUXDOTDIR` user option is set at the top and every
-  `source-file` / plugin path is resolved with `source-file -F '#{TMUXDOTDIR}/...'`,
-  so nothing is hard-coded to `$HOME`.
+- **Single-line autoload that TPM understands** — the init glob uses an
+  unquoted `~` path (`source-file -q ~/.config/tmux/init/[0-9]*.conf`). tmux
+  expands it to load every stage, and TPM can read the same path to discover
+  the `@plugin` list for `prefix + I` — so one line does both jobs. See
+  [Plugins](#plugins) for why the exact form matters.
 - **Split theme** — colors live in their own [TokyoNight](https://github.com/folke/tokyonight.nvim)
   theme file under `init/themes/`, loaded via `init/40_themes-colors.conf`.
 - **TPM plugin management** — plugins are declared in `init/50_plugins-init.conf`
@@ -97,11 +99,30 @@ tmux/
     └── tpm/                         # TPM (installed via git clone)
 ```
 
-> `tmux.conf` autoloads **every** numbered stage with a single glob:
-> `source-file -q -F '#{TMUXDOTDIR}/init/[0-9]*.conf'`. The `[0-9]*` pattern
-> loads `00_` … `99_` in sorted order and deliberately skips
-> `example_tmux.conf`. To add a new stage, drop in a numbered `*.conf` file —
-> no edit to `tmux.conf` required.
+> **How loading works.** `tmux.conf` autoloads everything with a single line:
+>
+> ```tmux
+> source-file -q ~/.config/tmux/init/[0-9]*.conf
+> ```
+>
+> The `[0-9]*` pattern loads `00_` … `99_` in sorted order and deliberately
+> skips `example_tmux.conf`.
+>
+> **Why the path is an *unquoted* `~`** (this is load-bearing — don't "tidy" it):
+>
+> - Inside a config file there is **no shell**, and tmux only expands a leading
+>   `~` when it is **unquoted**. A *quoted* `'~/...'` glob would silently match
+>   nothing (everything would fall back to tmux defaults — e.g. a green status
+>   bar). An `-F '#{TMUXDOTDIR}/...'` form also loads fine, but see the next
+>   point.
+> - TPM's plugin scanner reads `source`/`source-file` lines from `tmux.conf`
+>   and follows them to find `@plugin` declarations, but it **cannot** expand
+>   `-F` or `#{TMUXDOTDIR}`. The unquoted `~` path is readable by both tmux and
+>   TPM, so one line both loads the config *and* lets `prefix + I` discover the
+>   plugin list in `50_plugins-init.conf`. See [Plugins](#plugins).
+>
+> To add a new stage, drop in a numbered `init/*.conf` file — the glob picks it
+> up automatically, no edit to `tmux.conf` required.
 
 ---
 
@@ -112,7 +133,7 @@ via a single glob. Each stage owns one concern:
 
 | Stage                        | Purpose                                              |
 | ---------------------------- | ---------------------------------------------------- |
-| `tmux.conf`                  | Set `TMUXDOTDIR`, then `source-file` the glob        |
+| `tmux.conf`                  | Set `TMUXDOTDIR`, then autoload the init glob        |
 | `init/00_tmux_init.conf`     | Base/server options: terminal, truecolor, history, indexes |
 | `init/10_variables.conf`     | User `@`-options and the TPM plugin path             |
 | `init/20_options.conf`       | Session/window options: mouse, vi keys, titles, activity |
@@ -246,6 +267,8 @@ for the full set:
 | `prefix` + <kbd>Shift</kbd>+<kbd>P</kbd> | `tmux-logging` | Toggle logging of the pane to a file |
 | `prefix` + <kbd>Alt</kbd>+<kbd>p</kbd> | `tmux-logging` | Save the visible pane history       |
 | `prefix` + <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> | `tmux-logging` | Save the full scrollback       |
+| `prefix` + <kbd>\\</kbd>    | `tmux-menus`     | Open the main popup menu                 |
+| `prefix` + <kbd>Enter</kbd> | `tmux-menus`     | Open the main popup menu (secondary default, if unbound) |
 
 > `tmux-autoreload` has no keybinding — it watches `tmux.conf` and reloads
 > automatically on save. `tmux-sensible` only applies sane default options.
@@ -278,9 +301,18 @@ Plugins are declared in
 [`init/50_plugins-init.conf`](init/50_plugins-init.conf) and managed by
 [TPM](https://github.com/tmux-plugins/tpm).
 
+> **Discovery gotcha.** TPM finds plugins by scanning `tmux.conf` for
+> `source`/`source-file` lines and following them to wherever `@plugin` lines
+> live. It can only follow paths it can read literally — it **cannot** expand
+> `-F` or `#{TMUXDOTDIR}`. This config's `@plugin` lines live in a *sourced*
+> file (`init/50_plugins-init.conf`), so the autoload glob in `tmux.conf` uses
+> an unquoted `~` path (`source-file -q ~/.config/tmux/init/[0-9]*.conf`) that
+> TPM *can* read and follow. If you rewrite that line to use `-F`/`#{...}` or
+> quote the `~`, `prefix + I` will silently stop finding plugins.
+
 ### Installing TPM
 
-TPM is not vendored — clone it into `$TMUXDOTDIR/plugins/tpm`:
+TPM is not vendored — clone it into the config's `plugins/` dir:
 
 ```bash
 git clone https://github.com/tmux-plugins/tpm "$HOME/.config/tmux/plugins/tpm"
@@ -306,6 +338,13 @@ To add a plugin, add a line to `init/50_plugins-init.conf` and press
 set -g @plugin 'owner/plugin-name'
 ```
 
+> Headless install (e.g. from a provisioning script) without pressing
+> `prefix + I`:
+>
+> ```bash
+> ~/.config/tmux/plugins/tpm/bin/install_plugins
+> ```
+
 ### Enabled Plugins
 
 | Plugin            | Description                                                      |
@@ -316,6 +355,7 @@ set -g @plugin 'owner/plugin-name'
 | `tmux-autoreload` | Watches `tmux.conf` and reloads it automatically on save.        |
 | `tmux-logging`    | Toggle pane logging, save visible output, or capture scrollback. |
 | `retmux`          | Save and restore tmux sessions/layouts.                          |
+| `tmux-menus`      | Popup menus for managing panes, windows, sessions, and settings. |
 
 - `tpm` — <https://github.com/tmux-plugins/tpm>
 - `tmux-sensible` — <https://github.com/tmux-plugins/tmux-sensible>
@@ -323,6 +363,7 @@ set -g @plugin 'owner/plugin-name'
 - `tmux-autoreload` — <https://github.com/b0o/tmux-autoreload>
 - `tmux-logging` — <https://github.com/tmux-plugins/tmux-logging>
 - `retmux` — <https://github.com/sk1418/retmux>
+- `tmux-menus` — <https://github.com/jaclu/tmux-menus>
 
 ---
 

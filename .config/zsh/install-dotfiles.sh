@@ -568,24 +568,24 @@ function install_dependencies(){
     fi
     PKG_MANAGER="brew"
     # Define dependency list for macOS. Adjust package names if necessary.
-    DEPENDENCIES=("git" "zsh" "curl" "bat" "lua" "neovim")
+    DEPENDENCIES=("git" "zsh" "curl" "bat" "lua" "neovim" "tmux")
   elif [[ "${OS_TYPE}" == "Linux" ]]; then
     # Linux: Detect available package manager.
     if command -v apt-get >/dev/null 2>&1; then
       PKG_MANAGER="apt-get"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc" "tmux")
     elif command -v pacman >/dev/null 2>&1; then
       PKG_MANAGER="pacman"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua" "neovim" "gcc")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua" "neovim" "gcc" "tmux" "entr")
     elif command -v dnf >/dev/null 2>&1; then
       PKG_MANAGER="dnf"
-      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc" "tmux" "entr")
     elif command -v yum >/dev/null 2>&1; then
       PKG_MANAGER="yum"
-      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc")
+      DEPENDENCIES=("git" "zsh" "curl" "lua" "neovim" "gcc" "tmux" "entr")
     elif command -v apk >/dev/null 2>&1; then
       PKG_MANAGER="apk"
-      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc" "musl-dev")
+      DEPENDENCIES=("git" "zsh" "curl" "bat" "lsd" "lua5.4" "neovim" "gcc" "musl-dev" "tmux")
     else
       write_error "Unsupported Linux package manager. Please install dependencies manually."
       exit 1
