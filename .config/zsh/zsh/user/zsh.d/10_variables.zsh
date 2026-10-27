@@ -149,23 +149,36 @@ fi
 ### [~]........... MAN
 ### [=]==================================[=]
 if [[ -n "${commands[man]}" ]] ; then
-  MANPAGER='nvim +Man!'
-  MANWIDTH="$(( COLUMNS - (( COLUMNS / 4 )) ))"
   MANPATH=$(man --path)
-  man() {
-    export MANWIDTH="$(( COLUMNS ))"
-      env \
-          LESS_TERMCAP_mb="$(printf "\e[1;31m")" \
-          LESS_TERMCAP_md="$(printf "\e[1;35m")" \
-          LESS_TERMCAP_me="$(printf "\e[0m")" \
-          LESS_TERMCAP_se="$(printf "\e[0m")" \
-          LESS_TERMCAP_so="$(printf "\e[4;36m")" \
-          LESS_TERMCAP_ue="$(printf "\e[0m")" \
-          LESS_TERMCAP_us="$(printf "\e[3;34m")" \
-          PAGER="${commands[less]:-${PAGER}}" \
-          MANWIDTH="$(( COLUMNS ))" \
-      man "${@}"
-  }
+  export MANPATH
+
+  if [[ -n "${commands[nvim]}" ]]; then
+    ## nvim renders + highlights the page itself; MANWIDTH/LESS_TERMCAP_* do not apply
+    export MANPAGER='nvim +Man!'
+    unset MANWIDTH
+  elif [[ -n "${commands[bat]}" ]]; then
+    ## man/groff formats the page, bat only colorizes; MANWIDTH applies, LESS_TERMCAP_* do not
+    export MANPAGER='bat --plain --language=Manpage'
+    ## Recompute width per invocation so it tracks terminal resizes
+    man() {
+      MANWIDTH="$(( COLUMNS - (( COLUMNS / 4 )) ))" command man "${@}"
+    }
+  else
+    ## plain less: both MANWIDTH and LESS_TERMCAP_* matter
+    export MANPAGER='less'
+    ## Recompute width per invocation so it tracks terminal resizes
+    man() {
+      LESS_TERMCAP_mb=$'\x1B[1;31m' \
+      LESS_TERMCAP_md=$'\x1B[1;35m' \
+      LESS_TERMCAP_me=$'\x1B[0m' \
+      LESS_TERMCAP_se=$'\x1B[0m' \
+      LESS_TERMCAP_so=$'\x1B[4;36m' \
+      LESS_TERMCAP_ue=$'\x1B[0m' \
+      LESS_TERMCAP_us=$'\x1B[3;34m' \
+      MANWIDTH="$(( COLUMNS - (( COLUMNS / 4 )) ))" \
+      command man "${@}"
+    }
+  fi
 fi
 
 ## [=]==================================[=]
@@ -188,7 +201,7 @@ else
 	PAGER="less"
 fi
 export NVIMDIR="${XDG_CONFIG_HOME}/nvim"
-export MANPAGER MANWIDTH NVIMBINPATH NVIMPAGER PAGER
+export PAGER
 
 ### [=]==================================[=]
 ### [~]............ GIT
@@ -263,11 +276,10 @@ fi
 ### [=]==================================[=]
 if [[ "${commands[python]}" ]]; then
   GENCOMPL_PY="python"
-  PYTHONPATH="${PATH}:${HOME}/.local/bin"
   IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
   IPYTHON_CONFIG="${IPYTHONDIR:-${XDG_CONFIG_HOME}/ipython}/profile_default/ipython_config.py"
   PYENV_ROOT="${HOME}/.pyenv"
-  export GENCOMPL_PY PYTHONPATH IPYTHONDIR IPYTHON_CONFIG PYENV_ROOT
+  export GENCOMPL_PY IPYTHONDIR IPYTHON_CONFIG PYENV_ROOT
 fi
 
 ### [=]==================================[=]
