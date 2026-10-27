@@ -1,0 +1,55 @@
+# ~/.config/bash/bashrc.local
+# Machine-specific, UNTRACKED overrides. Sourced at the very end of bashrc,
+# so anything here wins. Keep secrets and per-host tweaks out of the main config.
+# Everything below is commented out — uncomment what you need.
+
+# ---------------------------------------------------------------------------
+# Prompt toggles (implemented in bashrc)
+# ---------------------------------------------------------------------------
+# Show the red ' -N-' exit-code segment when a command fails (default: off).
+#BASH_PROMPT_SHOW_EXIT=1
+
+# Force username visibility regardless of host rules: 1 = always, 0 = never.
+# Leave unset to use the host rule (hidden on archbox as dampsock).
+#BASH_PROMPT_SHOW_USER=0
+
+# Disable the git segment entirely (useful in very large repos). Default: on.
+#BASH_PROMPT_GIT=0
+
+# Native bash: trim \w to the last N path components in the prompt.
+#PROMPT_DIRTRIM=3
+
+# ---------------------------------------------------------------------------
+# PATH / environment (machine-specific)
+# ---------------------------------------------------------------------------
+#export PATH="${HOME}/.local/bin:${PATH}"
+#export GOPATH="${HOME}/go"
+#export PATH="${PATH}:${GOPATH}/bin"
+#export JAVA_HOME="/usr/lib/jvm/default"
+
+# ---------------------------------------------------------------------------
+# History overrides
+# ---------------------------------------------------------------------------
+#HISTSIZE=100000
+#HISTFILESIZE=200000
+#HISTIGNORE='ls:cd:pwd:clear:history'
+
+# ---------------------------------------------------------------------------
+# Host-specific aliases
+# ---------------------------------------------------------------------------
+#alias ff='fastfetch'
+#alias work-vpn='sudo openconnect vpn.example.com'
+
+# ---------------------------------------------------------------------------
+# Lazy tool shims (gate each before loading)
+# ---------------------------------------------------------------------------
+#command -v zoxide   >/dev/null 2>&1 && eval "$(zoxide init bash)"
+#command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
+#command -v direnv   >/dev/null 2>&1 && eval "$(direnv hook bash)"
+#[[ -s "${HOME}/.nvm/nvm.sh" ]] && source "${HOME}/.nvm/nvm.sh"
+
+# ---------------------------------------------------------------------------
+# Secrets / tokens  (prefer a separate chmod 600 file)
+# ---------------------------------------------------------------------------
+#export AWS_PROFILE="work"
+#[[ -r "${HOME}/.config/bash/secrets" ]] && source "${HOME}/.config/bash/secrets"

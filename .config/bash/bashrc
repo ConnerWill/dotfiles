@@ -1,5 +1,5 @@
-# ~/.config/bash/bashrc
-# Sourced from ~/.bashrc. Interactive bash defaults.
+# ~/.config/bash/bashrc  (${BDOTDIR}/bashrc)
+# Loaded via the ~/.bashrc stub, which sets BDOTDIR to this directory.
 # Coming from zsh: bash uses PS1, not PROMPT. Unset the inherited zsh var.
 
 # If not running interactively, don't do anything.
@@ -37,9 +37,9 @@ shopt -s nocaseglob              # case-insensitive globbing
 # ---------------------------------------------------------------------------
 # Pick the best available editor rather than hardcoding nvim.
 for __editor in nvim vim vi nano; do
-    if command -v "$__editor" >/dev/null 2>&1; then
-        export EDITOR="$__editor"
-        export VISUAL="$__editor"
+    if command -v "${__editor}" >/dev/null 2>&1; then
+        export EDITOR="${__editor}"
+        export VISUAL="${__editor}"
         break
     fi
 done
@@ -54,23 +54,125 @@ if command -v bat >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# Prompt  (PS1 -- the bash equivalent of zsh's PROMPT)
-# Format:  [Arch][host][~/path] (git-branch) $
+# Prompt  (PS1 -- bash port of the zsh prompt in 83_vcs_prompts.zsh)
+# Layout:  [exit] [user<icon>host] [path] :(git-branch dirty) :
+# Colors (ANSI 256) mirror the zsh scheme:
+#   brackets 51 (bold cyan), username 99, hostname 99, path 60,
+#   distro icon per-distro (Arch=39), git sep 190, git brackets 5,
+#   repo/branch 15, dirty 196 (bold red) / clean 46.
 # ---------------------------------------------------------------------------
-__bash_git_branch() {
+
+# 256-color helpers. Wrapped in \[ \] so bash counts prompt width correctly.
+__c()  { printf '\[\e[38;5;%sm\]' "$1"; }   # set fg color
+__cb() { printf '\[\e[1;38;5;%sm\]' "$1"; } # bold fg color
+__cr='\[\e[0m\]'                             # reset
+
+# Distro icon + color (read once from /etc/os-release; Nerd Font glyphs).
+__prompt_distro() {
+    local id="other" icon="@" color=201
+    if [[ -r /etc/os-release ]]; then
+        id=$(. /etc/os-release 2>/dev/null; printf '%s' "${ID:-other}")
+    fi
+    case "${id}" in
+        arch)      icon=' ' color=39  ;;
+        artix)     icon=' ' color=39  ;;
+        debian)    icon=' ' color=196 ;;
+        ubuntu)    icon=' ' color=208 ;;
+        fedora)    icon=' ' color=26  ;;
+        rocky)     icon=' ' color=35  ;;
+        gentoo)    icon=' ' color=141 ;;
+        void)      icon=' ' color=35  ;;
+        alpine)    icon=' ' color=25  ;;
+        nixos)     icon=' ' color=68  ;;
+        opensuse*) icon=' ' color=113 ;;
+        *)         icon='@' color=201 ;;
+    esac
+    __PROMPT_DISTRO_ICON="${icon}"
+    __PROMPT_DISTRO_COLOR="${color}"
+}
+__prompt_distro
+
+# Exit-code segment: ' -N-' in red when the last command failed.
+# Gated by BASH_PROMPT_SHOW_EXIT (default off). Set to 1 in bashrc.local to enable.
+: "${BASH_PROMPT_SHOW_EXIT:=0}"
+__prompt_exit() {
+    local code=$1
+    [[ "${BASH_PROMPT_SHOW_EXIT}" == "1" ]] || return
+    [[ ${code} -eq 0 ]] && return
+    printf '%s -%s-%s' "$(__cb 196)" "${code}" "${__cr}"
+}
+
+# Git segment: ':(branch +dirty)' — yellow-green sep, magenta brackets,
+# branch/repo in white, counts colored red when dirty, green when clean.
+# Gated by BASH_PROMPT_GIT (default on). Set to 0 to disable (faster in huge repos).
+: "${BASH_PROMPT_GIT:=1}"
+__prompt_git() {
+    [[ "${BASH_PROMPT_GIT}" == "1" ]] || return
     command -v git >/dev/null 2>&1 || return
-    local branch
-    branch=$(git branch --show-current 2>/dev/null) || return
-    [[ -n "$branch" ]] && printf ' (%s)' "$branch"
+    git rev-parse --git-dir >/dev/null 2>&1 || return
+
+    local branch dirty staged untracked line x y
+    branch=$(git branch --show-current 2>/dev/null)
+    [[ -z "${branch}" ]] && branch=$(git rev-parse --short HEAD 2>/dev/null)
+
+    dirty=0 staged=0 untracked=0
+    while IFS= read -r line; do
+        x=${line:0:1}; y=${line:1:1}
+        [[ "${line}" == '??'* ]] && { ((untracked++)); continue; }
+        [[ "${x}" != ' ' && "${x}" != '?' ]] && ((staged++))
+        [[ "${y}" != ' ' && "${y}" != '?' ]] && ((dirty++))
+    done < <(git status --porcelain=v1 2>/dev/null)
+
+    local total=$((dirty + staged + untracked)) color counts=""
+    if (( total > 0 )); then
+        color=$(__cb 196)   # dirty -> bold red
+    else
+        color=$(__c 46)     # clean -> green
+    fi
+    (( staged > 0 ))    && counts+=" ⥉${staged}"
+    (( dirty > 0 ))     && counts+=" ⊕${dirty}"
+    (( untracked > 0 )) && counts+=" ⊙${untracked}"
+
+    printf '%s:%s(%s%s%s%s%s)%s' \
+        "$(__c 190)" "$(__c 5)" \
+        "${color}" "${branch}" "$(__c 15)" "${counts}" \
+        "$(__c 5)" "${__cr}"
 }
 
 if [[ -n "${BASH_VERSINFO:-}" ]]; then
-    # Colors: cyan brackets, green distro, yellow host, blue path, magenta git.
-    PS1='\[\e[36m\][Arch]\[\e[0m\]'
-    PS1+='\[\e[33m\][\h]\[\e[0m\]'
-    PS1+='\[\e[34m\][\w]\[\e[0m\]'
-    PS1+='\[\e[35m\]$(__bash_git_branch)\[\e[0m\]'
-    PS1+='\[\e[36m\] \$\[\e[0m\] '
+    __set_bash_prompt() {
+        local last=$?
+        local ob cb user host icon
+        # Username visibility:
+        #   BASH_PROMPT_SHOW_USER=1 -> always show, =0 -> always hide.
+        #   Unset -> host rule (mirrors zsh: hide on archbox as dampsock).
+        local short_host="${HOSTNAME%%.*}"
+        local show_user
+        if [[ -n "${BASH_PROMPT_SHOW_USER:-}" ]]; then
+            show_user="${BASH_PROMPT_SHOW_USER}"
+        elif [[ "${short_host}" == "archbox" && "${USER}" == "dampsock" ]]; then
+            show_user=0
+        else
+            show_user=1
+        fi
+
+        ob="$(__cb 51)[${__cr}"          # bold cyan open bracket
+        cb="$(__cb 51)]${__cr}"          # bold cyan close bracket
+        user="$(__c 99)\u${__cr}"        # username (purple)
+        host="$(__c 99)\h${__cr}"        # hostname (purple)
+        icon="$(__c "${__PROMPT_DISTRO_COLOR}")${__PROMPT_DISTRO_ICON}${__cr}"
+
+        local user_host
+        if [[ ${show_user} -eq 1 ]]; then
+            user_host="${ob}${user}${icon}${host}${cb}"
+        else
+            user_host="${ob}${icon}${host}${cb}"
+        fi
+        local path="${ob}$(__c 60)\w${__cr}${cb}"
+
+        PS1="$(__prompt_exit "${last}")${user_host}${path}$(__prompt_git)$(__c 51): ${__cr}"
+    }
+    PROMPT_COMMAND="__set_bash_prompt${PROMPT_COMMAND:+; ${PROMPT_COMMAND}}"
 fi
 
 # ---------------------------------------------------------------------------
@@ -123,9 +225,9 @@ fi
 
 # Editor aliases follow whatever $EDITOR resolved to above.
 if [[ -n "${EDITOR:-}" ]]; then
-    alias e="$EDITOR"
-    alias vi="$EDITOR"
-    alias vim="$EDITOR"
+    alias e="${EDITOR}"
+    alias vi="${EDITOR}"
+    alias vim="${EDITOR}"
 fi
 
 # ---------------------------------------------------------------------------
@@ -142,6 +244,6 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# Local overrides (not tracked): ~/.config/bash/bashrc.local
+# Local overrides (not tracked): ${BDOTDIR}/bashrc.local
 # ---------------------------------------------------------------------------
-[[ -f "${HOME}/.config/bash/bashrc.local" ]] && . "${HOME}/.config/bash/bashrc.local"
+[[ -f "${BDOTDIR:-${HOME}/.config/bash}/bashrc.local" ]] && . "${BDOTDIR:-${HOME}/.config/bash}/bashrc.local"

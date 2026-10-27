@@ -1,14 +1,15 @@
 # ~/.bashrc — bootstrap stub.
-# Bash only reads from a fixed set of startup files (~/.bashrc for interactive
-# non-login shells). It has no ~/.config / $ZDOTDIR support like zsh, so this
-# file exists purely to source the real config from ~/.config/bash.
+# Bash has no native $ZDOTDIR: its startup paths (~/.bashrc, ~/.bash_profile,
+# ~/.profile) are compiled in. This fixed file is the one unavoidable entry
+# point; it defines BDOTDIR and delegates everything else to ${BDOTDIR}.
 
 # Kiro CLI pre block. Keep at the top of this file. (tool-managed)
 [[ -f "${HOME}/.local/share/kiro-cli/shell/bashrc.pre.bash" ]] && builtin source "${HOME}/.local/share/kiro-cli/shell/bashrc.pre.bash"
 
 
-# Load personal bash config from ~/.config/bash
-[[ -f "${HOME}/.config/bash/bashrc" ]] && source "${HOME}/.config/bash/bashrc"
+# ZDOTDIR-equivalent: point BDOTDIR at the bash config dir and load from it.
+export BDOTDIR="${XDG_CONFIG_HOME:-${HOME}/.config}/bash"
+[[ -f "${BDOTDIR}/bashrc" ]] && source "${BDOTDIR}/bashrc"
 
 
 # Kiro CLI post block. Keep at the bottom of this file. (tool-managed)
