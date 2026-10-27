@@ -1,0 +1,147 @@
+# ~/.config/bash/bashrc
+# Sourced from ~/.bashrc. Interactive bash defaults.
+# Coming from zsh: bash uses PS1, not PROMPT. Unset the inherited zsh var.
+
+# If not running interactively, don't do anything.
+case $- in
+    *i*) ;;
+    *) return ;;
+esac
+
+# Clear any zsh prompt vars leaking into the bash environment.
+unset PROMPT RPROMPT
+
+# ---------------------------------------------------------------------------
+# History
+# ---------------------------------------------------------------------------
+HISTCONTROL=ignoreboth          # ignore duplicates and lines starting with space
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTTIMEFORMAT='%F %T '          # timestamp each entry
+shopt -s histappend              # append to history, don't overwrite
+# Write each command to history immediately (shared across sessions).
+PROMPT_COMMAND='history -a'
+
+# ---------------------------------------------------------------------------
+# Shell options
+# ---------------------------------------------------------------------------
+shopt -s checkwinsize            # update LINES/COLUMNS after each command
+shopt -s cdspell                 # autocorrect minor cd typos
+shopt -s dirspell 2>/dev/null    # autocorrect dir names during completion
+shopt -s autocd 2>/dev/null      # type a dir name to cd into it (zsh-like)
+shopt -s globstar 2>/dev/null    # ** matches recursively
+shopt -s nocaseglob              # case-insensitive globbing
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+# Pick the best available editor rather than hardcoding nvim.
+for __editor in nvim vim vi nano; do
+    if command -v "$__editor" >/dev/null 2>&1; then
+        export EDITOR="$__editor"
+        export VISUAL="$__editor"
+        break
+    fi
+done
+unset __editor
+
+command -v less >/dev/null 2>&1 && export PAGER="less" && export LESS="-R"
+
+# Prefer bat as the pager when available (overrides less above).
+if command -v bat >/dev/null 2>&1; then
+    export PAGER="bat"
+    export MANPAGER="bat --language=man --style=plain"
+fi
+
+# ---------------------------------------------------------------------------
+# Prompt  (PS1 -- the bash equivalent of zsh's PROMPT)
+# Format:  [Arch][host][~/path] (git-branch) $
+# ---------------------------------------------------------------------------
+__bash_git_branch() {
+    command -v git >/dev/null 2>&1 || return
+    local branch
+    branch=$(git branch --show-current 2>/dev/null) || return
+    [[ -n "$branch" ]] && printf ' (%s)' "$branch"
+}
+
+if [[ -n "${BASH_VERSINFO:-}" ]]; then
+    # Colors: cyan brackets, green distro, yellow host, blue path, magenta git.
+    PS1='\[\e[36m\][Arch]\[\e[0m\]'
+    PS1+='\[\e[33m\][\h]\[\e[0m\]'
+    PS1+='\[\e[34m\][\w]\[\e[0m\]'
+    PS1+='\[\e[35m\]$(__bash_git_branch)\[\e[0m\]'
+    PS1+='\[\e[36m\] \$\[\e[0m\] '
+fi
+
+# ---------------------------------------------------------------------------
+# Completion
+# ---------------------------------------------------------------------------
+if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    . /usr/share/bash-completion/bash_completion
+elif [[ -f /etc/bash_completion ]]; then
+    . /etc/bash_completion
+fi
+
+# ---------------------------------------------------------------------------
+# Aliases
+# ---------------------------------------------------------------------------
+# Prefer modern tools when available, fall back to coreutils.
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --group-directories-first'
+    alias ll='eza -lh --group-directories-first --git'
+    alias la='eza -lah --group-directories-first --git'
+    alias lt='eza --tree --level=2'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -lh'
+    alias la='ls -lah'
+fi
+
+command -v bat >/dev/null 2>&1 && alias cat='bat --paging=never'
+
+# grep --color is a GNU extension; only enable if supported.
+if grep --color=auto '' </dev/null >/dev/null 2>&1; then
+    alias grep='grep --color=auto'
+fi
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias mkdir='mkdir -p'
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias ez='exec bash'
+
+# git shortcuts (only if git is installed).
+if command -v git >/dev/null 2>&1; then
+    alias g='git'
+    alias gs='git status'
+    alias gd='git diff'
+    alias gl='git log --oneline --graph --decorate -20'
+fi
+
+# Editor aliases follow whatever $EDITOR resolved to above.
+if [[ -n "${EDITOR:-}" ]]; then
+    alias e="$EDITOR"
+    alias vi="$EDITOR"
+    alias vim="$EDITOR"
+fi
+
+# ---------------------------------------------------------------------------
+# fzf keybindings / completion (Ctrl-R history, Ctrl-T files)
+# ---------------------------------------------------------------------------
+if command -v fzf >/dev/null 2>&1; then
+    # bash 5.3+ ships `fzf --bash`; fall back to Arch's keybinding scripts.
+    if fzf --bash >/dev/null 2>&1; then
+        eval "$(fzf --bash)"
+    else
+        [[ -f /usr/share/fzf/key-bindings.bash ]] && . /usr/share/fzf/key-bindings.bash
+        [[ -f /usr/share/fzf/completion.bash ]]   && . /usr/share/fzf/completion.bash
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# Local overrides (not tracked): ~/.config/bash/bashrc.local
+# ---------------------------------------------------------------------------
+[[ -f "${HOME}/.config/bash/bashrc.local" ]] && . "${HOME}/.config/bash/bashrc.local"
