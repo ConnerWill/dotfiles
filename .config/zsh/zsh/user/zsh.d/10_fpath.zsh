@@ -9,7 +9,7 @@ fpath+=( "${ZSH_USER_DIR}/functions/functions-manual/dotf/bin"        )
 fpath+=( "${ZSH_USER_DIR}/functions/functions-manual/dotf/completion" )
 fpath+=( "${ZSH_USER_DIR}/functions/functions-manual"                 )
 
-## Alternativly set PATH like this
+## Alternatively set PATH like this
 # export PATH="${PATH}:${HOME}/.bin"
 
 # automatically remove duplicates from these arrays
