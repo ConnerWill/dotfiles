@@ -1,9 +1,26 @@
-# 🖥️ tmux
+# tmux
 
-> **A modular tmux configuration: `tmux.conf` sources numbered init stages from
-`init/`, the theme is split into its own file, and plugins are managed with
-[TPM](https://github.com/tmux-plugins/tpm). All internal paths are resolved
-relative to `#{TMUXDOTDIR}` so the config is portable across machines.**
+<div align="justify">
+ <div align="center">
+
+```ocaml
+ ▄▄▄▄▄▄▄▄▄▄▄  ▄▄       ▄▄  ▄         ▄  ▄       ▄
+▐░░░░░░░░░░░▌▐░░▌     ▐░░▌▐░▌       ▐░▌▐░▌     ▐░▌
+ ▀▀▀▀█░█▀▀▀▀ ▐░▌░▌   ▐░▐░▌▐░▌       ▐░▌ ▐░▌   ▐░▌
+     ▐░▌     ▐░▌▐░▌ ▐░▌▐░▌▐░▌       ▐░▌  ▐░▌ ▐░▌
+     ▐░▌     ▐░▌ ▐░▐░▌ ▐░▌▐░▌       ▐░▌   ▐░▐░▌
+     ▐░▌     ▐░▌  ▐░▌  ▐░▌▐░▌       ▐░▌    ▐░▌
+     ▐░▌     ▐░▌   ▀   ▐░▌▐░▌       ▐░▌   ▐░▌░▌
+     ▐░▌     ▐░▌       ▐░▌▐░▌       ▐░▌  ▐░▌ ▐░▌
+     ▐░▌     ▐░▌       ▐░▌▐░█▄▄▄▄▄▄▄█░▌ ▐░▌   ▐░▌
+     ▐░▌     ▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌     ▐░▌
+      ▀       ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀       ▀
+```
+
+> **A modular tmux configuration**
+
+ </div>
+</div>
 
 ---
 
